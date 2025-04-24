@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> admin-Login Page</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: url("/User/assets/images/GEAR-UP/gearup-ornage.png") center
+          center fixed;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .login-container {
+        background: rgba(43, 43, 43, 0.95);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        width: 100%;
+        max-width: 400px;
+        color: #f5f5f5;
+      }
+
+      .login-container h2 {
+        margin-bottom: 30px;
+        text-align: center;
+        color: #f36d07;
+        letter-spacing: 2px;
+      }
+
+      .login-container input[type="email"],
+      .login-container input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #555;
+        border-radius: 25px;
+        background-color: #3c3c3c;
+        color: #f5f5f5;
+        transition: 0.3s ease;
+      }
+
+      .login-container input:hover,
+      .login-container input:focus {
+        border-color: #f36d07;
+        box-shadow: 0 0 5px rgba(246, 169, 4, 0.767);
+        outline: none;
+      }
+
+      .login-container .forgot {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #ccc;
+      }
+
+      .login-container .forgot a {
+        color: #f0a500;
+        text-decoration: none;
+      }
+
+      .login-container .forgot a:hover {
+        text-decoration: underline;
+      }
+
+      .btn {
+        background-color: #f36d07;
+        color: #1a1a1a;
+        padding: 12px 25px;
+        width: 100%;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s ease;
+        margin-bottom: 15px;
+      }
+
+      .btn:hover {
+        background-color: #ffbb33;
+        box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .google-btn {
+        background-color: #ffffff;
+        color: #333;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .google-btn:hover {
+        background-color: #f5f5f5;
+      }
+
+      .google-btn img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .signup {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #ccc;
+      }
+
+      .signup a {
+        color: #f0a500;
+        text-decoration: none;
+      }
+
+      .signup a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 25px;
+        }
+
+        .login-container h2 {
+          font-size: 22px;
+        }
+
+        .btn,
+        .google-btn {
+          font-size: 14px;
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>ADMIN LOGIN</h2>
+      <form id="adminLoginform" action="/login" method="post">
+        <input
+          type="email"
+          placeholder=" Enter your Email"
+          id="adminEmail"
+          name="email"
+          required
+        />
+        <div id="emailError" class="errorMessage"></div>
+
+        <input
+          type="password"
+          placeholder=" Enter your Password"
+          id="adminPassword"
+          name="password"
+          required
+        />
+        <div id="passwordError" class="errorMessage"></div>
+
+        <div class="forgot">
+          <span></span>
+          <a href="#">Forgot Password?</a>
+        </div>
+        <button class="btn" type="submit">LOGIN</button>
+      </form>
+      <!-- <button class="btn google-btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo"> Login with Google
+    </button> -->
+      <!-- <div class="signup">New here? <a href="#">Sign up</a></div> -->
+    </div>
+
+    <script>
+      document
+        .getElementById("adminLoginform")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          clearErrors();
+
+          const email = document.getElementById("adminEmail").value.trim();
+          const password = document.getElementById("adminPassword").value.trim();
+          let isValid=true;
+          // Email Validation
+          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+          if (!emailPattern.test(email)) {
+            document.getElementById("emailError").innerText =
+              "Please enter a valid email address!";
+            isValid = false;
+          }
+          // Password Validation (Minlen =6)
+          if (password.length < 6) {
+            document.getElementById("passwordError").innerText =
+              "Password must be at least 6 characters long!";
+            isValid = false;
+          }
+          // Submiing  form if all validations pass
+          if (isValid) {
+            alert("Admin login successful");
+            document.getElementById("adminLoginform").submit(); // Uncomment this for actual form submission
+          }
+          // Function to Clear Previous Errors
+          function clearErrors() {
+            document
+              .querySelectorAll(".errorMessage")
+              .forEach((error) => (error.innerText = ""));
+          }
+        });
+    </script>
+  </body>
+</html>

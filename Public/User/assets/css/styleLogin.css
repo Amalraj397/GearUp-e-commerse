@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  body {
+    background: url("assets/images/backgrounds/bicycle-1-800x800\ bmc\ orange\ line\ closer.jpg") center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+  }
+
+  .login-container {
+    background: rgba(43, 43, 43, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    width: 100%;
+    max-width: 400px;
+    color: #f5f5f5;
+  }
+
+  .login-container h2 {
+    margin-bottom: 30px;
+    text-align: center;
+    color: #f36d07;
+    letter-spacing: 2px;
+  }
+
+  .login-container input[type="email"],
+  .login-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #555;
+    border-radius: 25px;
+    background-color: #3c3c3c;
+    color: #f5f5f5;
+    transition: 0.3s ease;
+  }
+
+  .login-container input:hover,
+  .login-container input:focus {
+    border-color: #f36d07;
+    box-shadow: 0 0 5px rgba(246, 169, 4, 0.767);
+    outline: none;
+  }
+
+  .login-container .forgot {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .login-container .forgot a {
+    color: #f0a500;
+    text-decoration: none;
+  }
+
+  .login-container .forgot a:hover {
+    text-decoration: underline;
+  }
+
+  .btn {
+    background-color: #f36d07;
+    color: #1a1a1a;
+    padding: 12px 25px;
+    width: 100%;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s ease;
+    margin-bottom: 15px;
+  }
+
+  .btn:hover {
+    background-color: #ffbb33;
+    box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .google-btn {
+    background-color: #ffffff;
+    color: #333;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .google-btn:hover {
+    background-color: #f5f5f5;
+  }
+
+  .google-btn img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .signup {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .signup a {
+    color: #f0a500;
+    text-decoration: none;
+  }
+
+  .signup a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 480px) {
+    .login-container {
+      padding: 25px;
+    }
+
+    .login-container h2 {
+      font-size: 22px;
+    }
+
+    .btn, .google-btn {
+      font-size: 14px;
+      padding: 10px 20px;
+    }
+  }

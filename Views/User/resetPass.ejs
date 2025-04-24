@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reset Password</title>
+  <style>
+    :root {
+      --primary-color: #1e1e1e;
+      --accent-color: #ff7f11;
+      --bg-color: #121212;
+      --input-bg: #2a2a2a;
+      --text-color: #f1f1f1;
+      --error-color: #e74c3c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .header {
+      text-align: center;
+      padding: 25px;
+      border-bottom: 1px solid #333;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: var(--accent-color);
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    .form-container {
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      background-color: var(--input-bg);
+      border: 1px solid #444;
+      border-radius: 5px;
+      font-size: 16px;
+      color: var(--text-color);
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    .password-toggle {
+      position: relative;
+    }
+
+    .toggle-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #bbb;
+    }
+
+    .btn {
+      background-color: var(--accent-color);
+      color: #000;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #ffa31a;
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+      }
+    }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet"/>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Reset Password</h1>
+      <p>Enter your new password</p>
+    </div>
+    <div class="form-container">
+      <form id="resetPasswordForm">
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <div class="password-toggle">
+            <input type="password" id="newPassword" name="newPassword"/>
+            <span class="toggle-icon" onclick="togglePassword('newPassword')">👁️</span>
+          </div>
+          <div id="newMessage" class="error-message"></div>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="password-toggle">
+            <input type="password" id="confirmPassword" name="confirmPassword"/>
+            <span class="toggle-icon" onclick="togglePassword('confirmPassword')">👁️</span>
+          </div>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+        <button type="submit" class="btn">Reset Password</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    localStorage.setItem('resetStep', 'newPassword');
+
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    $(document).ready(function () {
+      $('#resetPasswordForm').on('submit', function (event) {
+        event.preventDefault();
+
+        const newPassword = $('#newPassword').val().trim();
+        const confirmPassword = $('#confirmPassword').val().trim();
+
+        const errorNewpassword = $('#newMessage');
+        const errorConfirmPassword = $('#errorMessage');
+
+        errorNewpassword.text('');
+        errorConfirmPassword.text('');
+
+        if (!newPassword) {
+          errorNewpassword.text('Enter New Password..!');
+          return;
+        } else if (newPassword.length < 6) {
+          errorNewpassword.text('Password must be at least 6 characters long..!');
+          return;
+        }
+
+        if (!confirmPassword) {
+          errorConfirmPassword.text('Enter Confirm Password..!');
+          return;
+        } else if (confirmPassword !== newPassword) {
+          errorConfirmPassword.text('Passwords do not match..!');
+          return;
+        }
+
+        $.ajax({
+          url: '/beats/user/forgotPassword/newPassword',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ newPassword }),
+          success: function (response) {
+            localStorage.removeItem('resetStep');
+            Swal.fire('Password reset successful!').then(() => {
+              window.location.href = response.redirectUrl;
+            });
+          },
+          error: function (xhr) {
+            const errorMessage =
+              xhr.responseJSON && xhr.responseJSON.message
+                ? xhr.responseJSON.message
+                : 'An error occurred..!';
+            Swal.fire(errorMessage);
+          },
+        });
+      });
+    });
+  </script>
+</body>
+</html>

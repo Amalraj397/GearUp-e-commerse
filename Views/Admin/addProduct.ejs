@@ -1,0 +1,803 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Add Product</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="products.css">
+     Font Awesome for icons --
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> !-->
+    <style>
+        /* Products Page Specific Styles */
+.products-container,
+.add-product-container {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.products-header,
+.add-product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.products-actions,
+.add-product-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-bg);
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 300px;
+}
+
+.search-box input {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    padding: 8px;
+    width: 100%;
+    outline: none;
+}
+
+.add-product-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.add-product-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Products Table */
+.products-table-container {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    overflow-x: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+}
+
+.products-table th,
+.products-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.products-table th {
+    background-color: rgba(255, 140, 0, 0.1);
+    color: var(--primary-color);
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.products-table tbody tr:hover {
+    background-color: rgba(255, 140, 0, 0.05);
+}
+
+.products-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.product-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.product-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-active {
+    background-color: rgba(72, 187, 120, 0.2);
+    color: var(--success-color);
+}
+
+.status-inactive {
+    background-color: rgba(245, 101, 101, 0.2);
+    color: var(--danger-color);
+}
+
+.status-draft {
+    background-color: rgba(237, 137, 54, 0.2);
+    color: var(--warning-color);
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn,
+.block-btn,
+.unblock-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.edit-btn {
+    background-color: rgba(66, 153, 225, 0.2);
+    color: var(--info-color);
+}
+
+.edit-btn:hover {
+    background-color: var(--info-color);
+    color: white;
+}
+
+.block-btn {
+    background-color: rgba(245, 101, 101, 0.2);
+    color: var(--danger-color);
+}
+
+.block-btn:hover {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.unblock-btn {
+    background-color: rgba(72, 187, 120, 0.2);
+    color: var(--success-color);
+}
+
+.unblock-btn:hover {
+    background-color: var(--success-color);
+    color: white;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination-btn {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 5px;
+}
+
+.page-number {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.page-number:hover {
+    background-color: rgba(255, 140, 0, 0.1);
+    color: var(--primary-color);
+}
+
+.page-number.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Add Product Form Styles */
+.add-product-form {
+    margin-top: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-card h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--darker-bg);
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.2);
+}
+
+.form-help-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+/* Image Upload Styles */
+.image-upload-container {
+    margin-top: 15px;
+}
+
+.image-upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.image-upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 140, 0, 0.05);
+}
+
+.image-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-upload-placeholder i {
+    font-size: 40px;
+    color: var(--primary-color);
+}
+
+.image-upload-placeholder p {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.image-upload-placeholder span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.image-upload-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.image-preview-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.image-preview {
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    aspect-ratio: 1;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-preview .remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-preview:hover .remove-image {
+    opacity: 1;
+}
+
+/* Price Input Styles */
+.price-input {
+    position: relative;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.price-input input {
+    padding-left: 25px !important;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    display: inline-block;
+    position: relative;
+}
+
+.toggle-input {
+    display: none;
+}
+
+.toggle-label {
+    display: block;
+    width: 48px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: var(--border-color);
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-label::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    transition: transform 0.3s ease;
+}
+
+.toggle-input:checked + .toggle-label {
+    background-color: var(--primary-color);
+}
+
+.toggle-input:checked + .toggle-label::after {
+    transform: translateX(24px);
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.cancel-btn,
+.save-product-btn,
+.publish-btn,
+.submit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.cancel-btn:hover {
+    background-color: var(--border-color);
+}
+
+.save-product-btn {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.save-product-btn:hover {
+    background-color: rgba(255, 140, 0, 0.1);
+}
+
+.publish-btn,
+.submit-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.publish-btn:hover,
+.submit-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-box {
+        width: 100%;
+    }
+    
+    .add-product-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .add-product-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .add-product-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+    </style>
+            <%-include("../../Views/Partials/Admin/header")%>
+            <!-- Add Product Content -->
+            <div class="add-product-container">
+                <div class="add-product-header">
+                    <h1>Add New Product</h1>
+                    <div class="add-product-actions">
+                        <button class="save-product-btn">View products.</button>
+                    </div>  
+                </div>
+            </div>
+                <form id="add-product-form" class="add-product-form">
+                    <div class="form-grid">
+                        <div class="form-column">
+                            <!-- Basic Information -->
+                            <div class="form-card">
+                                <h3>Basic Information</h3>
+                                <div class="form-group">
+                                    <label for="product-name">Product Name*</label>
+                                    <input type="text" id="product-name" name="product-name" required>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="brand">Brand*</label>
+                                        <select id="brand" name="brand" required>
+                                            <option value="">Select Brand</option>
+                                            <option value="ninteone">ninteOne</option>
+                                            <option value="ktm">KTM</option>
+                                            <option value="stryder">Stryder</option>
+                                            <option value="RockRider">RockRider</option>
+                                            <option value="fastrack">FastTrack</option>
+                                            <option value="urbanmotion">UrbanMotion</option>
+                                            <option value="hero">Hero</option>
+                                            <option value="speedx">SpeedX</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Category*</label>
+                                        <select id="category" name="category" required>
+                                            <option value="">Select Category</option>
+                                            <option value="shoes"> For Men</option>
+                                            <option value="clothing">For Women</option>
+                                            <option value="accessories">For kids</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="description">Description*</label>
+                                    <textarea id="description" name="description" rows="5" required></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Variants and Attributes -->
+                            <div class="form-card">
+                                <h3>Variants and Attributes</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="brand">Varients*</label>
+                                        <select id="brand" name="brand" required>
+                                            <option value="mtb">MTB [mountain bikes]</option>
+                                            <option value="atb">ATB [All terrain bikes]</option>
+                                            <option value="nike">Road Bikes</option>
+                                            <option value="adidas">City Bikes</option>
+                                            <option value="puma">Fat tyre Bikes</option>
+                                            <option value="nike">Single Speed</option>
+                                            <option value="adidas">BMX</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="color">Color</label>
+                                        <input type="text" id="color" name="color" placeholder="e.g. Red, Blue, Black">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="stock">Stock Quantity*</label>
+                                    <input type="number" id="stock" name="stock" min="0" required>
+                                </div>
+                            </div>
+                            
+                            <!-- Product Images -->
+                            <div class="form-card">
+                                <h3>Product Images</h3>
+                                <p class="form-help-text">Upload multiple images for your product. First image will be used as the featured image.</p>
+                                
+                                <div class="image-upload-container">
+                                    <div class="image-upload-area" id="image-upload-area">
+                                        <div class="image-upload-placeholder">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <p>Drag & drop images here or click to browse</p>
+                                            <span>Supports: JPG, PNG, GIF (Max 5MB each)</span>
+                                        </div>
+                                        <input type="file" id="product-images" name="product-images" multiple accept="image/*" class="image-upload-input">
+                                    </div>
+                                    
+                                    <div class="image-preview-container" id="image-preview-container">
+                                        <!-- Image previews will be added here by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-column">
+                            <!-- Pricing Information -->
+                            <div class="form-card">
+                                <h3>Pricing Information</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="regular-price">Regular Price*</label>
+                                        <div class="price-input">
+                                            <span class="currency-symbol">$</span>
+                                            <input type="number" id="regular-price" name="regular-price" min="0" step="0.01" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selling-price">Selling Price*</label>
+                                        <div class="price-input">
+                                            <span class="currency-symbol">$</span>
+                                            <input type="number" id="selling-price" name="selling-price" min="0" step="0.01" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="product-offer">Product Offer (%)</label>
+                                    <input type="number" id="product-offer" name="product-offer" min="0" max="100" placeholder="e.g. 10">
+                                </div>
+                            </div>
+                            
+                            <!-- Product Status -->
+                            <div class="form-card">
+                                <h3>Product Status</h3>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="status">
+                                        <option value="active">Active</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="featured">Featured Product</label>
+                                    <div class="toggle-switch">
+                                        <input type="checkbox" id="featured" name="featured" class="toggle-input">
+                                        <label for="featured" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Additional Information -->
+                            <div class="form-card">
+                                <h3>Additional Information</h3>
+                                <div class="form-group">
+                                    <label for="tags">Infos</label>
+                                    <input type="text" id="tags" name="tags" placeholder="Enter tags separated by commas" value="enterTag">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Added Features</label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-gearless" name="features[]" value="Gearless">
+                                            <label for="feature-gearless">Gearless</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-geared" name="features[]" value="Geared">
+                                            <label for="feature-geared">Geared</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-discbrake" name="features[]" value="Disc Brake">
+                                            <label for="feature-discbrake">Disc Brake</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-dust&water" name="features[]" value="dust&water">
+                                            <label for="feature-discbrake">Disc Brake</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-suspension" name="features[]" value="Suspension Fork">
+                                            <label for="feature-suspension">Suspension Fork</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-electric" name="features[]" value="Electric Assist">
+                                            <label for="feature-electric">Electric Assist</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-light-weight" name="features[]" value="Light Weight">
+                                            <label for="feature-light-weight">Light-weight</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="feature-tubeless-tire" name="features[]" value="Tubeless Tire">
+                                            <label for="feature-tubeless-tire">Tubeless Tires</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="window.location.href='products.html'">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check"></i> Save Product
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- <script src="script.js"></script> -->
+    <script src="./script.js"></script>
+    <script src="./add-product.js"></script>
+</body>
+</html>

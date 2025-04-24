@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup Page</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", sans-serif;
+      }
+
+      body {
+        background: url("/User/assets/images/GEAR-UP/gearup-ornage.png")
+          no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+      }
+
+      .signup-container {
+        background: rgba(43, 43, 43, 0.95);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+        width: 100%;
+        max-width: 500px;
+        color: #f5f5f5;
+        /* position: relative; */
+      }
+
+      .signup-container h2 {
+        margin-bottom: 30px;
+        text-align: center;
+        color: #f36d07;
+        letter-spacing: 2px;
+      }
+
+      .input-group {
+        position: relative;
+      }
+
+      .signup-container input {
+        width: 100%;
+        padding: 12px 40px 12px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #555;
+        border-radius: 25px;
+        background-color: #3c3c3c;
+        color: #f5f5f5;
+        transition: 0.3s ease;
+      }
+
+      .signup-container input:hover,
+      .signup-container input:focus {
+        border-color: #f0a500;
+        box-shadow: 0 0 5px rgba(240, 165, 0, 0.5);
+        outline: none;
+      }
+
+      .toggle-password {
+        position: absolute;
+        top: 33%;
+        right: 27px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #ccc;
+        font-size: 13px;
+      }
+
+      .btn {
+        background-color: #f36d07;
+        color: #1a1a1a;
+        padding: 12px 25px;
+        width: 100%;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s ease;
+        margin-bottom: 15px;
+      }
+
+      .btn:hover {
+        background-color: #ffbb33;
+        box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
+        transform: translateY(-2px);
+      }
+
+      /* .google-btn {
+        background-color: #ffffff;
+        color: #333;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: bold;
+      }
+
+      .google-btn img {
+        width: 20px;
+        height: 20px;
+      }
+
+      .google-btn:hover {
+        background-color: #f5f5f5;
+      } */
+
+      .login-link {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #ccc;
+      }
+
+      .login-link a {
+        color: #f0a500;
+        text-decoration: none;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+      .go-back-button {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        background-color: #f36d07;
+        color: #1a1a1a;
+        padding: 10px 18px;
+        border-radius: 20px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+      }
+
+      .go-back-button:hover {
+        background-color: #ffbb33;
+        box-shadow: 0 6px 15px rgba(255, 187, 51, 0.4);
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 480px) {
+        .signup-container {
+          padding: 25px;
+        }
+
+        .signup-container h2 {
+          font-size: 22px;
+        }
+
+        .btn,
+        .google-btn {
+          font-size: 14px;
+          padding: 10px 20px;
+        }
+      }
+      .errorMessage {
+        color: rgb(236, 49, 49);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <h2>SIGN UP</h2>
+      <form id="signupForm" action="/signup" method="post">
+        <input
+          type="text"
+          placeholder=" Enter Your First Name"
+          id="register-firstName"
+          name="firstName"
+          required
+        />
+        <div id="fnameError" class="errorMessage"></div>
+
+        <input
+          type="text"
+          placeholder=" Enter Your Last Name"
+          id="register-lastName"
+          name="lastName"
+          required
+        />
+        <div id="lnameError" class="errorMessage"></div>
+
+        <input
+          type="email"
+          placeholder="Enter Your Email"
+          id="register-email"
+          name="registerEmail"
+          required
+        />
+        <div id="emailError" class="errorMessage"></div>
+
+        <input
+          type="tel"
+          placeholder="Phone Your Contact Number"
+          id="register-phone"
+          name="registerPhone"
+          required
+        />
+        <div id="phoneError" class="errorMessage"></div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            id="register-password"
+            name="registerPassword"
+            placeholder="Enter Your Password"
+            required
+          />
+          <div id="passwordError" class="errorMessage"></div>
+          <!-- <span class="toggle-password" onclick="togglePassword('password')">🔒</span> -->
+          <span
+            class="toggle-password"
+            onclick="togglePassword('register-password')"
+            >🔒</span
+          >
+        </div>
+
+        <div class="input-group">
+          <input
+            type="password"
+            id="register-confirmPassword"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            required
+          />
+          <!-- <span class="toggle-password"onclick="togglePassword('confirmPassword')">🔒</span> -->
+          <div id="confpasswordError" class="errorMessage"></div>
+        </div>
+        <button class="btn" type="submit">CREATE ACCOUNT</button>
+        <button class="btn" type="submit">Login With Google</button>
+      </form>
+      <a href="/" class="go-back-button">Go Back</a>
+      <!-- <button class="btn google-btn"> -->
+      <!-- <img
+          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+          alt="Google logo"
+        /> -->
+      <!-- <a href="#" id="google-btn" class="btn">
+          <i class="icon-google"></i>
+          Login With Google
+        </a> -->
+      <!-- Sign up with Google -->
+      <!-- </button> -->
+      <div class="login-link">
+        Already have an account? <a href="/login">Login</a>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function togglePassword(id) {
+        const input = document.getElementById(id);
+        if (input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
+        }
+      }
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          clearErrors();
+
+          // Get input values
+          const firstName = document
+            .getElementById("register-firstName")
+            .value.trim();
+          const lastName = document
+            .getElementById("register-lastName")
+            .value.trim();
+          const email = document.getElementById("register-email").value.trim();
+          const phone = document.getElementById("register-phone").value.trim();
+          const password = document
+            .getElementById("register-password")
+            .value.trim();
+          const confirmPassword = document
+            .getElementById("register-confirmPassword")
+            .value.trim();
+
+          let isValid = true;
+
+          // First,Last name validation
+          const namePattern = /^[A-Z][a-zA-Z]{2,}$/; // star with capital and len should 3
+          const specialCharPattern = /[!@#$%^&*()~/+\-]/; // identify if special symbols
+
+          if (
+            !namePattern.test(firstName) ||
+            specialCharPattern.test(firstName)
+          ) {
+            document.getElementById("fnameError").innerText =
+              "Invalid first name! Use only letters, start with uppercase, min 3 chars.";
+            isValid = false;
+          }
+
+          if (
+            !namePattern.test(lastName) ||
+            specialCharPattern.test(lastName)
+          ) {
+            document.getElementById("lnameError").innerText =
+              "Invalid last name! Use only letters, start with uppercase, min 3 chars.";
+            isValid = false;
+          }
+
+          // Email Validation
+          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+          if (!emailPattern.test(email)) {
+            document.getElementById("emailError").innerText =
+              "Please enter a valid email address!";
+            isValid = false;
+          }
+
+          // Phone Number Validation (10 digits)
+          const phonePattern = /^[0-9]{10}$/;
+          if (!phonePattern.test(phone)) {
+            document.getElementById("phoneError").innerText =
+              "Phone number must be exactly 10 digits!";
+            isValid = false;
+          }
+
+          // Password Validation (Min 6 characters)
+          if (password.length < 6) {
+            document.getElementById("passwordError").innerText =
+              "Password must be at least 6 characters long!";
+            isValid = false;
+          }
+
+          // Confirm Password Validation
+          if (password !== confirmPassword) {
+            document.getElementById("confpasswordError").innerText =
+              "Passwords do not match!";
+            isValid = false;
+          }
+
+          // Submit form if all validations pass
+          // if (isValid) {
+          //   alert("Form submitted successfully!");
+          //   document.getElementById("signupForm").submit(); // Uncomment this for actual form submission
+          // }
+
+          //sweetalerts
+          if (isValid) {
+            fetch("/signup", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              // body: JSON.stringify({ firstName,lastName,email,phone,password }),
+              body: JSON.stringify({
+                firstName,
+                lastName,
+                registerEmail: email,
+                registerPhone: phone,
+                registerPassword: password,
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  Swal.fire({
+                    icon: "success",
+                    title: data.message || "Signup successful!",
+                    showConfirmButton: false,
+                    timer: 1000,
+                  }).then(() => {
+                    window.location.href = data.redirectTo || "/";
+                  });
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Signup Failed",
+                    text: data.message || "Something went wrong.",
+                  });
+                }
+              })
+              .catch(() => {
+                Swal.fire({
+                  icon: "error",
+                  title: "Error",
+                  text: "Server error. Please try again.",
+                });
+              });
+          }
+        });
+
+      // Function to Clear Previous Errors
+      function clearErrors() {
+        document
+          .querySelectorAll(".errorMessage")
+          .forEach((error) => (error.innerText = ""));
+      }
+
+      // // Google Authentication Redirect
+      // document.getElementById("google-btn")?.addEventListener("click", function () {
+      //   window.location.href = "/auth/google";
+      // });
+
+      // document
+      //   .getElementById("signupform")
+      //   .addEventListener("submit", function (e) {
+      //     e.preventDefault();
+      //     alert("Signup Successful!");
+      //   });
+    </script>
+  </body>
+</html>

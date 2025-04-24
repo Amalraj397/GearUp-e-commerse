@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDEZ - Premium Bicycles</title>
+    <link rel="stylesheet" href="./User/assets/css/styles.css">
+    <!-- <link rel="stylesheet" href="./User/assets/css/styleLogin.css"> -->
+    <!-- <link rel="stylesheet" href="./User/assets/css/styleSignup.css"> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>RIDEZ</h1>
+                <div class="logo-underline"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link">Go to Store</a></li>
+                <li><a href="#" class="nav-link">Contact Us</a></li>
+                <li><a href="#" class="nav-link">About Us</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <li><a href="/login" class="nav-link">Login</a></li>
+                <li><a href="/signup" class="nav-link">Sign-up</a></li>
+            </div>
+
+        </nav>
+    </header> -->
+
+
+    <header>
+        <nav class="navbar">
+          <div class="logo">
+            <!-- <h1>Gear-UP</h1> -->
+             <img src="/User/assets/images/GEAR-UP/gear up.PNG" alt="gearup logo" width="90px" height="35px">
+            <div class="logo-underline"></div>
+          </div>
+      
+          <ul class="nav-links">
+            <li><a href="#" class="nav-link">Go to Store</a></li>
+            <li><a href="#" class="nav-link">Contact Us</a></li>
+            <li><a href="#" class="nav-link">About Us</a></li>
+          </ul>
+      
+          <ul class="auth-buttons">
+            <% if (user) { %>
+                <% console.log("user data:", user); %>
+
+              <li class="nav-link">Hi,welcome <%= user.name %> 👋</li>
+              <li><a href="/logout" class="nav-link">Logout</a></li>
+            <% } else { %>
+              <li><a href="/login" class="nav-link">Login</a></li>
+              <li><a href="/signup" class="nav-link">Sign-up</a></li>
+            <% } %>
+          </ul>
+        </nav>
+      </header>
+      

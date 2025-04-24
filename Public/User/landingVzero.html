@@ -1,0 +1,1814 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDEZ - Premium Bicycles</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <style>
+        /* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #0a0a0a;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Button Styles */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background-color: #ff6600;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #e55c00;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.btn-orange {
+    background-color: #ff6600;
+    color: white;
+    padding: 10px 20px;
+}
+
+.btn-orange:hover {
+    background-color: #e55c00;
+}
+
+.btn-white {
+    background-color: #ffffff;
+    color: #0a0a0a;
+    padding: 10px 20px;
+}
+
+.btn-white:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-login {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+.btn-login:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-signup {
+    background-color: #ff6600;
+    color: #ffffff;
+}
+
+.btn-signup:hover {
+    background-color: #e55c00;
+}
+
+/* Navigation Bar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    position: relative;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 2px;
+}
+
+.logo-underline {
+    width: 40px;
+    height: 3px;
+    background-color: #ff6600;
+    margin-top: 5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding: 5px 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ff6600;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    min-height: 80vh;
+    padding: 50px 5%;
+    overflow: hidden;
+}
+
+.hero-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.hero-text {
+    max-width: 500px;
+    z-index: 2;
+}
+
+.year-tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: #ff6600;
+}
+
+.hero-text h2 {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ff6600;
+    margin-bottom: 20px;
+}
+
+.hero-text p {
+    margin-bottom: 30px;
+    color: #cccccc;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.hero-image {
+    position: relative;
+    width: 50%;
+    height: 500px;
+}
+
+.orange-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ff6600;
+    right: -20%;
+    z-index: 1;
+    border-radius: 10px;
+}
+
+#hero-bike {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+    z-index: 2;
+    transition: transform 0.5s ease;
+}
+
+#hero-bike:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.hero-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.dots {
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #555555;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #ff6600;
+}
+
+.arrows {
+    display: flex;
+    gap: 15px;
+}
+
+.arrow-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-btn:hover {
+    background-color: #ff6600;
+}
+
+/* Categories Section */
+.categories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 50px 5%;
+}
+
+.category-card {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.category-card:hover img {
+    transform: scale(1.05);
+}
+
+.category-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.category-content h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.category-content p {
+    font-size: 12px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    color: #cccccc;
+}
+
+/* Footer */
+footer {
+    background-color: #111111;
+    padding: 50px 5% 20px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.footer-logo h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.footer-logo p {
+    color: #999999;
+}
+
+.footer-links {
+    display: flex;
+    gap: 50px;
+}
+
+.footer-column h4 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #ff6600;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+    color: #999999;
+    transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #ff6600;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #666666;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .hero-text h2 {
+        font-size: 36px;
+    }
+    
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .nav-links {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-content {
+        flex-direction: column;
+    }
+    
+    .hero-text {
+        margin-bottom: 40px;
+        text-align: center;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-image {
+        width: 100%;
+    }
+    
+    .orange-bg {
+        right: 0;
+    }
+    
+    .categories {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 30px;
+    }
+}
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>RIDEZ</h1>
+                <div class="logo-underline"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link">Go to Store</a></li>
+                <li><a href="#" class="nav-link">Contact Us</a></li>
+                <li><a href="#" class="nav-link">About Us</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button class="btn btn-login">Login</button>
+                <button class="btn btn-signup">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="year-tag">BIKE RANGE 2023</span>
+                    <h2>Vanquish Comp Carbon</h2>
+                    <div class="price">$1195.00</div>
+                    <p>High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">BUY NOW</button>
+                        <button class="btn btn-secondary">EXPLORE PRODUCTS</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="orange-bg"></div>
+                    <img src="/placeholder.svg?height=600&width=600" alt="Vanquish Comp Carbon Bicycle" id="hero-bike">
+                </div>
+            </div>
+            <div class="hero-controls">
+                <div class="dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <div class="arrows">
+                    <button class="arrow-btn prev">&#10094;</button>
+                    <button class="arrow-btn next">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories">
+            <div class="category-card">
+                <img src="/placeholder.svg?height=300&width=400" alt="Singletrack Speed Bicycle">
+                <div class="category-content">
+                    <h3>Singletrack Speed</h3>
+                    <p>BUILT TO DOMINATE THE TRAILS</p>
+                    <button class="btn btn-orange">LEARN MORE</button>
+                </div>
+            </div>
+            <div class="category-card">
+                <img src="/placeholder.svg?height=300&width=400" alt="Trail Power Bicycle">
+                <div class="category-content">
+                    <h3>Trail Power</h3>
+                    <p>BUILT TOUGH & POWERFUL</p>
+                    <button class="btn btn-white">DISCOVER MORE</button>
+                </div>
+            </div>
+            <div class="category-card">
+                <img src="/placeholder.svg?height=300&width=400" alt="Road Bikes">
+                <div class="category-content">
+                    <h3>Road Bikes</h3>
+                    <p>DESIGNED FOR SPEED</p>
+                    <button class="btn btn-orange">SHOP NOW</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>RIDEZ</h2>
+                <p>Premium Bicycles Since 2010</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#">Mountain Bikes</a></li>
+                        <li><a href="#">Road Bikes</a></li>
+                        <li><a href="#">Electric Bikes</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Warranty</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 RIDEZ. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Navigation menu hover effect
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.color = '#ff6600';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.color = '#ffffff';
+        });
+    });
+    
+    // Hero slider functionality
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    
+    // Sample bike data for the slider
+    const bikes = [
+        {
+            name: 'Vanquish Comp Carbon',
+            price: '$1195.00',
+            description: 'High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.'
+        },
+        {
+            name: 'Mountain Explorer Pro',
+            price: '$1495.00',
+            description: 'Designed for the toughest trails with advanced suspension and premium components.'
+        },
+        {
+            name: 'Road Master Elite',
+            price: '$1295.00',
+            description: 'Lightweight frame and aerodynamic design for maximum speed on the open road.'
+        },
+        {
+            name: 'Urban Commuter X1',
+            price: '$895.00',
+            description: 'Perfect for city riding with comfortable geometry and practical features.'
+        }
+    ];
+    
+    let currentSlide = 0;
+    
+    // Function to update the hero content
+    function updateSlide(index) {
+        // Update text content
+        document.querySelector('.hero-text h2').textContent = bikes[index].name;
+        document.querySelector('.price').textContent = bikes[index].price;
+        document.querySelector('.hero-text p').textContent = bikes[index].description;
+        
+        // Update active dot
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[index].classList.add('active');
+        
+        // Add animation effect
+        const heroImage = document.getElementById('hero-bike');
+        heroImage.style.opacity = '0';
+        
+        setTimeout(() => {
+            heroImage.style.opacity = '1';
+            heroImage.style.transform = 'translate(-50%, -50%) scale(1.05)';
+            
+            setTimeout(() => {
+                heroImage.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 300);
+        }, 300);
+    }
+    
+    // Event listeners for dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            updateSlide(currentSlide);
+        });
+    });
+    
+    // Event listeners for arrow buttons
+    prevBtn.addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + bikes.length) % bikes.length;
+        updateSlide(currentSlide);
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % bikes.length;
+        updateSlide(currentSlide);
+    });
+    
+    // Auto slide every 5 seconds
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % bikes.length;
+        updateSlide(currentSlide);
+    }, 5000);
+    
+    // Parallax effect for hero section
+    const heroSection = document.querySelector('.hero');
+    
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        if (scrollPosition < 500) {
+            const heroImage = document.getElementById('hero-bike');
+            heroImage.style.transform = `translate(-50%, -${50 - scrollPosition * 0.05}%)`;
+            
+            const orangeBg = document.querySelector('.orange-bg');
+            orangeBg.style.transform = `translateX(${scrollPosition * 0.05}%)`;
+        }
+    });
+    
+    // Button hover effects
+    const buttons = document.querySelectorAll('.btn');
+    
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px)';
+            this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+    
+    // Category card hover effects
+    const categoryCards = document.querySelectorAll('.category-card');
+    
+    categoryCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            const content = this.querySelector('.category-content');
+            content.style.transform = 'translateY(-10px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            const content = this.querySelector('.category-content');
+            content.style.transform = 'translateY(0)';
+        });
+    });
+});
+
+    </script>
+</body>
+</html> -->
+
+<!-- ......................................................................................................................... -->
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bikerz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+        <style>
+            /* Facilities Section */
+    .facilities {
+      padding: 80px 5%;
+      background-color: #ffffff;
+      color: #0a0a0a;
+      text-align: center;
+    }
+    
+    .section-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background-color: #ff6600;
+    }
+    
+    .facilities-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .facility-card {
+      flex: 1;
+      padding: 30px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .facility-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .facility-icon {
+      margin-bottom: 20px;
+    }
+    
+    .icon-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid #ff6600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      color: #ff6600;
+      transition: all 0.3s ease;
+    }
+    
+    .facility-card:hover .icon-circle {
+      background-color: #ff6600;
+      color: #ffffff;
+    }
+    
+    .facility-card h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .facility-card p {
+      color: #666666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    /* Product Categories Section */
+    .product-categories {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    
+    .product-category {
+      display: flex;
+      height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-category.kids {
+      background-color: #f5f5f5;
+    }
+    
+    .product-category.accessories {
+      background-color: #eeeeee;
+    }
+    
+    .product-info {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 2;
+    }
+    
+    .product-info h3 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .product-info p {
+      margin-bottom: 25px;
+      color: #555555;
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid #ff6600;
+      color: #ff6600;
+      padding: 10px 20px;
+      align-self: flex-start;
+    }
+    
+    .btn-outline:hover {
+      background-color: #ff6600;
+      color: #ffffff;
+    }
+    
+    .product-image {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .product-category:hover .product-image img {
+      transform: scale(1.05);
+    }
+    
+    /* Services Section */
+    .services {
+      background-color: #0a0a0a;
+      padding: 80px 5%;
+      color: #ffffff;
+    }
+    
+    .services-content {
+      display: flex;
+      align-items: center;
+      gap: 50px;
+    }
+    
+    .services-text {
+      flex: 1;
+    }
+    
+    .services-text h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .services-text h2::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: #ff6600;
+    }
+    
+    .service-items {
+      margin-bottom: 30px;
+    }
+    
+    .service-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 25px;
+    }
+    
+    .service-icon {
+      margin-right: 15px;
+      padding: 10px;
+      border-radius: 50%;
+      background-color: rgba(255, 102, 0, 0.1);
+    }
+    
+    .service-details h4 {
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: #ff6600;
+    }
+    
+    .service-details p {
+      color: #cccccc;
+      font-size: 14px;
+    }
+    
+    .services-image {
+      flex: 1;
+      position: relative;
+      height: 400px;
+    }
+    
+    .services-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    
+    /* Contact Form Section */
+    .contact-form-section {
+      padding: 80px 5%;
+      position: relative;
+      background-image: url("/placeholder.svg?height=800&width=1200");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    
+    .contact-form-section::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 1;
+    }
+    
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .form-content {
+      padding: 40px;
+    }
+    
+    .form-content h2 {
+      font-size: 32px;
+      color: #0a0a0a;
+      margin-bottom: 10px;
+    }
+    
+    .form-content p {
+      color: #555555;
+      margin-bottom: 30px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #0a0a0a;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #dddddd;
+      border-radius: 5px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #ff6600;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
+    }
+    
+    /* Update media queries to include new sections */
+    @media (max-width: 1024px) {
+      .facilities-container {
+        flex-direction: column;
+        gap: 30px;
+      }
+    
+      .product-categories {
+        grid-template-columns: 1fr;
+      }
+    
+      .services-content {
+        flex-direction: column;
+      }
+    
+      .services-image {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .product-category {
+        flex-direction: column;
+        height: auto;
+      }
+    
+      .product-info {
+        padding: 30px;
+        text-align: center;
+      }
+    
+      .btn-outline {
+        align-self: center;
+      }
+    
+      .product-image {
+        height: 300px;
+      }
+    
+      .form-content {
+        padding: 30px 20px;
+      }
+    }
+         </style> 
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo-container">
+                <img src="asset/logo.png" alt="">
+            </div>
+            <div class="menu-container">
+                <ul>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Shop</a></li>
+                    <li><a href="">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+         banner section -->
+        <!-- <div class="banner">
+            <div class="banner-content">
+                <h1 class="banner-title">Ride in Style with <br> Bikerz Premium Bikes</h1>
+                <p class="banner-description">
+                    Embark on thrilling adventures with our premium bikes. Designed for performance, comfort, and
+                    style, Bikerz bikes redefine your riding experience.
+                </p>
+                <button class="btn btn-primary">Explore Our Bikes</button>
+            </div>
+            <div class="banner-image">
+                <img src="asset/bike.png" alt="">
+            </div>
+        </div>
+    </header>
+     main section 
+    <main>
+     hot bikes section
+        <section class="hot-bikes">
+            <h1 class="section-title">Hot Bikes of this Year</h1>
+            <p class="text-light-gray">Best bike collection</p>
+            <div class="bikes-container">
+                <img src="asset/bike1.png" alt="">
+                <img src="asset/bike2.png" alt="">
+                <img src="asset/bike3.png" alt="">
+            </div>
+        </section>
+    new arrival section 
+        <section class="new-arrival">
+            <h1 class="section-title">New Arrival</h1>
+            <div class="new-bikes-container">
+                <div class="new-bike">
+                    <img src="asset/bike4.png" alt="">
+                </div>
+                <div class="new-bike-content">
+                    <h3 class="bike-title">Yamaha R1</h3>
+                    <p class="text-light-gray">Unleash the power of the Yamaha R1, a true masterpiece of engineering.
+                        Experience unparalleled performance and precision on the road.</p>
+                    <ul>
+                        <li>Responsive Handling</li>
+                        <li>Advanced Suspension</li>
+                        <li>Aerodynamic Design</li>
+                    </ul>
+                    <button class="btn btn-primary">Book Now</button>
+                </div>
+            </div>
+        </section>
+        <!-- categories section
+        <section class="product-categories">
+            <div class="product-category kids">
+                <div class="product-info">
+                    <h3>KIDS BIKES</h3>
+                    <p>Safe and fun bikes for all ages</p>
+                    <button class="btn btn-outline">SHOP NOW</button>
+                </div>
+                <div class="product-image">
+                    <img src="/placeholder.svg?height=400&width=400" alt="Kids Bike">
+                </div>
+            </div>
+            <div class="product-category accessories">
+                <div class="product-info">
+                    <h3>ACCESSORIES</h3>
+                    <p>Complete your ride with premium accessories</p>
+                    <button class="btn btn-outline">SHOP NOW</button>
+                </div>
+                <div class="product-image">
+                    <img src="/placeholder.svg?height=400&width=400" alt="Cycling Accessories">
+                </div>
+            </div>
+        </section>
+
+    <section class="facilities">
+        <h2 class="section-title">Our Facilities & Features</h2>
+        <div class="facilities-container">
+            <div class="facility-card">
+                <div class="facility-icon">
+                    <div class="icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings">
+                            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                </div>
+                <h3>Complete Overhaul</h3>
+                <p>Professional bike maintenance from our certified expert technicians</p>
+            </div>
+            <div class="facility-card">
+                <div class="facility-icon">
+                    <div class="icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-hand-metal">
+                            <path d="M18 12.5V10a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1.4"></path>
+                            <path d="M14 11V9a2 2 0 1 0-4 0v2"></path>
+                            <path d="M10 10.5V5a2 2 0 1 0-4 0v9"></path>
+                            <path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8V7a2 2 0 1 0-4 0v5"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3>Custom Parts & Accessories</h3>
+                <p>Personalize your ride with our wide range of custom options</p>
+            </div>
+            <div class="facility-card">
+                <div class="facility-icon">
+                    <div class="icon-circle">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bike">
+                            <circle cx="5.5" cy="17.5" r="3.5"></circle>
+                            <circle cx="18.5" cy="17.5" r="3.5"></circle>
+                            <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"></path>
+                        </svg>
+                    </div>
+                </div>
+                <h3>Bike Fitting & Delivery</h3>
+                <p>Professional bike fitting service and convenient delivery options</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="product-categories">
+        <div class="product-category kids">
+            <div class="product-info">
+                <h3>KIDS BIKES</h3>
+                <p>Safe and fun bikes for all ages</p>
+                <button class="btn btn-outline">SHOP NOW</button>
+            </div>
+            <div class="product-image">
+                <img src="/placeholder.svg?height=400&width=400" alt="Kids Bike">
+            </div>
+        </div>
+        <div class="product-category accessories">
+            <div class="product-info">
+                <h3>ACCESSORIES</h3>
+                <p>Complete your ride with premium accessories</p>
+                <button class="btn btn-outline">SHOP NOW</button>
+            </div>
+            <div class="product-image">
+                <img src="/placeholder.svg?height=400&width=400" alt="Cycling Accessories">
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="services-content">
+            <div class="services-text">
+                <h2>Bike Services & Repair</h2>
+                <div class="service-items">
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tool">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                            </svg>
+                        </div>
+                        <div class="service-details">
+                            <h4>Tune-Up / Full Rebuild</h4>
+                            <p>Get your bike in top shape with our expert service</p>
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ruler">
+                                <path d="M21 7 7 21"></path>
+                                <path d="m7 7 3 3"></path>
+                                <path d="m14 14 3 3"></path>
+                                <path d="M3 21h18"></path>
+                                <path d="M3 7h18"></path>
+                            </svg>
+                        </div>
+                        <div class="service-details">
+                            <h4>Pre-arrival Bike Fit</h4>
+                            <p>Custom fitting to ensure maximum comfort and efficiency</p>
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <div class="service-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-truck">
+                                <path d="M10 17h4V5H2v12h3"></path>
+                                <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"></path>
+                                <circle cx="7.5" cy="17.5" r="2.5"></circle>
+                                <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                            </svg>
+                        </div>
+                        <div class="service-details">
+                            <h4>Free Delivery</h4>
+                            <p>We deliver your bike fully assembled and ready to ride</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary">BOOK SERVICE</button>
+            </div>
+            <div class="services-image">
+                <img src="/placeholder.svg?height=500&width=500" alt="Red Mountain Bike">
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-form-section">
+        <div class="form-container">
+            <div class="form-content">
+                <h2>Get In Touch</h2>
+                <p>Have questions about our bikes or services? Send us a message and we'll get back to you.</p>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    </main>
+    <!-- footer section
+    <footer>
+        <p>Copyright 2024 Bikerz. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+  // Navigation menu hover effect
+  const navLinks = document.querySelectorAll(".nav-link")
+
+  navLinks.forEach((link) => {
+    link.addEventListener("mouseenter", function () {
+      this.style.color = "#ff6600"
+    })
+
+    link.addEventListener("mouseleave", function () {
+      this.style.color = "#ffffff"
+    })
+  })
+
+  // Hero slider functionality
+  const dots = document.querySelectorAll(".dot")
+  const prevBtn = document.querySelector(".prev")
+  const nextBtn = document.querySelector(".next")
+
+  // Sample bike data for the slider
+  const bikes = [
+    {
+      name: "Vanquish Comp Carbon",
+      price: "$1195.00",
+      description:
+        "High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.",
+    },
+    {
+      name: "Mountain Explorer Pro",
+      price: "$1495.00",
+      description: "Designed for the toughest trails with advanced suspension and premium components.",
+    },
+    {
+      name: "Road Master Elite",
+      price: "$1295.00",
+      description: "Lightweight frame and aerodynamic design for maximum speed on the open road.",
+    },
+    {
+      name: "Urban Commuter X1",
+      price: "$895.00",
+      description: "Perfect for city riding with comfortable geometry and practical features.",
+    },
+  ]
+
+  let currentSlide = 0
+
+  // Function to update the hero content
+  function updateSlide(index) {
+    // Update text content
+    document.querySelector(".hero-text h2").textContent = bikes[index].name
+    document.querySelector(".price").textContent = bikes[index].price
+    document.querySelector(".hero-text p").textContent = bikes[index].description
+
+    // Update active dot
+    dots.forEach((dot) => dot.classList.remove("active"))
+    dots[index].classList.add("active")
+
+    // Add animation effect
+    const heroImage = document.getElementById("hero-bike")
+    heroImage.style.opacity = "0"
+
+    setTimeout(() => {
+      heroImage.style.opacity = "1"
+      heroImage.style.transform = "translate(-50%, -50%) scale(1.05)"
+
+      setTimeout(() => {
+        heroImage.style.transform = "translate(-50%, -50%) scale(1)"
+      }, 300)
+    }, 300)
+  }
+
+  // Event listeners for dots
+  dots.forEach((dot, index) => {
+    dot.addEventListener("click", () => {
+      currentSlide = index
+      updateSlide(currentSlide)
+    })
+  })
+
+  // Event listeners for arrow buttons
+  prevBtn.addEventListener("click", () => {
+    currentSlide = (currentSlide - 1 + bikes.length) % bikes.length
+    updateSlide(currentSlide)
+  })
+
+  nextBtn.addEventListener("click", () => {
+    currentSlide = (currentSlide + 1) % bikes.length
+    updateSlide(currentSlide)
+  })
+
+  // Auto slide every 5 seconds
+  setInterval(() => {
+    currentSlide = (currentSlide + 1) % bikes.length
+    updateSlide(currentSlide)
+  }, 5000)
+
+  // Parallax effect for hero section
+  const heroSection = document.querySelector(".hero")
+
+  window.addEventListener("scroll", () => {
+    const scrollPosition = window.scrollY
+    if (scrollPosition < 500) {
+      const heroImage = document.getElementById("hero-bike")
+      heroImage.style.transform = `translate(-50%, -${50 - scrollPosition * 0.05}%)`
+
+      const orangeBg = document.querySelector(".orange-bg")
+      orangeBg.style.transform = `translateX(${scrollPosition * 0.05}%)`
+    }
+  })
+
+  // Button hover effects
+  const buttons = document.querySelectorAll(".btn")
+
+  buttons.forEach((button) => {
+    button.addEventListener("mouseenter", function () {
+      this.style.transform = "translateY(-3px)"
+      this.style.boxShadow = "0 5px 15px rgba(0, 0, 0, 0.3)"
+    })
+
+    button.addEventListener("mouseleave", function () {
+      this.style.transform = "translateY(0)"
+      this.style.boxShadow = "none"
+    })
+  })
+
+  // Category card hover effects
+  const categoryCards = document.querySelectorAll(".category-card")
+
+  categoryCards.forEach((card) => {
+    card.addEventListener("mouseenter", function () {
+      const content = this.querySelector(".category-content")
+      content.style.transform = "translateY(-10px)"
+    })
+
+    card.addEventListener("mouseleave", function () {
+      const content = this.querySelector(".category-content")
+      content.style.transform = "translateY(0)"
+    })
+  })
+
+  // Form validation and submission
+  const contactForm = document.getElementById("contact-form")
+
+  if (contactForm) {
+    contactForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+
+      // Get form values
+      const name = document.getElementById("name").value
+      const email = document.getElementById("email").value
+      const phone = document.getElementById("phone").value
+      const message = document.getElementById("message").value
+
+      // Simple validation
+      if (!name || !email || !message) {
+        alert("Please fill in all required fields.")
+        return
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.")
+        return
+      }
+
+      // Simulate form submission
+      const submitBtn = contactForm.querySelector('button[type="submit"]')
+      submitBtn.textContent = "Sending..."
+      submitBtn.disabled = true
+
+      // Simulate API call
+      setTimeout(() => {
+        alert("Thank you for your message! We will get back to you soon.")
+        contactForm.reset()
+        submitBtn.textContent = "Submit"
+        submitBtn.disabled = false
+      }, 1500)
+    })
+  }
+
+  // Facility card animations
+  const facilityCards = document.querySelectorAll(".facility-card")
+
+  if (facilityCards.length > 0) {
+    // Add animation when scrolling into view
+    window.addEventListener("scroll", () => {
+      facilityCards.forEach((card) => {
+        const cardPosition = card.getBoundingClientRect().top
+        const screenPosition = window.innerHeight / 1.3
+
+        if (cardPosition < screenPosition) {
+          card.style.opacity = "1"
+          card.style.transform = "translateY(0)"
+        }
+      })
+    })
+
+    // Initialize cards as hidden
+    facilityCards.forEach((card) => {
+      card.style.opacity = "0"
+      card.style.transform = "translateY(20px)"
+      card.style.transition = "all 0.5s ease"
+    })
+  }
+
+  // Service items hover effect
+  const serviceItems = document.querySelectorAll(".service-item")
+
+  serviceItems.forEach((item) => {
+    item.addEventListener("mouseenter", function () {
+      this.style.transform = "translateX(10px)"
+    })
+
+    item.addEventListener("mouseleave", function () {
+      this.style.transform = "translateX(0)"
+    })
+  })
+})
+    </script>
+</body>
+
+</html> --> 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDEZ - Premium Bicycles</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>RIDEZ</h1>
+                <div class="logo-underline"></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link">Go to Store</a></li>
+                <li><a href="#" class="nav-link">Contact Us</a></li>
+                <li><a href="#" class="nav-link">About Us</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button class="btn btn-login">Login</button>
+                <button class="btn btn-signup">Sign Up</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <span class="year-tag">BIKE RANGE 2023</span>
+                    <h2>Vanquish Comp Carbon</h2>
+                    <div class="price">$1195.00</div>
+                    <p>High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">BUY NOW</button>
+                        <button class="btn btn-secondary">EXPLORE PRODUCTS</button>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="orange-bg"></div>
+                    <img src="/placeholder.svg?height=600&width=600" alt="Vanquish Comp Carbon Bicycle" id="hero-bike">
+                </div>
+            </div>
+            <div class="hero-controls">
+                <div class="dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <div class="arrows">
+                    <button class="arrow-btn prev">&#10094;</button>
+                    <button class="arrow-btn next">&#10095;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="facilities">
+            <h2 class="section-title">Our Facilities & Features</h2>
+            <div class="facilities-container">
+                <div class="facility-card">
+                    <div class="facility-icon">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Complete Overhaul</h3>
+                    <p>Professional bike maintenance from our certified expert technicians</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 12.5V10a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1.4"></path>
+                                <path d="M14 11V9a2 2 0 1 0-4 0v2"></path>
+                                <path d="M10 10.5V5a2 2 0 1 0-4 0v9"></path>
+                                <path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8V7a2 2 0 1 0-4 0v5"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Custom Parts & Accessories</h3>
+                    <p>Personalize your ride with our wide range of custom options</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon">
+                        <div class="icon-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="5.5" cy="17.5" r="3.5"></circle>
+                                <circle cx="18.5" cy="17.5" r="3.5"></circle>
+                                <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Bike Fitting & Delivery</h3>
+                    <p>Professional bike fitting service and convenient delivery options</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-categories">
+            <div class="product-category kids">
+                <div class="product-info">
+                    <h3>KIDS BIKES</h3>
+                    <p>Safe and fun bikes for all ages</p>
+                    <button class="btn btn-outline">SHOP NOW</button>
+                </div>
+                <div class="product-image">
+                    <img src="/placeholder.svg?height=400&width=400" alt="Kids Bike">
+                </div>
+            </div>
+            <div class="product-category accessories">
+                <div class="product-info">
+                    <h3>ACCESSORIES</h3>
+                    <p>Complete your ride with premium accessories</p>
+                    <button class="btn btn-outline">SHOP NOW</button>
+                </div>
+                <div class="product-image">
+                    <img src="/placeholder.svg?height=400&width=400" alt="Cycling Accessories">
+                </div>
+            </div>
+        </section>
+
+        <section class="services">
+            <div class="services-content">
+                <div class="services-text">
+                    <h2>Bike Services & Repair</h2>
+                    <div class="service-items">
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                                </svg>
+                            </div>
+                            <div class="service-details">
+                                <h4>Tune-Up / Full Rebuild</h4>
+                                <p>Get your bike in top shape with our expert service</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 7 7 21"></path>
+                                    <path d="m7 7 3 3"></path>
+                                    <path d="m14 14 3 3"></path>
+                                    <path d="M3 21h18"></path>
+                                    <path d="M3 7h18"></path>
+                                </svg>
+                            </div>
+                            <div class="service-details">
+                                <h4>Pre-arrival Bike Fit</h4>
+                                <p>Custom fitting to ensure maximum comfort and efficiency</p>
+                            </div>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 17h4V5H2v12h3"></path>
+                                    <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"></path>
+                                    <circle cx="7.5" cy="17.5" r="2.5"></circle>
+                                    <circle cx="17.5" cy="17.5" r="2.5"></circle>
+                                </svg>
+                            </div>
+                            <div class="service-details">
+                                <h4>Free Delivery</h4>
+                                <p>We deliver your bike fully assembled and ready to ride</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">BOOK SERVICE</button>
+                </div>
+                <div class="services-image">
+                    <img src="/placeholder.svg?height=500&width=500" alt="Red Mountain Bike">
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-form-section">
+            <div class="form-container">
+                <div class="form-content">
+                    <h2>Get In Touch</h2>
+                    <p>Have questions about our bikes or services? Send us a message and we'll get back to you.</p>
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2>RIDEZ</h2>
+                <p>Premium Bicycles Since 2010</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#">Mountain Bikes</a></li>
+                        <li><a href="#">Road Bikes</a></li>
+                        <li><a href="#">Electric Bikes</a></li>
+                        <li><a href="#">Accessories</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Warranty</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 RIDEZ. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
