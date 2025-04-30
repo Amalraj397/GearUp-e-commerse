@@ -13,7 +13,8 @@ import {          //importing functions from usercontroller page
     verifyOtp,
     userLogout, 
     getproductBox,
-    resendOTP,          
+    resendOTP,  
+    handleGoogleSignup,        
     // next function
     // next function
     // next function
@@ -37,6 +38,7 @@ userRoute.get ("/logout",userLogout);
 userRoute.get("/signup", showSignup); 
 userRoute.post("/signup", userSignup);
 
+userRoute.post("/auth/google/signup", handleGoogleSignup);
 
 userRoute.get("/getOtp", getOtpPage);
 userRoute.post("/otpVerify", verifyOtp);

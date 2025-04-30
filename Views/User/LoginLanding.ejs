@@ -202,7 +202,41 @@
       <div class="signup">New here? <a href="#">Sign up</a></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="./User/assets/js/loginLand.js"></script>   -->
     <script>
+      //  ..................... js for login.......................
+
+      const loginForm = document.getElementById("loginForm");
+
+      loginForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        try {
+          const response = await 
+          fetch("/user/login", {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: { "Content-Type": "application/json" },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                localStorage.setItem("loggedInUser", JSON.stringify(data.user)); // ✅ Save user
+                window.location.href = data.redirectTo;
+              } else {
+                alert(data.message);
+              }
+            })
+            // .catch((err) => console.error(err));
+        } catch (error) {
+          console.error("Login error:", error);
+        }
+      });
+      // ................
+
       document
         .getElementById("loginForm")
         .addEventListener("submit", function (e) {

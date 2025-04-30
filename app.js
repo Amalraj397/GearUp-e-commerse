@@ -11,10 +11,12 @@ import userRoute from "./Routes/userRoute.js";
 import adminRoute from "./Routes/adminRoute.js";
 
 import { setUserLocals } from './middlewares/setUserLocals.js';
+// import cors from 'cors';
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+// app.use(cors());
 
 app.set('view engine', 'ejs'); 
 app.set("views", [
@@ -43,6 +45,8 @@ app.use(session({
       maxAge: 72*60*60*1000
   }
 }));
+
+
 
 app.use(setUserLocals);
 app.use("/",userRoute);

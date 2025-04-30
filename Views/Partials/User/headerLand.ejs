@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIDEZ - Premium Bicycles</title>
+    <title>GearUP - Premium Bicycles</title>
     <link rel="stylesheet" href="./User/assets/css/styles.css">
     <!-- <link rel="stylesheet" href="./User/assets/css/styleLogin.css"> -->
     <!-- <link rel="stylesheet" href="./User/assets/css/styleSignup.css"> -->
@@ -49,15 +49,25 @@
       
           <ul class="auth-buttons">
             <% if (user) { %>
-                <% console.log("user data:", user); %>
+                <% console.log("user data:::", user); %>
 
-              <li class="nav-link">Hi,welcome <%= user.name %> 👋</li>
+              <li class="nav-link"  id="user-name">Hi,welcome <%= user.name %> 👋</li>
               <li><a href="/logout" class="nav-link">Logout</a></li>
             <% } else { %>
               <li><a href="/login" class="nav-link">Login</a></li>
               <li><a href="/signup" class="nav-link">Sign-up</a></li>
             <% } %>
           </ul>
+
+          <!-- new for google auth and normal auth -->
+
+          <!-- <ul class="auth-buttons">
+            <li class="nav-link" id="user-name" style="display: none;">Hi, welcome 👋</li>
+            <li><a href="/login" class="nav-link" id="login-link">Login</a></li>
+            <li><a href="/signup" class="nav-link" id="signup-link">Sign-up</a></li>
+            <li><a href="/logout" class="nav-link" id="logout-link" style="display: none;">Logout</a></li>
+          </ul> -->
+
         </nav>
       </header>
       

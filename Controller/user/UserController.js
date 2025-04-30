@@ -3,7 +3,6 @@ import generateOTP from "../../utils/generate-OTP.js";
 import sendEmail from "../../utils/nodemailer.js";
 import securePassword from "../../utils/hashPass.js";
 import bcrypt from "bcrypt";
-import Swal from 'sweetalert2';
 // import { generateOTP } from "../../utils/generate-OTP.js";
 
 export const showLanding = (req, res) => {
@@ -141,7 +140,7 @@ export const verifyOtp = async (req, res) => {
 
       // Hashing password
       // const sPassword = await securePassword(getUser.password);
-      const sPassword = await securePassword(req.session.userData.password); // ✅ RIGHT
+      const sPassword = await securePassword(req.session.userData.password); 
 
 
       //  Storing User data in DB
@@ -329,8 +328,19 @@ export const userLogin = async (req, res) => {
       id: user._id,
       name: user.firstName,
     };
+    
+    // ✅ FINAL SUCCESS RESPONSE for normal user login
+    return res.status(200).json({
+      success: true,
+      redirectTo: "/",
+      message: "Login successful!",
+      user: {
+        id: user._id,
+        name: user.firstName,
+      },
+    });
 
-    return res.status(200).json({ success: true, redirectTo: "/", message: "Login successful!" });
+    // return res.status(200).json({ success: true, redirectTo: "/", message: "Login successful!" });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -358,6 +368,76 @@ export const userLogout = async (req, res) => {
     res.status(500).send("internal server Error  ");
   }
 };
+
+// -----------------------google authentication-----------------
+
+// export const handleGoogleSignup = async (req, res) => {
+//   const { email, googleId, displayName, photo } = req.body;
+//   try {
+//     let user = await User.findOne({ email });
+//     if (!user) {
+//       const [firstName, ...rest] = displayName.split(" ");
+//       const lastName = rest.join(" ");
+//       user = await User.create({
+//         firstName,
+//         lastName,
+//         email,
+//         googleId,
+//         profilePicture: photo,
+//       });
+//     }
+
+//     // Optionally use session or JWT here
+//     res.json({ success: true, user });
+//   } catch (err) {
+//     console.error("Google Auth Save Error:", err);
+//     res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };
+
+export const handleGoogleSignup = async (req, res) => {
+  try {
+    const { email, displayName, googleId, photo } = req.body;
+
+    if (!email || !displayName || !googleId) {
+      return res.status(400).json({ success: false, message: "Missing fields" });
+    }
+
+    // Check if user already exists
+    let user = await userschema.findOne({ email });
+
+    if (user) {
+      return res.status(200).json({ success: true, user });
+    }
+
+    // Split the displayName into firstName and lastName
+    const nameParts = displayName.split(" ");
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(" ") || "GoogleUser";
+
+    // Generate a random password
+    const randomPassword = Math.random().toString(36).slice(-8);
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+    // Create the user
+    user = await userschema.create({
+      firstName,
+      lastName,
+      email,
+      phone: null, // Optional
+      password: hashedPassword,
+      googleId,
+    });
+
+    res.status(201).json({ success: true, user });
+
+  } catch (error) {
+    console.error("Google Signup Error:", error);
+    res.status(500).json({ success: false, message: "Server error during Google signup" });
+  }
+};
+
+// -------------------------------------------------------------------
 
 // testing  getting the product-category page demo
 

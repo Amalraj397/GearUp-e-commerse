@@ -237,8 +237,10 @@
           <div id="confpasswordError" class="errorMessage"></div>
         </div>
         <button class="btn" type="submit">CREATE ACCOUNT</button>
-        <button class="btn" type="submit">Login With Google</button>
       </form>
+      <button class="btn" id="google-login" type="">
+        <i class="icon-google"></i>Login With Google
+      </button>
       <a href="/" class="go-back-button">Go Back</a>
       <!-- <button class="btn google-btn"> -->
       <!-- <img
@@ -255,6 +257,25 @@
         Already have an account? <a href="/login">Login</a>
       </div>
     </div>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth (compat version) -->
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
+
+    <script>
+      // Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyD6oCwWMMPVUy278R7RqtfyIDjdf9Lr2bQ",
+        authDomain: "auth-gearup.firebaseapp.com",
+        projectId: "auth-gearup",
+        storageBucket: "auth-gearup.firebasestorage.app",
+        messagingSenderId: "1035509266541",
+        appId: "1:1035509266541:web:1de31eb39abebb79be2764",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       function togglePassword(id) {
@@ -411,6 +432,168 @@
       //     e.preventDefault();
       //     alert("Signup Successful!");
       //   });
+
+      // import { auth, provider } from "../../utils/firebase.js";
+      // import { signInWithPopup } from "../../utils/firebase/auth";
+
+      // const googleLoginBtn = document.getElementById("google-login");
+
+      // googleLoginBtn.addEventListener("click", () => {
+      //   signInWithPopup(auth, provider)
+      //     .then((result) => {
+      //       const user = result.user;
+      //       console.log("User Info:", user);
+      //       // Redirect to dashboard or homepage
+      //       window.location.href = "/dashboard.html";
+      //     })
+      //     .catch((error) => {
+      //       console.error("Google Sign-In Error:", error);
+      //       alert("Authentication Failed");
+      //     });
+      // });
+      // ------------------------------------------------
+      // const googleLoginBtn = document.getElementById("google-login");
+
+      // googleLoginBtn.addEventListener("click", () => {
+      //   const provider = new firebase.auth.GoogleAuthProvider();
+
+      //   firebase
+      //     .auth()
+      //     .signInWithPopup(provider)
+      //     .then((result) => {
+      //       const user = result.user;
+      //       console.log("User Info:", user);
+      //       window.location.href = "/"; // or any redirect
+      //     })
+      //     .catch((error) => {
+      //       console.error("Google Sign-In Error:", error);
+      //       alert("Authentication Failed");
+      //     });
+      // });
+
+      // -----new-----
+      // document.addEventListener("DOMContentLoaded", () => {
+      //   const googleLoginBtn = document.getElementById("google-login");
+
+      //   if (googleLoginBtn) {
+      //     googleLoginBtn.addEventListener("click", () => {
+      //       const provider = new firebase.auth.GoogleAuthProvider();
+
+      //       firebase
+      //         .auth()
+      //         .signInWithPopup(provider)
+      //         .then((result) => {
+      //           const user = result.user;
+
+      //           const userData = {
+      //             email: user.email,
+      //             displayName: user.displayName,
+      //             googleId: user.uid,
+      //             photo: user.photoURL,
+      //           };
+
+      //           fetch("/auth/google/signup", {
+      //             method: "POST",
+      //             headers: {
+      //               "Content-Type": "application/json",
+      //             },
+      //             body: JSON.stringify(userData),
+      //           })
+      //             .then((res) => res.json())
+      //             .then((data) => {
+      //               if (data.success) {
+      //                 localStorage.setItem(
+      //                   "loggedInUser",
+      //                   JSON.stringify(data.user)
+      //                 );
+      //                 window.location.href = "/landing.html";
+      //               } else {
+      //                 alert("Something went wrong during login");
+      //               }
+      //             })
+      //             .catch((error) => {
+      //               console.error("Error sending user data to server:", error);
+      //               alert("Server error");
+      //             });
+      //         })
+      //         .catch((error) => {
+      //           console.error("Google Sign-In Error:", error);
+      //           alert("Authentication Failed");
+      //         });
+      //     });
+      //   }
+      // });
+
+
+      // ------------------------latest  added sweet alerts-----------------
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const googleLoginBtn = document.getElementById("google-login");
+
+        if (googleLoginBtn) {
+          googleLoginBtn.addEventListener("click", () => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            firebase
+              .auth()
+              .signInWithPopup(provider)
+              .then((result) => {
+                const user = result.user;
+
+                const userData = {
+                  email: user.email,
+                  displayName: user.displayName,
+                  googleId: user.uid,
+                  photo: user.photoURL,
+                };
+
+                return fetch("/auth/google/signup", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(userData),
+                });
+              })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  localStorage.setItem(
+                    "loggedInUser",
+                    JSON.stringify(data.user)
+                  );
+                  Swal.fire({
+                    icon: "success",
+                    title: "Login Successful!",
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+
+                  // // Save user to localStorage
+                  // localStorage.setItem(
+                  //   "loggedInUser",
+                  //   JSON.stringify(data.user)
+                  // );
+
+                  setTimeout(() => {
+                    window.location.href = "/"; // Redirect after login
+                  }, 1000);
+                } else {
+                  throw new Error("Something went wrong during signup");
+                }
+              })
+              .catch((error) => {
+                console.error("Google Sign-In Error:", error);
+
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Authentication Failed!",
+                });
+              });
+          });
+        }
+      });
     </script>
   </body>
 </html>
