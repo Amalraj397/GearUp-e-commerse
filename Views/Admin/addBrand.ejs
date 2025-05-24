@@ -159,8 +159,7 @@
       e.preventDefault();
 
       const brandName = document.getElementById("brand-name").value;
-      const brandDescription =
-        document.getElementById("brand-description").value;
+      const brandDescription = document.getElementById("brand-description").value;
       const brandImage = document.getElementById("brand-image").value;
 
       const errorMessage = [];
@@ -173,10 +172,10 @@
         errorMessage.push("Enter brand name");
       }
 
-      const nameRegex = /^[A-Z][a-zA-Z]*$/;
-      if (!nameRegex.test(brandName) || brandName.length < 3) {
+      const nameRegex = /^[A-Z][a-zA-Z0-9+\-]*(?: [a-zA-Z0-9+\-]+)*$/;
+      if (!nameRegex.test(brandName) || brandName.length < 2 ) {
         errorMessage.push(
-          "The brand name must start with a Capital letter and be at least 4 characters long. "
+          "The brand name must start with a Capital letter and be at least 3 characters long. "
         );
       }
 
@@ -203,34 +202,6 @@
       }
 
       const formData = new FormData(this);
-
-      // fetch('/api/v1/admin/brands/addBrand', {
-      //     method: 'POST',
-      //     body: formData // send form data including file
-      // }).then(response => {
-      //     if(!response.ok) { //Check if response is ok..!
-      //         return response.json().then(data => {
-      //             throw new Error(data.message) // throw error with the message from server
-      //         });
-
-      //     }
-      //     return response.json() //parse json response if ok!
-      // }).then(data => {
-      //     Swal.fire({
-      //         title: data.message,
-      //         icon: 'success'
-      //     }).then(()=>{
-      //         location.reload()
-      //     });
-      // }).catch(error => {
-      //     Swal.fire({
-      //         title: 'Error !',
-      //         text: error.message,
-      //         icon :'error'
-      //     });
-      // });
-
-      // -------------------new 8:22pm ,29/04--------------v
 
       fetch("/admin/addBrands", {
         method: "POST",

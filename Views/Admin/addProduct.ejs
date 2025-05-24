@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Add Product</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="products.css">
-     Font Awesome for icons --
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> !-->
+    <link rel="stylesheet" href="products.css"> -->
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Products Page Specific Styles */
 .products-container,
@@ -364,7 +364,7 @@
     color: var(--text-muted);
 }
 
-.image-upload-input {
+.image-upload-item {
     position: absolute;
     top: 0;
     left: 0;
@@ -374,18 +374,30 @@
     cursor: pointer;
 }
 
-.image-preview-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 10px;
-    margin-top: 15px;
+.image-preview-item {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 2px;
+  border: 1px solid #ccc;
 }
-
 .image-preview {
+    display: grid;
     position: relative;
-    border-radius: 5px;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 5px;
+    margin-top: 15px;
+    border-radius: 3px;
     overflow: hidden;
-    aspect-ratio: 1;
+    width: 100%;
+}
+.image-preview-item-wrapper{
+    position:relative;
+    width:100px;
+    height:100px
+}
+.image-preview-item-wrapper:hover .remove-image{
+    opacity:1
 }
 
 .image-preview img {
@@ -394,7 +406,7 @@
     object-fit: cover;
 }
 
-.image-preview .remove-image {
+.remove-image {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -410,12 +422,13 @@
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.3s ease;
-}
+} 
 
 .image-preview:hover .remove-image {
     opacity: 1;
 }
 
+/* ----------------image upload styles ends----------------- */
 /* Price Input Styles */
 .price-input {
     position: relative;
@@ -547,6 +560,26 @@
     background-color: var(--primary-dark);
 }
 
+.error-message {
+    color: #a61518;
+    font-size: 1.0rem;
+    margin-top: 4px;
+    display: block;
+    min-height: 20px;
+}
+
+
+/* input.error, select.error, textarea.error {
+  border: 1px solid red;
+} */
+
+@media (max-width: 768px) {
+    .gender-frame-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
 /* Responsive Styles */
 @media (max-width: 1024px) {
     .form-grid {
@@ -590,11 +623,10 @@
                 <div class="add-product-header">
                     <h1>Add New Product</h1>
                     <div class="add-product-actions">
-                        <button class="save-product-btn">View products.</button>
+                        <button id="viewProductsBtn" class="save-product-btn" onclick="window.location.href='/admin/productList'">View products.</button>
                     </div>  
                 </div>
-            </div>
-                <form id="add-product-form" class="add-product-form">
+                <form id="addProduct-form" class="add-product-form">
                     <div class="form-grid">
                         <div class="form-column">
                             <!-- Basic Information -->
@@ -602,87 +634,79 @@
                                 <h3>Basic Information</h3>
                                 <div class="form-group">
                                     <label for="product-name">Product Name*</label>
-                                    <input type="text" id="product-name" name="product-name" required>
+                                    <input type="text" id="product-name" name="productName">
+                                    <span  class="error-message"></span>
                                 </div>
-                                
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="brand">Brand*</label>
-                                        <select id="brand" name="brand" required>
-                                            <option value="">Select Brand</option>
-                                            <option value="ninteone">ninteOne</option>
-                                            <option value="ktm">KTM</option>
-                                            <option value="stryder">Stryder</option>
-                                            <option value="RockRider">RockRider</option>
-                                            <option value="fastrack">FastTrack</option>
-                                            <option value="urbanmotion">UrbanMotion</option>
-                                            <option value="hero">Hero</option>
-                                            <option value="speedx">SpeedX</option>
+                                        <select id="brand" name="brand">
+                                            <option value="" disabled selected>-select-</option>
+                                            <%for(let i=0; i<brand.length; i++) {%>
+                                            <option value="<%= brand[i].brandName%>">
+                                                <%=brand[i].brandName%>
+                                            </option>
+                                            <% } %>
                                         </select>
+                                        <span class="error-message"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="category">Category*</label>
-                                        <select id="category" name="category" required>
-                                            <option value="">Select Category</option>
-                                            <option value="shoes"> For Men</option>
-                                            <option value="clothing">For Women</option>
-                                            <option value="accessories">For kids</option>
+                                        <select id="category" name="category">
+                                            <option value="" disabled selected>-select-</option>
+                                            <%for(let i=0; i<category.length; i++) {%>
+                                            <option value="<%=category[i].name%>">
+                                                <%=category[i].name%>
+                                            </option>
+                                            <% } %>
                                         </select>
+                                        <span class="error-message"></span>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="description">Description*</label>
-                                    <textarea id="description" name="description" rows="5" required></textarea>
+                                    <textarea id="description" name="description" rows="5"></textarea>
+                                    <span class="error-message"></span>
                                 </div>
                             </div>
                             
                             <!-- Variants and Attributes -->
                             <div class="form-card">
-                                <h3>Variants and Attributes</h3>
+                                <h3>Attributes:</h3>
                                 <div class="form-row">
                                     <div class="form-group">
-                                        <label for="brand">Varients*</label>
-                                        <select id="brand" name="brand" required>
-                                            <option value="mtb">MTB [mountain bikes]</option>
-                                            <option value="atb">ATB [All terrain bikes]</option>
-                                            <option value="nike">Road Bikes</option>
-                                            <option value="adidas">City Bikes</option>
-                                            <option value="puma">Fat tyre Bikes</option>
-                                            <option value="nike">Single Speed</option>
-                                            <option value="adidas">BMX</option>
+                                        <label for="scale">Scale:</label>
+                                        <select id="scale" name="scale" >
+                                            <option value="" disabled selected>-select-</option>
+                                            <option id="1:64" value="1:64"> 1:64 </option>
+                                            <option id="1:43" value="1:43"> 1:43 </option>
+                                            <option id="1:32" value="1:32"> 1:32 </option>
+                                            <option id="1:24" value="1:24"> 1:24 </option>
+                                            <option id="1:18" value="1:18"> 1:18 </option>
                                         </select>
+                                        <span class="error-message"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="color">Color</label>
-                                        <input type="text" id="color" name="color" placeholder="e.g. Red, Blue, Black">
+                                        <label for="color">Edition:</label>
+                                        <select id="edition" name="edition">
+                                            <option value="" disabled selected>-select-</option>
+                                            <option  id="fast and Furious" value="Fast & Furious">Fast & Furious</option>
+                                            <option  id="gran turismo" value="Gran Turismo">Gran Turismo</option>
+                                            <option  id="batman" value="Batman">Batman</option>
+                                            <option  id="racing" value="racing">Racing sports</option>
+                                            <option  id="Official" value="Official">Official</option>
+                                            <option  id="forza motorsports" value="Forza Motorsports">Forza Motorsports</option>
+                                            <option  id="collective" value="collective">Collective</option>
+                                        </select>
+                                        <span class="error-message"></span>
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="stock">Stock Quantity*</label>
-                                    <input type="number" id="stock" name="stock" min="0" required>
-                                </div>
-                            </div>
-                            
-                            <!-- Product Images -->
-                            <div class="form-card">
-                                <h3>Product Images</h3>
-                                <p class="form-help-text">Upload multiple images for your product. First image will be used as the featured image.</p>
-                                
-                                <div class="image-upload-container">
-                                    <div class="image-upload-area" id="image-upload-area">
-                                        <div class="image-upload-placeholder">
-                                            <i class="fas fa-cloud-upload-alt"></i>
-                                            <p>Drag & drop images here or click to browse</p>
-                                            <span>Supports: JPG, PNG, GIF (Max 5MB each)</span>
-                                        </div>
-                                        <input type="file" id="product-images" name="product-images" multiple accept="image/*" class="image-upload-input">
-                                    </div>
-                                    
-                                    <div class="image-preview-container" id="image-preview-container">
-                                        <!-- Image previews will be added here by JavaScript -->
-                                    </div>
+                                    <input type="number" id="product-stock" name="stock" min="0">
+                                    <span  class="error-message"></span>
                                 </div>
                             </div>
                         </div>
@@ -690,29 +714,18 @@
                         <div class="form-column">
                             <!-- Pricing Information -->
                             <div class="form-card">
-                                <h3>Pricing Information</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="regular-price">Regular Price*</label>
-                                        <div class="price-input">
-                                            <span class="currency-symbol">$</span>
-                                            <input type="number" id="regular-price" name="regular-price" min="0" step="0.01" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="selling-price">Selling Price*</label>
-                                        <div class="price-input">
-                                            <span class="currency-symbol">$</span>
-                                            <input type="number" id="selling-price" name="selling-price" min="0" step="0.01" required>
-                                        </div>
-                                    </div>
-                                </div>
-                                
+                                <h3>Pricing & offer Info</h3>
+                                <div class="form-group">
+                                        <label for="product-price">Product Price*</label>
+                                        <input type="number" id="product-price" name="price" min="0">
+                                        <span class="error-message"></span>
+                                </div> 
                                 <div class="form-group">
                                     <label for="product-offer">Product Offer (%)</label>
-                                    <input type="number" id="product-offer" name="product-offer" min="0" max="100" placeholder="e.g. 10">
+                                    <input type="number" id="product-offer" name="offer" min="0" max="100" placeholder="e.g : 10">
+                                    <span class="error-message"></span>
                                 </div>
-                            </div>
+                            </div> 
                             
                             <!-- Product Status -->
                             <div class="form-card">
@@ -720,73 +733,37 @@
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select id="status" name="status">
-                                        <option value="active">Active</option>
-                                        <option value="inactive">Inactive</option>
+                                        <option value="In-stock">In Stock</option>
+                                        <option value="Out-of-stock">Out of Stock</option>
+                                        <option value="Discontinued">Discontinued</option>
                                     </select>
+                                    <span class="error-message"></span>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label for="featured">Featured Product</label>
-                                    <div class="toggle-switch">
-                                        <input type="checkbox" id="featured" name="featured" class="toggle-input">
-                                        <label for="featured" class="toggle-label"></label>
-                                    </div>
+ 
+                                <div class="form-card">
+                                  <h3>Product Images</h3>
+                                    <p class="form-help-text">Upload multiple images for your product. First image will be used as the featured image.</p>
+                                     <div class="image-upload-container">
+                                      <div class="image-upload-area" id="image-upload-area">
+                                          <div class="image-upload-placeholder">
+                                              <i class="fas fa-cloud-upload-alt"></i>
+                                              <p>Drag & drop images here or click to browse</p>
+                                              <span>Supports: JPG, PNG, GIF (Max 10 MB each)</span>
+                                          </div>
+                                          <input type="file" id="product-images" name="productImages" multiple accept="image/*" class="image-upload-input">
+                                          <div class="image-preview" id="image-preview"></div>
+                                        </div>
+                                         <span id="error-message" class="error-message"></span>
+                                    </div>  
                                 </div>
-                            </div>
-                            
-                            <!-- Additional Information -->
-                            <div class="form-card">
-                                <h3>Additional Information</h3>
-                                <div class="form-group">
-                                    <label for="tags">Infos</label>
-                                    <input type="text" id="tags" name="tags" placeholder="Enter tags separated by commas" value="enterTag">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Added Features</label>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-gearless" name="features[]" value="Gearless">
-                                            <label for="feature-gearless">Gearless</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-geared" name="features[]" value="Geared">
-                                            <label for="feature-geared">Geared</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-discbrake" name="features[]" value="Disc Brake">
-                                            <label for="feature-discbrake">Disc Brake</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-dust&water" name="features[]" value="dust&water">
-                                            <label for="feature-discbrake">Disc Brake</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-suspension" name="features[]" value="Suspension Fork">
-                                            <label for="feature-suspension">Suspension Fork</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-electric" name="features[]" value="Electric Assist">
-                                            <label for="feature-electric">Electric Assist</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-light-weight" name="features[]" value="Light Weight">
-                                            <label for="feature-light-weight">Light-weight</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="feature-tubeless-tire" name="features[]" value="Tubeless Tire">
-                                            <label for="feature-tubeless-tire">Tubeless Tires</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
-                    
+
                     <div class="form-actions">
-                        <button type="button" class="cancel-btn" onclick="window.location.href='products.html'">
+                        <button type="button" class="cancel-btn"  id="cancelBtn" onclick="window.location.href='/admin/addProduct'">
                             <i class="fas fa-times"></i> Cancel
-                        </button>
+                          </button>
                         <button type="submit" class="submit-btn">
                             <i class="fas fa-check"></i> Save Product
                         </button>
@@ -795,9 +772,244 @@
             </div>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- <script src="script.js"></script> -->
-    <script src="./script.js"></script>
-    <script src="./add-product.js"></script>
+<!-- --------------------script------------------- -->
+<script>
+  const productForm = document.getElementById('addProduct-form');
+  const imagePreviewContainer = document.getElementById('image-preview');
+  const imageUploadArea = document.getElementById('image-upload-area');
+  const placeHolder = document.querySelector('.image-upload-placeholder');
+  const imageInput = document.getElementById('product-images');
+  let selectedFiles = [];
+
+  // ================IMAGE EVENTS SETUP================
+
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    imageUploadArea.addEventListener(eventName, e => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    imageUploadArea.addEventListener(eventName, () => {
+      imageUploadArea.classList.add('highlight');
+    }, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    imageUploadArea.addEventListener(eventName, () => {
+      imageUploadArea.classList.remove('highlight');
+    }, false);
+  });
+
+  imageUploadArea.addEventListener('drop', e => {
+    const files = e.dataTransfer.files;
+    addFiles(files);
+  });
+
+  imageInput.addEventListener('change', e => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      addFiles(files);
+      placeHolder.style.display = 'none';
+    }
+  });
+
+  function addFiles(files) {
+    for (const file of files) {
+      if (!file.type.match('image/(jpeg|png|gif|jpg|jfif)')) {
+        Swal.fire({ icon: 'error', title: 'Invalid File Type', text: 'Only JPG, PNG, GIF, or JFIF formats allowed.' });
+        continue;
+      }
+
+      if (file.size > 10 * 1024 * 1024) {
+        Swal.fire({ icon: 'error', title: 'File Too Large', text: 'Each file must be under 10 MB.' });
+        continue;
+      }
+
+      if (selectedFiles.length >= 8) {
+        Swal.fire({ icon: 'warning', title: 'Maximum Limit Reached', text: 'You can upload up to 8 images only.' });
+        break;
+      }
+
+      selectedFiles.push(file);
+      previewImage(file);
+    }
+
+    const imageError = document.getElementById('error-message');
+    if (selectedFiles.length < 3) {
+      imageError.textContent = 'Please upload at least three images.';
+    } else {
+      imageError.textContent = '';
+    }
+  }
+
+  function previewImage(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const previewDiv = document.createElement('div');
+      previewDiv.className = 'image-preview-item-wrapper';
+
+      const img = document.createElement('img');
+      img.className = 'image-preview-item';
+      img.src = e.target.result;
+      img.alt = file.name;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-image';
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      removeBtn.addEventListener('click', () => {
+        imagePreviewContainer.removeChild(previewDiv);
+        selectedFiles = selectedFiles.filter(f => f.name !== file.name);
+
+        if (selectedFiles.length < 3) {
+          document.getElementById('error-message').textContent = 'Please upload at least three images.';
+        } else {
+          document.getElementById('error-message').textContent = '';
+        }
+
+        if (selectedFiles.length === 0) {
+          placeHolder.style.display = 'flex';
+        }
+      });
+
+      previewDiv.appendChild(img);
+      previewDiv.appendChild(removeBtn);
+      imagePreviewContainer.appendChild(previewDiv);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ========== FORM SUBMISSION AND VALIDATION ==========
+
+    // Listening for form submission
+      productForm.addEventListener('submit', function (e) {
+          e.preventDefault(); // Prevent default form submission for custom validation
+
+    // Clear the previous error messages
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(msg => msg.textContent = '');
+
+    let isValid = true;
+
+    // Validate Product Name
+    const productName = document.getElementById('product-name');
+        if (!productName.value.trim()) {
+    productName.nextElementSibling.textContent = 'Product Name is required';
+            isValid = false;
+        }
+
+    // Validate Brand 
+    const brand = document.getElementById('brand');
+        if (!brand.value) {
+    brand.nextElementSibling.textContent = 'Please select a brand';
+            isValid = false;
+        }
+
+    // Validate Category 
+    const category = document.getElementById('category');
+        if (!category.value) {
+    category.nextElementSibling.textContent = 'Please select a category';
+            isValid = false;
+        }
+
+    // Validate Description 
+    const description = document.getElementById('description');
+        if (!description.value.trim()) {
+    description.nextElementSibling.textContent = 'Description is required';
+            isValid = false;
+        }
+
+    // Validate Stock
+    const stock = document.getElementById('product-stock');
+        if (stock.value === '' || isNaN(stock.value) || Number(stock.value) < 0) {
+    stock.nextElementSibling.textContent = 'Please enter a valid stock quantity (0 or more).';
+            isValid = false;
+        }
+
+    // Validate Price
+    const price = document.getElementById('product-price');
+        if (price.value === '' || isNaN(price.value) || Number(price.value) < 0) {
+    price.nextElementSibling.textContent = 'Please enter a valid price (0 or more).';
+            isValid = false;
+        }
+
+    // Validate Offer
+    const offer = document.getElementById('product-offer');
+        if (offer.value === '' || isNaN(offer.value) || Number(offer.value) < 0) {
+    offer.nextElementSibling.textContent = 'Offer must be between 0 and 100';
+            isValid = false;
+        }
+
+    // Validate Image Uploads
+    const Image = document.getElementById('error-message');
+        if (selectedFiles.length < 3) {
+    Image.textContent = 'Please upload at least three images.';
+            isValid = false;
+        }
+
+    // If any validation failed, stop form submission
+        if (!isValid) return;
+
+  // Show success message using SweetAlert if all validations pass
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Validation Passed',
+      text: 'All fields are valid. Submitting the form...',
+      showConfirmButton: false,
+      timer: 1000
+    }).then(() => {
+
+    const formData = new FormData();  
+
+      //manually appending all data to avoid image duplication 
+  formData.append('productName', document.getElementById('product-name').value);
+  formData.append('brand', document.getElementById('brand').value);
+  formData.append('category', document.getElementById('category').value);
+  formData.append('description', document.getElementById('description').value);
+  formData.append('scale', document.getElementById('scale').value);
+  formData.append('edition', document.getElementById('edition').value);
+  formData.append('stock', document.getElementById('product-stock').value);
+  formData.append('price', document.getElementById('product-price').value);
+  formData.append('offer', document.getElementById('product-offer').value);
+  formData.append('status', document.getElementById('status').value);
+
+
+  // Append each image file (already selected & stored in selectedFiles)
+    selectedFiles.forEach(file => {
+        formData.append('productImages', file); // 'images' matches the Multer field name
+  });
+
+  fetch("/admin/addProduct", {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => response.json())
+    .then(data => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Product Added!',
+          text: 'Your product was successfully uploaded.',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          productForm.reset();            // Clearing  the form
+          document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
+          selectedFiles = [];             // Reset selected files array
+        });
+    })
+    .catch(err => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Server Error',
+        text: 'Failed to submit the form. Please try again later.'
+      });
+    });
+})
+})
+
+</script>
 </body>
 </html>

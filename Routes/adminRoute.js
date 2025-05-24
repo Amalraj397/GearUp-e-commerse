@@ -23,7 +23,8 @@ import {
 import{
   loadproductList,
   loadAddproduct,
-} from "../Controller/admin/product Controller.js"
+  addnewProduct,
+} from "../Controller/admin/productController.js"
 
 import {
     getBrands,
@@ -34,7 +35,7 @@ import {
 import {
     getCategory,
     getAddCategory,
-    addNewCategory
+    addNewCategory,
 } from"../Controller/admin/categoryController.js"
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -55,6 +56,7 @@ adminRoute.get ("/userManage",getuserData);
   //Product management
 adminRoute.get ("/addProduct",loadAddproduct);  //product management [add product]
 adminRoute.get ("/productList",loadproductList);  //  [list product]
+adminRoute.post ("/addProduct", uploadMiddleware('Products').array('productImages',8), addnewProduct);
 
 
   //Brand management
@@ -67,6 +69,6 @@ adminRoute.post("/addBrands", uploadMiddleware('Brands').single('brand-Image'), 
 
 adminRoute.get ("/category", getCategory);  //getting  category page
 adminRoute.get ("/addCategory",getAddCategory); //get add category page 
-adminRoute.post("/addCategory",addNewCategory)  // adding new category
+adminRoute.post ("/addCategory",addNewCategory )  // adding new category
 
 export default adminRoute;

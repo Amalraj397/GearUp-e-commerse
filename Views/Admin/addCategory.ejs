@@ -94,14 +94,14 @@
 <div class="add-category-container">
     <div class="page-header">
         <h1 class="page-title">ADD CATEGORIES</h1>
-        <button class="back-button" onclick="window.history.back();">
+        <button class="back-button" id="backButton" onclick="window.history.back();">
             <span class="material-icons">Back</span>
         </button>
     </div>
     
     <div class="form-container">
         <!-- <h2>Add Category</h2> -->
-        <form id="add-category"   class="add-category-form">
+        <form id="add-category" class="add-category-form">
             <div class="form-group">
                 <label for="category-name">Category Name:</label>
                 <input type="text" id="category-name" name="name" placeholder="Enter category name">
@@ -220,7 +220,7 @@
 
 
 <!-- ................... second. new 01:14pm  30/04  -->
-<script>
+<!-- <script>
     document.getElementById('backButton').addEventListener('click', function () {
       window.location.href = "/admin/addCategory ";
     });
@@ -228,6 +228,11 @@
     document.getElementById('add-category').addEventListener('submit', function (e) {
       e.preventDefault();
   
+
+      console.log("Form submitted");
+      console.log("Category Name:", categoryName);
+      console.log("Description:", categoryDescription);
+
       const categoryName = document.getElementById('category-name').value;
       const categoryDescription = document.getElementById('category-description').value;
       const errorMessage = [];
@@ -252,8 +257,8 @@
         return;
       }
   
-      // ✅ Fetch using JSON
-      fetch("/admin/addCategory ", {
+      //  Fetch using JSON
+      fetch("/admin/addCategory", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -279,6 +284,78 @@
             icon: "error",
           });
         });
+    });
+  </script>
+   -->
+<!-- ---------------11:50   03-05 -->
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const backBtn = document.getElementById('backButton');
+      if (backBtn) {
+        backBtn.addEventListener('click', function () {
+          window.location.href = "/admin/addCategory";
+        });
+      }
+  
+      const form = document.getElementById('add-category');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+  
+          const categoryName = document.getElementById('category-name').value;
+          console.log(categoryName);
+          const categoryDescription = document.getElementById('category-description').value;
+          const errorMessage = [];
+  
+          const nameRegex = /^[A-Z][a-zA-Z+\-\s]*$/;
+          if (!categoryName || !nameRegex.test(categoryName) || categoryName.length < 5) {
+            errorMessage.push("The category name must start with a capital letter and be at least 5 characters long.");
+          }
+  
+          if (!categoryDescription || categoryDescription.trim().length < 5) {
+            errorMessage.push("The description must be at least 5 characters long and cannot start with a space.");
+          }
+  
+          const errorMessageContainer = document.getElementById('errorMessages');
+          errorMessageContainer.innerText = '';
+          if (errorMessage.length > 0) {
+            errorMessage.forEach(msg => {
+              const p = document.createElement('p');
+              p.textContent = msg;
+              errorMessageContainer.appendChild(p);
+            });
+            return;
+          }
+  
+          fetch("/admin/addCategory", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              name: categoryName.trim(),
+              description: categoryDescription.trim()
+            })
+          })
+            .then(async (response) => {
+              const data = await response.json().catch(() => ({}));
+              if (!response.ok) throw new Error(data.message || "Request failed");
+              Swal.fire({
+                title: data.message || "Success!",
+                icon: "success",
+              }).then(() => {
+                location.reload();
+              });
+            })
+            .catch((err) => {
+              Swal.fire({
+                title: "Error!",
+                text: err.message || "Something went wrong. Please try again.",
+                icon: "error",
+              });
+            });
+        });
+      }
     });
   </script>
   

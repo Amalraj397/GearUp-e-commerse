@@ -295,115 +295,115 @@
 
 <script>
 
-function confirmList(id, button) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You want to list this Brand?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, list it !'
-        }).then((result)=> {
-            if (result.isConfirmed) {
-                // Call the back-end  API to list the category
-                fetch(`/api/v1/admin/brands/listBrand?id=${id}`, {
-                    method: 'POST'
-                }).then(response => response.json()).then(data => {
-                    Swal.fire(data.message, "",'success');
-                    setTimeout(()=>{
-                        location.reload() 
-                    },1000)
+// function confirmList(id, button) {
+//         Swal.fire({
+//             title: 'Are you sure?',
+//             text: 'You want to list this Brand?',
+//             icon: 'warning',
+//             showCancelButton: true,
+//             confirmButtonText: 'Yes, list it !'
+//         }).then((result)=> {
+//             if (result.isConfirmed) {
+//                 // Call the back-end  API to list the category
+//                 fetch(`/api/v1/admin/brands/listBrand?id=${id}`, {
+//                     method: 'POST'
+//                 }).then(response => response.json()).then(data => {
+//                     Swal.fire(data.message, "",'success');
+//                     setTimeout(()=>{
+//                         location.reload() 
+//                     },1000)
                   
-                }).catch(error => {
-                    Swal.fire('Error!', error.message, 'error');
-                });
-            }
-        });
-    }
+//                 }).catch(error => {
+//                     Swal.fire('Error!', error.message, 'error');
+//                 });
+//             }
+//         });
+//     }
 
-    function confirmUnlist(id) {
-        Swal.fire({
-            title: 'Are you sure',
-            text: 'You want to unlist this Brand?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, unlist it!'
-        }).then((result)=>{
-            if (result.isConfirmed){
-                fetch(`/api/v1/admin/brands/unlistBrand?id=${id}`, {
-                    method: 'POST'
-                }).then(response => response.json()).then(data => {
-                    Swal.fire(data.message, '', 'success');
-                    setTimeout(()=>{
-                        location.reload() 
-                    },1000)
-                }).catch(error =>{
-                    Swal.fire('Error!'. error.message, 'error');
-                });
-            }
-        });
-    }
+//     function confirmUnlist(id) {
+//         Swal.fire({
+//             title: 'Are you sure',
+//             text: 'You want to unlist this Brand?',
+//             icon: 'warning',
+//             showCancelButton: true,
+//             confirmButtonText: 'Yes, unlist it!'
+//         }).then((result)=>{
+//             if (result.isConfirmed){
+//                 fetch(`/api/v1/admin/brands/unlistBrand?id=${id}`, {
+//                     method: 'POST'
+//                 }).then(response => response.json()).then(data => {
+//                     Swal.fire(data.message, '', 'success');
+//                     setTimeout(()=>{
+//                         location.reload() 
+//                     },1000)
+//                 }).catch(error =>{
+//                     Swal.fire('Error!'. error.message, 'error');
+//                 });
+//             }
+//         });
+//     }
 
-    function addOffer(brandId, button) {
-        Swal.fire ({
-            title: 'Add Offer Percentage',
-            input: 'text',
-            inputLabel: 'Offer Percentage',
-            inputPlaceholder: 'Enter offer percentage',
-            showCancelButton: true,
-            confirmButtonText: 'Add Offer',
-            preConfirm : (value) => {
-                if (!value || isNaN(value) || value <0 || value > 100) {
-                    Swal.showValidationMessage ('Please enter a valid percentage between 1 and 100.');
-                }else {
-                    return fetch('/api/v1/admin/brand/addOffer', {
-                        method: 'POST',
-                        headers: { 'Content-Type' : 'application/json'},
-                        body: JSON.stringify({ brandId, percentage: value})
-                    }).then(response => {
-                        if(!response.ok) throw new Error('Failed to add offer');
-                        return response.json();
-                    });
-                }
-            }
-        }).then((result)=> {
-            if (result.isConfirmed) {
-                Swal.fire(`Offer added successfully!`, '', 'success');
+//     function addOffer(brandId, button) {
+//         Swal.fire ({
+//             title: 'Add Offer Percentage',
+//             input: 'text',
+//             inputLabel: 'Offer Percentage',
+//             inputPlaceholder: 'Enter offer percentage',
+//             showCancelButton: true,
+//             confirmButtonText: 'Add Offer',
+//             preConfirm : (value) => {
+//                 if (!value || isNaN(value) || value <0 || value > 100) {
+//                     Swal.showValidationMessage ('Please enter a valid percentage between 1 and 100.');
+//                 }else {
+//                     return fetch('/api/v1/admin/brand/addOffer', {
+//                         method: 'POST',
+//                         headers: { 'Content-Type' : 'application/json'},
+//                         body: JSON.stringify({ brandId, percentage: value})
+//                     }).then(response => {
+//                         if(!response.ok) throw new Error('Failed to add offer');
+//                         return response.json();
+//                     });
+//                 }
+//             }
+//         }).then((result)=> {
+//             if (result.isConfirmed) {
+//                 Swal.fire(`Offer added successfully!`, '', 'success');
                 
-            }
-            setTimeout(()=>{
-                location.reload()
-            },2000)
-        }).catch(error => {
-            Swal.fire ('Error !', error.message, 'error');
-        });
+//             }
+//             setTimeout(()=>{
+//                 location.reload()
+//             },2000)
+//         }).catch(error => {
+//             Swal.fire ('Error !', error.message, 'error');
+//         });
 
-    }
+//     }
 
   
 
-    // Edit brand
-    function editBrand(id){
-        window.location.href = `/api/v1/admin/brands/editBrand?id=${id}`
-    }
+//     // Edit brand
+//     function editBrand(id){
+//         window.location.href = `/api/v1/admin/brands/editBrand?id=${id}`
+//     }
 
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.getElementById('search-btn');
+//     const searchInput = document.getElementById('search-input');
+//     const searchButton = document.getElementById('search-btn');
 
-    searchButton.addEventListener('click', function(){
-        const searchValue = searchInput.value.trim();
-        if(searchValue){
-          window.location.href = `/api/v1/admin/brands?search=${searchValue}`;
-        }else{
-            Toastify({
-        text: "Enter any input here!",
-        duration: 3000, 
-        close: true, 
-        gravity: "top", 
-        position: "right", 
-        backgroundColor: "#FF5733", 
-        stopOnFocus: true,
-    }).showToast();
-        }
-    })
-</script>
+//     searchButton.addEventListener('click', function(){
+//         const searchValue = searchInput.value.trim();
+//         if(searchValue){
+//           window.location.href = `/api/v1/admin/brands?search=${searchValue}`;
+//         }else{
+//             Toastify({
+//         text: "Enter any input here!",
+//         duration: 3000, 
+//         close: true, 
+//         gravity: "top", 
+//         position: "right", 
+//         backgroundColor: "#FF5733", 
+//         stopOnFocus: true,
+//     }).showToast();
+//         }
+//     })
+// </script>
 <%-include("../../Views/Partials/Admin/footer")%>

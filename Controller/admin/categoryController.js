@@ -1,5 +1,5 @@
 import categorySchema from "../../Models/categoryModel.js";
-import productSchema from "../../Models/productModel.js";
+// import productSchema from "../../Models/productModel.js";
 
 // Category Info handler
 
@@ -50,24 +50,62 @@ export const getAddCategory = async (req, res, next) => {
 
 // Category post handler
 
-export const addNewCategory = async (req, res, next)=>{
-    const { name , description } = req.body
-    try {
-        // Cat: exist or not..!
-        const existCat = await categorySchema.findOne({name})
-        if (existCat){
-            return res.status(400).json({ message: 'Category already exist..!'})
-        }
-        // Save category..!
-        const newCategory = new categorySchema ({ name , description})
-        await newCategory.save()
-        return res.status(201).json({ message: 'New category added..!'})
+// export const addNewCategory = async (req, res)=>{
+//     const { name , description } = req.body
 
-    } catch (error) {
-        next(error)
+//     console.log("------------------------------------");
+//     console.log("data recived: req-",req.body);
+//     console.log("------------------------------------");
 
+//     try {
+//         // Cat: exist or not..!
+//         const existCat = await categorySchema.findOne({name})
+//         if (existCat){
+//             return res.status(400).json({ message: 'Category already exist..!'})
+//         }
+//         // Save category..!
+//         const newCategory = new categorySchema ({ name , description})
+
+//         console.log("------------------------------------");
+//         console.log( newCategory.name );
+//         console.log(newCategory.description );
+//         console.log(newCategory);
+//         console.log("------------------------------------");
+
+//         await newCategory.save()
+//         return res.status(201).json({ message: 'New category added..!'})
+
+//     } catch (error) {
+//       console.log("error in loading the page", error);
+//       res.status(500).send("server Error  ");
+//     }
+// }
+
+// ---------------------------------------------------------
+
+export const addNewCategory = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    console.log("------------------------------------");
+    console.log("data recived: req-",req.body);
+    console.log("------------------------------------");
+
+    if (!name || !description) {
+      return res.status(400).json({ message: "Name and description are required." });
     }
-}
+
+     //saving  data to db
+    const newCategory = new categorySchema({ name, description });
+    await newCategory.save();
+
+    res.status(201).json({ message: "Category added successfully." });
+  } catch (error) {
+    console.error("Error adding category:", error);
+    res.status(500).json({ message: "Server error. Could not add category." });
+  }
+};
+
 
 // // Category edit handler
 // exports.getEditCategoryPage = async(req,res, next)=>{
@@ -83,6 +121,7 @@ export const addNewCategory = async (req, res, next)=>{
 //         next(error)
 //     }
 // }
+
 // // Category edit post handler
 // exports.editCategory = async (req, res, next)=>{
 //     const { id }= req.body
@@ -105,6 +144,7 @@ export const addNewCategory = async (req, res, next)=>{
 //     }
 // }
 
+
 // // category list handler
 // exports.listCategory = async (req, res, next)=>{
 //     const { id } = req.query
@@ -117,6 +157,7 @@ export const addNewCategory = async (req, res, next)=>{
 
 //     }
 // }
+
 
 // //Unlist category
 // exports.unlistCategory = async (req, res, next)=>{

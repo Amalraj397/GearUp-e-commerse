@@ -192,4 +192,6 @@
         salesChart.resize();
         revenueChart.resize();
     });
+
+    
 });

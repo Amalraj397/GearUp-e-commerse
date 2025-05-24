@@ -329,7 +329,7 @@ export const userLogin = async (req, res) => {
       name: user.firstName,
     };
     
-    // ✅ FINAL SUCCESS RESPONSE for normal user login
+    //  FINAL SUCCESS RESPONSE for normal user login
     return res.status(200).json({
       success: true,
       redirectTo: "/",

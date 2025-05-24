@@ -333,26 +333,26 @@ document.addEventListener("DOMContentLoaded", function () {
   // Sample bike data for the slider
   const bikes = [
     {
-      name: "Vanquish Comp Carbon",
-      price: "$1195.00",
+      name: "Ferrari F40-LM 001",
+      price: "₹2999.00",
       description:
         "High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.",
     },
     {
-      name: "Mountain Explorer Pro",
-      price: "$1495.00",
+      name: "BUGATTI BOLIDE",
+      price: "₹4299.00",
       description:
-        "Designed for the toughest trails with advanced suspension and premium components.",
+        "Lightweight, extreme and uncompromising. The BOLIDE is BUGATTI's track-only hypercar built around the iconic W16 engine.s.",
     },
     {
       name: "Road Master Elite",
-      price: "$1295.00",
+      price: "₹2599.00",
       description:
         "Lightweight frame and aerodynamic design for maximum speed on the open road.",
     },
     {
       name: "Urban Commuter X1",
-      price: "$895.00",
+      price: "₹2999.00",
       description:
         "Perfect for city riding with comfortable geometry and practical features.",
     },
@@ -415,11 +415,11 @@ document.addEventListener("DOMContentLoaded", function () {
       updateSlide(currentSlide);
     });
 
-    // Auto slide every 5 seconds
+    // Auto slide every 4 seconds
     setInterval(() => {
       currentSlide = (currentSlide + 1) % bikes.length;
       updateSlide(currentSlide);
-    }, 5000);
+    }, 4000);
   }
 
   // Parallax effect for hero section
