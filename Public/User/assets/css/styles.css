@@ -21,6 +21,15 @@
     list-style: none;
   }
   
+  /* .toggle-desc-btn {
+  margin-top: 5px;
+  background-color: transparent;
+  color: #ff6600;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+} */
+
   /* Button Styles */
   .btn {
     padding: 12px 24px;
@@ -93,7 +102,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5%;
+    padding: 10px 5%;
     position: relative;
     z-index: 100;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);

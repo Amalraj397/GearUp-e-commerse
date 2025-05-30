@@ -7,6 +7,7 @@ html {
 }
 html,
 body {
+  /* background-image: url('/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg'); */
   height: 100%;
 }
 body {
@@ -81,7 +82,7 @@ img {
   background-color: #c96 !important;
 }
 .bg-secondary {
-  background-color: #a6c76c !important;
+  background-color: #e97010 !important;
 }
 .bg-image {
   background-color: #ccc;
@@ -132,7 +133,7 @@ h6,
   font-weight: 500;
   line-height: 1.1;
   margin-bottom: 1.4rem;
-  color: #333;
+  color: #d0cfcf;
   letter-spacing: -0.03em;
 }
 h1,
@@ -162,13 +163,13 @@ h6,
   letter-spacing: -0.01em;
 }
 a {
-  color: #c96;
+  color: rgb(228, 227, 225);
   text-decoration: none;
   transition: color 0.3s ease;
 }
 a:hover,
 a:focus {
-  color: #bf8040;
+  color: #ff8000;
   text-decoration: none;
 }
 .link-underline {
@@ -181,7 +182,9 @@ a:focus {
   color: #a6c76c !important;
 }
 .text-dark {
-  color: #333 !important;
+  color: #e8e5e5 !important;
+  font-size: large;
+  font-weight: 600;
 }
 .text-light {
   color: #ccc !important;
@@ -241,7 +244,7 @@ blockquote.text-white cite span {
   }
   h4,
   .h4 {
-    font-size: 2.4rem;
+    font-size: 2.0rem;
   }
 }
 .row {
@@ -340,7 +343,7 @@ blockquote.text-white cite span {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  /* min-height: 100%; */
   transition: transform 0.4s ease;
 }
 .mmenu-active .page-wrapper {
@@ -571,9 +574,11 @@ blockquote.text-white cite span {
   font-weight: 300;
   font-size: 1.3rem;
   line-height: 1.5;
+  background: #000;
+  padding: 50px;
   letter-spacing: 0;
   color: #777;
-  margin-bottom: 0.1rem;
+  /* margin-bottom: 0.1rem; */
 }
 .header-top a {
   color: inherit;
@@ -2655,11 +2660,11 @@ a {
 }
 p {
   margin-bottom: 0;
-  font-size: 1.4rem;
-  font-weight: 300;
+  font-size: 1.6rem;
+  font-weight: 400;
   font-family: "Poppins";
   letter-spacing: 0;
-  color: #777;
+  color: #e7660b;
 }
 .header-2 {
   background-color: #fff;
@@ -5061,22 +5066,62 @@ p {
   }
 }
 .page-header {
-  padding: 4.6rem 0 5rem;
+  padding: 2.6rem 0 4rem;
   background-color: #ebebeb;
   background-size: cover;
-  background-position: center center;
+  background-position: center;
   background-repeat: no-repeat;
+  background-color: #ebebeb;
+  z-index: 1;
 }
+
+.page-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3); /* change 0.3 to control darkness */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Ensures text stays above the dark overlay */
+.page-header h1,
+.page-header h1 span {
+  position: relative;
+  z-index: 2;
+}
+/* .page-header h1 {
+  color: #ffffff;
+  /* font: normal 400 3.2rem/1.1 "Lato", sans-serif; */
+  /* font: normal 400 3.2rem/1.1 " "; */
+  /* font: normal 400 3.2rem/1.1 "Poppins", sans-serif; */
+  /* font: normal 400 3.2rem/1.1 "Open Sans", sans-serif; */
+  /* font: normal 400 3rem/1.1 "Roboto", sans-serif;*/
+ /* font: normal 400 3.5rem/1.1 "Bebas Neue", sans-serif; */
+ /* font: normal 400 3.6rem/1.1 "Anton", sans-serif; */
+ /* font: normal 500 3.2rem/1.2 "Raleway", sans-serif; */
+ /* font: normal 900 3rem/1.1 "Orbitron", sans-serif;   */
+ /* font: normal 600 3.2rem/1.1 "Barlow Condensed", sans-serif; */
+/* font: normal 400 3.2rem/1.3 "Josefin Sans", sans-serif; */
+/* font: normal 500 3rem/1.2 "Exo 2", sans-serif; */
+/* font: normal 500 3.3rem/1.2 "Cinzel", serif; */
+/* font: italic 400 3.4rem/1.2 "Playfair Display", serif; */
+/* font: normal 400 3.2rem/1.1 "Audiowide", cursive;  */
+  /* font: normal 400 3rem/1.2 "Montserrat", sans-serif; 
+  letter-spacing: 0.201em;
+  margin-bottom: 0;
+} */
+
 .page-header h1 {
-  color: #333;
-  font: normal 400 3.2rem/1.1 "Poppins", sans-serif;
-  letter-spacing: -0.025em;
+  color: #ffffff;
+  font: normal 900 3rem/1.1 "Orbitron", sans-serif;
+  letter-spacing: 0.201em;
   margin-bottom: 0;
 }
 .page-header h1 span {
   display: block;
-  color: #c96;
-  font-size: 1.6rem;
+  color: rgb(210, 75, 12);
+  font-size: 2.6rem;
   margin-top: 0.8rem;
 }
 .page-header.page-header-big {
@@ -8244,7 +8289,7 @@ p {
   background-color: #fff;
   padding: 1.2rem 2rem;
   text-align: center;
-  min-width: 170px;
+  min-width: 100px;
   border-radius: 0.2rem;
   position: absolute;
   top: auto;
@@ -10169,10 +10214,10 @@ button:focus {
   flex-direction: column;
 }
 .toolbox-info {
-  color: #ccc;
+  color: whitesmoke;
 }
 .toolbox-info span {
-  color: #333;
+  color:  #ce5b0d;
 }
 .toolbox-sort {
   display: flex;
@@ -10245,7 +10290,7 @@ button:focus {
   border-bottom: none;
 }
 .sidebar-shop .widget-title {
-  color: #333;
+  color: #fffbfb;
   font-weight: 400;
   font-size: 1.8rem;
   line-height: 1.15;
@@ -10258,7 +10303,7 @@ button:focus {
 }
 .sidebar-shop .custom-control-label {
   font-weight: 400;
-  color: #333;
+  color: #fffbfb;
   cursor: pointer;
 }
 .sidebar-shop .custom-control-label::before {
@@ -10271,7 +10316,7 @@ button:focus {
   padding-bottom: 2.1rem;
 }
 .widget-clean label {
-  color: inherit;
+  color: whitesmoke;
   font-weight: 400;
   font-size: 1.4rem;
   letter-spacing: -0.01em;
@@ -10286,7 +10331,7 @@ button:focus {
 .widget-collapsible .widget-title a {
   position: relative;
   display: block;
-  color: inherit;
+  color: whitesmoke;
   text-decoration: none;
   padding-right: 3rem;
 }
@@ -10311,6 +10356,19 @@ button:focus {
 .widget-collapsible .widget-body {
   padding-top: 1rem;
   padding-bottom: 2rem;
+}
+.widget-title a {
+    color: #FFA500;
+    font-weight: bold;
+}
+
+.custom-control-label {
+    color: #ffffff;
+}
+
+.filter-items .filter-item:hover {
+    background-color: rgba(255, 165, 0, 0.1);
+    border-radius: 5px;
 }
 .filter-item {
   position: relative;
@@ -11703,6 +11761,47 @@ button:focus {
   padding: 0;
   margin: 0;
 }
+
+/* ---------new product list page --------- */
+
+/* .product-card {
+  width: 200px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-align: center;
+} */
+
+.product-card img {
+  width: 100% !important;
+  height: 250px !important;
+  object-fit: cover !important;
+  border-radius: 10px 10px 0 0;
+  display: block;
+}
+/* Container holding all product cards */
+.products-container {
+  padding-top: 20px;
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
+  gap: 5px;
+}
+
+/* Each individual product card */
+.product-card {
+  /* background: rgba(255, 255, 255, 0.05); */
+  /* border-radius: 15px; */
+  overflow: hidden;
+  height: 230px; /* uniform card height */
+  display: flex;
+  /* padding-top: 10px; */
+  border-radius: 10px 10px 0 0;
+  flex-direction: column;
+  border: 1px solid #ffffff;
+  justify-content: space-between;
+}
+
+/* ---------------------------------------- */
 .widget-cats li:not(:last-child) {
   margin-bottom: 1rem;
 }
