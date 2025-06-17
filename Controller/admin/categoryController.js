@@ -144,30 +144,42 @@ export const addNewCategory = async (req, res) => {
 //     }
 // }
 
+export const unlistCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// // category list handler
-// exports.listCategory = async (req, res, next)=>{
-//     const { id } = req.query
-//     try {
-//         await categorySchema.findByIdAndUpdate(id, {isListed: true});
-//         res.status(201).json({message: "Category listed successfully..! "});
+    const updatedCategory = await categorySchema.findByIdAndUpdate(
+      id,
+      { isBlocked: true }
+    );
 
-//     } catch (error) {
-//         next(error)
+    if (!updatedCategory) {
+      return res.status(404).json({ success: false, message: 'Category not found.' });
+    }
 
-//     }
-// }
+    res.json({ success: true, message: 'Category unlisted successfully.' });
+  } catch (error) {
+    console.error('Error unlisting category:', error);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};
 
+export const listCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-// //Unlist category
-// exports.unlistCategory = async (req, res, next)=>{
-//     const { id }= req.query
-//     try {
-//         await categorySchema.findByIdAndUpdate(id, {isListed: false});
-//         res.status(201).json({message: "Category unlisted successfully..!"})
+    const updatedCategory = await categorySchema.findByIdAndUpdate(
+      id,
+      { isBlocked: false }
+    );
 
-//     } catch (error) {
-//         next(error)
+    if (!updatedCategory) {
+      return res.status(404).json({ success: false, message: 'Category not found.' });
+    }
 
-//     }
-// }
+    res.json({ success: true, message: 'Category listed successfully.' });
+  } catch (error) {
+    console.error('Error listing category:', error);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};

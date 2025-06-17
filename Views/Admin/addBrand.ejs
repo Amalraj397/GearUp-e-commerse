@@ -101,11 +101,13 @@
     background-color: #0343b1;
   }
 </style>
+ <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <div class="add-brand-container">
   <div class="page-header">
     <h1 class="page-title">ADD BRANDS</h1>
     <button class="back-button" onclick="window.history.back();">
-      <span class="material-icons">Back</span>
+      <span class="material-icons">arrow_back</span>
     </button>
   </div>
 
@@ -217,8 +219,8 @@
           });
         })
         .catch(() => {
-            // console.error('Fetch error:', error); // Debugging
-          Swal.fire({
+            // console.error('Fetch error:', error); // 
+            Swal.fire({
             title: "Error!",
             text: "Something went wrong. Please try again.",
             icon: "error",

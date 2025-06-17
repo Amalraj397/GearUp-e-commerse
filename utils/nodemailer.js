@@ -1,7 +1,7 @@
 
 // const nodemailer = require('nodemailer')
 import nodemailer from 'nodemailer';
-console.log("env mail",process.env.NODEMAILER_EMAIL);
+// console.log("env mail",process.env.NODEMAILER_EMAIL);      //  debugging
 
 
 // emailsend-function

@@ -1,8 +1,6 @@
 import productSchema from "../../Models/productModel.js";
 import categorySchema from "../../Models/categoryModel.js";
 import brandSchema from "../../Models/brandModel.js";
-import userSchema from "../../Models/userModel.js";
-
 
 export const getshopPage = async (req, res) => {
   try {

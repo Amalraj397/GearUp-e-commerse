@@ -1,11 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard - Users</title>
-    <link rel="stylesheet" href="styles.css" /> -->
-    <!-- <link rel="stylesheet" href="users.css"> -->
     <style>
       /* Users Page Specific Styles */
       .users-container {
@@ -309,23 +301,22 @@
               <button class="page-number">2</button>
               <button class="page-number">3</button>
               <button class="page-number">4</button>
-              <button class="page-number">5</button>
             </div>
             <button id="next-page" class="pagination-btn">
               Next <i class="fas fa-chevron-right"></i>
             </button>
-
           </div>
         </div>
       </main>
     </div>
 
-    <!-- <script src="script.js"></script> -->
+    <!-- <script src="script.js"></script> --> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         // Sample user data
        let users = <%- JSON.stringify(userdata) %>
-        console.log("---------",users)
+        // console.log("---------",users) // debugging
         //  user dummy data present here.
 
         // Sort users by joined date (newest first)
@@ -366,58 +357,125 @@
            <td>${user.phone}</td>
            <td>${formatDate(user.createdAt)}</td>
            <td>
-               <span class="user-status ${user.isBlocked === "false" ? "status-active" : "status-blocked"}">
-                 ${user.status === "false" ? "Active" : "Blocked"}
-               </span>
-             </td>
-               <td class="action-buttons">
+              <span class="user-status ${user.isBlocked ? "status-blocked" : "status-active"}">
+                ${user.isBlocked ? "Blocked" : "Active"}
+              </span>  
+           </td>
+                <td class="action-buttons">
                  ${
-                   user.isBlocked === "active"
-                     ? `<button class="block-btn" data-id="${user.id}"><i class="fas fa-ban"></i> Block</button>`
-                     : `<button class="unblock-btn" data-id="${user.id}"><i class="fas fa-check-circle"></i> Unblock</button>`
-                 }
-                </td>
-      `;
+                    user.isBlocked
+                      ? `<button class="unblock-btn" data-id="${user._id}">
+                        <i class="fas fa-check-circle"></i> Unblock
+                        </button>`
+                        
+                      : `<button class="block-btn" data-id="${user._id}">
+                        <i class="fas fa-ban"></i> Block
+                        </button>`
+                  }
+                </td>`;
             tableBody.appendChild(row);
           });
 
+// -----------------------------------BLOCKING AND UNBLOCKING USERS----------------------------------------
+
+    function blockUser(userId) {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You are about to block this user.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, block",
+          cancelButtonText: "Cancel"
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/admin/block-user/${userId}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" }
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  Swal.fire("Blocked!", "User has been blocked.", "success");
+      
+                  //  Update user in the local array
+                  const updatedUser = users.find((u) => u._id === userId);
+                  if (updatedUser) {
+                    updatedUser.isBlocked = true;
+                  }
+      
+                  //  Re-render
+                  applyFiltersAndSort();
+                }else {
+                    Swal.fire("Failed!", "Something went wrong.", "error");
+                  }
+              }).catch((err) => {
+                  console.error("block error:", err);
+                  Swal.fire("Error", "Could not block the user.", "error");
+                });
+          }
+        });
+      }
+    function unblockUser(userId) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to unblock this user.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, unblock",
+        cancelButtonText: "Cancel"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/unblock-user/${userId}`, { 
+            method: "PUT",
+            headers: { "Content-Type": "application/json" }
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire("Unblocked!", "User has been unblocked.", "success");
+
+               //  Update user in the local array
+
+                const updatedUser = users.find((u) => u._id === userId);
+              if (updatedUser) {
+                updatedUser.isBlocked = false;
+              }
+                //  This must re-fetch and re-render the user list
+                applyFiltersAndSort();
+              } else {
+                Swal.fire("Failed!", "Something went wrong.", "error");
+              }
+            })
+            .catch((err) => {
+              console.error("Unblock error:", err);
+              Swal.fire("Error", "Could not unblock the user.", "error");
+            });
+        }
+      });
+    }
+
+// ----------------------------------*  END *-------------------------------------
+
           // Add event listeners to block/unblock buttons
+
           document.querySelectorAll(".block-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
-              const userId = parseInt(this.getAttribute("data-id"));
+              const userId = this.getAttribute("data-id");
+              console.log("Trying to block:", userId); // debugging
               blockUser(userId);
             });
           });
 
           document.querySelectorAll(".unblock-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
-              const userId = parseInt(this.getAttribute("data-id"));
+              const userId = this.getAttribute("data-id");
+              console.log("Block clicked for ID:", userId);  // debugging
               unblockUser(userId);
             });
           });
 
           // Update pagination
           updatePagination();
-        }
-
-        // Block user function
-        function blockUser(userId) {
-          const userIndex = users.findIndex((user) => user.id === userId);
-          if (userIndex !== -1) {
-            users[userIndex].status = "blocked";
-            // Re-apply current filter and sort
-            applyFiltersAndSort();
-          }
-        }
-
-        // Unblock user function
-        function unblockUser(userId) {
-          const userIndex = users.findIndex((user) => user.id === userId);
-          if (userIndex !== -1) {
-            users[userIndex].status = "active";
-            // Re-apply current filter and sort
-            applyFiltersAndSort();
-          }
         }
 
         // Update pagination controls
@@ -461,37 +519,21 @@
           const searchTerm = this.value.toLowerCase().trim();
           applyFiltersAndSort(searchTerm);
         });
-        
-        // searchInput.addEventListener("input", function () {
-        //     const searchTerm = this.value.toLowerCase().trim();
-        //     console.log("Searching for:", searchTerm); // 👈 Add this
-        //        applyFiltersAndSort(searchTerm);
-        // });
 
         // Sort functionality
         const sortSelect = document.getElementById("sort-select");
         sortSelect.addEventListener("change", function () {
           applyFiltersAndSort();
         });
-
           
         // Apply filters and sort
         function applyFiltersAndSort(
           searchTerm = searchInput.value.toLowerCase().trim()
         ) {
-          // Filter users
-          // filteredUsers = users.filter((user) => {
-          //   return (
-          //     (user.firstName+user.lastName).toLowerCase().includes(searchTerm) ||
-          //     user.email.toLowerCase().includes(searchTerm) ||
-          //     user.phone.includes(searchTerm)
-          //   );
-          // });
-
             filteredUsers = users.filter((user) => {
             const fullName = `${user.firstName || ""}${user.lastName || ""}`.toLowerCase();
             const email = user.email?.toLowerCase() || "";
-            const phone = String(user.phone || ""); // 👉 this fixes the error
+            const phone = String(user.phone || ""); 
           
             return (
               fullName.includes(searchTerm) ||
@@ -499,8 +541,7 @@
               phone.includes(searchTerm)
             );
           });
-
-
+           
           // Sort users
           const sortOption = sortSelect.value;
           switch (sortOption) {

@@ -1,15 +1,5 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Products</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="products.css">
-    <!-- Font Awesome for icons --
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> !-->
-    <style>
-        /* Products Page Specific Styles */
+<style>
+ /* Products Page Specific Styles */
 .products-container,
 .add-product-container {
     padding: 20px;
@@ -127,11 +117,19 @@
 .status-active {
     background-color: rgba(72, 187, 120, 0.2);
     color: var(--success-color);
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 0.30rem;
+    font-weight: 500;
 }
 
-.status-inactive {
+.status-Blocked {
     background-color: rgba(245, 101, 101, 0.2);
     color: var(--danger-color);
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 0.30rem;
+    font-weight: 500;
 }
 
 .status-draft {
@@ -161,6 +159,8 @@
 .edit-btn {
     background-color: rgba(66, 153, 225, 0.2);
     color: var(--info-color);
+    width: 85px;
+    border: 2px solid 
 }
 
 .edit-btn:hover {
@@ -547,6 +547,44 @@
     background-color: var(--primary-dark);
 }
 
+.btn {
+  padding: 0.495rem 0.65rem;
+  border-radius: 0.25rem;
+  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+
+.unlist-btn{
+    background-color: #ef2438;
+    border: 2px solid #c82333;
+    color: #ffffff;
+}
+.unlist-btn:hover {
+  background-color: #d89da3;
+  color: #3e3b3b;
+}
+
+.list-btn-green{
+    background-color: #299a49;
+    border: 2px solid #1b630b;
+    color: #ffffff;
+    width: 85px;
+    padding: 11px 17px 7px 20px;
+    font-weight: 400;
+    font-size: 0.9rem;
+
+}
+
+.list-btn-green:hover {
+  background-color: #218838;
+  color: #3e3b3b;
+}
+
+
+
 /* Responsive Styles */
 @media (max-width: 1024px) {
     .form-grid {
@@ -583,84 +621,12 @@
         justify-content: space-between;
     }
 }
-    </style>
-<!-- </head>
-<body>
-    <div class="container"> -->
-        <!-- Sidebar --
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin Panel</h2>
-            </div>
-            <nav class="sidebar-menu">
-                <ul>
-                    <li>
-                        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="users.html"><i class="fas fa-users"></i> Users</a>
-                    </li>
-                    <li class="active">
-                        <a href="products.html"><i class="fas fa-box"></i> Products</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-tags"></i> Brands</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-list"></i> Categories</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-ticket-alt"></i> Coupons</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-layer-group"></i> Variants</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-shopping-cart"></i> Orders</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-chart-bar"></i> Reports</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-exchange-alt"></i> Transactions</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
 
-        <!-- Main Content -->
-        <!-- <main class="main-content"> -->
-            <!-- Navbar --
-            <nav class="navbar">
-                <div class="navbar-left">
-                    <button id="sidebar-toggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-                <div class="search-container">
-                    <input type="text" placeholder="Search...">
-                    <button class="search-btn"><i class="fas fa-search"></i></button>
-                </div>
-                <div class="navbar-right">
-                    <div class="admin-info">
-                        <span>Welcome Admin, <strong>John Doe</strong></span>
-                    </div>
-                    <div class="dropdown">
-                        <button class="dropdown-btn">
-                            <img src="https://via.placeholder.com/40" alt="Admin" class="admin-avatar">
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-content">
-                            <a href="#"><i class="fas fa-user-edit"></i> Edit Profile</a>
-                            <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                            <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </nav> -->
+    </style>
+    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
             <%-include("../../Views/Partials/Admin/header")%>
             <!-- Products Content -->
             <div class="products-container">
@@ -684,11 +650,11 @@
                                 <th>ID</th>
                                 <th>Image</th>
                                 <th>Product Name</th>
+                                <th>Description</th>
                                 <th>Brand</th>
                                 <th>Category</th>
-                                <th>Variant</th>
-                                <th>Color</th>
-                                <th>Regular Price</th>
+                                <th>Edition</th>
+                                <th>Scale</th>
                                 <th>Selling Price</th>
                                 <th>Offer</th>
                                 <th>Stock</th>
@@ -697,7 +663,7 @@
                             </tr>
                         </thead>
                         <tbody id="products-table-body">
-                            <!-- Product rows will be populated by JavaScript -->
+                        <!-- products will be rendered here dynamically by script here -->
                         </tbody>
                     </table>
                 </div>
@@ -708,6 +674,7 @@
                         <button class="page-number active">1</button>
                         <button class="page-number">2</button>
                         <button class="page-number">3</button>
+                        <button class="page-number">4</button>
                     </div>
                     <button id="next-page" class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
                 </div>
@@ -716,6 +683,278 @@
     </div>
 
     <script src="./script.js"></script>
-    <script src="./list-product.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  let currentPage = 1;
+  const productsPerPage = 6;
+  let allProducts = []; //  this will hold all products
+  let filteredProducts = [];
+
+  renderProductList();
+
+  async function renderProductList() {
+    try {
+      const response = await fetch('/admin/api/products');
+      const data = await response.json();
+
+      allProducts = data.Products; // store in global variable
+      filteredProducts = [...allProducts]; // keep filtered copy
+
+      renderPaginatedProducts();
+    //   attachProductActionListeners();
+      updatePagination();
+      
+    } catch (error) {
+      console.error("Error loading product list:", error);
+    }
+  }
+
+  function renderPaginatedProducts() {
+    const tbody = document.getElementById("products-table-body");
+    tbody.innerHTML = "";
+
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    const paginated = filteredProducts.slice(startIndex, endIndex);
+
+    paginated.forEach((product, index) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${startIndex + index + 1}</td>
+        <td>
+          <img src="/uploads/product-images/${product.productImage?.[0]}" 
+               alt="${product.productName}" 
+               class="brand-logo">
+        </td>
+        <td>${product.productName}</td>
+        <td>${product.description?.substring(0, 100) || ''}...</td>
+        <td>${product.brand?.brandName || 'N/A'}</td>
+        <td>${product.category?.name || 'N/A'}</td>
+        <td>${product.edition || 'N/A'}</td>
+        <td>${product.scale || 'N/A'}</td>
+        <td>₹${product.salePrice}</td>
+        <td>${product.productOffer}%</td>
+        <td>${product.stock}</td>
+        <td>
+              <span class="status-badge ${product.isBlocked ? "status-blocked" : "status-active"}">
+                ${product.isBlocked ? "Blocked" : "Active"}
+              </span>  
+        </td>
+        
+        <td class="action-cell">
+          ${product.isBlocked
+            ? `<button class="btn btn-success action-btn list-btn list-btn-green" data-id="${product._id}">
+                    <i class="fas fa-check-circle"></i> LIST
+                </button>`
+
+            : `<button class="btn btn-danger action-btn list-btn unlist-btn" data-id="${product._id}">
+                    <i class="fas fa-ban"></i> UNLIST
+                </button>`
+          }
+
+          <button class="action-btn edit-btn" onclick="editProduct('${product._id}')">
+            <span class="material-icons">edit</span> EDIT
+          </button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  
+    // -----------------------LIST & UNLIST PRODUCTS----------------
+
+    function confirmUnlistProduct(productId, btn) {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "This product will be unlisted from the store.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, unlist it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/unlist-product/${productId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire("Unlisted!", data.message, "success").then(() => {
+                location.reload(); // or re-fetch product list
+              });
+            } else {
+              Swal.fire("Failed!", data.message, "error");
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+            Swal.fire("Error", "Something went wrong", "error");
+          });
+        }
+      });
+    }
+
+    function confirmListProduct(productId, btn) {
+        Swal.fire({
+        title: "Are you sure?",
+        text: "This product will be listed again in the store.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, list it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/list-product/${productId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire("Listed!", data.message, "success").then(() => {
+                location.reload(); // or call renderProductList()
+              });
+            } else {
+              Swal.fire("Failed!", data.message, "error");
+            }
+          })
+          .catch(error => {
+            console.error("Error:", error);
+            Swal.fire("Error", "Something went wrong", "error");
+          });
+        }
+      });
+    }
+
+
+// --------------------------------* END *-----------------------------
+
+
+    // Add event listeners to UNLIST buttons
+    document.querySelectorAll(".unlist-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const productId = this.getAttribute("data-id");
+        confirmUnlistProduct(productId, this);
+      });
+    });
+    
+    // Add event listeners to LIST buttons
+    document.querySelectorAll(".list-btn-green").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const productId = this.getAttribute("data-id");
+        confirmListProduct(productId, this);
+      });
+    });
+        updatePagination();
+  }
+
+
+  function updatePagination() {
+    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const pageNumbers = document.getElementById("page-numbers");
+    const prevBtn = document.getElementById("prev-page");
+    const nextBtn = document.getElementById("next-page");
+
+    // Update prev/next buttons
+     prevBtn.disabled = currentPage === 1;
+     nextBtn.disabled = currentPage === totalPages;
+
+    // Update page numbers
+     pageNumbers.innerHTML = "";
+
+    // Determine range of page numbers to show
+     let startPage = Math.max(1, currentPage - 2);
+     let endPage = Math.min(totalPages, startPage + 4)
+
+     // Adjust if we're near the end
+     if (endPage - startPage < 4) {
+       startPage = Math.max(1, endPage - 4);
+     }
+
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement("button");
+      pageBtn.className = `page-number ${i === currentPage ? "active" : ""}`;
+      pageBtn.textContent = i;
+      pageBtn.addEventListener("click", () => {
+        currentPage = i;
+        renderPaginatedProducts(); // call the correct call
+        // attachProductActionListeners();
+        updatePagination();
+      });
+      pageNumbers.appendChild(pageBtn);
+    }
+
+    // Optional: Next & Previous button functionality
+    prevBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPaginatedProducts();
+        // attachProductActionListeners();
+        updatePagination();
+      }
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderPaginatedProducts();
+        // attachProductActionListeners();
+        updatePagination();
+      }
+    });
+  }
+     // Search functionality
+    const searchInput = document.getElementById("product-search");
+        searchInput.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase().trim();
+          applyFiltersAndSort(searchTerm);
+        });
+
+    function applyFiltersAndSort(searchTerm = searchInput.value.toLowerCase().trim()) {
+          filteredProducts = allProducts.filter((product) => {
+          const name = product.productName?.toLowerCase() || "";
+          const brand = product.brand?.brandName?.toLowerCase() || "";
+          const category = product.category?.categoryName?.toLowerCase() || "";
+          const edition = product.edition?.toLowerCase() || "";
+          const scale = product.scale?.toLowerCase() || "";
+      
+          return (
+            name.includes(searchTerm) ||
+            brand.includes(searchTerm) ||
+            category.includes(searchTerm) ||
+            edition.includes(searchTerm) ||
+            scale.includes(searchTerm)
+          );
+        });
+      
+        // Reset to first page when filtering
+        currentPage = 1;
+        renderPaginatedProducts();
+    }
+    
+
+  function editProduct(productId) {
+    window.location.href = `/admin/edit-product/${productId}`;
+  }
+
+  function confirmUnlistProduct(productId, btn) {
+    console.log("Unlisting:", productId);
+  }
+
+  function confirmListProduct(productId, btn) {
+    console.log("Listing:", productId);
+  }
+});
+</script>
+
 </body>
 </html>

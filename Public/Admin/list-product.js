@@ -1,150 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Sample product data
-    const products = [
-        {
-            id: 1,
-            name: "RoadMaster 500",
-            brand: "SpeedX",
-            category: "Road Bike",
-            variant: "Men's Performance",
-            color: "Red/Black",
-            regularPrice: 24000.00,
-            sellingPrice: 21500.00,
-            offer: 10,
-            stock: 10,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=SpeedX"
-        },
-        {
-            id: 2,
-            name: "MountainRider X",
-            brand: "TrailBlaze",
-            category: "Mountain Bike",
-            variant: "Unisex Trail",
-            color: "Matte Black",
-            regularPrice: 28500.00,
-            sellingPrice: 25500.00,
-            offer: 11,
-            stock: 5,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Trail"
-        },
-        {
-            id: 3,
-            name: "Urban Hybrid 3.0",
-            brand: "CityCruze",
-            category: "Hybrid Bike",
-            variant: "Men's City",
-            color: "Grey/Orange",
-            regularPrice: 22000.00,
-            sellingPrice: 19800.00,
-            offer: 10,
-            stock: 0,
-            status: "inactive",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=City"
-        },
-        {
-            id: 4,
-            name: "FunBike 12",
-            brand: "KiddoRide",
-            category: "Kids Bike",
-            variant: "Boys/Girls 3-6 yrs",
-            color: "Blue/Yellow",
-            regularPrice: 8500.00,
-            sellingPrice: 7499.00,
-            offer: 12,
-            stock: 20,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Kiddo"
-        },
-        {
-            id: 5,
-            name: "TrailMaster 29",
-            brand: "RockRider",
-            category: "Mountain Bike",
-            variant: "Men's Off-road",
-            color: "Green/Black",
-            regularPrice: 31000.00,
-            sellingPrice: 27999.00,
-            offer: 10,
-            stock: 3,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Rock"
-        },
-        {
-            id: 6,
-            name: "CityCruise 700c",
-            brand: "MetroVelo",
-            category: "Hybrid Bike",
-            variant: "Women's City Ride",
-            color: "White/Peach",
-            regularPrice: 19500.00,
-            sellingPrice: 17500.00,
-            offer: 10,
-            stock: 8,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Velo"
-        },
-        {
-            id: 7,
-            name: "eRide X1",
-            brand: "VoltCycle",
-            category: "Electric Bike",
-            variant: "Unisex",
-            color: "Black/Green",
-            regularPrice: 48500.00,
-            sellingPrice: 44999.00,
-            offer: 7,
-            stock: 0,
-            status: "inactive",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Volt"
-        },
-        {
-            id: 8,
-            name: "Junior Sprint 16",
-            brand: "TinyTrek",
-            category: "Kids Bike",
-            variant: "Boys/Girls 5-8 yrs",
-            color: "Red/White",
-            regularPrice: 9700.00,
-            sellingPrice: 8999.00,
-            offer: 7,
-            stock: 18,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Trek"
-        },
-        {
-            id: 9,
-            name: "Racer Pro 700c",
-            brand: "FastLane",
-            category: "Road Bike",
-            variant: "Men's Speed",
-            color: "Black/Neon",
-            regularPrice: 27000.00,
-            sellingPrice: 24999.00,
-            offer: 7,
-            stock: 6,
-            status: "draft",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Fast"
-        },
-        {
-            id: 10,
-            name: "Eco Step-Through",
-            brand: "UrbanMotion",
-            category: "Hybrid Bike",
-            variant: "Women's Comfort",
-            color: "Teal",
-            regularPrice: 21500.00,
-            sellingPrice: 19999.00,
-            offer: 7,
-            stock: 9,
-            status: "active",
-            image: "https://via.placeholder.com/50x50/FF8C00/FFFFFF?text=Eco"
-        }
-    ];
-    
 
     // Pagination variables
+
     let currentPage = 1;
     const productsPerPage = 5;
     let filteredProducts = [...products];
@@ -165,37 +23,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
         // Render products
-        paginatedProducts.forEach(product => {
-            const row = document.createElement('tr');
+        // paginatedProducts.forEach(product => {
+        //     const row = document.createElement('tr');
             
-            row.innerHTML = `
-                <td>${product.id}</td>
-                <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
-                <td>${product.name}</td>
-                <td>${product.brand}</td>
-                <td>${product.category}</td>
-                <td>${product.variant}</td>
-                <td>${product.color}</td>
-                <td>${formatCurrency(product.regularPrice)}</td>
-                <td>${formatCurrency(product.sellingPrice)}</td>
-                <td>${product.offer}%</td>
-                <td>${product.stock > 0 ? product.stock : '<span class="status-inactive">Out of Stock</span>'}</td>
-                <td>
-                    <span class="product-status ${product.status === 'active' ? 'status-active' : product.status === 'draft' ? 'status-draft' : 'status-inactive'}">
-                        ${product.status.charAt(0).toUpperCase() + product.status.slice(1)}
-                    </span>
-                </td>
-                <td class="product-actions">
-                    <button class="edit-btn" data-id="${product.id}"><i class="fas fa-edit"></i></button>
-                    ${product.status === 'active' ? 
-                        `<button class="block-btn" data-id="${product.id}"><i class="fas fa-ban"></i></button>` : 
-                        `<button class="unblock-btn" data-id="${product.id}"><i class="fas fa-check-circle"></i></button>`
-                    }
-                </td>
-            `;
+        //     row.innerHTML = `
+        //         <td>${product.id}</td>
+        //         <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
+        //         <td>${product.name}</td>
+        //         <td>${product.brand}</td>
+        //         <td>${product.category}</td>
+        //         <td>${product.variant}</td>
+        //         <td>${product.color}</td>
+        //         <td>${formatCurrency(product.regularPrice)}</td>
+        //         <td>${formatCurrency(product.sellingPrice)}</td>
+        //         <td>${product.offer}%</td>
+        //         <td>${product.stock > 0 ? product.stock : '<span class="status-inactive">Out of Stock</span>'}</td>
+        //         <td>
+        //             <span class="product-status ${product.status === 'active' ? 'status-active' : product.status === 'draft' ? 'status-draft' : 'status-inactive'}">
+        //                 ${product.status.charAt(0).toUpperCase() + product.status.slice(1)}
+        //             </span>
+        //         </td>
+        //         <td class="product-actions">
+        //             <button class="edit-btn" data-id="${product.id}"><i class="fas fa-edit"></i></button>
+        //             ${product.status === 'active' ? 
+        //                 `<button class="block-btn" data-id="${product.id}"><i class="fas fa-ban"></i></button>` : 
+        //                 `<button class="unblock-btn" data-id="${product.id}"><i class="fas fa-check-circle"></i></button>`
+        //             }
+        //         </td>
+        //     `;
             
-            tableBody.appendChild(row);
-        });
+        //     tableBody.appendChild(row);
+        // });
 
         // Add event listeners to action buttons
         document.querySelectorAll('.edit-btn').forEach(btn => {

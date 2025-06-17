@@ -23,7 +23,7 @@ app.set("views", [
     path.join(__dirname, "Views/Admin"),
     path.join(__dirname, "Views/User")
 ]);
-  console.log("View Directories:", app.get("views"));
+  // console.log("View Directories:", app.get("views"));   // debugging
 
   // Serve static files
 app.use(express.static(path.join(__dirname, "Public")));
@@ -33,7 +33,6 @@ app.use(express.urlencoded({ extended: true }));    // middlewares for parsing t
 
 
 //handling the session 
-
 
 app.use(session({
   secret: process.env.SESSION_SECRET,

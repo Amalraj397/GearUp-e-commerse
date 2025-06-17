@@ -9,8 +9,8 @@ export const getuserData = async (req, res, next)=>{
 
         //Pagination
         const page = req.query.page*1 || 1;
-        const limit = req.query.limit*1 || 0
-        const skip = (page -1) * limit
+        const limit = req.query.limit*1 || 0;
+        const skip = (page -1) * limit;
 
         const filter = {};
         if(searchQuery){
@@ -29,7 +29,9 @@ export const getuserData = async (req, res, next)=>{
         userdata = await userschema.find().sort({createdAt:-1}).skip(skip).limit(limit).exec()
        
        }
-       console.log(userdata)
+       console.log("-------------------")
+       console.log("userdata : ",userdata)
+       console.log("-------------------")
 
         // render
         res.render('userManagement.ejs',{
@@ -45,3 +47,27 @@ export const getuserData = async (req, res, next)=>{
         res.status(500).send("internal server Error..!");
     }
 }
+
+
+
+//  -------------------block and unblock users-----------------
+
+export const blockUser = async (req, res) => {
+  try {
+    await userschema.findByIdAndUpdate(req.params.id, { isBlocked: true });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};
+
+export const unblockUser = async (req, res) => {
+  try {
+    await userschema.findByIdAndUpdate(req.params.id, { isBlocked: false });
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+};

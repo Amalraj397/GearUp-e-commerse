@@ -1,352 +1,571 @@
 <%-include("../../Views/Partials/Admin/header")%>
 
 <style>
-    .categories-container {
-        padding: 20px;
-        color: #ffffff;
-        background-color: #1a202c;
-    }
+  .categories-container {
+    padding: 20px;
+    color: #ffffff;
+    background-color: #1a202c;
+  }
 
-    .page-title {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
 
-    .top-controls {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    /* ---------------- */
-    .search-sort {
-        display: flex;
-        gap: 10px;
-    }
+  .top-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  /* ---------------- */
+  .search-sort {
+    display: flex;
+    gap: 10px;
+  }
 
-    .search-bar {
-        display: flex;
-        background-color: #2d3748;
-        border-radius: 4px;
-    }
+  .search-bar {
+    display: flex;
+    background-color: #2d3748;
+    border-radius: 4px;
+  }
 
-    .search-bar input {
-        background-color: transparent;
-        border: none;
-        color: #ffffff;
-        padding: 8px 12px;
-        width: 200px;
-    }
+  .search-bar input {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    padding: 8px 12px;
+    width: 200px;
+  }
 
-    .search-button {
-        background-color: #084a86f0;
-        border: 3px;
-        color: #ffffff;
-        cursor: pointer;
-        padding: 8px;
-    }
-    /* --------------------- */
-    .add-category-btn {
-        display: inline-flex;
-        align-items: center;
-        background-color: #ff9500;
-        color: #ffffff;
-        border: none;
-        padding: 8px 8px;
-        border-radius: 4px;
-        text-decoration: none;
-        cursor: pointer;
-        font-size: 10px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-    .add-category-btn :hover {
-        background-color: #4a5568;
-    }
+  .search-button {
+    background-color: #084a86f0;
+    border: 3px;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 8px;
+  }
+  /* --------------------- */
+  .add-category-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #ff9500;
+    color: #ffffff;
+    border: none;
+    padding: 8px 8px;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .add-category-btn :hover {
+    background-color: #4a5568;
+  }
 
-    .add-category-btn .material-icons {
-        margin-right: 8px;
-        font-size: 18px;
-    }
+  .add-category-btn .material-icons {
+    margin-right: 8px;
+    font-size: 18px;
+  }
 
-    .categories-table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-    }
+  .categories-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
 
-    .categories-table th {
-        text-align: left;
-        padding: 10px;
-        background-color: #2d3748;
-        font-weight: bold;
-        color: aliceblue;
-    }
+  .categories-table th {
+    text-align: left;
+    padding: 10px;
+    background-color: #2d3748;
+    font-weight: bold;
+    color: aliceblue;
+  }
 
-    .categories-table td {
-        padding: 10px;
-        background-color: #2d3748;
-        color: aliceblue;
-    }
+  .categories-table td {
+    padding: 10px;
+    background-color: #2d3748;
+    color: aliceblue;
+  }
 
-    .action-cell {
-        text-align: right;
-        white-space: nowrap;
-    }
+  .action-cell {
+    text-align: center;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    gap: 11px; /* space between buttons */
+    align-items: center; /* center horizontally */
+  }
+  .action-btn {
+    width: 90px;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 5px;
+    display: inline-flex;
+    align-items: center;
+  }
 
-    .action-btn {
-        border: none;
-        padding: 5px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 5px;
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .list-btn {
-        /* background-color: #48bb78; */
-        color: #ffffff;
-    }
-    .btn-danger.list-btn {
+  .list-btn {
+    /* background-color: #48bb78; */
+    color: #ffffff;
+  }
+  .btn-danger.list-btn {
     background-color: #e53e3e; /* Red */
-}
+  }
 
-.btn-success.list-btn {
+  .btn-success.list-btn {
     background-color: #48bb78; /* Green */
-}
+  }
 
-    .edit-btn {
-        background-color: #4299e1;
-        color: #ffffff;
-        padding: 5px;
-    }
+  .edit-btn {
+    background-color: #4299e1;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 9px 15px;
+    border: 1px solid white;
+  }
 
-    .offer-btn {
-        background-color: #ed8936;
-        color: #ffffff;
-    }
+  .edit-btn:hover {
+    background-color: #325c9c;
+    color: #3e3b3b;
+  }
+  .offer-btn {
+    background-color: #ed8936;
+    color: #ffffff;
+  }
 
-    .action-btn .material-icons {
-        font-size: 18px;
-        margin-right: 4px;
-    }
+  .action-btn .material-icons {
+    font-size: 18px;
+    margin-right: 4px;
+  }
 
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
 
-    .pagination-button {
-        background-color: #2d3748;
-        color: #ffffff;
-        border: none;
-        padding: 8px 12px;
-        margin: 0 5px;
-        border-radius: 4px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 40px;
-    }
+  .pagination-button {
+    background-color: #2d3748;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+  }
 
-    .pagination-button.active {
-        background-color: #4a5568;
-        font-weight: bold;
-        font-family: normal;
-    }
+  .pagination-button.active {
+    background-color: #4a5568;
+    font-weight: bold;
+    font-family: normal;
+  }
+  .pagination-button:hover {
+    background-color: #ddd;
+  }
+  .pagination-button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-    .pagination-button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
+  .block-btn,
+  .unblock-btn {
+    padding: 10px 9px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 80px;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+    border: 2px solid rgb(255, 11, 11);
+  }
+
+  .block-btn {
+    background-color: rgba(149, 7, 7, 0.809);
+    color: #480909;
+  }
+
+  .block-btn:hover {
+    background-color: var(--danger-color);
+    color: white;
+  }
+
+  .unblock-btn {
+    background-color: rgba(72, 187, 120, 0.2);
+    color: var(--success-color);
+  }
+
+  .unblock-btn:hover {
+    background-color: var(--success-color);
+    color: white;
+  }
+  .status-active {
+    background-color: rgba(72, 187, 120, 0.2);
+    color: rgb(7, 255, 7);
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 0.3rem;
+    font-weight: 500;
+  }
+    .status-blocked {
+    background-color: rgba(188, 59, 59, 0.2);
+    color: rgb(255, 0, 0);
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 0.3rem;
+    font-weight: 500;
+  }
+  .btn {
+    padding: 0.495rem 0.65rem;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .unlist-category-btn {
+    background-color: #ef2438;
+    border: 2px solid #c82333;
+    color: #ffffff;
+  }
+  .unlist-category-btn:hover {
+    background-color: #d89da3;
+    color: #3e3b3b;
+  }
+
+  .list-category-btn {
+    background-color: #299a49;
+    border: 1px solid #bed2ba;
+    color: #ffffff;
+    width: 90px;
+    padding: 9px 0px 7px 20px;
+    font-weight: 400;
+    font-size: 0.9rem;
+  }
+
+  .list-category-btn:hover {
+    background-color: #218838;
+    color: #3e3b3b;
+  }
 </style>
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
 
 <div class="categories-container">
-    <h1 class="page-title">CATEGORIES</h1>
-   
-    
-    <div class="top-controls" >
-        <div class="search-bar">
-            <input type="text" placeholder="Search categories..." id="search-input" value="<%= searchQuery %>">
-            <button class="search-button" id="search-btn">
-                <span class="material-icons">search</span>
-            </button>
-        </div>
-       
-            <a href="/admin/addCategory" class="add-category-btn">
-            <span class="material-icons"> Add Category</span>
-    
-        </a>
-        </button>
+  <h1 class="page-title">CATEGORIES</h1>
+
+  <div class="top-controls">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search categories..."
+        id="search-input"
+        value="<%= searchQuery %>"
+      />
+      <button class="search-button" id="search-btn">
+        <span class="material-icons">search</span>
+      </button>
     </div>
 
-    <table class="categories-table">
-        <thead>
-            <tr>
-                <th>CATEGORY</th>
-                <th>DESCRIPTION</th>
-                <th>OFFER</th>
-                <th>ACTION</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%category.forEach((cat)=>{ %>
-            <tr>
-                <td><%=cat.name%></td>
-                <td><%=cat.description%></td>
-                <td><%=cat.categoryOffer || '0' %>%</td>
-                <td class="action-cell">
-                    <% if (!cat.isListed) { %>
-                    <button class="btn btn-danger action-btn list-btn " onclick="confirmUnlistCategory('<%= cat._id %>',this)">UNLIST</button>
-                    <% } else { %>
-                    <button class="btn btn-success action-btn list-btn " onclick="confirmListCategory('<%= cat._id %>',this)">LIST</button>
-                    <% } %>
-                    <button class="action-btn edit-btn" onclick="editCategory('<%= cat._id %>')">
-                        <span class="material-icons">edit</span>
-                    </button>
-                    <button class="action-btn offer-btn" onclick="addOffer('<%= cat._id %>', this)"
-                        style="<% if (cat.categoryOffer >0) { %> background-color: #ed8936; <% } else { %> background-color: #48bb78; <% } %>">
-                        <span class="material-icons">local_offer</span>
-                        <% if (cat.categoryOffer >0) { %>Edit Offer <% }
-                        else { %> Add Offer <% } %>
-                    </button>
-                </td>
-            </tr>
-            <% }) %>
-        </tbody>
-    </table>
-    <% if(category.length === 0) {%>
-        <p>No Category found!</p>
-        <% } else if (category.length > 0) {%>
-    <div class="pagination">
-        <button class="pagination-button" disabled>
-            <span class="material-icons">chevron_left</span>
-        </button>
-        <% for (let i=1; i<=totalPage; i++) {%>
-            <a href="?page=<%= i %>" class="pagination-button <%= page === i ? 'active' : '' %>"><%= i %></a>
-            <% } %>
-        <button class="pagination-button">
-            <span class="material-icons">chevron_right</span>
-        </button>
-    </div>
+    <a href="/admin/addCategory" class="add-category-btn">
+      <span class="material-icon"> Add Category</span>
+    </a>
+  </div>
+
+  <table class="categories-table">
+    <thead>
+      <tr>
+        <th>CATEGORY</th>
+        <th>DESCRIPTION</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>OFFER</th>
+        <th>STATUS</th>
+        <th></th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% category.forEach((cat) => { %>
+      <tr>
+        <td><%= cat.name || 'N/A' %></td>
+        <td><%= cat.description || 'N/A' %></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= cat.categoryOffer || '0' %>%</td>
+        <td>
+          <span
+            class="status-badge <%= cat.isBlocked ? 'status-blocked' : 'status-active' %>"
+          >
+            <%= cat.isBlocked ? 'Blocked' : 'Active' %>
+          </span>
+        </td>
+        <td></td>
+        <td class="action-cell">
+          <!-- <% if (cat.isBlocked) { %>
+          <button
+            class="btn btn-success action-btn list-btn list-btn-green"
+            data-id="<%= category._id %>"
+          >
+            <i class="fas fa-check-circle"></i> LIST
+          </button>
+          <% } else { %>
+          <button
+            class="btn btn-danger action-btn list-btn unlist-btn"
+            data-id="<%= category._id %>"
+          >
+            <i class="fas fa-ban"></i> UNLIST
+          </button>
+          <% } %> -->
+          <% if (cat.isBlocked) { %>
+  <button class="btn btn-success action-btn list-category-btn" data-id="<%= cat._id %>">
+    <i class="fas fa-check-circle"></i> LIST
+  </button>
+<% } else { %>
+  <button class="btn btn-danger action-btn unlist-category-btn" data-id="<%= cat._id %>">
+    <i class="fas fa-ban"></i> UNLIST
+  </button>
+<% } %>
+
+          <button
+            class="action-btn edit-btn"
+            onclick="editProduct('<%= category._id %>')"
+          >
+            <span class="material-icons">edit</span> EDIT
+          </button>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <% if (category.length === 0) { %>
+  <p>No Category found!</p>
+  <% } else { %>
+  <div class="pagination">
+    <!-- Left Arrow -->
+    <% if (page > 1) { %>
+    <a href="?page=<%= page - 1 %>" class="pagination-button">
+      <span class="material-icons">chevron_left</span>
+    </a>
+    <% } else { %>
+    <span class="pagination-button disabled">
+      <span class="material-icons">chevron_left</span>
+    </span>
     <% } %>
+
+    <!-- Page Numbers -->
+    <% for (let i = 1; i <= totalPage; i++) { %>
+    <a
+      href="?page=<%= i %>"
+      class="pagination-button <%= page === i ? 'active' : '' %>"
+      ><%= i %></a
+    >
+    <% } %>
+
+    <!-- Right Arrow -->
+    <% if (page < totalPage) { %>
+    <a href="?page=<%= page + 1 %>" class="pagination-button">
+      <span class="material-icons">chevron_right</span>
+    </a>
+    <% } else { %>
+    <span class="pagination-button disabled">
+      <span class="material-icons">chevron_right</span>
+    </span>
+    <% } %>
+  </div>
+  <% } %>
 </div>
 
-<script>
-    // Js functions 
-    function confirmListCategory(id, button) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You want to list this category?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, list it !'
-        }).then((result)=> {
-            if (result.isConfirmed) {
-                // Call the back-end  API to list the category
-                fetch(`/api/v1/admin/category/listCategory?id=${id}`, {
-                    method: 'POST'
-                }).then(response => response.json()).then(data => {
-                    Swal.fire(data.message, "",'success');
-                    setTimeout(()=>{
-                        location.reload() 
-                    },2000)
-                    
-                }).catch(error => {
-                    Swal.fire('Error!', error.message, 'error');
-                });
-            }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+
+  // UNLIST
+  document.querySelectorAll('.unlist-category-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const categoryId = btn.getAttribute('data-id');
+      if (categoryId) confirmUnlistCategory(categoryId);
+    });
+  });
+
+  // LIST
+  document.querySelectorAll('.list-category-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const categoryId = btn.getAttribute('data-id');
+      if (categoryId) confirmListCategory(categoryId);
+    });
+  });
+
+  function confirmUnlistCategory(categoryId) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This category will be unlisted from the store.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, unlist it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`/admin/unlist-category/${categoryId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire("Unlisted!", data.message, "success").then(() => location.reload());
+          } else {
+            Swal.fire("Failed!", data.message, "error");
+          }
+        })
+        .catch((err) => {
+          console.error("Fetch error:", err);
+          Swal.fire("Error", "Something went wrong", "error");
         });
-    }
+      }
+    });
+  }
 
-    function confirmUnlistCategory(id) {
-        Swal.fire({
-            title: 'Are you sure',
-            text: 'You want to unlist this category',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, unlist it!'
-        }).then((result)=>{
-            if (result.isConfirmed){
-                fetch(`/api/v1/admin/category/unlistCategory?id=${id}`, {
-                    method: 'POST'
-                }).then(response => response.json()).then(data => {
-                    Swal.fire(data.message, '', 'success');
-                    setTimeout(()=>{
-                        location.reload()
-                    },2000)
-                    
-                }).catch(error =>{
-                    Swal.fire('Error!'. error.message, 'error');
-                });
-            }
+  function confirmListCategory(categoryId) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This category will be listed again in the store.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#28a745",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, list it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`/admin/list-category/${categoryId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            Swal.fire("Listed!", data.message, "success").then(() => location.reload());
+          } else {
+            Swal.fire("Failed!", data.message, "error");
+          }
+        })
+        .catch((err) => {
+          console.error("Fetch error:", err);
+          Swal.fire("Error", "Something went wrong", "error");
         });
-    }
+      }
+    });
+  }
 
-    function addOffer(categoryId, button) {
-        Swal.fire ({
-            title: 'Add Offer Percentage',
-            input: 'text',
-            inputLabel: 'Offer Percentage',
-            inputPlaceholder: 'Enter offer percentage',
-            showCancelButton: true,
-            confirmButtonText: 'Add Offer',
-            preConfirm : (value) => {
-                if (!value || isNaN(value) || value <0 || value > 100) {
-                    Swal.showValidationMessage ('Please enter a valid percentage between 1 and 100.');
-                }else {
-                    return fetch('/api/v1/admin/category/addOffer', {
-                        method: 'POST',
-                        headers: { 'Content-Type' : 'application/json'},
-                        body: JSON.stringify({ categoryId, percentage: value})
-                    }).then(response => {
-                        if(!response.ok) throw new Error('Failed to add offer');
-                        return response.json();
-                    });
-                }
-            }
-        }).then((result)=> {
-            if (result.isConfirmed) {
-                Swal.fire(`Offer added successfully!`, '', 'success');
-                
-            }
-            setTimeout(()=>{
-                location.reload()
-            },2000)
-        }).catch(error => {
-            Swal.fire ('Error !', error.message, 'error');
-        });
-
-    }
-    // Edit category
-    function editCategory(id){
-     
-        window.location.href = `/api/v1/admin/category/editCategory?id=${id}`
-    }
-
-    const searchInput = document.getElementById('search-input');
-    const searchButton = document.getElementById('search-btn');
-
-    searchButton.addEventListener('click', function(){
-        const searchValue = searchInput.value.trim();
-
-        if(searchValue){
-           window.location.href = `/api/v1/admin/category?search=${searchValue}`;
-        }else{
-            Toastify({
-        text: "Enter any input here!",
-        duration: 3000, 
-        close: true, 
-        gravity: "top", 
-        position: "right", 
-        backgroundColor: "#FF5733", 
-        stopOnFocus: true, 
-    }).showToast();
-        }
-    })
-    
+});
 </script>
+<!-- <script>
+  document.addEventListener("DOMContentLoaded", () => {
 
+    function confirmUnlistCategory(categoryId, btn) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This category will be unlisted from the store.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, unlist it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/unlist-category/${categoryId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire("Unlisted!", data.message, "success").then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire("Failed!", data.message, "error");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              Swal.fire("Error", "Something went wrong", "error");
+            });
+        }
+      });
+    }
+    function confirmListCategory(categoryId, btn) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This category will be listed again in the store.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, list it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/list-category/${categoryId}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire("Listed!", data.message, "success").then(() => {
+                  location.reload();
+                });
+              } else {
+                Swal.fire("Failed!", data.message, "error");
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              Swal.fire("Error", "Something went wrong", "error");
+            });
+        }
+      });
+    }
+
+    document.querySelectorAll(".unlist-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryId = btn.getAttribute("data-id");
+        confirmUnlistCategory(categoryId, this);
+      });
+    });
+
+    // LIST Button
+    document.querySelectorAll(".list-btn-green").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryId = btn.getAttribute("data-id");
+        confirmListCategory(categoryId, this);
+      });
+    });
+  });
+</script> -->
 <%-include("../../Views/Partials/Admin/footer")%>

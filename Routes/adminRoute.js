@@ -11,19 +11,23 @@ import {
     loadAdminlogin,
     loadAdminDash,
     adminLogout,
-    // loaduserMangement,
-  
-    
 }from "../Controller/admin/adminController.js";
 
 import {
     getuserData,
+    blockUser,
+    unblockUser,
 }from "../Controller/admin/AdminuserController.js"
 
 import{
-  loadproductList,
-  loadAddproduct,
-  addnewProduct,
+    loadproductList,
+    loadAddproduct,
+    addnewProduct,
+    editProductPage,
+    getProductsJson,
+
+    unlistProduct,
+    listProduct,
 } from "../Controller/admin/productController.js"
 
 import {
@@ -36,6 +40,8 @@ import {
     getCategory,
     getAddCategory,
     addNewCategory,
+    unlistCategory,
+    listCategory,
 } from"../Controller/admin/categoryController.js"
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -51,12 +57,24 @@ adminRoute.get("/dashboard",loadAdminDash);   // load admin landing or dashboard
 adminRoute.get ("/logout",adminLogout);  //admin logput
                                          // load admindashboard
 
-adminRoute.get ("/userManage",getuserData);
+adminRoute.get ("/userManage",getuserData);    // load usermanagement[user-list]
 
   //Product management
 adminRoute.get ("/addProduct",loadAddproduct);  //product management [add product]
 adminRoute.get ("/productList",loadproductList);  //  [list product]
-adminRoute.post ("/addProduct", uploadMiddleware('Products').array('productImages',8), addnewProduct);
+adminRoute.get("/api/products", getProductsJson); // JSON data for frontend
+adminRoute.post ("/addProduct",uploadMiddleware('Products').array('productImages',8), addnewProduct);
+
+//listing and unlisting  products
+adminRoute.patch("/unlist-product/:id",unlistProduct);
+adminRoute.patch("/list-product/:id",listProduct);
+
+// edit product
+adminRoute.patch ("/editProduct", uploadMiddleware('Products').array('productImages',8), editProductPage);
+
+ // blocking and  unblocking  users
+adminRoute.put("/block-user/:id", blockUser);   //blocking user
+adminRoute.put("/unblock-user/:id", unblockUser);   //unblocking user
 
 
   //Brand management
@@ -65,10 +83,13 @@ adminRoute.get("/addBrands",getAddBrandPage);  //getting brand page //adding new
 adminRoute.post("/addBrands", uploadMiddleware('Brands').single('brand-Image'), addNewBrand);
 
 
-//category management 
-
+  //category management 
 adminRoute.get ("/category", getCategory);  //getting  category page
 adminRoute.get ("/addCategory",getAddCategory); //get add category page 
 adminRoute.post ("/addCategory",addNewCategory )  // adding new category
+
+//listing and Unlisting Category
+adminRoute.patch("/unlist-category/:id",unlistCategory);  //unlisting category
+adminRoute.patch("/list-category/:id",listCategory);   //listing category
 
 export default adminRoute;

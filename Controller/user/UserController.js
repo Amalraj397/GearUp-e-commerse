@@ -401,10 +401,16 @@ export const handleGoogleSignup = async (req, res) => {
 
     if (!email || !displayName || !googleId) {
       return res.status(400).json({ success: false, message: "Missing fields" });
-    }
+    } 
 
     // Check if user already exists
     let user = await userschema.findOne({ email });
+    
+    //check if user is blocked or not
+
+     if (user.isBlocked) {
+      return res.status(403).json({ success: false, message: 'Your account has been blocked by the admin' });
+    }
 
     if (user) {
       return res.status(200).json({ success: true, user });

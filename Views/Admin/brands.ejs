@@ -188,11 +188,13 @@
         font-family: normal;
     }
 
-    .pagination-button:disabled {
+    .pagination-button.disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }
 </style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
 <div class="brands-container">
     <h1 class="page-title">BRANDS</h1>
@@ -208,7 +210,7 @@
             
         </div>
         
-            <a href="/admin/addBrands" class="add-brand-btn">
+        <a href="/admin/addBrands" class="add-brand-btn">
             <span class="material-icons"></span>
             Add Brands
         </a>
@@ -218,8 +220,8 @@
     <table class="brands-table">
         <thead>
             <tr>
-                <th>BRANDS</th>
-                <th>BRAND LOGO</th>
+                <th>BRAND</th>
+                <th>LOGO</th>
                 <th>DESCRIPTION</th>
                 <th>OFFER</th>
                 <th>STATUS</th>
@@ -260,7 +262,7 @@
                         <% if (model.modelOffer > 0) { %>Edit Offer <% }
                         else { %> Add Offer <% } %>
                     </button> -->
-                    <button class="action-btn offer-btn" 
+                    <!-- <button class="action-btn offer-btn" 
                         onclick="addOffer('<%= model._id %>', this)"
                         style="<% if (model.brandOffer > 0) { %> background-color: #ed8936; <% } else { %> background-color: #48bb78; <% } %>">
                         <span class="material-icons">local_offer</span>
@@ -269,28 +271,47 @@
                     <% } else { %>
                         Add Offer
                      <% } %>
-                   </button>
+                   </button> -->
                 </td>
             </tr>
             <%})%>
            
         </tbody>
     </table>
-    <%if (brand.length === 0) {%>
-        <p>No Brand found!</p>
-        <%} else if (brand.length > 1) {%>
-    <div class="pagination">
-        <button class="pagination-button" disabled>
-            <span class="material-icons">chevron_left</span>
-        </button>
-        <%for (let i=1; i<=totalPage; i++) {%>
-            <a href="?page=<%= i %>" class="pagination-button <%= page === i ? 'active' : '' %>"><%= i %></a>
-            <% } %>
-        <button class="pagination-button">
-            <span class="material-icons">chevron_right</span>
-        </button>
-    </div>
+     <% if (brand.length === 0) { %>
+  <p>No brand found!</p>
+<% } else { %>
+  <div class="pagination">
+    <!-- Left Arrow -->
+    <% if (page > 1) { %>
+      <a href="?page=<%= page - 1 %>" class="pagination-button">
+        <span class="material-icons">chevron_left</span>
+      </a>
+    <% } else { %>
+      <span class="pagination-button disabled">
+        <span class="material-icons">chevron_left</span>
+      </span>
     <% } %>
+
+    <!-- Page Numbers -->
+    <% for (let i = 1; i <= totalPage; i++) { %>
+      <a href="?page=<%= i %>" class="pagination-button <%= page === i ? 'active' : '' %>"><%= i %></a>
+    <% } %>
+
+    <!-- Right Arrow -->
+    <% if (page < totalPage) { %>
+      <a href="?page=<%= page + 1 %>" class="pagination-button">
+        <span class="material-icons">chevron_right</span>
+      </a>
+    <% } else { %>
+      <span class="pagination-button disabled">
+        <span class="material-icons">chevron_right</span>
+      </span>
+    <% } %>
+  </div>
+<% } %>
+
+    
 </div>
 
 <script>

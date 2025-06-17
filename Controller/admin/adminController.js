@@ -11,22 +11,6 @@ export const loadAdminlogin = async (req, res) => {
 };
 
 
-
-// export const loadAdminDash = async(req, res) => {
-//     try {
-//         if(req.user && req.user.isAdmin === true){
-//             return res.render("adminDash.ejs");
-//         }
-//         else{
-//             res.status(401).send("Unauthorized Access!");
-//         }
-//     } catch (error) {
-//         console.log("error in loading the admin-Dashboard", error);
-//         res.status(500).send("server Error");  
-//     }
-// ;}
-
-
 export const loadAdminDash = async (req, res) => {
     try {
       res.render("adminDash.ejs");
@@ -59,17 +43,6 @@ export const loadAdminDash = async (req, res) => {
    }
  }; 
 
-
-
-//  export const loaduserMangement = async (req, res) => {
-//   try {
-//     // console.log("hai user management controller working")
-//     res.render("userManagement.ejs");
-//   } catch (error) {
-//     console.log("error in loading the page", error);
-//     res.status(500).send("server Error  ");
-//   }
-// };
 
 
 
