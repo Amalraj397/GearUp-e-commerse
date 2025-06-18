@@ -3,20 +3,57 @@ import categorySchema from "../../Models/categoryModel.js";
 
 // Category Info handler
 
+// export const getCategory = async (req, res, next) => {
+//   try {
+//     //Pagination
+//     const page = req.query.page * 1 || 1;
+//     const limit = req.query.limit * 1 || 4;
+//     const skip = (page - 1) * limit;
+
+//     // Capture the search Query!
+//     const searchQuery = req.query.search || "";
+
+//     const filter = {};
+//     if (searchQuery) {
+//       filter["name"] = { $regex: new RegExp(searchQuery, "i") };
+//     }
+
+//     const totalCategories = await categorySchema.countDocuments(filter);
+//     const category = await categorySchema
+//       .find(filter)
+//       .skip(skip)
+//       .limit(limit)
+//       .exec();
+
+//     // render
+//     res.status(200).render("category.ejs", {
+//       category,
+//       page,
+//       totalPage: Math.ceil(totalCategories / limit),
+//       searchQuery,
+//     });
+//   }  catch (error) {
+//       console.log("error in loading the page", error);
+//       res.status(500).send("server Error  ");
+//     }
+// };
+
 export const getCategory = async (req, res, next) => {
   try {
-    //Pagination
-    const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 4;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 4;
     const skip = (page - 1) * limit;
+    const searchQuery = typeof req.query.search === "string" ? req.query.search : "";
 
-    // Capture the search Query!
-    const searchQuery = req.query.search || "";
 
-    const filter = {};
-    if (searchQuery) {
-      filter["name"] = { $regex: new RegExp(searchQuery, "i") };
-    }
+    const filter = searchQuery
+      ? {
+          $or: [
+            { name: { $regex: searchQuery, $options: "i" } },
+            { description: { $regex: searchQuery, $options: "i" } }, // remove if you don’t have `description`
+          ],
+        }
+      : {};
 
     const totalCategories = await categorySchema.countDocuments(filter);
     const category = await categorySchema
@@ -25,7 +62,6 @@ export const getCategory = async (req, res, next) => {
       .limit(limit)
       .exec();
 
-    // render
     res.status(200).render("category.ejs", {
       category,
       page,
@@ -33,7 +69,8 @@ export const getCategory = async (req, res, next) => {
       searchQuery,
     });
   } catch (error) {
-    next(error);
+    console.log("Error in loading the page", error);
+    res.status(500).send("Server Error");
   }
 };
 
@@ -43,9 +80,9 @@ export const getAddCategory = async (req, res, next) => {
   try {
     return res.status(200).render("addCategory.ejs");
   } catch (error) {
-    console.log(error);
-    next(error);
-  }
+      console.log("error in loading the page", error);
+      res.status(500).send("server Error  ");
+    }
 };
 
 // Category post handler
@@ -75,10 +112,10 @@ export const getAddCategory = async (req, res, next) => {
 //         await newCategory.save()
 //         return res.status(201).json({ message: 'New category added..!'})
 
-//     } catch (error) {
-//       console.log("error in loading the page", error);
-//       res.status(500).send("server Error  ");
-//     }
+    // } catch (error) {
+    //   console.log("error in loading the page", error);
+    //   res.status(500).send("server Error  ");
+    // }
 // }
 
 // ---------------------------------------------------------
@@ -181,5 +218,28 @@ export const listCategory = async (req, res) => {
   } catch (error) {
     console.error('Error listing category:', error);
     res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+};
+
+
+export const getLiveCategorySearch = async (req, res) => {
+  try {
+    const query = req.query.query || "";
+
+    const filter = query
+      ? {
+          $or: [
+            { name: { $regex: query, $options: "i" } },
+            { description: { $regex: query, $options: "i" } },
+          ],
+        }
+      : {};
+
+    const categories = await categorySchema.find(filter).limit(20); // Adjust limit as needed
+
+    res.json({ success: true, categories });
+  } catch (error) {
+    console.error("Live search error:", error);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

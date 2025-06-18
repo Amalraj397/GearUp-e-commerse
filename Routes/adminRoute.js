@@ -34,6 +34,8 @@ import {
     getBrands,
     getAddBrandPage,
     addNewBrand,
+    unlistBrand,
+    listBrand,
 } from "../Controller/admin/brandController.js"
 
 import {
@@ -42,6 +44,7 @@ import {
     addNewCategory,
     unlistCategory,
     listCategory,
+    getLiveCategorySearch,
 } from"../Controller/admin/categoryController.js"
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -81,6 +84,9 @@ adminRoute.put("/unblock-user/:id", unblockUser);   //unblocking user
 adminRoute.get("/brands",getBrands);   // getting brandpage
 adminRoute.get("/addBrands",getAddBrandPage);  //getting brand page //adding new brand
 adminRoute.post("/addBrands", uploadMiddleware('Brands').single('brand-Image'), addNewBrand);
+  //listing and unlisting brand
+adminRoute.patch('/unlist-brand/:id', unlistBrand);  //Un-listing a Brand
+adminRoute.patch('/list-brand/:id', listBrand);  // Listing a Brand
 
 
   //category management 
@@ -88,8 +94,9 @@ adminRoute.get ("/category", getCategory);  //getting  category page
 adminRoute.get ("/addCategory",getAddCategory); //get add category page 
 adminRoute.post ("/addCategory",addNewCategory )  // adding new category
 
-//listing and Unlisting Category
+  //listing and Unlisting Category
 adminRoute.patch("/unlist-category/:id",unlistCategory);  //unlisting category
 adminRoute.patch("/list-category/:id",listCategory);   //listing category
+adminRoute.get('/category/search', getLiveCategorySearch); //live search
 
 export default adminRoute;

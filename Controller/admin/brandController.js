@@ -5,7 +5,7 @@ export const getBrands = async (req, res) => {
   try {
     //Pagination
     const page = req.query.page * 1 || 1;
-    const limit = req.query.limit * 1 || 4;
+    const limit = req.query.limit * 1 || 7;
     const skip = (page - 1) * limit;
 
     // capture search query!
@@ -13,11 +13,12 @@ export const getBrands = async (req, res) => {
 
     const filter = {};
     if (searchQuery) {
-      filter["brandName"] = { $regex: new RegExp(searchQuery, "i") };
-    }
+      filter.brandName = { $regex: new RegExp(searchQuery, "i") }; // case-insensitive search
+  }
 
     const totalBrands = await brandSchema.countDocuments(filter);
-    const brand = await brandSchema.find(filter).skip(skip).limit(limit).exec();
+    // const brand = await brandSchema.find(filter).skip(skip).limit(limit).exec();
+    const brand = await brandSchema.find(filter).sort({ createdAt: -1 });
 
     // render
     res.status(200).render("brands.ejs", {
@@ -74,4 +75,24 @@ export const addNewBrand = async (req, res) => {
       res.status(500).send("Server Error");
     }
   };
+ // unlisting a Brand 
+  export const unlistBrand = async (req, res) => {
+  try {
+    const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: true });
+    res.json({ success: true, message: "Brand unlisted successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to unlist brand" });
+  }
+};
+ 
+//listng a Brand
+export const listBrand = async (req, res) => {
+  try {
+    const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: false });
+    res.json({ success: true, message: "Brand listed successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to list brand" });
+  }
+};
+
   

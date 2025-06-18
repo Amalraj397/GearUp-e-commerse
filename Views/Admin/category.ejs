@@ -120,7 +120,7 @@
   }
 
   .edit-btn {
-    background-color: #4299e1;
+    background-color: #144974;
     color: #ffffff;
     font-weight: 600;
     padding: 9px 15px;
@@ -128,7 +128,7 @@
   }
 
   .edit-btn:hover {
-    background-color: #325c9c;
+    background-color: #0066ff;
     color: #3e3b3b;
   }
   .offer-btn {
@@ -216,7 +216,7 @@
     border-radius: 0.3rem;
     font-weight: 500;
   }
-    .status-blocked {
+  .status-blocked {
     background-color: rgba(188, 59, 59, 0.2);
     color: rgb(255, 0, 0);
     padding: 4px;
@@ -283,7 +283,6 @@
       <span class="material-icon"> Add Category</span>
     </a>
   </div>
-
   <table class="categories-table">
     <thead>
       <tr>
@@ -318,30 +317,21 @@
         </td>
         <td></td>
         <td class="action-cell">
-          <!-- <% if (cat.isBlocked) { %>
+          <% if (cat.isBlocked) { %>
           <button
-            class="btn btn-success action-btn list-btn list-btn-green"
-            data-id="<%= category._id %>"
+            class="btn btn-success action-btn list-category-btn"
+            data-id="<%= cat._id %>"
           >
             <i class="fas fa-check-circle"></i> LIST
           </button>
           <% } else { %>
           <button
-            class="btn btn-danger action-btn list-btn unlist-btn"
-            data-id="<%= category._id %>"
+            class="btn btn-danger action-btn unlist-category-btn"
+            data-id="<%= cat._id %>"
           >
             <i class="fas fa-ban"></i> UNLIST
           </button>
-          <% } %> -->
-          <% if (cat.isBlocked) { %>
-  <button class="btn btn-success action-btn list-category-btn" data-id="<%= cat._id %>">
-    <i class="fas fa-check-circle"></i> LIST
-  </button>
-<% } else { %>
-  <button class="btn btn-danger action-btn unlist-category-btn" data-id="<%= cat._id %>">
-    <i class="fas fa-ban"></i> UNLIST
-  </button>
-<% } %>
+          <% } %>
 
           <button
             class="action-btn edit-btn"
@@ -361,7 +351,10 @@
   <div class="pagination">
     <!-- Left Arrow -->
     <% if (page > 1) { %>
-    <a href="?page=<%= page - 1 %>" class="pagination-button">
+    <a
+      href="?page=<%= page - 1 %>&search=<%= searchQuery %>"
+      class="pagination-button"
+    >
       <span class="material-icons">chevron_left</span>
     </a>
     <% } else { %>
@@ -373,7 +366,7 @@
     <!-- Page Numbers -->
     <% for (let i = 1; i <= totalPage; i++) { %>
     <a
-      href="?page=<%= i %>"
+      href="?page=<%= i %>&search=<%= searchQuery %>"
       class="pagination-button <%= page === i ? 'active' : '' %>"
       ><%= i %></a
     >
@@ -381,7 +374,10 @@
 
     <!-- Right Arrow -->
     <% if (page < totalPage) { %>
-    <a href="?page=<%= page + 1 %>" class="pagination-button">
+    <a
+      href="?page=<%= page + 1 %>&search=<%= searchQuery %>"
+      class="pagination-button"
+    >
       <span class="material-icons">chevron_right</span>
     </a>
     <% } else { %>
@@ -394,96 +390,26 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>document.addEventListener('DOMContentLoaded', () => {
-
-  // UNLIST
-  document.querySelectorAll('.unlist-category-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const categoryId = btn.getAttribute('data-id');
-      if (categoryId) confirmUnlistCategory(categoryId);
-    });
-  });
-
-  // LIST
-  document.querySelectorAll('.list-category-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const categoryId = btn.getAttribute('data-id');
-      if (categoryId) confirmListCategory(categoryId);
-    });
-  });
-
-  function confirmUnlistCategory(categoryId) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This category will be unlisted from the store.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, unlist it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`/admin/unlist-category/${categoryId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            Swal.fire("Unlisted!", data.message, "success").then(() => location.reload());
-          } else {
-            Swal.fire("Failed!", data.message, "error");
-          }
-        })
-        .catch((err) => {
-          console.error("Fetch error:", err);
-          Swal.fire("Error", "Something went wrong", "error");
-        });
-      }
-    });
-  }
-
-  function confirmListCategory(categoryId) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "This category will be listed again in the store.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#28a745",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, list it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`/admin/list-category/${categoryId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success) {
-            Swal.fire("Listed!", data.message, "success").then(() => location.reload());
-          } else {
-            Swal.fire("Failed!", data.message, "error");
-          }
-        })
-        .catch((err) => {
-          console.error("Fetch error:", err);
-          Swal.fire("Error", "Something went wrong", "error");
-        });
-      }
-    });
-  }
-
-});
-</script>
-<!-- <script>
+<script>
   document.addEventListener("DOMContentLoaded", () => {
+    // UNLIST
+    document.querySelectorAll(".unlist-category-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryId = btn.getAttribute("data-id");
+        if (categoryId) confirmUnlistCategory(categoryId);
+      });
+    });
 
-    function confirmUnlistCategory(categoryId, btn) {
+    // LIST
+    document.querySelectorAll(".list-category-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const categoryId = btn.getAttribute("data-id");
+        if (categoryId) confirmListCategory(categoryId);
+      });
+    });
+
+    //===============unlist-Category================
+    function confirmUnlistCategory(categoryId) {
       Swal.fire({
         title: "Are you sure?",
         text: "This category will be unlisted from the store.",
@@ -500,24 +426,26 @@
               "Content-Type": "application/json",
             },
           })
-            .then((response) => response.json())
+            .then((res) => res.json())
             .then((data) => {
               if (data.success) {
-                Swal.fire("Unlisted!", data.message, "success").then(() => {
-                  location.reload();
-                });
+                Swal.fire("Unlisted!", data.message, "success").then(() =>
+                  location.reload()
+                );
               } else {
                 Swal.fire("Failed!", data.message, "error");
               }
             })
-            .catch((error) => {
-              console.error("Error:", error);
+            .catch((err) => {
+              console.error("Fetch error:", err);
               Swal.fire("Error", "Something went wrong", "error");
             });
         }
       });
     }
-    function confirmListCategory(categoryId, btn) {
+
+    //===============List-Category================
+    function confirmListCategory(categoryId) {
       Swal.fire({
         title: "Are you sure?",
         text: "This category will be listed again in the store.",
@@ -534,38 +462,129 @@
               "Content-Type": "application/json",
             },
           })
-            .then((response) => response.json())
+            .then((res) => res.json())
             .then((data) => {
               if (data.success) {
-                Swal.fire("Listed!", data.message, "success").then(() => {
-                  location.reload();
-                });
+                Swal.fire("Listed!", data.message, "success").then(() =>
+                  location.reload()
+                );
               } else {
                 Swal.fire("Failed!", data.message, "error");
               }
             })
-            .catch((error) => {
-              console.error("Error:", error);
+            .catch((err) => {
+              console.error("Fetch error:", err);
               Swal.fire("Error", "Something went wrong", "error");
             });
         }
       });
     }
 
-    document.querySelectorAll(".unlist-btn").forEach((btn) => {
+    //===============Search-Category================
+    // const searchInput = document.getElementById("search-input");
+    // const searchBtn = document.getElementById("search-btn");
+
+    // // On button click
+    // searchBtn.addEventListener("click", () => {
+    //   const query = searchInput.value.trim();
+    //   window.location.href = `/admin/category?page=1${
+    //     query ? `&search=${encodeURIComponent(query)}` : ""
+    //   }`;
+    // });
+
+    // // Optional: trigger search on Enter key
+    // searchInput.addEventListener("keydown", (e) => {
+    //   if (e.key === "Enter") {
+    //     searchBtn.click();
+    //   }
+    // });
+
+    const searchInput = document.getElementById("search-input");
+    const tableBody = document.querySelector(".categories-table tbody");
+
+  // Debounce function to limit API calls
+  function debounce(func, delay) {
+    let timeout;
+    return function (...args) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
+
+  // Fetch categories as user types
+  const fetchCategories = debounce((query) => {
+    fetch(`/admin/category/search?query=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          tableBody.innerHTML = "";
+
+          if (data.categories.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="10" style="text-align:center;">No Category found!</td></tr>`;
+            return;
+          }
+
+          data.categories.forEach((cat) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${cat.name || "N/A"}</td>
+              <td>${cat.description || "N/A"}</td>
+              <td></td><td></td><td></td><td></td>
+              <td>${cat.categoryOffer || "0"}%</td>
+              <td>
+                <span class="status-badge ${cat.isBlocked ? "status-blocked" : "status-active"}">
+                  ${cat.isBlocked ? "Blocked" : "Active"}
+                </span>
+              </td>
+              <td></td>
+              <td class="action-cell">
+                ${
+                  cat.isBlocked
+                    ? `<button class="btn btn-success action-btn list-category-btn" data-id="${cat._id}">
+                        <i class="fas fa-check-circle"></i> LIST
+                      </button>`
+                    : `<button class="btn btn-danger action-btn unlist-category-btn" data-id="${cat._id}">
+                        <i class="fas fa-ban"></i> UNLIST
+                      </button>`
+                }
+                <button class="action-btn edit-btn" onclick="editProduct('${cat._id}')">
+                  <span class="material-icons">edit</span> EDIT
+                </button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+
+          // Rebind unlist/list buttons
+          bindListUnlistButtons();
+        }
+      })
+      .catch((err) => {
+        console.error("Search fetch error:", err);
+      });
+  }, 300); // 300ms debounce
+
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.trim();
+    fetchCategories(query);
+  });
+
+  function bindListUnlistButtons() {
+    document.querySelectorAll(".unlist-category-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const categoryId = btn.getAttribute("data-id");
-        confirmUnlistCategory(categoryId, this);
+        if (categoryId) confirmUnlistCategory(categoryId);
       });
     });
 
-    // LIST Button
-    document.querySelectorAll(".list-btn-green").forEach((btn) => {
+    document.querySelectorAll(".list-category-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const categoryId = btn.getAttribute("data-id");
-        confirmListCategory(categoryId, this);
+        if (categoryId) confirmListCategory(categoryId);
       });
     });
+  }
+
   });
-</script> -->
+</script>
 <%-include("../../Views/Partials/Admin/footer")%>
