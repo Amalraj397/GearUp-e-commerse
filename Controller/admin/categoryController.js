@@ -256,13 +256,11 @@ export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body;
-    // console.log("name, description", name, description)
     const updatedCategory = await categorySchema.findByIdAndUpdate(
       id,
       { name, description },
       { new: true }
     );
-    console.log("updatedCategory:",updatedCategory);
     if (!updatedCategory) {
       return res.status(404).json({ message: "Category not found." });
     }

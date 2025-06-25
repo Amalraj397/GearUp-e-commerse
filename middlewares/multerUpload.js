@@ -7,7 +7,8 @@ import path from 'path';
 export function uploadMiddleware(folderName) {
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
-    params: (req, file) => ({
+    params: (req, file) => (
+      {
       folder: folderName.trim(),
       public_id: `${file.fieldname}-${Date.now()}`,
       format: path.extname(file.originalname).substring(1),

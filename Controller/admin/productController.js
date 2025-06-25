@@ -343,24 +343,18 @@ export const deleteProductImage = async (req, res) => {
   { new: true }
 );
 
-
      if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
 
     console.log("product:", product);
     
-
     return res.json({ success: true, message: "Image deleted" });
     
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
-
-   
-
-
 }
 
 // =====================EDIT PRODUCT PAGE END=====================

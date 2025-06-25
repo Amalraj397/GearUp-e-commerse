@@ -29,10 +29,6 @@ export const getuserData = async (req, res, next)=>{
         userdata = await userschema.find().sort({createdAt:-1}).skip(skip).limit(limit).exec()
        
        }
-       console.log("-------------------")
-       console.log("userdata : ",userdata)
-       console.log("-------------------")
-
         // render
         res.render('userManagement.ejs',{
             userdata,

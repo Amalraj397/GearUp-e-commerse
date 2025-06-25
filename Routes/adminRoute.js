@@ -99,9 +99,9 @@ adminRoute.post("/addBrands", uploadMiddleware('Brands').single('brand-Image'), 
 //listing and unlisting brand
 adminRoute.patch('/unlist-brand/:id', unlistBrand);  //Un-listing a Brand
 adminRoute.patch('/list-brand/:id', listBrand);  // Listing a Brand
-//edit Brand
+//edit and update Brand
 adminRoute.get("/editBrand/:id",getBrandEditPage); //get brand edit page
-adminRoute.post("/editBrand/:id", uploadMiddleware('Brands').single('brand-Image'),updateBrand);
+adminRoute.patch("/editBrand/:id", uploadMiddleware('Brands').single('brandImage'),updateBrand);
 
 
   //category management 

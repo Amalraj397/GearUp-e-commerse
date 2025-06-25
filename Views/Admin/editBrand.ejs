@@ -100,16 +100,19 @@
   .submit-button:hover {
     background-color: #0343b1;
   }
-  .existing-brand-logo{
+  .existing-brand-logo {
     width: 200px;
     height: 100px;
     margin: 15px 10px 12px 16px;
-    object-fit: cover; 
+    object-fit: cover;
     border-radius: 5px;
     border: 1px solid #ccc;
   }
 </style>
- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet"
+/>
 
 <div class="add-brand-container">
   <div class="page-header">
@@ -141,20 +144,29 @@
           type="text"
           id="brand-description"
           name="description"
-          value="<%= brand.description %>" 
+          value="<%= brand.description %>"
           placeholder="Enter brand description"
         />
       </div>
       <div class="form-group">
-        <label for="brand-image"><h3>BrandImage</h3>[exsisting]</label>
-          <img class="existing-brand-logo"
+        <label for="brand-image"
+          ><h3>BrandImage</h3>
+          [exsisting]</label
+        >
+        <img
+          class="existing-brand-logo"
           id="existing-brand-logo"
-          src="<%= brand.brandImage %>" 
-          alt="Current Brand Logo"/>
+          src="<%= brand.brandImage %>"
+          alt="Current Brand Logo"
+        />
         <!-- <div class="file-input-wrapper"> -->
         <h4>Add New Logo</h4>
-        <input type="file" id="brand-image" name="brand-Image" accept="image/*"/>
-        
+        <input
+          type="file"
+          id="brand-image"
+          name="brandImage"
+          accept="image/*"
+        />
       </div>
       <button type="submit" class="submit-button">Update & Save</button>
     </form>
@@ -165,14 +177,38 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+ const brandImage = document.getElementById("brand-image");
+  const brandLogoPreview = document.getElementById("existing-brand-logo");
+  const submitButton = document.getElementById("submit-button");
+  let imageflag = false;
+
+   brandImage.addEventListener("change", function () {
+     console.log("brandImage dfghjdsgsdfhh:", brandImage.files[0].name);
+        const file = this.files[0];
+        if (file) {
+          imageflag = true;
+          const url = URL.createObjectURL(file); // 🔗 Create a temporary URL
+          brandLogoPreview.src = url;
+          // preview.style.display = "block";
+          console.log("brandImage:", file);
+
+          const reader = new FileReader();
+          // reader.onload = function (e) {
+          //   brandLogoPreview.src = e.target.result;
+          // };
+          reader.readAsDataURL(this.files[0]);
+        }
+      });
+
+
   document
     .getElementById("add-brand-form")
     .addEventListener("submit", function (e) {
       e.preventDefault();
 
       const brandName = document.getElementById("brand-name").value;
-      const brandDescription = document.getElementById("brand-description").value;
-      const brandImage = document.getElementById("brand-image").value;
+      const brandDescription =
+        document.getElementById("brand-description").value;
 
       const errorMessage = [];
 
@@ -185,7 +221,7 @@
       }
 
       const nameRegex = /^[A-Z][a-zA-Z0-9+\-]*(?: [a-zA-Z0-9+\-]+)*$/;
-      if (!nameRegex.test(brandName) || brandName.length < 2 ) {
+      if (!nameRegex.test(brandName) || brandName.length < 2) {
         errorMessage.push(
           "The brand name must start with a Capital letter and be at least 3 characters long. "
         );
@@ -212,30 +248,45 @@
         });
         return; // Stop the submission process
       }
+      const formData = new FormData();
+      formData.append("name", brandName.trim());
+      formData.append("description", brandDescription.trim());
+      if (imageflag && brandImage.files[0]) {
+      formData.append("brandImage", brandImage.files[0]); 
+       }
 
-      const formData = new FormData(this);
-
-      fetch("/admin/addBrands", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          Swal.fire({
-            title: data.message || "Success!",
-            icon: "success",
-          }).then(() => {
-            location.reload();
-          });
-        })
-        .catch(() => {
-            // console.error('Fetch error:', error); // 
-            Swal.fire({
-            title: "Error!",
-            text: "Something went wrong. Please try again.",
-            icon: "error",
-          });
-        });
+      Swal.fire({
+        title: "Are you sure",
+        text: "You want to make changes..!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Update..!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          fetch(`/admin/editBrand/${"<%= brand._id %>"}`, {
+            method: "PATCH",
+            body: formData,
+          })
+            .then(async (response) => {
+              const data = await response.json().catch(() => ({}));
+              if (!response.ok)
+                throw new Error(data.message || "Request failed");
+              Swal.fire({
+                title: data.message || "Success!",
+                icon: "success",
+              }).then(() => {
+                location.reload();
+              });
+            })
+            .catch((err) => {
+              Swal.fire({
+                title: "Error!",
+                text: err.message || "Something went wrong. Please try again.",
+                icon: "error",
+              });
+            });
+        }
+      });
     });
 </script>
 <%-include("../../Views/Partials/Admin/footer")%>

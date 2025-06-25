@@ -1,4 +1,5 @@
 import brandSchema from "../../Models/brandModel.js";
+import cloudinary from "../../Config/cloudinary_Config.js";
 
 // get brand page
 export const getBrands = async (req, res) => {
@@ -95,27 +96,56 @@ export const listBrand = async (req, res) => {
   }
 };
 
+//  getting the brand edit page
 export const getBrandEditPage = async (req, res) => {
   try {
     const brand = await brandSchema.findById(req.params.id);
     res.status(200).render("editBrand.ejs", { 
       brand,
     });
-    console.log("brand::",brand)
   } catch (error) {
     console.log("error in loading the page", error);
     res.status(500).send("server Error  ");
   }
 };
 
+// updating the brand
 
 export const updateBrand = async (req, res) => {
   try {
-    const brand = await brandSchema.findByIdAndUpdate(req.params.id, req.body);
-    res.json({ success: true, message: "Brand updated successfully" });
+    const { id } = req.params;
+    const { name, description } = req.body;
+
+    const brand = await brandSchema.findById(id);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found." });
+    }
+
+    // ✅ Update fields
+    if (name) brand.brandName = name;
+    if (description) brand.description = description;
+
+    // ✅ If a new image was uploaded
+    if (req.file) {
+      const oldImageUrl = brand.brandImage;
+
+      // 🧹 Optional: Delete old image from Cloudinary
+      // const segments = oldImageUrl.split("/");
+      // const fileNameWithExtension = segments[segments.length - 1];
+      // const publicId = "Brands/" + fileNameWithExtension.split(".")[0]; // Cloudinary folder + filename without extension
+
+      // await cloudinary.uploader.destroy(publicId);
+
+      // ✅ Save new image URL
+      brand.brandImage = req.file.path;
+    }
+
+    await brand.save();
+
+    res.status(200).json({ message: "Brand updated successfully." });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to update brand" });
+    console.error("Brand update error:", error);
+    res.status(500).json({ message: "Server error while updating brand." });
   }
 };
-
   
