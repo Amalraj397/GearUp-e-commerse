@@ -96,9 +96,12 @@
   }
 
   .brand-logo {
-    width: 50px;
-    height: 50px;
+    width: 75px;
+    height: 60px;
     object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #ffffff;
+  
   }
 
   .status-badge {
@@ -240,7 +243,7 @@
   .status-active {
     background-color: rgba(72, 187, 120, 0.2);
     color: rgb(7, 255, 7);
-    padding: 5px;
+    padding: 7px;
     border: 1px solid;
     border-radius: 0.3rem;
     font-weight: 500;
@@ -248,7 +251,7 @@
   .status-blocked {
     background-color: rgba(188, 59, 59, 0.2);
     color: rgb(255, 0, 0);
-    padding: 5px;
+    padding: 57x;
     border: 1px solid;
     border-radius: 0.3rem;
     font-weight: 500;
@@ -288,8 +291,8 @@
       <tr>
         <th>BRAND</th>
         <th>LOGO</th>
-        <th>DESCRIPTION</th>
         <th></th>
+        <th>DESCRIPTION</th>
         <th></th>
         <th></th>
         <th>OFFER</th>
@@ -305,13 +308,13 @@
         <td><%= model.brandName%></td>
         <td>
           <img
-            src="/uploads/re-image/<%=model.brandImage[0]%>"
+            src="<%=model.brandImage[0]%>"
             alt="<%= model.brandName%>"
             class="brand-logo"
           />
         </td>
-        <td><%= model.description%></td>
         <td></td>
+        <td><%= model.description%></td>
         <td></td>
         <td></td>
         <td><%= model.brandOffer%></td>
@@ -342,26 +345,10 @@
           <% } %>
           <button
             class="action-btn edit-btn"
-            onclick="editProduct('<%= brand._id %>')"
-          >
+            onclick="editBrand('<%= model._id %>')">
             <span class="material-icons">edit</span> EDIT
           </button>
-          <!-- <button class="action-btn offer-btn" onclick="addOffer('<%= model._id %>', this)"
-                        style="<% if (model.brandOffer >0) { %> background-color: #ed8936; <% } else { %> background-color: #48bb78; <% } %>">
-                        <span class="material-icons">local_offer</span>
-                        <% if (model.modelOffer > 0) { %>Edit Offer <% }
-                        else { %> Add Offer <% } %>
-                    </button> -->
-          <!-- <button class="action-btn offer-btn" 
-                        onclick="addOffer('<%= model._id %>', this)"
-                        style="<% if (model.brandOffer > 0) { %> background-color: #ed8936; <% } else { %> background-color: #48bb78; <% } %>">
-                        <span class="material-icons">local_offer</span>
-                    <% if (model.brandOffer > 0) { %>
-                         Edit Offer
-                    <% } else { %>
-                        Add Offer
-                     <% } %>
-                   </button> -->
+         
         </td>
       </tr>
       <%})%>
@@ -407,6 +394,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    function editBrand(brandId) {
+      window.location.href = `/admin/editBrand/${brandId}`;
+    }
+
   document.addEventListener("DOMContentLoaded", () => {
     // UNLIST brand
     document.querySelectorAll(".unlist-brand-btn").forEach((btn) => {

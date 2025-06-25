@@ -124,10 +124,6 @@ export const addNewCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
 
-    console.log("------------------------------------");
-    console.log("data recived: req-",req.body);
-    console.log("------------------------------------");
-
     if (!name || !description) {
       return res.status(400).json({ message: "Name and description are required." });
     }
@@ -243,3 +239,38 @@ export const getLiveCategorySearch = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const getCategoryEditPage = async (req, res) => {
+  try {
+    const category = await categorySchema.findById(req.params.id);
+    res.render("editCategory.ejs", { 
+      category,
+     });
+  } catch (error) {
+      console.log("error in loading the page", error);
+      res.status(500).send("server Error  ");
+    }
+};
+
+export const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description } = req.body;
+    // console.log("name, description", name, description)
+    const updatedCategory = await categorySchema.findByIdAndUpdate(
+      id,
+      { name, description },
+      { new: true }
+    );
+    console.log("updatedCategory:",updatedCategory);
+    if (!updatedCategory) {
+      return res.status(404).json({ message: "Category not found." });
+    }
+    res.json({ message: "Category updated successfully." });
+  } catch (error) {
+      console.log("error in loading the page", error);
+      res.status(500).send("server Error  ");
+    }
+};
+
+

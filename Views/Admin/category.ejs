@@ -335,8 +335,7 @@
 
           <button
             class="action-btn edit-btn"
-            onclick="editProduct('<%= category._id %>')"
-          >
+            onclick="editCategory('<%= cat._id %>')">
             <span class="material-icons">edit</span> EDIT
           </button>
         </td>
@@ -391,6 +390,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+  function editCategory(categoryId) {
+      window.location.href = `/admin/editCategory/${categoryId}`;
+    }
+
   document.addEventListener("DOMContentLoaded", () => {
     // UNLIST
     document.querySelectorAll(".unlist-category-btn").forEach((btn) => {

@@ -577,15 +577,21 @@
     font-size: 0.9rem;
 
 }
-
 .list-btn-green:hover {
   background-color: #218838;
   color: #3e3b3b;
 }
+.brand-logo{
+    width:70px;
+    height:60px;
+    border-radius: 3px;
+    border: 2px solid #f16304;
+}
 
-
-
-/* Responsive Styles */
+.action-btn + .edit-btn {
+  margin-top: 10px; 
+}
+/* Responsive styles starts here*/
 @media (max-width: 1024px) {
     .form-grid {
         grid-template-columns: 1fr;
@@ -655,7 +661,7 @@
                                 <th>Category</th>
                                 <th>Edition</th>
                                 <th>Scale</th>
-                                <th>Selling Price</th>
+                                <th>Price</th>
                                 <th>Offer</th>
                                 <th>Stock</th>
                                 <th>Status</th>
@@ -686,6 +692,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
    
 <script>
+     function editProduct(productId) {
+  window.location.href = `/admin/editProduct/${productId}`;
+}
+
+    
 document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
   const productsPerPage = 6;
@@ -698,7 +709,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch('/admin/api/products');
       const data = await response.json();
-
+      console.log("data", data);
+      
       allProducts = data.Products; // store in global variable
       filteredProducts = [...allProducts]; // keep filtered copy
 
@@ -711,6 +723,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+ 
   function renderPaginatedProducts() {
     const tbody = document.getElementById("products-table-body");
     tbody.innerHTML = "";
@@ -725,7 +738,7 @@ document.addEventListener("DOMContentLoaded", () => {
       row.innerHTML = `
         <td>${startIndex + index + 1}</td>
         <td>
-          <img src="/uploads/product-images/${product.productImage?.[0]}" 
+          <img src="${product.productImage?.[0]}" 
                alt="${product.productName}" 
                class="brand-logo">
         </td>
@@ -758,6 +771,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <button class="action-btn edit-btn" onclick="editProduct('${product._id}')">
             <span class="material-icons">edit</span> EDIT
           </button>
+        
         </td>
       `;
       tbody.appendChild(row);
@@ -835,9 +849,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-
 // --------------------------------* END *-----------------------------
-
 
     // Add event listeners to UNLIST buttons
     document.querySelectorAll(".unlist-btn").forEach((btn) => {
@@ -940,11 +952,11 @@ document.addEventListener("DOMContentLoaded", () => {
         currentPage = 1;
         renderPaginatedProducts();
     }
-    
 
-  function editProduct(productId) {
-    window.location.href = `/admin/edit-product/${productId}`;
-  }
+   function editProduct(productId) {
+  window.location.href = `/admin/editProduct/${productId}`;
+}
+
 
   function confirmUnlistProduct(productId, btn) {
     console.log("Unlisting:", productId);

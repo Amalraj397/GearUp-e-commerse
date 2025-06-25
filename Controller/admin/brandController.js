@@ -95,4 +95,27 @@ export const listBrand = async (req, res) => {
   }
 };
 
+export const getBrandEditPage = async (req, res) => {
+  try {
+    const brand = await brandSchema.findById(req.params.id);
+    res.status(200).render("editBrand.ejs", { 
+      brand,
+    });
+    console.log("brand::",brand)
+  } catch (error) {
+    console.log("error in loading the page", error);
+    res.status(500).send("server Error  ");
+  }
+};
+
+
+export const updateBrand = async (req, res) => {
+  try {
+    const brand = await brandSchema.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ success: true, message: "Brand updated successfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Failed to update brand" });
+  }
+};
+
   
