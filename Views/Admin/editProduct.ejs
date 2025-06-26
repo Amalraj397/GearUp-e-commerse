@@ -797,7 +797,7 @@
 //   const existingImages = product.images || [] ;
  const productData = <%- JSON.stringify(product) %>;
   console.log("Product:", productData._id);
-   const existingImages = productData.productImage || [] ;
+  const existingImages = productData.productImage || [] ;
 
 //   console.log("Loaded existing images:", existingImages);
 
@@ -805,16 +805,11 @@
   const deletedImages = [];
   const deletedImagesInput = document.getElementById("deletedImages");
   console.log('-----------------------------------------------');
-  
 
   console.log("deletedImagesInput:", deletedImagesInput);
   console.log("deletedImages:", deletedImages);
   console.log(deletedImagesInput.value);
   console.log('-----------------------------------');
-  
-  
-  
-  
 
   window.addEventListener("DOMContentLoaded", () => {
     if (!Array.isArray(existingImages)) {
@@ -869,27 +864,14 @@
         }
       });
     }
-  });
-
-            
-
-
-
-
-            
-        
+  });   
         deletedImagesInput.value = JSON.stringify(deletedImages);
        
       };
-
-
-
       previewDiv.appendChild(img);
       previewDiv.appendChild(removeBtn);
       imagePreview.appendChild(previewDiv);
     });
-
-
   });
 </script>
 
@@ -1086,11 +1068,18 @@
 
 //     deletedImagesInput.value = JSON.stringify(deletedImages);
 //   });
-//  </script>   
+
+//</script>   
 
 
 // <script>
-  const productForm = document.getElementById('addProduct-form');
+
+  console.log('existing-images-hiii', existingImages);
+  
+
+
+
+  const productForm = document.getElementById('editProduct-form');
   const imagePreviewContainer = document.getElementById('image-preview');
   const imageUploadArea = document.getElementById('image-upload-area');
   const placeHolder = document.querySelector('.image-upload-placeholder');
@@ -1124,8 +1113,11 @@
   });
 
   imageInput.addEventListener('change', e => {
+    
     const files = Array.from(e.target.files);
+     console.log('files-hellooo1', files);
     if (files.length > 0) {
+      console.log('files-hellooo2', files);
       addFiles(files);
       placeHolder.style.display = 'none';
     }
@@ -1149,15 +1141,16 @@
       }
 
       selectedFiles.push(file);
+       console.log('files-hellooo2-selected files', files);
       previewImage(file);
     }
 
-    const imageError = document.getElementById('error-message');
-    if (selectedFiles.length < 3) {
-      imageError.textContent = 'Please upload at least three images.';
-    } else {
-      imageError.textContent = '';
-    }
+    // const imageError = document.getElementById('error-message');
+    // if (selectedFiles.length < 3) {
+    //   imageError.textContent = 'Please upload at least three images.';
+    // } else {
+    //   imageError.textContent = '';
+    // }
   }
 
   function previewImage(file) {
@@ -1178,11 +1171,11 @@
         imagePreviewContainer.removeChild(previewDiv);
         selectedFiles = selectedFiles.filter(f => f.name !== file.name);
 
-        if (selectedFiles.length < 3) {
-          document.getElementById('error-message').textContent = 'Please upload at least three images.';
-        } else {
-          document.getElementById('error-message').textContent = '';
-        }
+        // if (selectedFiles.length < 3) {
+        //   document.getElementById('error-message').textContent = 'Please upload at least three images.';
+        // } else {
+        //   document.getElementById('error-message').textContent = '';
+        // }
 
         if (selectedFiles.length === 0) {
           placeHolder.style.display = 'flex';
@@ -1205,7 +1198,10 @@
     // Listening for form submission
       productForm.addEventListener('submit', function (e) {
           e.preventDefault(); // Prevent default form submission for custom validation
-
+console.log("selectedFiles:", selectedFiles);
+       let imageArray = [...selectedFiles, ...existingImages];
+console.log("images: -----------concat", imageArray);
+          // Validate the form
     // Clear the previous error messages
     const errorMessages = document.querySelectorAll('.error-message');
     errorMessages.forEach(msg => msg.textContent = '');
@@ -1263,8 +1259,8 @@
 
     // Validate Image Uploads
     const Image = document.getElementById('error-message');
-        if (selectedFiles.length < 3) {
-    Image.textContent = 'Please upload at least three images.';
+        if (imageArray.length < 3) {
+    Image.textContent = 'Please upload at least three images....!';
             isValid = false;
         }
 
@@ -1295,22 +1291,35 @@
   formData.append('offer', document.getElementById('product-offer').value);
   formData.append('status', document.getElementById('status').value);
 
-
   // Append each image file (already selected & stored in selectedFiles)
+  console.log('finall - selected file', selectedFiles);
+  
+  
     selectedFiles.forEach(file => {
         formData.append('productImages', file); // 'images' matches the Multer field name
   });
 
-  fetch("/admin/addProduct", {
-    method: 'POST',
-    body: formData
+
+  Swal.fire({
+        title: "Are you sure",
+        text: "You want to make changes..!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Update..!",
+  }).then((result)=>{
+    if (result.isConfirmed){
+      console.log('form-data-final', formData);
+      
+      fetch(`/admin/editProduct/${productData._id}`, {
+        method: 'PUT',
+        body: formData,
   })
     .then(response => response.json())
     .then(data => {
         Swal.fire({
           icon: 'success',
-          title: 'Product Added!',
-          text: 'Your product was successfully uploaded.',
+          title: 'Product Updated!',
+          text: 'Your product was successfully updated.',
           confirmButtonText: 'OK'
         }).then(() => {
           productForm.reset();            // Clearing  the form
@@ -1322,14 +1331,14 @@
       Swal.fire({
         icon: 'error',
         title: 'Server Error',
-        text: 'Failed to submit the form. Please try again later.'
+        text: 'Failed to update the form. Please try again later.'
       });
     });
-})
-})
-
+  }
+    });
+  })
+});
 </script>
-
 
 </body>
 </html>

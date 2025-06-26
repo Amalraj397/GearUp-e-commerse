@@ -253,17 +253,16 @@ export const updateProduct = async (req, res) => {
       // deletedImages = [], // from frontend
     } = req.body;
 
-    console.log("req.body:", req.body);
-    
-    
-      let deletedImages = [];
-        if (req.body.deletedImages) {
-          try {
-            deletedImages = JSON.parse(req.body.deletedImages);
-          } catch (err) {
-            console.warn("Failed to parse deletedImages:", err);
-          }
-      }
+    // console.log("req.body:", req.body);  // debugging 
+    //   let deletedImages = [];
+    //     if (req.body.deletedImages) {
+    //       try {
+    //         deletedImages = JSON.parse(req.body.deletedImages);
+    //       } catch (err) {
+    //         console.warn("Failed to parse deletedImages:", err);
+    //       }
+    //   }
+   
 
     // Validate mandatory fields
     if (!productName || !brand || !category || !description || !scale || !edition || !status || !price || !stock) {
@@ -271,34 +270,40 @@ export const updateProduct = async (req, res) => {
     }
 
     // finding brand and category
-      const [brandDoc, categoryDoc] = await Promise.all([
-    brandSchema.findOne({ brandName:brand }),
-    categorySchema.findOne({ name: category })
+    const [brandDoc, categoryDoc] = await Promise.all([
+      brandSchema.findOne({ brandName:brand }),
+      categorySchema.findOne({ name: category })
   ]);
 
     const product = await productSchema.findById(productId);
-    console.log("product data:", product);
+    console.log("product data:", product);    //debugging
     
     if (!product) return res.status(404).json({ message: 'Product not found.' });
 
     // Remove deleted images
     let existingImages = product.productImage;
-    if (deletedImages.length > 0) {
-      const deleted = Array.isArray(deletedImages) ? deletedImages : [deletedImages];
-      existingImages = existingImages.filter(url => !deleted.includes(url));
-      for (const url of deleted) {
-        await deleteCloudinaryImage(url); // optional if you want to clean up
-      }
-    }
+    // if (deletedImages.length > 0) {
+    //   const deleted = Array.isArray(deletedImages) ? deletedImages : [deletedImages];
+    //   existingImages = existingImages.filter(url => !deleted.includes(url)
+    // );
+    //   // for (const url of deleted) {
+    //   //   await deleteCloudinaryImage(url); // optional if you want to clean up
+    //   // }
+    // }
 
     // Add new uploaded images
     const newImages = req.files?.map(file => file.path) || [];
+    console.log('controller- imagres', newImages);
+    
     const finalImages = [...existingImages, ...newImages];
+
+    // console.log("existingImages:", existingImages);
+    // console.log("newImages:", newImages);
+    console.log("finalImages:", finalImages);
 
     if (finalImages.length < 3) {
       return res.status(400).json({ message: 'At least 3 images are required.' });
     }
-
     // Update product
     await productSchema.findByIdAndUpdate(productId, {
       productName,
@@ -311,9 +316,14 @@ export const updateProduct = async (req, res) => {
       price,
       offer,
       stock,
-      images: finalImages,
-    });
+      productImage: finalImages,
+     
+    } );
 
+    const productdata_final = await productSchema.findByIdAndUpdate(productId, {})
+
+    console.log('final product data', productdata_final);
+    
     res.status(200).json({ message: 'Product updated successfully!' });
   } catch (err) {
     console.error(err);
@@ -340,8 +350,7 @@ export const deleteProductImage = async (req, res) => {
    const product = await productSchema.findByIdAndUpdate(
   productId,
   { $pull: { productImage: imageId.deletedImagesUrl } },
-  { new: true }
-);
+  { new: true });
 
      if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });

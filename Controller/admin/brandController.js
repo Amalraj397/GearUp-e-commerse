@@ -121,22 +121,22 @@ export const updateBrand = async (req, res) => {
       return res.status(404).json({ message: "Brand not found." });
     }
 
-    // ✅ Update fields
+    //  Update fields
     if (name) brand.brandName = name;
     if (description) brand.description = description;
 
-    // ✅ If a new image was uploaded
+    //  If a new image was uploaded
     if (req.file) {
       const oldImageUrl = brand.brandImage;
 
-      // 🧹 Optional: Delete old image from Cloudinary
+      // Delete old image from Cloudinary
       // const segments = oldImageUrl.split("/");
       // const fileNameWithExtension = segments[segments.length - 1];
       // const publicId = "Brands/" + fileNameWithExtension.split(".")[0]; // Cloudinary folder + filename without extension
 
       // await cloudinary.uploader.destroy(publicId);
 
-      // ✅ Save new image URL
+      //  Save new image URL
       brand.brandImage = req.file.path;
     }
 

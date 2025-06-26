@@ -89,3 +89,36 @@ export const getBrandPage = (req, res) => {
     res.status(500).send("server Error  ");
   }
 };
+
+
+export const filterProducts = async (req, res) => {
+  try {
+    const { categories, brands, editions, scales } = req.body;
+
+    const filterQuery = {};
+
+    if (categories && categories.length > 0) {
+      filterQuery.category = { $in: categories };
+    }
+
+    if (brands && brands.length > 0) {
+      filterQuery.brand = { $in: brands };
+    }
+
+    if (editions && editions.length > 0) {
+      filterQuery.edition = { $in: editions };
+    }
+
+    if (scales && scales.length > 0) {
+      filterQuery.scale = { $in: scales };
+    }
+
+    const products = await Product.find(filterQuery).lean();
+
+    res.json({ products });
+  } catch (err) {
+    console.error('Filter error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+

@@ -183,19 +183,15 @@
   let imageflag = false;
 
    brandImage.addEventListener("change", function () {
-     console.log("brandImage dfghjdsgsdfhh:", brandImage.files[0].name);
+    //  console.log("brandImage dfghjdsgsdfhh:", brandImage.files[0].name);
         const file = this.files[0];
         if (file) {
           imageflag = true;
           const url = URL.createObjectURL(file); // 🔗 Create a temporary URL
           brandLogoPreview.src = url;
-          // preview.style.display = "block";
           console.log("brandImage:", file);
 
           const reader = new FileReader();
-          // reader.onload = function (e) {
-          //   brandLogoPreview.src = e.target.result;
-          // };
           reader.readAsDataURL(this.files[0]);
         }
       });

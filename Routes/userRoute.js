@@ -24,6 +24,8 @@ import {          //importing functions from usercontroller page
           getcategoryPage,
           getBrandPage,
           getproductDetailpage,
+
+          filterProducts,  //for filtering products
  } from "../Controller/user/userStoreController.js";
 
 
@@ -57,6 +59,10 @@ userRoute.post("/resentOtp", resendOTP);
 userRoute.get("/shopPage",getshopPage)
 userRoute.get("/categoryPage",getcategoryPage)
 userRoute.get("/brandPage",getBrandPage)
+
+
+userRoute.get("/filterProducts",filterProducts)
+
 
 userRoute.get("/productDetail/:id",getproductDetailpage);
 
