@@ -55,12 +55,14 @@ export const addNewBrand = async (req, res) => {
     //  Get the Cloudinary-hosted image URL
     const logo = req.file?.path || req.file?.secure_url;
   
-    try {
-      const brand = await brandSchema.findOne({ brandName: name });
-  
-      if (brand) {
-        return res.status(400).json({ message: 'Brand name already exists' });
-      }
+  try {
+    const brand = await brandSchema.findOne({
+        brandName: { $regex: `^${name}$`, $options: 'i' }
+    });
+
+  if (brand) {
+    return res.status(400).json({ message: 'Brand name already exists' });
+    }
   
       const newBrand = new brandSchema({
         brandName: name,
@@ -76,7 +78,9 @@ export const addNewBrand = async (req, res) => {
       res.status(500).send("Server Error");
     }
   };
- // unlisting a Brand 
+
+
+ // ---------------------unlisting a Brand -------------------
   export const unlistBrand = async (req, res) => {
   try {
     const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: true });
@@ -86,7 +90,7 @@ export const addNewBrand = async (req, res) => {
   }
 };
  
-//listng a Brand
+//---------------------listng a Brand----------------------
 export const listBrand = async (req, res) => {
   try {
     const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: false });

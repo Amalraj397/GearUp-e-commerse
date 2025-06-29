@@ -74,13 +74,6 @@ export const userSignup = async (req, res) => {
     req.session.otp = otp;
     req.session.otpExpiration = otpExpirationT;
 
-    // res.status(201).json({
-    //     message:
-    //       "User registered successfully! Please check your email for OTP.",
-    //   });
-    //  return  res.redirect("/getOtp")
-    //  ---------------
-
     req.session.successMessage =
       "Registration successful! Please enter the OTP sent to your phone/email.";
 
@@ -91,7 +84,6 @@ export const userSignup = async (req, res) => {
       message: "Signup successful! Please enter the OTP.",
       redirectTo: "/getOtp",
     });
-
 
     // ----------
   } catch (error) {
@@ -328,6 +320,8 @@ export const userLogin = async (req, res) => {
       id: user._id,
       name: user.firstName,
     };
+    
+    console.log("req.session.user", req.session.user);
     
     //  FINAL SUCCESS RESPONSE for normal user login
     return res.status(200).json({

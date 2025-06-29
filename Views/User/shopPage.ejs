@@ -1,18 +1,8 @@
-<!-- <!DOCTYPE html>
-<html lang="en"> -->
 
-
-<!-- molla/category.html  22 Nov 2019 10:02:48 GMT -->
 <head>
-    <!-- <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> -->
+  
     <title>AutoMinima - precesion in every scale</title>
-    <!-- <meta name="keywords" content="HTML5 Template">
-    <meta name="description" content="Molla - Bootstrap eCommerce Template"> -->
     <meta name="author" content="p-themes">
-    <!-- Favicon -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/User/assets/images/icons/apple-touch-icon.png"> -->
     <link rel="apple-touch-icon" sizes="180x180" href="/User/assets/images/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/User/assets/images/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/User/assets/images/icons/favicon-16x16.png">
@@ -24,15 +14,15 @@
     <meta name="msapplication-TileColor" content="#cc9966">
     <meta name="msapplication-config" content="/User/assets/images/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-    <!-- Plugins CSS File -->
     <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
-    <!-- Main CSS File -->
-    <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
     <link rel="stylesheet" href="/User/assets/css/style.css">
-    <link rel="stylesheet" href="/User/assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="/User/assets/css/plugins/owl-carousel/owl.carousel.css"> 
     <link rel="stylesheet" href="/User/assets/css/plugins/magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
    <%-include("../../Views/Partials/User/headerLand")%>
 </head>
 
@@ -53,16 +43,30 @@
             <div class="page-content">
                 <div class="container">
                 	<div class="row">
-                		<div class="col-lg-9">
+                		<div class="col-lg-9 product-list">
+                <div class="search-box">
+                  <input
+                    type="text"
+                    id="product-search"
+                    placeholder="Search products...."
+                    value="<%= searchQuery || '' %>"
+                  />
+                  <button class="search-btn">
+                    <i class="fas fa-search"></i>
+                  </button>
+                </div>
                 			<div class="toolbox">
                 				<div class="toolbox-left">
                 					<div class="toolbox-info">
-                						Showing <span>9 of 56</span> Products
+                						<!-- Showing <span>9 of 56</span> Products -->
                 					</div><!-- End .toolbox-info -->
                 				</div><!-- End .toolbox-left -->
                 			</div>
                               <div class="products mb-3">
                                 <div class="row g-4 justify-content-center" id="product-list">
+                                  <% if (products.length === 0) { %>
+                                     <p>No products found for "<%= searchQuery %>"</p>
+                                  <% } else { %>
                                   <% products.forEach(product => { %>
                                     <div class="col-md-6 col-lg-4 col-xl-3">
                                       <div class="products-container">
@@ -87,75 +91,56 @@
                                       </div>
                                     </div>
                                   <% }) %>
+                                  <% } %>
                                 </div>
-                              </div>
-                            <!-- <div class="products mb-3"  id="product-list">
-                                <div class="row g-4 justify-content-center">
-                                  <% products.forEach(product => { %>
-                                     <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="products-container">
-                                            <a href="/productDetail/<%=product._id%>">
-                                            <div class="product-card">
-                                                <img src="<%= product.productImage[0] %>" class="img-fluid w-100 rounded-top" alt="<%= product.productName %>">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
-                                                <%= product.category.name %>
-                                            </div>
-                                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                            <h4><%= product.productName %></h4>
-                                                            <p><%= product.scale %> | <%= product.edition %></p>
-                                                    <div class="d-flex justify-content-between flex-lg-wrap">
-                                                            <p class="text-dark fs-5 fw-bold mb-0">₹<%= product.salePrice %></p>
-                                                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
-                                                               <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
-                                                            </a>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                  <% }) %>
-                                </div>
-                            </div>End .products -->
-                                            <nav aria-label="Page navigation">
-                                              <ul class="pagination justify-content-center">
-                                                <% if (currentPage > 1) { %>
-                                                  <li class="page-item">
-                                                    <a class="page-link page-link-prev" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
-                                                      <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                                    </a>
-                                                  </li>
-                                                <% } else { %>
-                                                  <li class="page-item disabled">
-                                                    <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-                                                      <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                                    </a>
-                                                  </li>
-                                                <% } %>
-                                            
-                                                <% for (let i = 1; i <= totalPages; i++) { %>
-                                                  <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                                                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                                                  </li>
-                                                <% } %>
-                                            
-                                                <li class="page-item-total">of <%= totalPages %></li>
-                                            
-                                                <% if (currentPage < totalPages) { %>
-                                                  <li class="page-item">
-                                                    <a class="page-link page-link-next" href="?page=<%= currentPage + 1 %>" aria-label="Next">
-                                                      Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                                    </a>
-                                                  </li>
-                                                <% } else { %>
-                                                  <li class="page-item disabled">
-                                                    <a class="page-link page-link-next" href="#" aria-label="Next" tabindex="-1" aria-disabled="true">
-                                                      Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                                    </a>
-                                                  </li>
-                                                <% } %>
-                                              </ul>
-                                            </nav>
+                               </div>
+                               <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                              
+                                              <% if (currentPage > 1) { %>
+                                                <li class="page-item">
+                                                  <a class="page-link page-link-prev" 
+                                                     href="?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" 
+                                                     aria-label="Previous">
+                                                    <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                                  </a>
+                                                </li>
+                                              <% } else { %>
+                                                <li class="page-item disabled">
+                                                  <a class="page-link page-link-prev" href="#" tabindex="-1" aria-disabled="true">
+                                                    <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                                  </a>
+                                                </li>
+                                              <% } %>
+                                          
+                                              <% for (let i = 1; i <= totalPages; i++) { %>
+                                                <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                                  <a class="page-link" 
+                                                     href="?page=<%= i %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>">
+                                                    <%= i %>
+                                                  </a>
+                                                </li>
+                                              <% } %>
+                                          
+                                              <li class="page-item-total">of <%= totalPages %></li>
+                                          
+                                              <% if (currentPage < totalPages) { %>
+                                                <li class="page-item">
+                                                  <a class="page-link page-link-next" 
+                                                     href="?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" 
+                                                     aria-label="Next">
+                                                    Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                                                  </a>
+                                                </li>
+                                              <% } else { %>
+                                                <li class="page-item disabled">
+                                                  <a class="page-link page-link-next" href="#" tabindex="-1" aria-disabled="true">
+                                                    Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                                                  </a>
+                                                </li>
+                                              <% } %>
+                                            </ul>
+                                          </nav>
                                     		</div><!-- End .col-lg-9 -->
                                     	<aside class="col-lg-3 order-lg-first">
                                     		<div class="sidebar sidebar-shop">
@@ -262,7 +247,7 @@
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
 
-    <script>
+<!-- <script>
           const selectedFilters = {
             categories: [],
             brands: [],
@@ -350,8 +335,73 @@
 
   applyFilters(); // This re-fetches all products
 }
-</script>
+</script> -->
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      applyFilters();
+    });
+  });
+
+  function applyFilters() {
+    const selectedCategories = getSelectedValues('.category-checkbox');
+    const selectedBrands = getSelectedValues('.brand-checkbox');
+    const selectedEditions = getSelectedValues('.edition-checkbox');
+    const selectedScales = getSelectedValues('.scale-checkbox');
+
+    const query = new URLSearchParams();
+
+    if (selectedCategories.length) query.append('categories', selectedCategories.join(','));
+    if (selectedBrands.length) query.append('brands', selectedBrands.join(','));
+    if (selectedEditions.length) query.append('editions', selectedEditions.join(','));
+    if (selectedScales.length) query.append('scales', selectedScales.join(','));
+
+    fetch(`/filterProducts?${query.toString()}`)
+      .then(res => res.text())
+      .then(html => {
+        window.location.href = `/filterProducts?${query.toString()}`
+        
+      });
+  }
+
+  function getSelectedValues(selector) {
+    return Array.from(document.querySelectorAll(selector))
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+  }
+
+  // Clear filters
+  document.querySelector('.sidebar-filter-clear').addEventListener('click', (e) => {
+    e.preventDefault();
+    checkboxes.forEach(cb => cb.checked = false);
+    applyFilters();
+  });
+
+      // search functionality
+
+  const searchInput = document.getElementById('product-search');
+  const searchBtn = document.querySelector('.search-btn');
+
+  searchBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const query = searchInput.value.trim();
+    const url = new URL(window.location.href);
+    url.searchParams.set('search', query);
+    url.searchParams.set('page', 1); // Reset to page 1 on search
+    console.log("url::",url)
+    window.location.href = url.toString();
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      searchBtn.click();
+    }
+  });
+
+</script>
 
     <%-include("../../Views/Partials/User/footerLand")%>
 </body>

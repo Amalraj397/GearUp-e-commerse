@@ -796,7 +796,7 @@
 <script>
 //   const existingImages = product.images || [] ;
  const productData = <%- JSON.stringify(product) %>;
-  console.log("Product:", productData._id);
+  // console.log("Product:", productData._id);        //debugging
   const existingImages = productData.productImage || [] ;
 
 //   console.log("Loaded existing images:", existingImages);
@@ -804,16 +804,15 @@
   const imagePreview = document.getElementById("image-preview");
   const deletedImages = [];
   const deletedImagesInput = document.getElementById("deletedImages");
-  console.log('-----------------------------------------------');
 
-  console.log("deletedImagesInput:", deletedImagesInput);
-  console.log("deletedImages:", deletedImages);
-  console.log(deletedImagesInput.value);
-  console.log('-----------------------------------');
+  // console.log('-----------------------------------------------');      //debugging
+  // console.log("deletedImagesInput:", deletedImagesInput);
+  // console.log("deletedImages:", deletedImages);
+  // console.log(deletedImagesInput.value);                              //debugging
+  // console.log('-----------------------------------');
 
   window.addEventListener("DOMContentLoaded", () => {
     if (!Array.isArray(existingImages)) {
-    //   console.warn("existingImages is not an array");
       return;
     }
 
@@ -835,7 +834,7 @@
         event.preventDefault();
         deletedImages.push(url);
         let deletedImagesUrl = deletedImages.join()
-        console.log("-----------------", deletedImagesUrl);
+        // console.log("-----------------", deletedImagesUrl);      //debugging
         
           Swal.fire({
     title: "Are you sure?",
@@ -1073,12 +1072,7 @@
 
 
 // <script>
-
-  console.log('existing-images-hiii', existingImages);
-  
-
-
-
+  // console.log('existing-images-hiii', existingImages);      //debugging
   const productForm = document.getElementById('editProduct-form');
   const imagePreviewContainer = document.getElementById('image-preview');
   const imageUploadArea = document.getElementById('image-upload-area');
@@ -1115,9 +1109,7 @@
   imageInput.addEventListener('change', e => {
     
     const files = Array.from(e.target.files);
-     console.log('files-hellooo1', files);
     if (files.length > 0) {
-      console.log('files-hellooo2', files);
       addFiles(files);
       placeHolder.style.display = 'none';
     }
@@ -1144,13 +1136,6 @@
        console.log('files-hellooo2-selected files', files);
       previewImage(file);
     }
-
-    // const imageError = document.getElementById('error-message');
-    // if (selectedFiles.length < 3) {
-    //   imageError.textContent = 'Please upload at least three images.';
-    // } else {
-    //   imageError.textContent = '';
-    // }
   }
 
   function previewImage(file) {
@@ -1171,12 +1156,6 @@
         imagePreviewContainer.removeChild(previewDiv);
         selectedFiles = selectedFiles.filter(f => f.name !== file.name);
 
-        // if (selectedFiles.length < 3) {
-        //   document.getElementById('error-message').textContent = 'Please upload at least three images.';
-        // } else {
-        //   document.getElementById('error-message').textContent = '';
-        // }
-
         if (selectedFiles.length === 0) {
           placeHolder.style.display = 'flex';
         }
@@ -1188,23 +1167,30 @@
     };
     reader.readAsDataURL(file);
   }
-  console.log("selectedFiles:", selectedFiles);
-  console.log("imagePreviewContainer:", imagePreviewContainer);
-  console.log("imageInput:", imageInput);
-  console.log("existingImages:", existingImages);
+
+  // console.log("----------------------------------");
+  // console.log("selectedFiles:", selectedFiles);                   //debugging       
+  // console.log("imagePreviewContainer:", imagePreviewContainer);
+  // console.log("imageInput:", imageInput);
+  // console.log("existingImages:", existingImages);                 //debugging
+  // console.log("----------------------------------");
 
   // ========== FORM SUBMISSION AND VALIDATION ==========
 
     // Listening for form submission
-      productForm.addEventListener('submit', function (e) {
-          e.preventDefault(); // Prevent default form submission for custom validation
-console.log("selectedFiles:", selectedFiles);
-       let imageArray = [...selectedFiles, ...existingImages];
-console.log("images: -----------concat", imageArray);
-          // Validate the form
-    // Clear the previous error messages
+    productForm.addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent default form submission for custom validation
+
+      // console.log("selectedFiles:", selectedFiles);         //debugging
+
+     let imageArray = [...selectedFiles, ...existingImages];
+
+      // console.log("images: -----------concat", imageArray);        //debugging
+
+        // Validate the form
+    
     const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(msg => msg.textContent = '');
+    errorMessages.forEach(msg => msg.textContent = '');    // Clear the previous error messages
 
     let isValid = true;
 
@@ -1292,13 +1278,12 @@ console.log("images: -----------concat", imageArray);
   formData.append('status', document.getElementById('status').value);
 
   // Append each image file (already selected & stored in selectedFiles)
-  console.log('finall - selected file', selectedFiles);
-  
+
+  // console.log('finall - selected file', selectedFiles);      //debugging
   
     selectedFiles.forEach(file => {
         formData.append('productImages', file); // 'images' matches the Multer field name
   });
-
 
   Swal.fire({
         title: "Are you sure",
@@ -1308,8 +1293,7 @@ console.log("images: -----------concat", imageArray);
         confirmButtonText: "Yes, Update..!",
   }).then((result)=>{
     if (result.isConfirmed){
-      console.log('form-data-final', formData);
-      
+      // console.log('form-data-final', formData);        //debugging
       fetch(`/admin/editProduct/${productData._id}`, {
         method: 'PUT',
         body: formData,
@@ -1324,7 +1308,8 @@ console.log("images: -----------concat", imageArray);
         }).then(() => {
           productForm.reset();            // Clearing  the form
           document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
-          selectedFiles = [];             // Reset selected files array
+          selectedFiles = [];                        // Reset  files array
+          window.location.href = '/admin/productList';        // location reload';
         });
     })
     .catch(err => {

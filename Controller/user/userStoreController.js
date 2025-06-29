@@ -4,40 +4,60 @@ import brandSchema from "../../Models/brandModel.js";
 
 export const getshopPage = async (req, res) => {
   try {
-     
-     const page = parseInt(req.query.page) || 1;
-     const limit = 8;
-     const skip = (page - 1) * limit;
 
-    // Fetch active (non-blocked) products
-    const products = await productSchema.find({ isBlocked: false })
+    const searchQuery = req.query.search?.trim() || '';
+    console.log("searchQuery : ",searchQuery);
+    const page = parseInt(req.query.page) || 1;
+    const limit = 8;
+    const skip = (page - 1) * limit;
+    const filter = { isBlocked: false };
+
+    if (searchQuery) {
+      const regex = new RegExp(searchQuery, 'i'); // case-insensitive'i';
+      filter.productName = { $regex: regex };
+    //   filter.$or = [
+    //   { productName: regex },
+    //   // { 'brand.name': regex },    
+    //   // { 'category.name': regex }, 
+    //   // { tags: regex },
+    //   // { edition: regex },
+    //   // { scale: regex }
+    // ];
+    }
+    console.log("filter : ",filter);
+
+    // Fetch filtered and paginated products
+    const products = await productSchema.find(filter)
       .populate("brand")
       .populate("category")
       .skip(skip)
       .limit(limit)
       .lean();
 
-    const totalProducts = await productSchema.countDocuments({ isBlocked: false });
+        // console.log("products : ",products);   // debugging
+
+    // Count total filtered products
+    const totalProducts = await productSchema.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    // Get unique editions and scales
+    // Get distinct editions and scales
     const editions = await productSchema.distinct("edition", { isBlocked: false });
     const scales = await productSchema.distinct("scale", { isBlocked: false });
 
-    // Optionally fetch brands and categories if needed for filtering
+    // Brands & categories for filtering
     const brands = await brandSchema.find({ isBlocked: false });
     const categories = await categorySchema.find({ isBlocked: false });
 
-    // Send everything to the shop page
+    // Render to shop page
     res.render("shopPage.ejs", {
       products,
       editions,
       scales,
       brands,
       categories,
-      
-      currentPage:page,
+      currentPage: page,
       totalPages,
+      searchQuery, 
     });
 
   } catch (error) {
@@ -45,6 +65,7 @@ export const getshopPage = async (req, res) => {
     res.status(500).render("error", { message: "Something went wrong." });
   }
 };
+
 
 export const getproductDetailpage = async (req, res) => {
       const {id} = req.params;
@@ -93,32 +114,37 @@ export const getBrandPage = (req, res) => {
 
 export const filterProducts = async (req, res) => {
   try {
-    const { categories, brands, editions, scales } = req.body;
+    const { categories, brands, editions, scales, page = 1 } = req.query;
+    const searchQuery = req.query.search?.trim() || '';
 
-    const filterQuery = {};
+    const filter = {isBlocked: false};
+    if (categories) filter.category = { $in: categories.split(',') };
+    if (brands) filter.brand = { $in: brands.split(',') };
+    if (editions) filter.edition = { $in: editions.split(',') };
+    if (scales) filter.scale = { $in: scales.split(',') };
 
-    if (categories && categories.length > 0) {
-      filterQuery.category = { $in: categories };
-    }
+    const limit = 9;
+    const skip = (page - 1) * limit;
 
-    if (brands && brands.length > 0) {
-      filterQuery.brand = { $in: brands };
-    }
+    const products = await productSchema.find(filter).skip(skip).limit(limit).populate('category');
+    const totalProducts = await productSchema.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    if (editions && editions.length > 0) {
-      filterQuery.edition = { $in: editions };
-    }
+     return res.render('shopPage.ejs', {
+      products,
+      currentPage: +page,
+      totalPages,
+      filter,
+      searchQuery,
 
-    if (scales && scales.length > 0) {
-      filterQuery.scale = { $in: scales };
-    }
+      categories: await categorySchema.find(),
+      brands: await brandSchema.find(),
+      editions: [...new Set(await productSchema.distinct('edition'))],
+      scales: [...new Set(await productSchema.distinct('scale'))],
 
-    const products = await Product.find(filterQuery).lean();
-
-    res.json({ products });
-  } catch (err) {
-    console.error('Filter error:', err);
-    res.status(500).json({ message: 'Server error' });
+    });
+  } catch (error) {
+    console.error('Error filtering products:', error);
+    res.status(500).send('Server error');
   }
 };
-

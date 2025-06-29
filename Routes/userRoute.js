@@ -16,8 +16,7 @@ import {          //importing functions from usercontroller page
     resendOTP,  
     handleGoogleSignup,        
     // next function
-    // next function
-    // next function
+    
  } from "../Controller/user/UserController.js";
 
  import { getshopPage,
@@ -33,9 +32,6 @@ const userRoute=express.Router()
 
 userRoute.get("/", showLanding);
 userRoute.get("/pageNotFound", pageNotFound);
-
-// userRoute.get("/login",showLogin);
-
 
 // user-login/logout get-post  route
 userRoute.get("/login",showLogin) ;
@@ -59,19 +55,10 @@ userRoute.post("/resentOtp", resendOTP);
 userRoute.get("/shopPage",getshopPage)
 userRoute.get("/categoryPage",getcategoryPage)
 userRoute.get("/brandPage",getBrandPage)
-
+ 
 
 userRoute.get("/filterProducts",filterProducts)
-
-
 userRoute.get("/productDetail/:id",getproductDetailpage);
-
-
-
-// router.get('/', (req, res) => {
-//     res.render('User/index'); // ✅ Render the home page
-// });
-
 
 
 export default userRoute

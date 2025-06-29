@@ -12,16 +12,16 @@
         font-family: "Segoe UI", sans-serif;
       }
 
-      body {
-        background: url("/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg") center
-          center fixed;
+      /* body {
+        /* background: url("/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg") center
+          center fixed; *
         background-size: cover;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
         padding: 20px;
-      }
+      }*/
 
       .login-container {
         background: rgba(43, 43, 43, 0.95);
@@ -29,21 +29,46 @@
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         width: 100%;
-        max-width: 400px;
-        color: #f5f5f5;
-      }
+        height: 500px;
+        max-width: 500px;
+        color: #9d0707;
+      } 
+       /* Remove the current background-image rule */
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
 
-      .login-container h2 {
+/* Style for the video */
+#bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  z-index: -1; /* Send the video behind the content */
+}
+
+
+      .login-container h1 {
         margin-bottom: 30px;
         text-align: center;
         color: #f36d07;
-        letter-spacing: 2px;
+        font-style: italic;
+        letter-spacing: 4px;
       }
 
       .login-container input[type="email"],
       .login-container input[type="password"] {
         width: 100%;
-        padding: 12px;
+        padding:  20px;
         margin-bottom: 20px;
         border: 1px solid #555;
         border-radius: 25px;
@@ -79,14 +104,14 @@
       .btn {
         background-color: #f36d07;
         color: #1a1a1a;
-        padding: 12px 25px;
+        padding: 20px 25px;
         width: 100%;
-        border: none;
+        border: 1px solid #e2b66a;
         border-radius: 25px;
         cursor: pointer;
         font-weight: bold;
         transition: 0.3s ease;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
       }
 
       .btn:hover {
@@ -122,7 +147,9 @@
       }
 
       .signup a {
-        color: #f0a500;
+        color: #f08000;
+        font-size: 18px;
+        font-weight: 700;
         text-decoration: none;
       }
 
@@ -150,6 +177,17 @@
         transform: translateY(-2px);
       }
 
+      #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover ;
+        z-index: -1;
+        background-color: black; /* fallback color if aspect ratio creates bars */
+      }
+
       @media (max-width: 480px) {
         .login-container {
           padding: 25px;
@@ -168,15 +206,18 @@
     </style>
   </head>
   <body>
+    <video autoplay muted loop playsinline id="bg-video">
+    <source src="User/assets/videos/mustang high quality.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
     <div class="login-container">
-      <h2>LOGIN</h2>
+      <h1>LOGIN</h1>
       <form id="loginForm" action="/login" method="post">
         <input
           type="email"
           placeholder=" Enter your Email"
           id="login-email"
           name="email"
-          required
         />
         <div id="emailError" class="errorMessage"></div>
 
@@ -185,7 +226,6 @@
           placeholder=" Enter your Password"
           id="login-password"
           name="password"
-          required
         />
         <div id="passwordError" class="errorMessage"></div>
 
@@ -199,7 +239,7 @@
       <!-- <button class="btn google-btn">
       <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo"> Login with Google
     </button> -->
-      <div class="signup">New here? <a href="/signup">Sign up</a></div>
+      <div class="signup">New here? <a href="/signup">Sign-Up</a></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/gh/noumanqamar450/alertbox@main/version/1.0.2/alertbox.min.js"></script>
@@ -225,7 +265,7 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.success) {
-                localStorage.setItem("loggedInUser", JSON.stringify(data.user)); // ✅ Save user
+                localStorage.setItem("loggedInUser", JSON.stringify(data.user)); //Save user
                 window.location.href = data.redirectTo;
               } else {
                 alert(data.message);
@@ -257,11 +297,21 @@
             isValid = false;
           }
           // Password Validation (Minlen =6)
-          if (password.length < 6) {
+          if (!password) {
+            document.getElementById("passwordError").innerText =
+              "Please enter the user Password"
+            isValid = false;
+          }else if (password.length < 6) {
             document.getElementById("passwordError").innerText =
               "Password must be at least 6 characters long!";
             isValid = false;
           }
+
+          // if (password.length < 6) {
+          //   document.getElementById("passwordError").innerText =
+          //     "Password must be at least 6 characters long!";
+          //   isValid = false;
+          // }
           // Submiing  form if all validations pass
           // if (isValid) {
           //   alert("successfully logged!");

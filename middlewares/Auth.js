@@ -18,7 +18,7 @@ export const adminAuth = async (req, res) => {
   try {
     if (!req.session.admin) {
 
-      return res.redirect("/api/v1/admin/login");
+      return res.redirect("/admin/login");
 
     }
     // Find admin by id
@@ -30,7 +30,7 @@ export const adminAuth = async (req, res) => {
 
     } else {
 
-      return res.redirect("/api/v1/admin/login");
+      return res.redirect("/admin/login");
 
     }
       } catch (error) {
@@ -45,23 +45,22 @@ export const userAuth = async (req, res) => {
   try {
     // check if user authenticated..!
     if (!req.session.user) {
-      return res.redirect("/user/login"); // Redirect if not authenticated..!
+      return res.redirect("/login"); // Redirect if not authenticated..!
     }
     //Find user by ID...!
     const user = await userSchema.findById(req.session.user._id);
 
     // Check if user exists and not blocked..!
-    if (user && !user.isBlocked) {
-      return next(); // Proceed to next ...!
-    } else {
-      res.redirect("/user/login"); // Redirect if user is blocked or not found..!
+    if (!user && user.isBlocked) {
+      res.redirect("/login"); // Redirect if user is blocked or not found..!
     }
+    next();
+
   } catch (error) {
     console.error("Error in user Authentication", error.message);
     res.status(500).send("Internal server error");
   }
 };
-
 
 // Middleware for checking authentication
 export const isAuthenticated = (req, res) => {

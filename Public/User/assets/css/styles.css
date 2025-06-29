@@ -41,7 +41,14 @@
     text-transform: uppercase;
     letter-spacing: 1px;
   }
-  
+  .logo-img{
+    width: 110px;
+    border-radius: 5px;
+    border: 1px solid #ff6600;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+  }
   .btn-primary {
     background-color: #ff6600;
     color: white;

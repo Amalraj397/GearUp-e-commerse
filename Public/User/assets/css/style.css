@@ -229,6 +229,35 @@ blockquote.text-white cite {
 blockquote.text-white cite span {
   color: #777;
 }
+.search-box {
+        display: flex;
+        align-items: center;
+        background-color: var(--card-bg);
+        border-radius: 5px;
+        padding: 5px 10px;
+        width: 50%;
+      }
+.search-box input {
+        background: none;
+        border:  1px solid whitesmoke;
+        color: var(--text-color);
+        padding: 8px;
+        width: 100%;
+        /* outline: */
+      }
+
+.search-btn {
+  padding: 13px 19px;
+  background-color: #ffffff;
+  border: 1px solid #d87f0e;
+  border-radius: 0 4px 4px 0;
+  color: black;
+  cursor: pointer;
+}
+
+.search-btn i {
+  font-size: 16px;
+}
 @media screen and (min-width: 768px) {
   h1,
   .h1 {
@@ -334,7 +363,7 @@ blockquote.text-white cite span {
   padding-right: 0;
 }
 .container {
-  width: 1188px;
+  width: 100%;
   max-width: 100%;
   padding-left: 10px;
   padding-right: 10px;
@@ -361,6 +390,11 @@ blockquote.text-white cite span {
 .page-content {
   padding-bottom: 5rem;
 }
+
+.product-list{
+  padding-left: 5%;
+}
+
 @media screen and (min-width: 992px) {
   .col-5col {
     -ms-flex: 0 0 20%;
@@ -430,6 +464,9 @@ blockquote.text-white cite span {
   }
 }
 @media screen and (min-width: 1600px) {
+  .container{
+    max-width: 90%;
+  }
   .container-fluid {
     padding-left: 70px;
     padding-right: 70px;
@@ -528,12 +565,17 @@ blockquote.text-white cite span {
   }
 }
 @media screen and (min-width: 1920px) {
+  .container{
+    max-width: 80%;
+  }
   .container-fluid {
     max-width: 1920px;
     margin-left: auto;
     margin-right: auto;
   }
+
 }
+
 .header {
   width: 100%;
   background-color: #fff;

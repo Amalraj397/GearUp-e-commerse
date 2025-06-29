@@ -208,26 +208,37 @@
       
 
       fetch("/admin/addBrands", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          Swal.fire({
-            title: data.message || "Success!",
-            icon: "success",
-          }).then(() => {
-            location.reload();
-          });
-        })
-        .catch(() => {
-            // console.error('Fetch error:', error); // 
-            Swal.fire({
-            title: "Error!",
-            text: "Something went wrong. Please try again.",
-            icon: "error",
-          });
-        });
+  method: "POST",
+  body: formData,
+})
+  .then(async (response) => {
+    const data = await response.json();
+
+    if (!response.ok) {
+      // error case
+      return Swal.fire({
+        title: "Error!",
+        text: data.message || "Something went wrong.",
+        icon: "error",
+      });
+    }
+
+    // success case
+    Swal.fire({
+      title: data.message || "Success!",
+      icon: "success",
+    }).then(() => {
+      location.reload();
+    });
+  })
+  .catch(() => {
+    Swal.fire({
+      title: "Error!",
+      text: "Something went wrong. Please try again.",
+      icon: "error",
+    });
+  });
+
     });
 </script>
 <%-include("../../Views/Partials/Admin/footer")%>
