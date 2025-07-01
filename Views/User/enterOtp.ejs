@@ -268,32 +268,6 @@
           });
         });
 
-        // submitBtn.addEventListener("click", async () => {
-        //   const otp = Array.from(otpInputs)
-        //     .map((input) => input.value)
-        //     .join("");
-        //   if (otp.length === 6) {
-        //     try {
-        //       const response = await fetch("/otpVerify", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({ otp }),
-        //       });
-
-        //       const data = await response.json();
-        //       if (data.success) {
-        //         alert(data.message);
-        //         window.location.href = data.url;
-        //       } else {
-        //         errorMsg.textContent = data.message;
-        //       }
-        //     } catch (error) {
-        //       console.error("Error verifying OTP:", error);
-        //     }
-        //   }
-        // });
-        // sweeet alert for otp verification
-
         submitBtn.addEventListener("click", async () => {
           const otp = Array.from(otpInputs)
             .map((input) => input.value)
@@ -357,18 +331,24 @@
         resendBtn.addEventListener("click", async (e) => {
           e.preventDefault();
           try {
-            const response = await fetch("/user/resendOtp", { method: "POST" });
+            const response = await fetch("/resendOtp", { method: "POST" });
             const data = await response.json();
             alert(data.message);
-            startResendCountdown(90);
+            startResendCountdown(60);
           } catch (error) {
             console.error("Could not resend OTP:", error);
-            errorMsg.textContent = "Could not resend OTP. Try again later.";
+            // errorMsg.textContent = "Could not resend OTP. Try again later.";
+            Swal.fire({
+                title: "Error",
+                text: data.message,
+                // text: "Could not resend OTP. Please try again later.",
+                icon: "error",
+              });
           }
         });
 
         // Start countdown on page load
-        startResendCountdown(90);
+        startResendCountdown(60);
       });
     </script>
   </body>

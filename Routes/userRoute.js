@@ -48,7 +48,7 @@ userRoute.post("/auth/google/signup", handleGoogleSignup);
 //OTP section 
 userRoute.get("/getOtp", getOtpPage);
 userRoute.post("/otpVerify", verifyOtp);
-userRoute.post("/resentOtp", resendOTP);
+userRoute.post("/resendOtp", resendOTP);
 
 
 //product details

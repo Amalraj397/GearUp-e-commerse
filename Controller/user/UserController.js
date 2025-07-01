@@ -44,7 +44,7 @@ export const userSignup = async (req, res) => {
     registerPassword,
   } = req.body;
 
-  console.log("email", req.body);
+  console.log("email", req.body);     // debugging
 
   try {
     // check email already exists..
@@ -63,8 +63,9 @@ export const userSignup = async (req, res) => {
     // console.log(newUser);
 
     req.session.userData = userData;
+    console.log("req.session.userdata:", req.session.userData);
     // generate OTP and Time
-    const otpExpirationT = Date.now() + 60 * 3000;
+    const otpExpirationT = Date.now() + 60 * 1000;
     const otp = generateOTP();
     console.log(" userLogin OTP:",otp);  //   diplay OTP in console
     //send OTP email
@@ -170,37 +171,7 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
-
-// resent OTP
-
-// export const resendOTP = async (req, res, next)=>{
-//   try {
-
-//       if(! req.session.userData || !req.session.userData.email){
-//           return res.status(400).json({ message: 'User data not found..!'})
-//       }
-
-//       const {email} = req.session.userData;
-   
-//       const otp = generateOTP()
-//       const newExpirationTime = Date.now() + 1 * 60 * 3000;
-
-//       req.session.otp = otp;
-//       req.session.otpExpiration = newExpirationTime;
-
-//       await sendEmail ({to: email, otp})
-
-//       res.status(200).json({ otpExpiration: newExpirationTime, message : " A new OTP has been send to your mail..!"})
-
-      
-//   } catch (error) {
-//       console.error('Error sending OTP...!',error)
-//       next(error);
-      
-//   }
-// }
-
-export const resendOTP = async (req, res, next) => {
+export const resendOTP = async (req, res) => {
   try {
     if (!req.session.userData || !req.session.userData.email) {
       return res.status(400).json({ message: "User data not found..!" });
@@ -208,23 +179,26 @@ export const resendOTP = async (req, res, next) => {
 
     const { email } = req.session.userData;
 
-    // Prevent resend within 60 seconds
+    // Prevent resend with-in 60 seconds
     if (
-      req.session.otpExpiration &&
-      req.session.otpExpiration > Date.now()
-    ) {
+      req.session.newotpExpiration &&
+      Date.now()-req.session.newotpExpiration < 60 * 1000
+    )
+     {
       return res
         .status(429)
         .json({ message: "Please wait before requesting a new OTP." });
     }
 
-    const otp = generateOTP(); // You should already have this function
+    const otp = generateOTP(); 
+     console.log("resend OTP:",otp);
+
     const newExpirationTime = Date.now() + 60 * 2000; // 2 minute cooldown
 
     req.session.otp = otp;
-    req.session.otpExpiration = newExpirationTime;
+     const otpExpiration = newExpirationTime;
 
-    await sendEmail({ to: email, otp }); // You should already have this function
+    await sendEmail({ to: email, otp }); 
 
     res
       .status(200) 
@@ -241,57 +215,6 @@ export const resendOTP = async (req, res, next) => {
 
 //  --------------------------userlogin controller------------------------------
 
-// export const userLogin = async (req, res) => {
-//   const { email, password } = req.body;
-//   try {
-//     console.log(email);
-
-//     //  check for if the useremail already  exists
-//     const user = await userschema.findOne({ email });
-//     if (!user) {
-//       return res.status(401).json({ message: "User not found..! signUp now" });
-//     }
-//     if (user.isBlocked) {
-//       return res.status(401).json({ message: "Sorry Unable to access" });
-//     }
-
-//     //  matchng the Password
-//     const passwordMatch = await bcrypt.compare(password, user.password);
-//     if (!passwordMatch) {
-//       return res.status(401).json({ message: "Password do not match..!" });
-//     }
-    
-
-//     if(user && user.isAdmin === true){
-//       req.session.admin = {
-//         id: user._id,                         //admin login
-//         name: user.firstName,
-//       };
-//       return res.redirect("/admin/dashboard");  // only redirect
-//     } 
-
-
-
-//     // Creating session for user..!
-//     req.session.user = {
-//       id: user._id,
-//       name: user.firstName,
-
-//       // res.render('index', { user: req.session.user });
-//     };
-
-//     console.log("user deails", req.session.user);
-
-//     // res.status(200).json({ message: "Login successfull..!" });
-//     res.redirect("/");
-//   } catch (error) {
-//     console.error("Error login failed", error);
-//     res.status(500).send("internal server Error  ");
-//   }
-// };
-
-
-// new code for  adding sweetalerts
 export const userLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -365,29 +288,6 @@ export const userLogout = async (req, res) => {
 
 // -----------------------google authentication-----------------
 
-// export const handleGoogleSignup = async (req, res) => {
-//   const { email, googleId, displayName, photo } = req.body;
-//   try {
-//     let user = await User.findOne({ email });
-//     if (!user) {
-//       const [firstName, ...rest] = displayName.split(" ");
-//       const lastName = rest.join(" ");
-//       user = await User.create({
-//         firstName,
-//         lastName,
-//         email,
-//         googleId,
-//         profilePicture: photo,
-//       });
-//     }
-
-//     // Optionally use session or JWT here
-//     res.json({ success: true, user });
-//   } catch (err) {
-//     console.error("Google Auth Save Error:", err);
-//     res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
 
 export const handleGoogleSignup = async (req, res) => {
   try {
