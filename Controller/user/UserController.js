@@ -66,7 +66,7 @@ export const userSignup = async (req, res) => {
     // generate OTP and Time
     const otpExpirationT = Date.now() + 60 * 3000;
     const otp = generateOTP();
-    console.log(otp);  //   diplay OTP in console
+    console.log(" userLogin OTP:",otp);  //   diplay OTP in console
     //send OTP email
     await sendEmail({ to: registerEmail, otp });
 

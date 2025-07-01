@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Molla">
     <meta name="application-name" content="Molla">
     <meta name="msapplication-TileColor" content="#cc9966">
-    <meta name="msapplication-config" content="/User/assets/images/icons/browserconfig.xml">
+    <meta name="msapplication-config" content="/User/assets-/images/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/User/assets/css/style.css">
@@ -36,10 +36,7 @@
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
-                <div class="container">
-                </div>
             <!-- </nav>End .breadcrumb-nav -->
-
             <div class="page-content">
                 <div class="container">
                 	<div class="row">
@@ -207,16 +204,16 @@
 					            	                    Price
 					            	                </a>
 					            	                </h3><!-- End .widget-title -->
-					            	                <div class="collapse show" id="widget-5">
-					            	        	    <div class="widget-body">
-                                                      <div class="filter-price">
-                                                    <div class="filter-price-text">
-                                                        Price Range:
-                                                        <span id="filter-price-range"></span>
-                                                    </div><!-- End .filter-price-text -->
-                                                <div id="price-slider"></div><!-- End #price-slider -->
+					            	        	        <div class="widget-body">
+                                            <div class="filter-price">
+                                                <div class="filter-price-text">
+                                                    Price Range : <span id="filter-price-range">₹199 - ₹9999</span>
+                                                </div><!-- End .filter-price-text --> 
+                                              <div id="price-slider"></div><!-- End #price-slider -->
                                             </div><!-- End .filter-price -->
-					            		</div><!-- End .widget-body -->
+										                      </div><!-- End .widget-body -->
+                                          <button id="apply-filters" class="btn btn-primary mt-3">Apply Filters</button>
+
 					            	</div><!-- End .collapse -->
         			            </div><!-- End .widget -->
                 			</div><!-- End .sidebar sidebar-shop -->
@@ -246,6 +243,10 @@
     <script src="assets/js/nouislider.min.js"></script>
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
+
+    <!-- noUiSlider JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
+
 
 <!-- <script>
           const selectedFilters = {
@@ -337,19 +338,104 @@
 }
 </script> -->
 <script>
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  // const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      applyFilters();
-    });
+  // checkboxes.forEach(checkbox => {
+  //   checkbox.addEventListener('change', () => {
+  //     applyFilters();
+  //   });
+  // });
+
+  // function applyFilters() {
+  //   const selectedCategories = getSelectedValues('.category-checkbox');
+  //   const selectedBrands = getSelectedValues('.brand-checkbox');
+  //   const selectedEditions = getSelectedValues('.edition-checkbox');
+  //   const selectedScales = getSelectedValues('.scale-checkbox');
+
+  //   const query = new URLSearchParams();
+
+  //   if (selectedCategories.length) query.append('categories', selectedCategories.join(','));
+  //   if (selectedBrands.length) query.append('brands', selectedBrands.join(','));
+  //   if (selectedEditions.length) query.append('editions', selectedEditions.join(','));
+  //   if (selectedScales.length) query.append('scales', selectedScales.join(','));
+
+  //   fetch(`/filterProducts?${query.toString()}`)
+  //     .then(res => res.text())
+  //     .then(html => {
+  //       window.location.href = `/filterProducts?${query.toString()}`
+        
+  //     });
+  // }
+
+  // function getSelectedValues(selector) {
+  //   return Array.from(document.querySelectorAll(selector))
+  //               .filter(cb => cb.checked)
+  //               .map(cb => cb.value);
+  // }
+
+  // // Clear filters
+  // document.querySelector('.sidebar-filter-clear').addEventListener('click', (e) => {
+  //   e.preventDefault();
+  //   checkboxes.forEach(cb => cb.checked = false);
+  //   applyFilters();
+  // });
+
+  //     // search functionality
+
+  // const searchInput = document.getElementById('product-search');
+  // const searchBtn = document.querySelector('.search-btn');
+
+  // searchBtn.addEventListener('click', (e) => {
+  //   e.preventDefault();
+
+  //   const query = searchInput.value.trim();
+  //   const url = new URL(window.location.href);
+  //   url.searchParams.set('search', query);
+  //   url.searchParams.set('page', 1); // Reset to page 1 on search
+  //   console.log("url::",url)         //debugging
+  //   window.location.href = url.toString();
+  // });
+
+  // searchInput.addEventListener('keydown', (e) => {
+  //   if (e.key === 'Enter') {
+  //     searchBtn.click();
+  //   }
+  // });
+
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const applyBtn = document.getElementById('apply-filters');
+
+  // Price slider setup
+  const priceSlider = document.getElementById('price-slider');
+  const priceRangeText = document.getElementById('filter-price-range');
+
+  noUiSlider.create(priceSlider, {
+    start: [199, 9999],
+    connect: true,
+    range: {
+      min: 199,
+      max: 9999
+    },
+    tooltips: [true, true],
+    format: {
+      to: val => Math.round(val),
+      from: val => Number(val)
+    }
   });
+
+  priceSlider.noUiSlider.on('update', function (values) {
+    priceRangeText.textContent = `₹${values[0]} - ₹${values[1]}`;
+  });
+
+  // Apply filters only when button is clicked
+  applyBtn.addEventListener('click', applyFilters);
 
   function applyFilters() {
     const selectedCategories = getSelectedValues('.category-checkbox');
     const selectedBrands = getSelectedValues('.brand-checkbox');
     const selectedEditions = getSelectedValues('.edition-checkbox');
     const selectedScales = getSelectedValues('.scale-checkbox');
+    const [minPrice, maxPrice] = priceSlider.noUiSlider.get();
 
     const query = new URLSearchParams();
 
@@ -357,13 +443,12 @@
     if (selectedBrands.length) query.append('brands', selectedBrands.join(','));
     if (selectedEditions.length) query.append('editions', selectedEditions.join(','));
     if (selectedScales.length) query.append('scales', selectedScales.join(','));
+    if (minPrice && maxPrice) {
+      query.append('minPrice', Math.round(minPrice));
+      query.append('maxPrice', Math.round(maxPrice));
+    }
 
-    fetch(`/filterProducts?${query.toString()}`)
-      .then(res => res.text())
-      .then(html => {
-        window.location.href = `/filterProducts?${query.toString()}`
-        
-      });
+    window.location.href = `/filterProducts?${query.toString()}`;
   }
 
   function getSelectedValues(selector) {
@@ -376,22 +461,20 @@
   document.querySelector('.sidebar-filter-clear').addEventListener('click', (e) => {
     e.preventDefault();
     checkboxes.forEach(cb => cb.checked = false);
+    priceSlider.noUiSlider.set([199, 9999]);
     applyFilters();
   });
 
-      // search functionality
-
+  // Search functionality (unchanged)
   const searchInput = document.getElementById('product-search');
   const searchBtn = document.querySelector('.search-btn');
 
   searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
-
     const query = searchInput.value.trim();
     const url = new URL(window.location.href);
     url.searchParams.set('search', query);
-    url.searchParams.set('page', 1); // Reset to page 1 on search
-    console.log("url::",url)
+    url.searchParams.set('page', 1);
     window.location.href = url.toString();
   });
 
@@ -400,6 +483,48 @@
       searchBtn.click();
     }
   });
+
+// ---------------------- filter by price option ----------------------
+
+// document.addEventListener('DOMContentLoaded', function() {
+//   const priceSlider = document.getElementById('price-slider');
+//   const priceRangeText = document.getElementById('filter-price-range');
+
+//   noUiSlider.create(priceSlider, {
+//     start: [199, 9999], // initial values
+//     connect: true,
+//     range: {
+//       min: 199,
+//       max: 9999
+//     },
+//     tooltips: [true, true],
+//     format: {
+//       to: function (value) {
+//         return Math.round(value);
+//       },
+//       from: function (value) {
+//         return Number(value);
+//       }
+//     }
+//   });
+
+//   priceSlider.noUiSlider.on('update', function (values) {
+//     priceRangeText.textContent = `₹${values[0]} - ₹${values[1]}`;
+//   });
+
+//   // On change, trigger filtering
+//   priceSlider.noUiSlider.on('change', function (values) {
+//     const minPrice = Math.round(values[0]);
+//     const maxPrice = Math.round(values[1]);
+
+//     // Example: update URL query parameters and reload
+//     const url = new URL(window.location.href);
+//     url.searchParams.set('minPrice', minPrice);
+//     url.searchParams.set('maxPrice', maxPrice);
+//     window.location.href = url.toString(); // reload with filter
+//   });
+// });
+
 
 </script>
 

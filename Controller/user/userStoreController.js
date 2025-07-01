@@ -78,8 +78,11 @@ export const getproductDetailpage = async (req, res) => {
             // return res.status(404).render('404');
             return res.redirect('/user/store')
         }
-        // const userDate = user ? await User.findById(user.id) : null;
-        const relatedProducts = await productSchema.find({category: product.category}).limit(5);
+        // const userDate = user ? await User.findById(user.id) : null
+        const relatedProducts = await productSchema.find({_id: { $ne: product._id}, // Exclude current product
+                                category: product.category,
+                                scale: product.scale,
+                              }).limit(10).populate('category');
 
         // console.log("product 0-----", product);  // debugging
 
@@ -118,12 +121,22 @@ export const filterProducts = async (req, res) => {
     const searchQuery = req.query.search?.trim() || '';
 
     const filter = {isBlocked: false};
+
     if (categories) filter.category = { $in: categories.split(',') };
     if (brands) filter.brand = { $in: brands.split(',') };
     if (editions) filter.edition = { $in: editions.split(',') };
     if (scales) filter.scale = { $in: scales.split(',') };
 
-    const limit = 9;
+        const minPrice = parseInt(req.query.minPrice);
+        const maxPrice = parseInt(req.query.maxPrice);
+
+        if (!isNaN(minPrice) || !isNaN(maxPrice)) {
+          filter.salePrice  = {};
+          if (!isNaN(minPrice)) filter.salePrice.$gte = minPrice;
+          if (!isNaN(maxPrice)) filter.salePrice.$lte = maxPrice;
+        }
+
+    const limit = 8;
     const skip = (page - 1) * limit;
 
     const products = await productSchema.find(filter).skip(skip).limit(limit).populate('category');

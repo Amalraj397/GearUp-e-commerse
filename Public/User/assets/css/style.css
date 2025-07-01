@@ -394,6 +394,10 @@ blockquote.text-white cite span {
 .product-list{
   padding-left: 5%;
 }
+.relatedProduct-list{
+  padding-left: 5%;
+}
+  
 
 @media screen and (min-width: 992px) {
   .col-5col {
@@ -10298,6 +10302,28 @@ button:focus {
 .product {
   overflow: hidden;
 }
+
+#product-list{
+  row-gap: 23px;
+}
+
+.related-product-list{
+  width: 100%;
+  display:flex;
+  gap:1rem;
+  overflow-x: auto;
+  padding:10px 10px;
+}
+.related-product-list::-webkit-scrollbar{
+  background-color: #1c1a1a;
+  height:7px;
+}
+
+.related-product-list::-webkit-scrollbar-thumb{
+  background-color: #ce5b0d;
+  border-radius: 10px;
+}
+
 .carousel-equal-height .owl-stage,
 .carousel-equal-height .owl-item {
   display: flex;
