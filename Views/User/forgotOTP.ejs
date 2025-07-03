@@ -276,7 +276,7 @@
             .join("");
           if (otp.length === 6) {
             try {
-              const response = await fetch("/otpVerify", {
+              const response = await fetch("/forgotverifyOTP", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ otp }),
@@ -289,9 +289,10 @@
                   title: data.message,
                   icon: "success",
                   confirmButtonColor: "#3085d6",
-                  confirmButtonText: "Go to Home",
+                  confirmButtonText: "Update Your new Password",
                 }).then(() => {
-                  window.location.href = data.url;
+                  // console.log("data.redirectUrl::", data.redirectUrl);    //debugging
+                  window.location.href = data.redirectUrl;
                 });
               } else {
                 Swal.fire({
@@ -303,7 +304,7 @@
                 });
               }
             } catch (error) {
-              console.error("Error verifying OTP:", error);
+              console.log("Error verifying OTP:", error);
               Swal.fire({
                 title: "Error",
                 text: "Something went wrong. Please try again later.",

@@ -14,7 +14,17 @@ import {          //importing functions from usercontroller page
     userLogout, 
     getproductBox,
     resendOTP,  
-    handleGoogleSignup,        
+    handleGoogleSignup,
+
+    // ----------forgot password-----------
+
+    forgotverifyEmail, 
+    forgotGetOtp, 
+    forgotverifyOtp,
+    forgotresendOTP,
+    getSetnewPassword,
+    confirmResetPassword,
+
     // next function
     
  } from "../Controller/user/UserController.js";
@@ -28,7 +38,7 @@ import {          //importing functions from usercontroller page
  } from "../Controller/user/userStoreController.js";
 
 
-const userRoute=express.Router()
+const userRoute=express.Router();
 
 userRoute.get("/", showLanding);
 userRoute.get("/pageNotFound", pageNotFound);
@@ -37,6 +47,18 @@ userRoute.get("/pageNotFound", pageNotFound);
 userRoute.get("/login",showLogin) ;
 userRoute.post("/login", userLogin);
 userRoute.get ("/logout",userLogout);
+
+//forgotpassword section
+userRoute.post("/forgotPassword",forgotverifyEmail);
+
+// forgotOtp section
+userRoute.get("/forgotGetotp",forgotGetOtp);
+userRoute.post("/forgotverifyOTP",forgotverifyOtp);
+userRoute.post("/forgotResendOtp",forgotresendOTP);
+
+// show reset password form
+userRoute.get("/updatePassword", getSetnewPassword);
+userRoute.post("/updateNewPassword", confirmResetPassword);
 
 //userSignUp get-post route
 userRoute.get("/signup", showSignup); 
@@ -52,12 +74,12 @@ userRoute.post("/resendOtp", resendOTP);
 
 
 //product details
-userRoute.get("/shopPage",getshopPage)
-userRoute.get("/categoryPage",getcategoryPage)
-userRoute.get("/brandPage",getBrandPage)
+userRoute.get("/shopPage",getshopPage);
+userRoute.get("/categoryPage",getcategoryPage);
+userRoute.get("/brandPage",getBrandPage);
  
 
-userRoute.get("/filterProducts",filterProducts)
+userRoute.get("/filterProducts",filterProducts);
 userRoute.get("/productDetail/:id",getproductDetailpage);
 
 

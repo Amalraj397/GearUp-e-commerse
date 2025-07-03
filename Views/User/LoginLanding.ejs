@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login Page</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", sans-serif;
-      }
 
-      /* body {
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    /* body {
         /* background: url("/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg") center
           center fixed; *
         background-size: cover;
@@ -23,240 +24,295 @@
         padding: 20px;
       }*/
 
+    .login-container {
+      background: rgba(43, 43, 43, 0.95);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      height: 500px;
+      max-width: 500px;
+      color: #9d0707;
+    }
+
+    /* Remove the current background-image rule */
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Style for the video */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      /* Send the video behind the content */
+    }
+
+
+    .login-container h1 {
+      margin-bottom: 30px;
+      text-align: center;
+      color: #f36d07;
+      font-style: italic;
+      letter-spacing: 4px;
+    }
+
+    .login-container input[type="email"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #555;
+      border-radius: 25px;
+      background-color: #3c3c3c;
+      color: #f5f5f5;
+      transition: 0.3s ease;
+    }
+
+    .login-container input:hover,
+    .login-container input:focus {
+      border-color: #f36d07;
+      box-shadow: 0 0 5px rgba(246, 169, 4, 0.767);
+      outline: none;
+    }
+
+    .login-container .forgot {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .login-container .forgot a {
+      color: #f06c00;
+      text-decoration: none;
+    }
+
+    .login-container .forgot a:hover {
+      text-decoration: underline;
+      color: #b30808;
+    }
+
+    .btn {
+      background-color: #f36d07;
+      color: #1a1a1a;
+      padding: 20px 25px;
+      width: 100%;
+      border: 1px solid #e2b66a;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+      margin-bottom: 25px;
+    }
+
+    .btn:hover {
+      background-color: #ffbb33;
+      box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .google-btn {
+      background-color: #ffffff;
+      color: #333;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .google-btn:hover {
+      background-color: #f5f5f5;
+    }
+
+    .google-btn img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .signup {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .signup a {
+      color: #f08000;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .signup a:hover {
+      text-decoration: underline;
+      color: #f05000;
+    }
+
+    .go-back-button {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #f36d07;
+      color: #1a1a1a;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .go-back-button:hover {
+      background-color: #ffbb33;
+      box-shadow: 0 6px 15px rgba(255, 187, 51, 0.4);
+      transform: translateY(-2px);
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      background-color: black;
+      /* fallback color if aspect ratio creates bars */
+    }
+
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      z-index: 999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #c5c7c9;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 8px;
+      width: 450px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .close {
+      float: right;
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .otpBtn{
+      background-color: #f36d07;
+      color: #1a1a1a;
+      padding: 5px 25px;
+      width: 100%;
+      border: 1px solid #000000;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+      margin-bottom: 25px;
+    }
+    
+    
+
+
+    @media (max-width: 480px) {
       .login-container {
-        background: rgba(43, 43, 43, 0.95);
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-        width: 100%;
-        height: 500px;
-        max-width: 500px;
-        color: #9d0707;
-      } 
-       /* Remove the current background-image rule */
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
-
-/* Style for the video */
-#bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  object-fit: cover;
-  z-index: -1; /* Send the video behind the content */
-}
-
-
-      .login-container h1 {
-        margin-bottom: 30px;
-        text-align: center;
-        color: #f36d07;
-        font-style: italic;
-        letter-spacing: 4px;
+        padding: 25px;
       }
 
-      .login-container input[type="email"],
-      .login-container input[type="password"] {
-        width: 100%;
-        padding:  20px;
-        margin-bottom: 20px;
-        border: 1px solid #555;
-        border-radius: 25px;
-        background-color: #3c3c3c;
-        color: #f5f5f5;
-        transition: 0.3s ease;
+      .login-container h2 {
+        font-size: 22px;
       }
 
-      .login-container input:hover,
-      .login-container input:focus {
-        border-color: #f36d07;
-        box-shadow: 0 0 5px rgba(246, 169, 4, 0.767);
-        outline: none;
-      }
-
-      .login-container .forgot {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-        font-size: 14px;
-        color: #ccc;
-      }
-
-      .login-container .forgot a {
-        color: #f0a500;
-        text-decoration: none;
-      }
-
-      .login-container .forgot a:hover {
-        text-decoration: underline;
-      }
-
-      .btn {
-        background-color: #f36d07;
-        color: #1a1a1a;
-        padding: 20px 25px;
-        width: 100%;
-        border: 1px solid #e2b66a;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s ease;
-        margin-bottom: 25px;
-      }
-
-      .btn:hover {
-        background-color: #ffbb33;
-        box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
-        transform: translateY(-2px);
-      }
-
+      .btn,
       .google-btn {
-        background-color: #ffffff;
-        color: #333;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
-
-      .google-btn:hover {
-        background-color: #f5f5f5;
-      }
-
-      .google-btn img {
-        width: 20px;
-        height: 20px;
-      }
-
-      .signup {
-        margin-top: 20px;
-        text-align: center;
         font-size: 14px;
-        color: #ccc;
+        padding: 10px 20px;
       }
+    }
+  </style>
+</head>
 
-      .signup a {
-        color: #f08000;
-        font-size: 18px;
-        font-weight: 700;
-        text-decoration: none;
-      }
-
-      .signup a:hover {
-        text-decoration: underline;
-      }
-      .go-back-button {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        background-color: #f36d07;
-        color: #1a1a1a;
-        padding: 10px 18px;
-        border-radius: 20px;
-        font-weight: bold;
-        text-decoration: none;
-        transition: 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-      }
-
-      .go-back-button:hover {
-        background-color: #ffbb33;
-        box-shadow: 0 6px 15px rgba(255, 187, 51, 0.4);
-        transform: translateY(-2px);
-      }
-
-      #bg-video {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover ;
-        z-index: -1;
-        background-color: black; /* fallback color if aspect ratio creates bars */
-      }
-
-      @media (max-width: 480px) {
-        .login-container {
-          padding: 25px;
-        }
-
-        .login-container h2 {
-          font-size: 22px;
-        }
-
-        .btn,
-        .google-btn {
-          font-size: 14px;
-          padding: 10px 20px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <video autoplay muted loop playsinline id="bg-video">
+<body>
+  <video autoplay muted loop playsinline id="bg-video">
     <source src="User/assets/videos/mustang high quality.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-    <div class="login-container">
-      <h1>LOGIN</h1>
-      <form id="loginForm" action="/login" method="post">
-        <input
-          type="email"
-          placeholder=" Enter your Email"
-          id="login-email"
-          name="email"
-        />
-        <div id="emailError" class="errorMessage"></div>
+    Your browser does not support the video tag.
+  </video>
+  <div class="login-container">
+    <h1>LOGIN</h1>
+    <form id="loginForm" action="/login" method="post">
+      <input type="email" placeholder=" Enter your Email" id="login-email" name="email" />
+      <div id="emailError" class="errorMessage"></div>
 
-        <input
-          type="password"
-          placeholder=" Enter your Password"
-          id="login-password"
-          name="password"
-        />
-        <div id="passwordError" class="errorMessage"></div>
+      <input type="password" placeholder=" Enter your Password" id="login-password" name="password" />
+      <div id="passwordError" class="errorMessage"></div>
 
-        <div class="forgot">
-          <span></span>
-          <a href="#">Forgot Password?</a>
-        </div>
-        <button class="btn" type="submit">LOGIN</button>
-        <a href="/" class="go-back-button">Go Back</a>
-      </form>
-      <!-- <button class="btn google-btn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google logo"> Login with Google
-    </button> -->
-      <div class="signup">New here? <a href="/signup">Sign-Up</a></div>
+      <div class="forgot">
+        <span></span>
+        <a href="#" id="forgotPasswordBtn">Forgot Password?</a>
+      </div>
+      <button class="btn" type="submit">LOGIN</button>
+      <a href="/" class="go-back-button">Go Back</a>
+    </form>
+
+    <!-- --------------modal for forgot password------------------ -->
+
+    <div id="emailModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Forgot your Password...? </h3>
+        <form id="emailForm">
+          <label for="email">Please enter your registered email:</label>
+          <input type="email" id="modalEmail" name="email"/>
+          <button type="submit" class="otpBtn">Send OTP</button>
+        </form>
+      </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/gh/noumanqamar450/alertbox@main/version/1.0.2/alertbox.min.js"></script>
-    <!-- <script src="./User/assets/js/loginLand.js"></script>   -->
-    <script>
-      //  ..................... js for login.......................
+    <!-- ------------------------modal ends--------------------------/ -->
 
-      const loginForm = document.getElementById("loginForm");
+    <div class="signup">New here? <a href="/signup">Sign-Up</a></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/gh/noumanqamar450/alertbox@main/version/1.0.2/alertbox.min.js"></script>
+  <script src="User/assets/js/forgotPass.js "></script> 
+      <!-- Copy\Public\User\assets\js\forgotPass.js  -->
+  <script>
+    //  ..................... js for login.......................
 
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    const loginForm = document.getElementById("loginForm");
 
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value.trim();
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-        try {
-          const response = await 
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      // const modalEmail = document.getElementById("modalEmail").value.trim();
+
+      try {
+        const response = await
           fetch("/user/login", {
             method: "POST",
             body: JSON.stringify({ email, password }),
@@ -271,97 +327,87 @@ body {
                 alert(data.message);
               }
             })
-            // .catch((err) => console.error(err));
-        } catch (error) {
-          console.error("Login error:", error);
+        // .catch((err) => console.error(err));
+      } catch (error) {
+        console.error("Login error:", error);
+      }
+    });
+    // ................
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = document.getElementById("login-email").value.trim();
+        const password = document
+          .getElementById("login-password")
+          .value.trim();
+        let isValid = true;
+        // Email Validation
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById("emailError").innerText =
+            "Please enter a valid email address!";
+          isValid = false;
         }
-      });
-      // ................
+        // Password Validation (Minlen =6)
+        if (!password) {
+          document.getElementById("passwordError").innerText =
+            "Please enter the user Password"
+          isValid = false;
+        } else if (password.length < 6) {
+          document.getElementById("passwordError").innerText =
+            "Password must be at least 6 characters long!";
+          isValid = false;
+        }
 
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          clearErrors();
+        //sweetalert implimentation
 
-          const email = document.getElementById("login-email").value.trim();
-          const password = document
-            .getElementById("login-password")
-            .value.trim();
-          let isValid = true;
-          // Email Validation
-          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-          if (!emailPattern.test(email)) {
-            document.getElementById("emailError").innerText =
-              "Please enter a valid email address!";
-            isValid = false;
-          }
-          // Password Validation (Minlen =6)
-          if (!password) {
-            document.getElementById("passwordError").innerText =
-              "Please enter the user Password"
-            isValid = false;
-          }else if (password.length < 6) {
-            document.getElementById("passwordError").innerText =
-              "Password must be at least 6 characters long!";
-            isValid = false;
-          }
-
-          // if (password.length < 6) {
-          //   document.getElementById("passwordError").innerText =
-          //     "Password must be at least 6 characters long!";
-          //   isValid = false;
-          // }
-          // Submiing  form if all validations pass
-          // if (isValid) {
-          //   alert("successfully logged!");
-          //   document.getElementById("loginForm").submit(); // Uncomment this for actual form submission
-          // }
-
-          //sweetalert implimentation
-
-          if (isValid) {
-            fetch("/login", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ email, password }),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.success) {
-                  Swal.fire({
-                    icon: "success",
-                    title: data.message,
-                    showConfirmButton: false,
-                    timer: 1500,
-                  }).then(() => {
-                    window.location.href = data.redirectTo;
-                  });
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Login Failed",
-                    text: data.message,
-                  });
-                }
-              })
-              .catch((err) => {
+        if (isValid) {
+          fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire({
+                  icon: "success",
+                  title: data.message,
+                  showConfirmButton: false,
+                  timer: 1500,
+                }).then(() => {
+                  window.location.href = data.redirectTo;
+                });
+              } else {
                 Swal.fire({
                   icon: "error",
-                  title: "Error",
-                  text: "Something went wrong. Try again later.",
+                  title: "Login Failed",
+                  text: data.message,
                 });
+              }
+            })
+            .catch((err) => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong. Try again later.",
               });
-          }
-          // Function to Clear Previous Errors
-          function clearErrors() {
-            document
-              .querySelectorAll(".errorMessage")
-              .forEach((error) => (error.innerText = ""));
-          }
-        });
-    </script>
-  </body>
+            });
+        }
+        // Function to Clear Previous Errors
+        function clearErrors() {
+          document
+            .querySelectorAll(".errorMessage")
+            .forEach((error) => (error.innerText = ""));
+        }
+      });
+  </script>
+</body>
+
 </html>
