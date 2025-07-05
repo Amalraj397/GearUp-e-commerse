@@ -314,6 +314,9 @@
           }
         });
 
+         let timer=60;
+        
+
         function startResendCountdown(seconds) {
           resendBtn.disabled = true;
           timerDisplay.textContent = `Resend in ${seconds}s`;
@@ -321,9 +324,11 @@
           clearInterval(countdown);
           countdown = setInterval(() => {
             seconds--;
+            window.sessionStorage.setItem("timer",seconds);
             if (seconds <= 0) {
               clearInterval(countdown);
               resendBtn.disabled = false;
+              window.sessionStorage.removeItem("timer");
               timerDisplay.textContent = "";
             } else {
               timerDisplay.textContent = `Resend in ${seconds}s`;
@@ -334,7 +339,7 @@
         resendBtn.addEventListener("click", async (e) => {
           e.preventDefault();
           try {
-            const response = await fetch("/resendOtp", { method: "POST" });
+            const response = await fetch("/forgotResendOtp", { method: "POST" });
             const data = await response.json();
             // alert(data.message);
             Toastify({
@@ -344,8 +349,9 @@
             position: "right", // left, center or right
             backgroundColor: "#4CAF50", 
             stopOnFocus: true,
-          }).showToast();
-            startResendCountdown(60);
+          }).showToast(); 
+
+            startResendCountdown(sessionStorage.getItem("timer") || timer);
           } catch (error) {
             console.error("Could not resend OTP:", error);
             // errorMsg.textContent = "Could not resend OTP. Try again later.";
@@ -359,7 +365,7 @@
         });
 
         // Start countdown on page load
-        startResendCountdown(60);
+        startResendCountdown(sessionStorage.getItem("timer") || timer);
       });
     </script>
   </body>

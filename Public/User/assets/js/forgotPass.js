@@ -1,9 +1,10 @@
   
-
   const modal = document.getElementById('emailModal');
   const btn = document.getElementById('forgotPasswordBtn');
   const span = document.querySelector('.close');
-  const form = document.getElementById('emailForm');
+  const form = document.getElementById('emailForm')
+  const btnDis=  document.getElementById("otpBtn");
+
 
   // Open modal
   btn.onclick = () => {
@@ -27,6 +28,8 @@
     e.preventDefault();
     const email = document.getElementById('modalEmail').value;
 
+    btnDis.disabled = true;
+
     // Optional: show SweetAlert/Toastify here
 
     const response = await fetch('/forgotPassword', {
@@ -43,5 +46,7 @@
       window.location.href = '/forgotGetotp';
     } else {
       alert(data.message); // or show error with SweetAlert
+      btnDis.disabled = false;
+
     }
   });

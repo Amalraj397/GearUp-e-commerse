@@ -1,9 +1,9 @@
- 
-import bcrypt from "bcrypt";
+
 
 export const loadAdminlogin = async (req, res) => {
+  if(req.session.admin) return res.redirect("/admin/dashboard");
   try {
-    res.render("adminLogin.ejs");
+    res.render("LoginLanding.ejs");
   } catch (error) {
     console.log("error in loading the page", error);
     res.status(500).send("server Error  ");

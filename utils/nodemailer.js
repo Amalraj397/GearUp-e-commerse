@@ -10,11 +10,14 @@ import nodemailer from 'nodemailer';
     try{
     // create a transporter - responsible to send emeil
     const transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 465,
         service: 'gmail',
         auth: {
             user: process.env.NODEMAILER_EMAIL, 
             pass: process.env.NODEMAILER_PASSWORD, 
         },
+        secure: true
 
     });
 

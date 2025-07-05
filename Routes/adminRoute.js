@@ -1,11 +1,11 @@
 import express from "express";
 // const app = express();
 
-// import {
-//  adminAuth,
-//  userAuth,
-//  isAuthenticated,
-// } from "../middlewares/Auth.js"
+import {
+ adminAuth,
+ nocache,
+//  adminAuthenticated,
+} from "../middlewares/Auth.js"
 
 import { 
     loadAdminlogin,
@@ -60,56 +60,56 @@ import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
 const adminRoute=express.Router();
 
-adminRoute.get("/login", loadAdminlogin);  // load adminlogin
+adminRoute.get("/login",nocache,loadAdminlogin);  // load adminlogin
 
-adminRoute.get("/dashboard",loadAdminDash);   // load admin landing or dashboard
+adminRoute.get("/dashboard",adminAuth,loadAdminDash);   // load admin landing or dashboard
 
 adminRoute.get ("/logout",adminLogout);  //admin logput
 
                                          
  //--------------------user management---------------------
-adminRoute.get ("/userManage",getuserData); // load usermanagement[user-list]
+adminRoute.get ("/userManage",adminAuth,getuserData); // load usermanagement[user-list]
  // blocking and  unblocking  users
-adminRoute.put("/block-user/:id", blockUser);   //blocking user
-adminRoute.put("/unblock-user/:id", unblockUser); //unblocking user
+adminRoute.put("/block-user/:id", adminAuth,blockUser);   //blocking user
+adminRoute.put("/unblock-user/:id",adminAuth,unblockUser); //unblocking user
 
 
 //----------------------Product management------------------------
-adminRoute.get ("/addProduct",loadAddproduct);  //product management [add product]
-adminRoute.get ("/productList",loadproductList);  //  [list product]
-adminRoute.get("/api/products", getProductsJson); // JSON data for frontend
-adminRoute.post ("/addProduct",uploadMiddleware('Products').array('productImages',8), addnewProduct); // adding new product
+adminRoute.get ("/addProduct",adminAuth,loadAddproduct);  //product management [add product]
+adminRoute.get ("/productList",adminAuth,loadproductList);  //  [list product]
+adminRoute.get("/api/products",adminAuth,getProductsJson); // JSON data for frontend
+adminRoute.post ("/addProduct",uploadMiddleware('Products').array('productImages',8),adminAuth, addnewProduct); // adding new product
 //listing and unlisting  products
-adminRoute.patch("/unlist-product/:id",unlistProduct);
-adminRoute.patch("/list-product/:id",listProduct);
+adminRoute.patch("/unlist-product/:id",adminAuth,unlistProduct);
+adminRoute.patch("/list-product/:id",adminAuth,listProduct);
 // edit product
-adminRoute.get("/editProduct/:id", getProductEditpage);   // getting edit product_page
-adminRoute.delete("/editProduct/delete-image/:id", deleteProductImage);  // deleting image
-adminRoute.put("/editProduct/:id", uploadMiddleware('Products').array('productImages',8),updateProduct);  //update product page
+adminRoute.get("/editProduct/:id",adminAuth,getProductEditpage);   // getting edit product_page
+adminRoute.delete("/editProduct/delete-image/:id",adminAuth,deleteProductImage);  // deleting image
+adminRoute.put("/editProduct/:id",uploadMiddleware('Products').array('productImages',8),adminAuth,updateProduct);  //update product page
 
 
 //--------------------------Brand management-------------------------
-adminRoute.get("/brands",getBrands);   // getting brandpage
-adminRoute.get("/addBrands",getAddBrandPage);  //getting brand page //adding new brand
-adminRoute.post("/addBrands", uploadMiddleware('Brands').single('brand-Image'), addNewBrand);
+adminRoute.get("/brands",adminAuth,getBrands);   // getting brandpage
+adminRoute.get("/addBrands",adminAuth,getAddBrandPage);  //getting brand page //adding new brand
+adminRoute.post("/addBrands",adminAuth,uploadMiddleware('Brands').single('brand-Image'),addNewBrand);
 //listing and unlisting brand
-adminRoute.patch('/unlist-brand/:id', unlistBrand);  //Un-listing a Brand
-adminRoute.patch('/list-brand/:id', listBrand);  // Listing a Brand
+adminRoute.patch('/unlist-brand/:id',adminAuth,unlistBrand);  //Un-listing a Brand
+adminRoute.patch('/list-brand/:id',adminAuth,listBrand);  // Listing a Brand
 //edit & update Brand
-adminRoute.get("/editBrand/:id",getBrandEditPage); //get brand edit page
-adminRoute.patch("/editBrand/:id", uploadMiddleware('Brands').single('brandImage'),updateBrand);
+adminRoute.get("/editBrand/:id",adminAuth,getBrandEditPage); //get brand edit page
+adminRoute.patch("/editBrand/:id",uploadMiddleware('Brands').single('brandImage'),adminAuth,updateBrand);
 
 
   //--------------------------category management-----------------------
-adminRoute.get ("/category", getCategory);  //getting  category page
-adminRoute.get ("/addCategory",getAddCategory); //get add category page 
-adminRoute.post ("/addCategory",addNewCategory )  // adding new category
+adminRoute.get ("/category",adminAuth,getCategory);  //getting  category page
+adminRoute.get ("/addCategory",adminAuth,getAddCategory); //get add category page 
+adminRoute.post ("/addCategory",adminAuth,addNewCategory )  // adding new category
   //edit & update category
-adminRoute.get("/editCategory/:id",getCategoryEditPage); //  get edit category page
-adminRoute.patch("/editCategory/:id",updateCategory); // update category
+adminRoute.get("/editCategory/:id",adminAuth,getCategoryEditPage); //  get edit category page
+adminRoute.patch("/editCategory/:id",adminAuth,updateCategory); // update category
   //listing and Unlisting Category
-adminRoute.patch("/unlist-category/:id",unlistCategory);  //unlisting category
-adminRoute.patch("/list-category/:id",listCategory);   //listing category
-adminRoute.get('/category/search', getLiveCategorySearch); //live search
+adminRoute.patch("/unlist-category/:id",adminAuth,unlistCategory);  //unlisting category
+adminRoute.patch("/list-category/:id",adminAuth,listCategory);   //listing category
+adminRoute.get('/category/search',adminAuth,getLiveCategorySearch); //live search
 
 export default adminRoute;

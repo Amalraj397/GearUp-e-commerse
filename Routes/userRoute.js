@@ -33,19 +33,24 @@ import {          //importing functions from usercontroller page
           getcategoryPage,
           getBrandPage,
           getproductDetailpage,
-
           filterProducts,  //for filtering products
  } from "../Controller/user/userStoreController.js";
+
+ import {
+    nocache,
+   //  userAuth,
+   //  userAuthenticated,
+ } from "../middlewares/Auth.js";
 
 
 const userRoute=express.Router();
 
-userRoute.get("/", showLanding);
+userRoute.get("/" ,showLanding);
 userRoute.get("/pageNotFound", pageNotFound);
 
-// user-login/logout get-post  route
-userRoute.get("/login",showLogin) ;
-userRoute.post("/login", userLogin);
+// user-login/logout get-post route
+userRoute.get("/login",nocache,showLogin) ;
+userRoute.post("/login",userLogin);
 userRoute.get ("/logout",userLogout);
 
 //forgotpassword section
