@@ -13,20 +13,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // document.addEventListener("DOMContentLoaded", () => {
-  //     const userDisplayName = document.getElementById("user-name");
-
-  //     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-  //     if (loggedInUser && loggedInUser.firstName) {
-  //       userDisplayName.innerText = `Hi, welcome ${loggedInUser.firstName} 👋`;
-  //     } else if (loggedInUser && loggedInUser.displayName) {
-  //       userDisplayName.innerText = `Hi, welcome ${loggedInUser.displayName} 👋`;
-  //     }
-  //   });
-
-  // -----------------------------------
-
   //   ---------------------------
 
   document.addEventListener("DOMContentLoaded", () => {

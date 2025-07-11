@@ -1,0 +1,253 @@
+<%- include("../../Views/Partials/User/headerLand") %>
+
+<head>
+    <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/User/assets/css/style.css">
+</head>
+
+<body>
+    <div class="page-wrapper">
+        <main class="main">
+            <div class="page-header text-center" style="background-image: url('/User/assets/images/page-header-bg.jpg')">
+                <div class="container">
+                    <h1 class="page-title">Edit Profile <span>My Account</span></h1>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="/userDashboard" class="btn btn-secondary">← Go Back</a>
+                    </div>
+
+                    <form id="editProfileForm" enctype="multipart/form-data">
+                        <!--  Profile Image -->
+                        <div class="text-center mb-4">
+                            <img src="<%= userData.profileImage ? userData.profileImage : '/User/assets/images/icons/userProfileDemo.png' %>" alt="Profile" id="profilePreview" style="width: 150px; height: 150px; border-radius: 50%;">
+                            <div class="mt-2">
+                                <input type="file" name="profileImage" id="profileImageInput" accept="image/*">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6 mb-3">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" name="firstName" value="<%= userData.firstName %>" required>
+                            </div>
+                            <div id="Fname-error" class="errorMessage"></div>
+                            <div class="col-sm-6 mb-3">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" name="lastName" value="<%= userData.lastName %>" required>
+                            </div>
+                            <div id="Lname-error" class="errorMessage"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email Address</label>
+                            <input type="email" class="form-control" name="email" value="<%= userData.email %>" readonly>
+                        </div>
+                        <div id="email-error" class="errorMessage"></div>
+
+                        <div class="mb-3">
+                            <label>Phone Number</label>
+                            <input type="text" class="form-control" name="phone" value="<%= userData.phone %>">
+                        </div>
+                        <div id="phone-error" class="errorMessage"></div>
+
+                        <div class="mb-3">
+                            <label>Address</label>
+                            <input type="text" class="form-control" name="address" value="<%= userData.address || 'No address, update now' %>">
+                        </div>
+                        <div id="address-error" class="errorMessage"></div>
+
+                        <!-- Change Password Toggle -->
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-warning" id="changePasswordToggle">Change Password</button>
+                        </div>
+
+                        <!-- Password Section -->
+                        <div id="passwordSection" style="display: none;">
+                            <div class="mb-3">
+                                <label>Old Password</label>
+                                <input type="password" class="form-control" name="oldPassword">
+                            </div>
+                            <div id="oldPassword-error" class="errorMessage"></div>
+
+                            <div class="mb-3">
+                                <label>New Password</label>
+                                <input type="password" class="form-control" name="newPassword">
+                            </div>
+                            <div id="newPassword-error" class="errorMessage"></div>
+
+                            <div class="mb-3">
+                                <label>Confirm New Password</label>
+                                <input type="password" class="form-control" name="confirmNewPassword">
+                            </div>
+                            <div id="confirmPassword-error" class="errorMessage"></div>
+
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-primary" id="sendOtpBtn">Verify via Email OTP</button>
+                            </div>
+
+                            <div id="otpSection" style="display: none;">
+                                <label>Enter OTP</label>
+                                <input type="text" class="form-control" name="otp">
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const passwordToggleBtn = document.getElementById('changePasswordToggle');
+        const passwordSection = document.getElementById('passwordSection');
+        const otpSection = document.getElementById('otpSection');
+
+        passwordToggleBtn.addEventListener('click', () => {
+            const isHidden = passwordSection.style.display === 'none';
+            passwordSection.style.display = isHidden ? 'block' : 'none';
+            passwordToggleBtn.textContent = isHidden ? 'Cancel Change Password' : 'Change Password';
+        });
+
+        document.getElementById('sendOtpBtn').addEventListener('click', () => {
+            alert('OTP sent to your registered email');
+            otpSection.style.display = 'block';
+        });
+
+        // Profile Image Preview
+        document.getElementById('profileImageInput').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('profilePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    <script>
+    document.getElementById("editProfileForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        clearErrorMessages();
+
+        let isValid = true;
+        const firstName = document.querySelector('[name="firstName"]').value.trim();
+        const lastName = document.querySelector('[name="lastName"]').value.trim();
+        const phone = document.querySelector('[name="phone"]').value.trim();
+        const address = document.querySelector('[name="address"]').value.trim();
+
+        const oldPassword = document.querySelector('[name="oldPassword"]').value.trim();
+        const newPassword = document.querySelector('[name="newPassword"]').value.trim();
+        const confirmNewPassword = document.querySelector('[name="confirmNewPassword"]').value.trim();
+
+        // First Name Validation
+        const namePattern = /^[a-zA-Z][a-zA-Z\s]*$/;
+        if (!firstName) {
+            showError('Fname-error', 'First name is required!');
+            isValid = false;
+        } else if (firstName.length < 3) {
+            showError('Fname-error', 'First name must be at least 3 characters long!');
+            isValid = false;
+        } else if (!namePattern.test(firstName)) {
+            showError('Fname-error', 'First name must contain only letters and spaces.');
+            isValid = false;
+        }
+
+        // Last Name Validation
+        if (!lastName) {
+            showError('Lname-error', 'Last name is required!');
+            isValid = false;
+        } else if (lastName.length < 1) {
+            showError('Lname-error', 'Last name must be at least 1 character long!');
+            isValid = false;
+        } else if (!namePattern.test(lastName)) {
+            showError('Lname-error', 'Last name must contain only letters and spaces.');
+            isValid = false;
+        }
+
+        // Phone Validation
+        const phonePattern = /^[0-9]{10}$/;
+        const zeroCount = (phone.match(/0/g) || []).length;
+        if (!phonePattern.test(phone)) {
+            showError('phone-error', 'Phone number must be exactly 10 digits.');
+            isValid = false;
+        } else if (phone.startsWith("0")) {
+            showError('phone-error', 'Phone number cannot start with zero.');
+            isValid = false;
+        } else if (zeroCount > 5) {
+            showError('phone-error', 'Phone number cannot contain more than 5 zeros.');
+            isValid = false;
+        }
+
+        // Address Validation
+        if (!address || address.length < 5) {
+            showError('address-error', 'Address must be at least 5 characters long.');
+            isValid = false;
+        }
+
+        // Password Validation (only if user tries to change it)
+        if (oldPassword || newPassword || confirmNewPassword) {
+            if (!oldPassword) {
+                showError('oldPassword-error', 'Old password is required!');
+                isValid = false;
+            } else if (oldPassword.length < 6) {
+                showError('oldPassword-error', 'Old password must be at least 6 characters long!');
+                isValid = false;
+            }
+
+            if (!newPassword) {
+                showError('newPassword-error', 'New password is required!');
+                isValid = false;
+            } else if (newPassword.length < 6) {
+                showError('newPassword-error', 'New password must be at least 6 characters long!');
+                isValid = false;
+            }
+
+            if (!confirmNewPassword) {
+                showError('confirmPassword-error', 'Please confirm your new password!');
+                isValid = false;
+            } else if (newPassword !== confirmNewPassword) {
+                showError('confirmPassword-error', 'New passwords do not match!');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) return;
+
+        Swal.fire({
+            title: "Are you sure you want to update your profile?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, update it!",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        });
+    });
+
+    function showError(id, message) {
+        document.getElementById(id).innerText = message;
+    }
+
+    function clearErrorMessages() {
+        const errorElements = document.querySelectorAll(".errorMessage");
+        errorElements.forEach((el) => el.innerText = "");
+    }
+</script>
+
+
+    <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
+</body>
+
+<%- include("../../Views/Partials/User/footerLand") %>

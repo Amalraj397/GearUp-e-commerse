@@ -1,13 +1,7 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Add Product</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="products.css"> -->
-    <!-- Font Awesome for icons -->
+<!--------product Add------>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <style>
         /* Products Page Specific Styles */
 .products-container,
@@ -567,11 +561,51 @@
     display: block;
     min-height: 20px;
 }
+/* -----------cropper modal--------- */
+#cropperModal {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+}
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
 
+.crop-btn, .cancel-btn {
+    padding: 8px 18px;
+    border: none;
+    font-weight: 700;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 8px;
+    transition: background-color 0.3s ease;
+}
 
-/* input.error, select.error, textarea.error {
-  border: 1px solid red;
-} */
+/* Crop Button - Green */
+.crop-btn {
+    background-color: #208537;
+    color: rgb(248, 244, 244);
+}
+.crop-btn:hover {
+    background-color: #00ff37;
+     color: rgb(31, 30, 30);
+}
+
+/* Cancel Button - Red */
+.cancel-btn {
+    background-color: #850a16;
+    color: white;
+    /* margin-left: 94%; */
+}
+.cancel-btn:hover {
+    background-color: #f1021a;
+}
+/* -----------cropper modal end---------- */
 
 @media (max-width: 768px) {
     .gender-frame-group {
@@ -769,12 +803,24 @@
                         </button>
                     </div>
                 </form>
+                <!-----------------cropper modal----------------->
+                <div id="cropperModal" class="modal" style="display:none;">
+                  <div class="modal-content" style="margin-top: 20%;">
+                    <img id="cropperImage" style="max-width: 100%; max-height: 400px;">
+                    <div style="margin-top: 10px;">
+                        <button type="button" id="cropImageBtn" class="crop-btn">Crop</button>
+                        <button type="button" id="cancelCropBtn" class="cancel-btn" style="margin-left: 94%">Cancel</button>
+                    </div>
+                  </div> 
+                </div>
+                <!---------------cropper modal end------------>
             </div>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
-<!-- --------------------script------------------- -->
+<!--------------------------------------=======SCRIPT=======----------------------------------------->
 <script>
   const productForm = document.getElementById('addProduct-form');
   const imagePreviewContainer = document.getElementById('image-preview');
@@ -783,6 +829,7 @@
   const imageInput = document.getElementById('product-images');
   let selectedFiles = [];
 
+  
   // ================IMAGE EVENTS SETUP================
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -804,18 +851,18 @@
     }, false);
   });
 
-  imageUploadArea.addEventListener('drop', e => {
-    const files = e.dataTransfer.files;
-    addFiles(files);
-  });
+    imageUploadArea.addEventListener('drop', e => {
+      const file = e.dataTransfer.files[0];  
+      if (!file) return;
+      openCropper(file); 
+    });
 
-  imageInput.addEventListener('change', e => {
-    const files = Array.from(e.target.files);
-    if (files.length > 0) {
-      addFiles(files);
+    imageInput.addEventListener('change', e => {
+      const file = e.target.files[0]; 
+      if (!file) return;
+      openCropper(file);  
       placeHolder.style.display = 'none';
-    }
-  });
+    });
 
   function addFiles(files) {
     for (const file of files) {
@@ -846,7 +893,57 @@
     }
   }
 
-  function previewImage(file) {
+// -----------------------image_cropper---------------------
+
+function openCropper(file) {
+  const cropperModal = document.getElementById('cropperModal');
+  const cropperImage = document.getElementById('cropperImage');
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    cropperImage.src = reader.result;
+    cropperModal.style.display = 'block';
+
+    if (window.cropperInstance) {
+      window.cropperInstance.destroy();
+    }
+    window.cropperInstance = new Cropper(cropperImage, {
+      aspectRatio: 1,
+      viewMode: 1,
+      autoCropArea: 1,
+    });
+  };
+  reader.readAsDataURL(file);
+
+  // Attach the crop button event dynamically
+  const cropBtn = document.getElementById('cropImageBtn');
+  const cancelBtn = document.getElementById('cancelCropBtn');
+
+  cropBtn.onclick = function () {
+    const cropper = window.cropperInstance;
+    if (!cropper) return;
+
+    const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
+
+    canvas.toBlob(blob => {
+      const croppedFile = new File([blob], file.name, { type: 'image/jpeg' });
+      handleCroppedImage(croppedFile);
+      cropper.destroy();
+      window.cropperInstance = null;
+      cropperModal.style.display = 'none';
+    }, 'image/jpeg');
+  };
+
+  cancelBtn.onclick = function () {
+    if (window.cropperInstance) window.cropperInstance.destroy();
+    window.cropperInstance = null;
+    cropperModal.style.display = 'none';
+  };
+}
+  
+// --------------------image_cropper ENDS----------------------
+
+ window.previewImage =  function (file) {
     const reader = new FileReader();
     reader.onload = e => {
       const previewDiv = document.createElement('div');
@@ -882,132 +979,142 @@
     reader.readAsDataURL(file);
   }
 
+   window.handleCroppedImage = function(file) {
+    // Your existing preview function, example:
+        previewImage(file); 
+
+        selectedFiles.push(file);
+
+    if (selectedFiles.length >= 3) {
+        document.getElementById('error-message').textContent = '';
+    }
+};
   // ========== FORM SUBMISSION AND VALIDATION ==========
 
     // Listening for form submission
-      productForm.addEventListener('submit', function (e) {
+    productForm.addEventListener('submit', function (e) {
           e.preventDefault(); // Prevent default form submission for custom validation
-
-    // Clear the previous error messages
-    const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(msg => msg.textContent = '');
-
-    let isValid = true;
-
-    // Validate Product Name
-    const productName = document.getElementById('product-name');
-        if (!productName.value.trim()) {
-    productName.nextElementSibling.textContent = 'Product Name is required';
-            isValid = false;
-        }
-
-    // Validate Brand 
-    const brand = document.getElementById('brand');
-        if (!brand.value) {
-    brand.nextElementSibling.textContent = 'Please select a brand';
-            isValid = false;
-        }
-
-    // Validate Category 
-    const category = document.getElementById('category');
-        if (!category.value) {
-    category.nextElementSibling.textContent = 'Please select a category';
-            isValid = false;
-        }
-
-    // Validate Description 
-    const description = document.getElementById('description');
-        if (!description.value.trim()) {
-    description.nextElementSibling.textContent = 'Description is required';
-            isValid = false;
-        }
-
-    // Validate Stock
-    const stock = document.getElementById('product-stock');
-        if (stock.value === '' || isNaN(stock.value) || Number(stock.value) < 0) {
-    stock.nextElementSibling.textContent = 'Please enter a valid stock quantity (0 or more).';
-            isValid = false;
-        }
-
-    // Validate Price
-    const price = document.getElementById('product-price');
-        if (price.value === '' || isNaN(price.value) || Number(price.value) < 0) {
-    price.nextElementSibling.textContent = 'Please enter a valid price (0 or more).';
-            isValid = false;
-        }
-
-    // Validate Offer
-    const offer = document.getElementById('product-offer');
-        if (offer.value === '' || isNaN(offer.value) || Number(offer.value) < 0) {
-    offer.nextElementSibling.textContent = 'Offer must be between 0 and 100';
-            isValid = false;
-        }
-
-    // Validate Image Uploads
-    const Image = document.getElementById('error-message');
-        if (selectedFiles.length < 3) {
-    Image.textContent = 'Please upload at least three images.';
-            isValid = false;
-        }
-
-    // If any validation failed, stop form submission
-        if (!isValid) return;
-
-  // Show success message using SweetAlert if all validations pass
-
-    Swal.fire({
-      icon: 'success',
-      title: 'Validation Passed',
-      text: 'All fields are valid. Submitting the form...',
-      showConfirmButton: false,
-      timer: 1000
-    }).then(() => {
-
-    const formData = new FormData();  
-
-      //manually appending all data to avoid image duplication 
-  formData.append('productName', document.getElementById('product-name').value);
-  formData.append('brand', document.getElementById('brand').value);
-  formData.append('category', document.getElementById('category').value);
-  formData.append('description', document.getElementById('description').value);
-  formData.append('scale', document.getElementById('scale').value);
-  formData.append('edition', document.getElementById('edition').value);
-  formData.append('stock', document.getElementById('product-stock').value);
-  formData.append('price', document.getElementById('product-price').value);
-  formData.append('offer', document.getElementById('product-offer').value);
-  formData.append('status', document.getElementById('status').value);
-
-
-  // Append each image file (already selected & stored in selectedFiles)
-    selectedFiles.forEach(file => {
-        formData.append('productImages', file); // 'images' matches the Multer field name
-  });
-
-  fetch("/admin/addProduct", {
-    method: 'POST',
-    body: formData
-  })
-    .then(response => response.json())
-    .then(data => {
+    
+        // Clear the previous error messages
+        const errorMessages = document.querySelectorAll('.error-message');
+        errorMessages.forEach(msg => msg.textContent = '');
+    
+        let isValid = true;
+    
+        // Validate Product Name
+        const productName = document.getElementById('product-name');
+            if (!productName.value.trim()) {
+        productName.nextElementSibling.textContent = 'Product Name is required';
+                isValid = false;
+            }
+    
+        // Validate Brand 
+        const brand = document.getElementById('brand');
+            if (!brand.value) {
+        brand.nextElementSibling.textContent = 'Please select a brand';
+                isValid = false;
+            }
+    
+        // Validate Category 
+        const category = document.getElementById('category');
+            if (!category.value) {
+        category.nextElementSibling.textContent = 'Please select a category';
+                isValid = false;
+            }
+    
+        // Validate Description 
+        const description = document.getElementById('description');
+            if (!description.value.trim()) {
+        description.nextElementSibling.textContent = 'Description is required';
+                isValid = false;
+            }
+    
+        // Validate Stock
+        const stock = document.getElementById('product-stock');
+            if (stock.value === '' || isNaN(stock.value) || Number(stock.value) < 0) {
+        stock.nextElementSibling.textContent = 'Please enter a valid stock quantity (0 or more).';
+                isValid = false;
+            }
+    
+        // Validate Price
+        const price = document.getElementById('product-price');
+            if (price.value === '' || isNaN(price.value) || Number(price.value) < 0) {
+        price.nextElementSibling.textContent = 'Please enter a valid price (0 or more).';
+                isValid = false;
+            }
+    
+        // Validate Offer
+        const offer = document.getElementById('product-offer');
+            if (offer.value === '' || isNaN(offer.value) || Number(offer.value) < 0) {
+        offer.nextElementSibling.textContent = 'Offer must be between 0 and 100';
+                isValid = false;
+            }
+    
+        // Validate Image Uploads
+        const Image = document.getElementById('error-message');
+            if (selectedFiles.length < 3) {
+        Image.textContent = 'Please upload at least three images.';
+                isValid = false;
+            }
+    
+        // If any validation failed, stop form submission
+            if (!isValid) return;
+    
+      // Show success message using SweetAlert if all validations pass
+    
         Swal.fire({
           icon: 'success',
-          title: 'Product Added!',
-          text: 'Your product was successfully uploaded.',
-          confirmButtonText: 'OK'
+          title: 'Validation Passed',
+          text: 'All fields are valid. Submitting the form...',
+          showConfirmButton: false,
+          timer: 1000
         }).then(() => {
-          productForm.reset();            // Clearing  the form
-          document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
-          selectedFiles = [];             // Reset selected files array
+    
+        const formData = new FormData();  
+    
+          //manually appending all data to avoid image duplication 
+      formData.append('productName', document.getElementById('product-name').value);
+      formData.append('brand', document.getElementById('brand').value);
+      formData.append('category', document.getElementById('category').value);
+      formData.append('description', document.getElementById('description').value);
+      formData.append('scale', document.getElementById('scale').value);
+      formData.append('edition', document.getElementById('edition').value);
+      formData.append('stock', document.getElementById('product-stock').value);
+      formData.append('price', document.getElementById('product-price').value);
+      formData.append('offer', document.getElementById('product-offer').value);
+      formData.append('status', document.getElementById('status').value);
+    
+    
+      // Append each image file (already selected & stored in selectedFiles)
+        selectedFiles.forEach(file => {
+            formData.append('productImages', file); // 'images' matches the Multer field name
+      });
+    
+      fetch("/admin/addProduct", {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.json())
+        .then(data => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Product Added!',
+              text: 'Your product was successfully uploaded.',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              productForm.reset();            // Clearing  the form
+              document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
+              selectedFiles = [];             // Reset selected files array
+            });
+        })
+        .catch(err => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Server Error',
+            text: 'Failed to submit the form. Please try again later.'
+          });
         });
     })
-    .catch(err => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Server Error',
-        text: 'Failed to submit the form. Please try again later.'
-      });
-    });
-})
 })
 
 </script>

@@ -6,7 +6,7 @@ import cloudinary from "../../Config/cloudinary_Config.js";
 // import {validateProductData} from "../../utils/validateProduct.js";
 
 export const loadproductList = (req, res) => {
-  res.render("productList.ejs"); // No need to query DB here
+  res.render("productList.ejs");
 };
 
 // controller for the productn fetc API
@@ -218,7 +218,7 @@ export const getProductEditpage = async (req, res) => {   // getting edit produc
     const category = await categorySchema.find(); // To show all available categories
 
     if (!product) return res.status(404).send("Product not found");
-    
+
     res.render("editProduct.ejs", {
       product,
       brand,
@@ -237,15 +237,15 @@ export const updateProduct = async (req, res) => {
   try {
     const productId = req.params.id;
     const {
-      productName, 
-      brand, 
-      category, 
-      description, 
+      productName,
+      brand,
+      category,
+      description,
       scale,
-      edition, 
-      status, 
-      price, 
-      offer, 
+      edition,
+      status,
+      price,
+      offer,
       stock,
     } = req.body;
 
@@ -256,13 +256,13 @@ export const updateProduct = async (req, res) => {
 
     // finding brand and category
     const [brandDoc, categoryDoc] = await Promise.all([
-      brandSchema.findOne({ brandName:brand }),
+      brandSchema.findOne({ brandName: brand }),
       categorySchema.findOne({ name: category })
-  ]);
+    ]);
 
     const product = await productSchema.findById(productId);
     // console.log("product data:", product);    //debugging
-    
+
     if (!product) return res.status(404).json({ message: 'Product not found.' });
 
     // Remove deleted images
@@ -272,7 +272,7 @@ export const updateProduct = async (req, res) => {
     const newImages = req.files?.map(file => file.path) || [];
 
     // console.log('controller- imagres', newImages);         // debugging 
-    
+
     const finalImages = [...existingImages, ...newImages];
 
     // console.log("---------------------------")           //debugging
@@ -295,12 +295,12 @@ export const updateProduct = async (req, res) => {
       offer,
       stock,
       productImage: finalImages,
-    } );
+    });
 
     const productdata_final = await productSchema.findByIdAndUpdate(productId, {})
 
     // console.log('final product data', productdata_final);     //debugging
-    
+
     res.status(200).json({ message: 'Product updated successfully!' });
   } catch (err) {
     console.error(err);
@@ -311,11 +311,11 @@ export const updateProduct = async (req, res) => {
 export const deleteProductImage = async (req, res) => {
   const productId = req.params.id;
   // console.log("productId:", productId);      //debugging
-  
+
   const imageId = req.body;
   // console.log("imageId:", imageId);         //debugging
-  
-  if(!imageId) {
+
+  if (!imageId) {
     return res.status(400).json({ success: false, message: "No image ID provided" });
   }
 
@@ -323,19 +323,19 @@ export const deleteProductImage = async (req, res) => {
     // 1. Delete from cloudinary
     await cloudinary.uploader.destroy(imageId);
 
-     // 2. Remove from DB (find the product that has this image and update)
-   const product = await productSchema.findByIdAndUpdate(
-  productId,
-  { $pull: { productImage: imageId.deletedImagesUrl } },
-  { new: true });
+    // 2. Remove from DB (find the product that has this image and update)
+    const product = await productSchema.findByIdAndUpdate(
+      productId,
+      { $pull: { productImage: imageId.deletedImagesUrl } },
+      { new: true });
 
-     if (!product) {
+    if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
-    } 
+    }
     // console.log("product:", product);         //debugging
-    
+
     return res.json({ success: true, message: "Image deleted" });
-    
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });

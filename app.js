@@ -1,5 +1,6 @@
 import express from "express";
 import session  from "express-session";
+import cookieParser from "cookie-parser";
 
 const app = express();
 import dotenv from 'dotenv';
@@ -37,15 +38,14 @@ app.use(express.urlencoded({ extended: true }));    // middlewares for parsing t
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
       secure: false,
-      // httpOnly:true,
       maxAge: 72*60*60*1000
   }
 }));
 
-
+app.use(cookieParser());
 
 app.use(setUserLocals);
 app.use("/",userRoute);

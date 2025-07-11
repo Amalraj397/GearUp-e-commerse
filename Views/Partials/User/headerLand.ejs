@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body>
     <!-- <header>
@@ -51,14 +53,27 @@
           <ul class="auth-buttons">
             <% if (user) { %>
                 <% console.log("user data:::", user); %>
+              <li class="nav-link"  id="user-name"> welcome <%= user.name %></li>
+             <div class="dropdown">
+              <button class="dropdown-btn">
+                 <i class="fas fa-user"></i>
+              </button>
+              <div class="dropdown-content">
+                <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
+                <a href="#"><i class="fas fa-shopping-bag"></i> Orders</a>
+                <a href="#"><i class="fas fa-map-marker-alt"></i> Your Address</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                <a href="#"><i class="fas fa-headset"></i> Contact Us</a>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+              </div>
+            </div>
 
-              <li class="nav-link"  id="user-name">Hi,welcome <%= user.name %> 👋</li>
-              <li><a href="/logout" class="nav-link">Logout</a></li>
             <% } else { %>
               <li><a href="/login" class="nav-link">Login</a></li>
               <li><a href="/signup" class="nav-link">Sign-up</a></li>
             <% } %>
-          </ul>
+            </ul>
+          </div>
 
           <!-- new for google auth and normal auth -->
           <!-- <ul class="auth-buttons">

@@ -12,12 +12,14 @@ import {          //importing functions from usercontroller page
     getOtpPage, 
     verifyOtp,
     userLogout, 
-    getproductBox,
     resendOTP,  
     handleGoogleSignup,
+    getproductBox,
+ } from "../Controller/user/UserController.js";
 
-    // ----------forgot password-----------
-
+   
+ // ----------forgot password controller-----------
+import{
     forgotverifyEmail, 
     forgotGetOtp, 
     forgotverifyOtp,
@@ -25,17 +27,24 @@ import {          //importing functions from usercontroller page
     getSetnewPassword,
     confirmResetPassword,
 
-    // next function
+}from "../Controller/user/forgotPasswordController.js";
     
- } from "../Controller/user/UserController.js";
+
 
  import { getshopPage,
           getcategoryPage,
           getBrandPage,
           getproductDetailpage,
-
           filterProducts,  //for filtering products
  } from "../Controller/user/userStoreController.js";
+
+
+import{
+    getUserDashboard,
+    geteditUserprofile,
+    updateUserprofile,
+}from "../Controller/user/userProfileController.js";
+
 
 
 const userRoute=express.Router();
@@ -77,10 +86,12 @@ userRoute.post("/resendOtp", resendOTP);
 userRoute.get("/shopPage",getshopPage);
 userRoute.get("/categoryPage",getcategoryPage);
 userRoute.get("/brandPage",getBrandPage);
- 
-
 userRoute.get("/filterProducts",filterProducts);
 userRoute.get("/productDetail/:id",getproductDetailpage);
 
+//  userprofile managament-section
+userRoute.get("/userDashboard",getUserDashboard);
+userRoute.get("/getEditProfile",geteditUserprofile);
+userRoute.put("/getEditProfile",updateUserprofile);
 
 export default userRoute
