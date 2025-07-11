@@ -26,6 +26,9 @@ export const showSignup = (req, res) => {
 };
 
 export const showLogin = (req, res) => {
+  // console.log("login paeg vannu")
+  if(req.session.user) return res.redirect("/");
+  if(req.session.admin) return res.redirect("/admin/dashboard");
   try {
     res.render("loginLanding.ejs");
   } catch (error) {
@@ -63,10 +66,10 @@ export const userSignup = async (req, res) => {
     // console.log(newUser);
 
     req.session.userData = userData;
-    console.log("req.session.userdata:", req.session.userData);
+    // console.log("req.session.userdata:", req.session.userData);   // debugging
     // generate OTP and Time
     const otpExpirationT = Date.now() + 60 * 1000;
-    const otp = generateOTP();
+    const otp = generatOTP();
     console.log(" userLogin OTP:",otp);  //   diplay OTP in console
     //send OTP email
     await sendEmail({ to: registerEmail, otp });
@@ -117,7 +120,7 @@ export const verifyOtp = async (req, res) => {
     const storedOtp = req.session.otp?.toString();
     const otpExpiration = req.session.otpExpiration; //time for otp
 
-    //  Check if the OTP has expired..!
+    //-------check if the OTP has expired-----
 
     if (Date.now() > otpExpiration) {
       delete req.session.otp;
@@ -129,11 +132,11 @@ export const verifyOtp = async (req, res) => {
     // Validate OTP
     if (otp == storedOtp) {
       const getUser = req.session.userData;
-      console.log(getUser);
+      // console.log(getUser);    //  dubugging
 
       // Hashing password
       // const sPassword = await securePassword(getUser.password);
-      const sPassword = await securePassword(req.session.userData.password); 
+      const sPassword = await securePassword(req.session.userData.password);     // hashing the password
 
 
       //  Storing User data in DB
@@ -144,7 +147,7 @@ export const verifyOtp = async (req, res) => {
         phone: getUser.phone,
         password: sPassword,
       });
-      console.log("this is user", user);
+      // console.log("this is user", user);     //dubugging
 
       await user.save();
 
@@ -244,7 +247,11 @@ export const userLogin = async (req, res) => {
       name: user.firstName,
     };
     
+<<<<<<< HEAD
     console.log("req.session.user while login", req.session.user);
+=======
+    console.log("req.session.user : user indd", req.session.user);   // debugging
+>>>>>>> 7ff13fd8e4d2918864442d801c2936a93557db4b
     
     //  FINAL SUCCESS RESPONSE for normal user login
     return res.status(200).json({
@@ -430,6 +437,7 @@ export const handleGoogleSignup = async (req, res) => {
 // };
 
 
+<<<<<<< HEAD
 // export const forgotresendOTP = async (req, res) => {
 //   try {
 //     // if (!req.session.email) {
@@ -438,6 +446,17 @@ export const handleGoogleSignup = async (req, res) => {
 
 //     const { email } = req.session;
 //     console.log("forgotPassword:resend OTP: ",email);
+=======
+export const forgotresendOTP = async (req, res) => {
+  try {
+    // if (!req.session.email) {
+    //   return res.status(400).json({ message: "User data not found..!" });
+    // }
+
+    const { email } = req.session;
+    console.log("forgotPassword:resend OTP: ",email);
+
+>>>>>>> 7ff13fd8e4d2918864442d801c2936a93557db4b
 
 
 //     // Prevent resend with-in 60 seconds
