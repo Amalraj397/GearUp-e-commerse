@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <div class="page-wrapper">
+    <div style="min-height: 68vh;" class="page-wrapper">
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('/User/assets/images/page-header-bg.jpg')">
         		<div class="container">
@@ -69,7 +69,7 @@
 	                		<div class="col-md-8 col-lg-9">
 	                			<div class="tab-content">
 								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<p>Hello <span class="font-weight-normal text-dark"><%= userData.firstName+" "+userData.lastName %></span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+								    	<p class="dashp">Hello <span class="font-weight-normal text-dark"><%= userData.firstName+" "+userData.lastName %></span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
 								    	<br>
 								    	From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
 								    </div><!-- .End .tab-pane -->
@@ -88,43 +88,45 @@
 								    	<p>The following addresses will be used on the checkout page by default.</p>
 
 								    	<div class="row">
-								    		<div class="col-lg-6">
-								    			<div class="card card-dashboard">
-								    				<div class="card-body">
-								    					<h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                                          <% addresses.forEach((addr, index) => { %>
+                                            <div class="col-lg-6">
+                                              <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                  <h3 class="card-title">Address <%= index + 1 %></h3>
+                                                  <p id="user-name"><strong><%= addr.firstName %> <%= addr.lastName %></strong></p>
+                                                  <p id="user-address"><%= addr.houseName %></p>
+                                                  <p><%= addr.city %>, <%= addr.state %></p>
+                                                  <p><%= addr.country %> - <%= addr.pincode %></p>
+                                                  <p id="user-phone">Contact: <%= addr.phone %></p>
+                                        
+                                                  <div class="address-actions">
+                                                    <a href="/edit-address/<%= addr._id %>" class="btn btn-sm btn-outline-primary confirm-edit">Edit</a>
+                                                    <!-- <a href="/remove-address/<%= addr._id %>" class="btn btn-sm btn-outline-danger confirm-remove">Remove</a> -->
+                                                     <a href="#" data-id="<%= addr._id %>" class="btn btn-sm btn-outline-danger confirm-remove">Remove</a>
 
-														<p>User Name<br>
-														User Company<br>
-														John str<br>
-														New York, NY 10001<br>
-														1-234-987-6543<br>
-														yourmail@mail.com<br>
-														<a href="#">Edit <i class="icon-edit"></i></a></p>
-								    				</div><!-- End .card-body -->
-								    			</div><!-- End .card-dashboard -->
-								    		</div><!-- End .col-lg-6 -->
-
-								    		<div class="col-lg-6">
-								    			<div class="card card-dashboard">
-								    				<div class="card-body">
-								    					<h3 class="card-title">Shipping Address</h3><!-- End .card-title -->
-
-														<p>You have not set up this type of address yet.<br>
-														<a href="#">Edit <i class="icon-edit"></i></a></p>
-								    				</div><!-- End .card-body -->
-								    			</div><!-- End .card-dashboard -->
-								    		</div><!-- End .col-lg-6 -->
-								    	</div><!-- End .row -->
+                                                    <% if (addr.isDefault) { %>
+                                                      <span class="badge bg-success">Default</span>
+                                                    <% } else { %>
+                                                      <a href="/set-default-address/<%= addr._id %>" class="btn btn-sm btn-outline-success confirm-default">Set as Default</a>
+                                                    <% } %>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <a href="/addUserAddress" class="btn btn-outline-primary-2" style="margin-bottom: 10px;">
+                                                        <span>ADD NEW ADDRESS</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </a>
+                                            </div>
+                                          <% }); %>
+                                        </div>
 								    </div><!-- .End .tab-pane -->
-
-								
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
 								    	<form id="userForm">
 										<div class="profile-image-container text-center mb-4">
-                                            <img src="<%= userData.profileImage ? userData.profileImage : '/User/assets/images/icons/userProfileDemo.png	' %>" 
+                                            <img src="<%= userData.profilePicture ? userData.profilePicture : '/User/assets/images/icons/userProfileDemo.png' %>" 
                                                  alt="Profile Picture" 
                                                  id="profileImage" 
-                                                 style="width: 150px; height: 150px; object-fit: cover; border-radius: 15px; background-color: rgb(255, 255, 255);">
+                                                 style="width: 150px; height: 150px; object-fit: cover; border-radius: 15px; border-radius: 50%; background-color: rgb(255, 255, 255);">
                                         </div>
 			                				<div class="row">
 			                					<div class="col-sm-6">
@@ -142,12 +144,27 @@
 		        							<input type="email"  id="userEmail" class="form-control" value="<%= userData.email %>"required>
 
 		            						<label>Phone Number</label>
-		            						<input type="text" id="userPhone" class="form-control" value="<%= userData.phone %>"> 
+		            						<input type="text" id="userPhone" class="form-control" value="<%= userData.phone %>">
 
-		            						<label>Address</label>
-		            						<input type="text" class="form-control" 
-    											value="<%= typeof userData.address === 'string' && userData.address.trim() ? userData.address : 'No address, update now' %>">
-            								<a href="/getEditProfile" class="btn btn-outline-primary-2">
+											<div class="address">
+                                                <label>Address</label>
+                                                <div class="address-row">
+                                                    <!-- <input type="text" class="form-control"
+                                                        value="<%= typeof userData.address === 'string' && userData.address.trim() ? userData.address : 'No address, update now' %>"> -->
+														<% if (addresses.length > 0) { %>
+                                                          <% const addr = addresses[0]; %>
+                                                          <input type="text" class="form-control" value="<%= `${addr.houseName}, ${addr.city}, ${addr.state} - ${addr.pincode}` %>">
+                                                        <% } else { %>
+                                                          <input type="text" class="form-control" value="No address, update now">
+                                                        <% } %>
+                                                    <a href="/addUserAddress" class="btn btn-outline-primary-2" style="margin-bottom: 10px;">
+                                                        <span>ADD NEW ADDRESS</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            
+                                            <a href="/getEditProfile" class="btn btn-outline-primary-2 edit-profile-btn">
                                                 <span>EDIT PROFILE</span>
                                                 <i class="icon-long-arrow-right"></i>
                                             </a>
@@ -168,6 +185,8 @@
 
     <!-- ----------------------------------------- js files------------------------------------------- -->
     <!-- Plugins JS File -->
+     
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/User/assets/js/jquery.min.js"></script>
     <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/User/assets/js/jquery.hoverIntent.min.js"></script>
@@ -176,8 +195,44 @@
     <script src="/User/assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="/User/assets/js/main.js"></script>
+    <script>
+       document.querySelectorAll('.confirm-remove').forEach(button => {
+         button.addEventListener('click', async (e) => {
+           e.preventDefault();
+           const id = button.getAttribute('data-id');
+     
+           const confirm = await Swal.fire({
+             title: "Are you sure?",
+             text: "You won't be able to revert this!",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonText: "Yes, delete it!"
+           });
+     
+           if (confirm.isConfirmed) {
+             try {
+               const res = await fetch(`/remove-address/${id}`, {
+                 method: 'DELETE'
+               });
+     
+               const result = await res.json();
+               if (res.ok) {
+                 Swal.fire("Deleted!", result.message, "success").then(() => {
+                   window.location.reload();
+                 });
+               } else {
+                 Swal.fire("Error", result.message || "Failed to delete address", "error");
+               }
+             } catch (err) {
+               Swal.fire("Error", "Something went wrong", "error");
+             }
+           }
+         });
+       });
+    </script>
+
 </body>
 
 
-</html>
 <%-include("../../Views/Partials/User/footerLand")%>
+</html>

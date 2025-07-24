@@ -1,0 +1,253 @@
+
+  <%- include("../../Views/Partials/User/headerLand") %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #d2d6dc;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: auto;
+    background: #afb1b5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .form-col {
+    flex: 1;
+  }
+
+  label {
+    font-weight: 600;
+    margin-top: 20px;
+    display: block;
+    color: #333;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #96796b;
+    border-radius: 4px;
+    background-color: #e2dfdf;
+    font-size: 14px;
+  }
+
+  .checkbox {
+    margin-top: 20px;
+  }
+
+  .submit-btn {
+    margin-top: 30px;
+    width: 100%;
+    background-color: #ae5105;
+    color: #000;
+    border: none;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+.submit-btn:hover {
+    background-color:  #ff7700 ;
+}
+  .back-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: #333;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+</style>
+
+
+<body>
+  <div class="container">
+  <a href="/userDashboard" class="back-btn">Back</a>
+  <h2>ADD ADDRESS</h2>
+  <form id="addressForm">
+    
+    <div class="form-row">
+      <div class="form-col">
+        <label>First Name *</label>
+        <input type="text" name="firstName" required />
+      </div>
+      <div class="form-col">
+        <label>Last Name *</label>
+        <input type="text" name="lastName" required />
+      </div>
+    </div>
+
+    <label>Email *</label>
+    <input type="email" name="email" required />
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>Phone *</label>
+        <input type="text" name="phone" required />
+      </div>
+      <div class="form-col">
+        <label>Alt Phone</label>
+        <input type="text" name="altPhone" />
+      </div>
+    </div>
+
+    <label>House Name</label>
+    <input type="text" name="houseName" />
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>City</label>
+        <input type="text" name="city" />
+      </div>
+      <div class="form-col">
+        <label>State</label>
+        <input type="text" name="state" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label>Country</label>
+        <input type="text" name="country" />
+      </div>
+      <div class="form-col">
+        <label>Pin Code</label>
+        <input type="text" name="pincode" />
+      </div>
+    </div>
+
+    <label>Landmark</label>
+    <input type="text" name="landmark" />
+
+    <label>Address Type</label>
+    <select name="addressType">
+      <option value="Home">Home</option>
+      <option value="Office">Office</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <button type="submit" class="submit-btn">Save address</button>
+  </form>
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+  const form = document.getElementById("addressForm");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value.trim();
+    });
+    // data.isDefault = form.isDefault.checked;
+
+    // Validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^\d{10}$/;
+    const pinPattern = /^\d{6}$/;
+
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      altPhone,
+      houseName,
+      city,
+      state,
+      country,
+      pincode,
+      landmark,
+      addressType,
+    } = data;
+
+    if (!firstName || !lastName || !email || !phone) {
+      return Swal.fire("Error", "Please fill all mandatory fields", "warning");
+    }
+
+    // if(!housename || !city || !state || !country){
+    //   return Swal.fire("Error", "Please fill all required fields", "warning");
+    // }
+
+    if (!emailPattern.test(email)) {
+      return Swal.fire("Invalid Email", "Enter a valid email address", "error");
+    }
+
+    if (!phonePattern.test(phone)) {
+      return Swal.fire("Invalid Phone", "Phone number must be 10 digits", "error");
+    }
+
+    if (altPhone && !phonePattern.test(altPhone)) {
+      return Swal.fire("Invalid Alt Phone", "Alt phone must be 10 digits", "error");
+    }
+
+    if (pincode && !pinPattern.test(pincode)) {
+      return Swal.fire("Invalid Pincode", "Pincode must be 6 digits", "error");
+    }
+
+    if (addressType === "Other" && !otherType) {
+      return Swal.fire("Address Type", "Please enter the address type", "warning");
+    }
+
+    // Submit if validation passes
+    try {
+      const res = await fetch("/addUserAddress", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+      if (res.ok) {
+        Swal.fire("Success", "Address added successfully!", "success").then(() => {
+          window.location.href = "/userDashboard";
+        });
+      } else {
+        Swal.fire("Error", result.message || "Something went wrong", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Failed to submit address", "error");
+    }
+  });
+</script>
+
+</body>
+
+<%- include("../../Views/Partials/User/footerLand") %>

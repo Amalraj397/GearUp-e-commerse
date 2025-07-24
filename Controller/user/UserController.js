@@ -247,11 +247,7 @@ export const userLogin = async (req, res) => {
       name: user.firstName,
     };
     
-<<<<<<< HEAD
-    console.log("req.session.user while login", req.session.user);
-=======
     console.log("req.session.user : user indd", req.session.user);   // debugging
->>>>>>> 7ff13fd8e4d2918864442d801c2936a93557db4b
     
     //  FINAL SUCCESS RESPONSE for normal user login
     return res.status(200).json({
@@ -437,7 +433,15 @@ export const handleGoogleSignup = async (req, res) => {
 // };
 
 
-<<<<<<< HEAD
+
+// export const forgotresendOTP = async (req, res) => {
+//   try {
+//     // if (!req.session.email) {
+//     //   return res.status(400).json({ message: "User data not found..!" });
+//     // }
+
+//     const { email } = req.session;
+// //     console.log("forgotPassword:resend OTP: ",email);
 // export const forgotresendOTP = async (req, res) => {
 //   try {
 //     // if (!req.session.email) {
@@ -446,17 +450,8 @@ export const handleGoogleSignup = async (req, res) => {
 
 //     const { email } = req.session;
 //     console.log("forgotPassword:resend OTP: ",email);
-=======
-export const forgotresendOTP = async (req, res) => {
-  try {
-    // if (!req.session.email) {
-    //   return res.status(400).json({ message: "User data not found..!" });
-    // }
 
-    const { email } = req.session;
-    console.log("forgotPassword:resend OTP: ",email);
 
->>>>>>> 7ff13fd8e4d2918864442d801c2936a93557db4b
 
 
 //     // Prevent resend with-in 60 seconds

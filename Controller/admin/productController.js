@@ -5,10 +5,6 @@ import cloudinary from "../../Config/cloudinary_Config.js";
 
 // import {validateProductData} from "../../utils/validateProduct.js";
 
-<<<<<<< HEAD
-export const loadproductList = (req, res) => {
-  res.render("productList.ejs");
-=======
 export const loadproductList =async (req, res) => {
   try {
     res.render("productList.ejs");
@@ -16,7 +12,6 @@ export const loadproductList =async (req, res) => {
     console.log("Error loading product list:", error);
     res.status(500).send("Internal Server Error");
   } 
->>>>>>> 7ff13fd8e4d2918864442d801c2936a93557db4b
 };
 
 // controller for the productn fetc API

@@ -1,0 +1,234 @@
+
+<%-include("../../Views/Partials/User/headerLand")%>
+
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="/User/assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="/User/assets/css/styles.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #d2d6dc;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: auto;
+    background: #afb1b5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+  }
+
+  h2 {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .form-col {
+    flex: 1;
+  }
+
+  label {
+    font-weight: 600;
+    margin-top: 20px;
+    display: block;
+    color: #333;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border: 1px solid #96796b;
+    border-radius: 4px;
+    background-color: #e2dfdf;
+    font-size: 14px;
+  }
+
+  .submit-btn {
+    margin-top: 30px;
+    width: 100%;
+    background-color: #ae5105;
+    color: #000;
+    border: none;
+    padding: 14px;
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .submit-btn:hover {
+    background-color: #ff7700;
+  }
+
+  .back-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: #333;
+    color: #fff;
+    padding: 8px 14px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+
+  @media screen and (max-width: 600px) {
+    .form-row {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<body>
+  <div class="container">
+    <a href="/userDashboard" class="back-btn">Back</a>
+    <h2>EDIT ADDRESS</h2>
+    <form id="addressForm">
+      <div class="form-row">
+        <div class="form-col">
+          <label>First Name *</label>
+          <input type="text" name="firstName" value="<%= address.firstName %>" required />
+        </div>
+        <div class="form-col">
+          <label>Last Name *</label>
+          <input type="text" name="lastName" value="<%= address.lastName %>" required />
+        </div>
+      </div>
+
+      <label>Email *</label>
+      <input type="email" name="email" value="<%= address.email %>" required />
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>Phone *</label>
+          <input type="text" name="phone" value="<%= address.phone %>" required />
+        </div>
+        <div class="form-col">
+          <label>Alt Phone</label>
+          <input type="text" name="altPhone" value="<%= address.altPhone %>" />
+        </div>
+      </div>
+
+      <label>House Name</label>
+      <input type="text" name="houseName" value="<%= address.houseName %>" />
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>City</label>
+          <input type="text" name="city" value="<%= address.city %>" />
+        </div>
+        <div class="form-col">
+          <label>State</label>
+          <input type="text" name="state" value="<%= address.state %>" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-col">
+          <label>Country</label>
+          <input type="text" name="country" value="<%= address.country %>" />
+        </div>
+        <div class="form-col">
+          <label>Pin Code</label>
+          <input type="text" name="pincode" value="<%= address.pincode %>" />
+        </div>
+      </div>
+
+      <label>Landmark</label>
+      <input type="text" name="landmark" value="<%= address.landmark %>" />
+
+      <label>Address Type</label>
+      <select name="addressType">
+        <option value="Home" <%= address.addressType === 'Home' ? 'selected' : '' %>>Home</option>
+        <option value="Office" <%= address.addressType === 'Office' ? 'selected' : '' %>>Office</option>
+        <option value="Other" <%= address.addressType === 'Other' ? 'selected' : '' %>>Other</option>
+      </select>
+
+      <button type="submit" class="submit-btn">Update Address</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const form = document.getElementById("addressForm");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => {
+        data[key] = value.trim();
+      });
+
+      const emailPattern =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const phonePattern = /^\d{10}$/;
+      const pinPattern = /^\d{6}$/;
+
+      const { firstName, lastName, email, phone, altPhone, pincode, addressType } = data;
+
+      if (!firstName || !lastName || !email || !phone) {
+        return Swal.fire("Error", "Please fill all mandatory fields", "warning");
+      }
+
+      if (!emailPattern.test(email)) {
+        return Swal.fire("Invalid Email", "Enter a valid email address", "error");
+      }
+
+      if (!phonePattern.test(phone)) {
+        return Swal.fire("Invalid Phone", "Phone number must be 10 digits", "error");
+      }
+
+      if (altPhone && !phonePattern.test(altPhone)) {
+        return Swal.fire("Invalid Alt Phone", "Alt phone must be 10 digits", "error");
+      }
+
+      if (pincode && !pinPattern.test(pincode)) {
+        return Swal.fire("Invalid Pincode", "Pincode must be 6 digits", "error");
+      }
+         const addressId = "<%= address._id %>";
+         
+      try {
+        const res = await fetch(`/updateUserAddress/${addressId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          Swal.fire("Success", "Address updated successfully!", "success").then(() => {
+            window.location.href = "/userDashboard";
+          });
+        } else {
+          Swal.fire("Error", result.message || "Something went wrong", "error");
+        }
+      } catch (err) {
+        Swal.fire("Error", "Failed to update address", "error");
+      }
+    });
+  </script>
+</body>
+
+<%-include("../../Views/Partials/User/footerLand")%>

@@ -124,7 +124,13 @@ export const updateBrand = async (req, res) => {
     if (!brand) {
       return res.status(404).json({ message: "Brand not found." });
     }
+    const existBrand = await brandSchema.findOne({
+        brandName: { $regex: `^${name}$`, $options: 'i' }
+    });
 
+    if(existBrand){
+       return res.status(404).json({ message: "Brand name already exists" });
+    }
     //  Update fields
     if (name) brand.brandName = name;
     if (description) brand.description = description;
@@ -132,18 +138,10 @@ export const updateBrand = async (req, res) => {
     //  If a new image was uploaded
     if (req.file) {
       const oldImageUrl = brand.brandImage;
-
-      // Delete old image from Cloudinary
-      // const segments = oldImageUrl.split("/");
-      // const fileNameWithExtension = segments[segments.length - 1];
-      // const publicId = "Brands/" + fileNameWithExtension.split(".")[0]; // Cloudinary folder + filename without extension
-
-      // await cloudinary.uploader.destroy(publicId);
-
-      //  Save new image URL
       brand.brandImage = req.file.path;
     }
 
+    // Save the updated brand
     await brand.save();
 
     res.status(200).json({ message: "Brand updated successfully." });

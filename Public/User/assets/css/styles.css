@@ -100,6 +100,15 @@
     margin: 0 auto;
     transition: all 0.3s ease;
   }
+  .logo-footer-img{
+    width: 265px;
+    border-radius: 5px;
+    border: 1px solid #ff6600;
+    align-items: center;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+  }
+  
   .btn-primary {
     background-color: #ff6600;
     color: white;
@@ -222,6 +231,10 @@
   
   .nav-link:hover::after {
     width: 100%;
+  }
+
+  .nav-link:hover {
+    color: #ff6600;
   }
   
   .auth-buttons {
@@ -464,9 +477,10 @@
   
   /* Product Categories Section */
   .product-categories {
+    padding: 25px 15px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 0;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 50px;
   }
   
   .product-category {

@@ -52,6 +52,18 @@ import{
 }from "../Controller/user/userProfileController.js";
 
 
+import{
+    getAdd_UseraddressPage,
+    add_UserAddress,
+    getEdit_userAddressPage,
+    edit_userAddress,
+    delete_userAddress,
+}from "../Controller/user/userAddressController.js";
+
+
+import { uploadMiddleware } from "../middlewares/multerUpload.js";
+
+
 
 const userRoute=express.Router();
 
@@ -87,7 +99,6 @@ userRoute.get("/getOtp", getOtpPage);
 userRoute.post("/otpVerify", verifyOtp);
 userRoute.post("/resendOtp", resendOTP);
 
-
 //product details
 userRoute.get("/shopPage",getshopPage);
 userRoute.get("/categoryPage",getcategoryPage);
@@ -98,6 +109,16 @@ userRoute.get("/productDetail/:id",getproductDetailpage);
 //  userprofile managament-section
 userRoute.get("/userDashboard",getUserDashboard);
 userRoute.get("/getEditProfile",geteditUserprofile);
-userRoute.put("/getEditProfile",updateUserprofile);
+userRoute.put("/EditUserprofile",uploadMiddleware('Users').single('userProfileImage'), updateUserprofile);
+
+// useraddress managemamet
+userRoute.get("/addUserAddress",getAdd_UseraddressPage);
+userRoute.post("/addUserAddress",add_UserAddress)
+//edit address
+userRoute.get("/edit-address/:id",getEdit_userAddressPage)
+userRoute.put("/updateUserAddress/:id",edit_userAddress);
+// delete
+userRoute.delete("/remove-address/:id",delete_userAddress);
+
 
 export default userRoute

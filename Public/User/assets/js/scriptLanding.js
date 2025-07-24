@@ -1,17 +1,16 @@
 
 document.addEventListener("DOMContentLoaded", function () {
   // Navigation menu hover effect
-  const navLinks = document.querySelectorAll(".nav-link");
+  // const navLinks = document.querySelectorAll(".nav-link");
 
-  navLinks.forEach((link) => {
-    link.addEventListener("mouseenter", function () {
-      this.style.color = "#ff6600";
-    });
+  // navLinks.forEach((link) => {
+  //   link.addEventListener("mouseenter", function () {
+  //     this.style.color = "#ff6600";
+  //   });
 
-    link.addEventListener("mouseleave", function () {
-      this.style.color = "#ffffff";
-    });
-  });
+  //   link.addEventListener("mouseleave", function () {
+  //     this.style.color = "#ffffff";
+  //   });
 
   //   ---------------------------
 

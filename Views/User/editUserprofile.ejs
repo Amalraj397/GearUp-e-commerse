@@ -8,7 +8,7 @@
 <body>
     <div class="page-wrapper">
         <main class="main">
-            <div class="page-header text-center" style="background-image: url('/User/assets/images/page-header-bg.jpg')">
+            <div class="page-header text-center">
                 <div class="container">
                     <h1 class="page-title">Edit Profile <span>My Account</span></h1>
                 </div>
@@ -23,42 +23,39 @@
                     <form id="editProfileForm" enctype="multipart/form-data">
                         <!--  Profile Image -->
                         <div class="text-center mb-4">
-                            <img src="<%= userData.profileImage ? userData.profileImage : '/User/assets/images/icons/userProfileDemo.png' %>" alt="Profile" id="profilePreview" style="width: 150px; height: 150px; border-radius: 50%;">
+                            <img src="<%= userData.profilePicture ? userData.profilePicture : '/User/assets/images/icons/userProfileDemo.png' %>" alt="user_ProfileImg" id="profilePreview" style="width: 150px; height: 150px; border-radius: 50%;">
                             <div class="mt-2">
                                 <input type="file" name="profileImage" id="profileImageInput" accept="image/*">
+                                <!-- <div id="profileImage-error" class="errorMessage"></div> -->
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-6 mb-3">
                                 <label>First Name</label>
-                                <input type="text" class="form-control" name="firstName" value="<%= userData.firstName %>" required>
-                            </div>
+                                <input type="text" class="form-control" id="firstName" name="firstName" value="<%= userData.firstName %>" >
                             <div id="Fname-error" class="errorMessage"></div>
+                            </div>
+                            
                             <div class="col-sm-6 mb-3">
                                 <label>Last Name</label>
-                                <input type="text" class="form-control" name="lastName" value="<%= userData.lastName %>" required>
+                                <input type="text" class="form-control" id="lastName" name="lastName" value="<%= userData.lastName %>" >
+                             <div id="Lname-error" class="errorMessage"></div>
                             </div>
-                            <div id="Lname-error" class="errorMessage"></div>
+                           
                         </div>
 
                         <div class="mb-3">
                             <label>Email Address</label>
                             <input type="email" class="form-control" name="email" value="<%= userData.email %>" readonly>
+                            <div id="email-error" class="errorMessage"></div>
                         </div>
-                        <div id="email-error" class="errorMessage"></div>
 
                         <div class="mb-3">
                             <label>Phone Number</label>
-                            <input type="text" class="form-control" name="phone" value="<%= userData.phone %>">
+                            <input type="text" class="form-control" id="userPhone" name="phone" value="<%= userData.phone %>">
+                            <div id="phone-error" class="errorMessage"></div>
                         </div>
-                        <div id="phone-error" class="errorMessage"></div>
-
-                        <div class="mb-3">
-                            <label>Address</label>
-                            <input type="text" class="form-control" name="address" value="<%= userData.address || 'No address, update now' %>">
-                        </div>
-                        <div id="address-error" class="errorMessage"></div>
 
                         <!-- Change Password Toggle -->
                         <div class="mb-3">
@@ -69,25 +66,25 @@
                         <div id="passwordSection" style="display: none;">
                             <div class="mb-3">
                                 <label>Old Password</label>
-                                <input type="password" class="form-control" name="oldPassword">
+                                <input type="password" class="form-control" id="oldPassword" name="oldPassword">
+                                <div id="oldPassword-error" class="errorMessage"></div>
                             </div>
-                            <div id="oldPassword-error" class="errorMessage"></div>
 
                             <div class="mb-3">
                                 <label>New Password</label>
-                                <input type="password" class="form-control" name="newPassword">
+                                <input type="password" class="form-control" id="newPassword" name="newPassword">
+                                <div id="newPassword-error" class="errorMessage"></div>
                             </div>
-                            <div id="newPassword-error" class="errorMessage"></div>
 
                             <div class="mb-3">
                                 <label>Confirm New Password</label>
-                                <input type="password" class="form-control" name="confirmNewPassword">
+                                <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword">
+                                <div id="confirmPassword-error" class="errorMessage"></div>
                             </div>
-                            <div id="confirmPassword-error" class="errorMessage"></div>
 
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <button type="button" class="btn btn-primary" id="sendOtpBtn">Verify via Email OTP</button>
-                            </div>
+                            </div> -->
 
                             <div id="otpSection" style="display: none;">
                                 <label>Enter OTP</label>
@@ -105,6 +102,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const passwordToggleBtn = document.getElementById('changePasswordToggle');
         const passwordSection = document.getElementById('passwordSection');
@@ -114,11 +112,6 @@
             const isHidden = passwordSection.style.display === 'none';
             passwordSection.style.display = isHidden ? 'block' : 'none';
             passwordToggleBtn.textContent = isHidden ? 'Cancel Change Password' : 'Change Password';
-        });
-
-        document.getElementById('sendOtpBtn').addEventListener('click', () => {
-            alert('OTP sent to your registered email');
-            otpSection.style.display = 'block';
         });
 
         // Profile Image Preview
@@ -140,16 +133,16 @@
         clearErrorMessages();
 
         let isValid = true;
-        const firstName = document.querySelector('[name="firstName"]').value.trim();
-        const lastName = document.querySelector('[name="lastName"]').value.trim();
-        const phone = document.querySelector('[name="phone"]').value.trim();
-        const address = document.querySelector('[name="address"]').value.trim();
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const phone = document.getElementById('userPhone').value.trim();
+        const userProfileImage = document.getElementById('profileImageInput').files[0];
 
-        const oldPassword = document.querySelector('[name="oldPassword"]').value.trim();
-        const newPassword = document.querySelector('[name="newPassword"]').value.trim();
-        const confirmNewPassword = document.querySelector('[name="confirmNewPassword"]').value.trim();
+        const oldPassword = document.getElementById('oldPassword').value.trim();
+        const newPassword = document.getElementById('newPassword').value.trim();
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
 
-        // First Name Validation
+        // FirstName Validation
         const namePattern = /^[a-zA-Z][a-zA-Z\s]*$/;
         if (!firstName) {
             showError('Fname-error', 'First name is required!');
@@ -162,7 +155,7 @@
             isValid = false;
         }
 
-        // Last Name Validation
+        // LastName Validation
         if (!lastName) {
             showError('Lname-error', 'Last name is required!');
             isValid = false;
@@ -185,12 +178,6 @@
             isValid = false;
         } else if (zeroCount > 5) {
             showError('phone-error', 'Phone number cannot contain more than 5 zeros.');
-            isValid = false;
-        }
-
-        // Address Validation
-        if (!address || address.length < 5) {
-            showError('address-error', 'Address must be at least 5 characters long.');
             isValid = false;
         }
 
@@ -221,18 +208,61 @@
             }
         }
 
-        if (!isValid) return;
+        // if (!userProfileImage) {
+        //     showError('profileImage-error', 'Please select a profile image');
+        //     isValid = false;
+        // }
 
+        if (!isValid) return;
+        const formData = new FormData();
+        formData.append("firstName", firstName);
+        formData.append("lastName", lastName);
+        formData.append("phone", phone);
+        formData.append("oldPassword", oldPassword);
+        formData.append("newPassword", newPassword);
+        formData.append("confirmNewPassword", confirmNewPassword);
+            
+        if (userProfileImage) {
+          formData.append("profileImage", userProfileImage);
+        }
         Swal.fire({
             title: "Are you sure you want to update your profile?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, update it!",
             cancelButtonText: "Cancel",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.submit();
+        }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const response = await fetch('/EditUserprofile', {
+              method: "PUT",
+            //   headers: {
+            //     "Content-Type": "application/json",
+            //   },
+              body: formData
+            });
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(
+                errorData.message || "An unexpected error occured..!"
+              );
             }
+            const successData = await response.json();
+            Swal.fire({
+              title: successData.message,
+              icon: "success",
+            }).then(() => {
+              location.reload();
+            });
+          } catch (error) {
+            console.log(error);
+            Swal.fire({
+              title: "Error!",
+              text: error.message,
+              icon: "error",
+            });
+          }
+        }
         });
     });
 
@@ -241,12 +271,16 @@
     }
 
     function clearErrorMessages() {
-        const errorElements = document.querySelectorAll(".errorMessage");
-        errorElements.forEach((el) => el.innerText = "");
+        document.getElementById("Fname-error").innerText = "";
+        document.getElementById("Lname-error").innerText = "";
+        document.getElementById("email-error").innertext="";
+        document.getElementById("phone-error").innerText = "";
+        // document.getElementById("profileImage-error").innerText = "";
+        document.getElementById("oldPassword-error").innerText = "";
+        document.getElementById("newPassword-error").innerText = "";
+        document.getElementById("confirmPassword-error").innerText = "";
     }
 </script>
-
-
     <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
 </body>
 

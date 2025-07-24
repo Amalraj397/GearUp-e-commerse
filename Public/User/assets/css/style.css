@@ -12,7 +12,7 @@ body {
 }
 body {
   font: normal 300 1.4rem/1.86 "Poppins", sans-serif;
-  color: #666;
+  color: #524e4e;
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -26,8 +26,11 @@ body {
   color: #fff;
   background-color: #c96;
 }
-p {
+.dashp{
   margin-bottom: 1.5rem;
+    font-weight: 600;
+    font-size: 18px;
+    color: #000000;
 }
 ul,
 ol {
@@ -54,6 +57,9 @@ sup {
   font-size: 70%;
   line-height: 0;
   vertical-align: baseline;
+}
+.errorMessage{
+  color: red;
 }
 sup {
   top: -0.5em;
@@ -167,6 +173,17 @@ a {
   text-decoration: none;
   transition: color 0.3s ease;
 }
+ #tab-dashboard a {
+    /* color: #ff6600;
+    font-size: 14px;
+    text-decoration: none; */
+    text-transform: capitalize;
+  }
+
+  #tab-dashboard a:hover {
+    color: #cc5200;
+    text-decoration: underline;
+  }
 a:hover,
 a:focus {
   color: #ff8000;
@@ -182,9 +199,9 @@ a:focus {
   color: #a6c76c !important;
 }
 .text-dark {
-  color: #e8e5e5 !important;
+  color: #ff8c00 !important;
   font-size: large;
-  font-weight: 600;
+  font-weight: 700;
 }
 .text-light {
   color: #ccc !important;
@@ -254,6 +271,31 @@ blockquote.text-white cite span {
   color: black;
   cursor: pointer;
 }
+  /*=======profile page======*/
+
+      .address {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .address-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .address-row input {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .edit-profile-btn {
+        margin-top: 20px; /* Adjust as needed */
+        align-self: flex-start;
+    }
+
+/* ====================== */
 
 .search-btn i {
   font-size: 16px;
@@ -11854,6 +11896,7 @@ button:focus {
   display: grid;
   /* grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); */
   gap: 5px;
+  max-width: 365px;
 }
 
 /* Each individual product card */
