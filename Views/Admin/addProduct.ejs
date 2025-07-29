@@ -263,12 +263,30 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.form-card h3 {
+.form-card-image{
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 69px;
+    margin-bottom: 69%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-card h3,.form-card-image h3 {
     margin-bottom: 15px;
     font-size: 18px;
     color: var(--primary-color);
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
+}
+
+.form-groups select{
+    width: 205%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--darker-bg);
+    color: var(--text-color);
+    font-size: 14px;
 }
 
 .form-group {
@@ -281,7 +299,7 @@
     gap: 15px;
 }
 
-.form-group label {
+.form-group,.form-groups label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
@@ -310,7 +328,7 @@
 }
 
 .form-help-text {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--text-muted);
     margin-bottom: 15px;
 }
@@ -329,6 +347,7 @@
     transition: all 0.3s ease;
     position: relative;
     margin-bottom: 15px;
+    height:93%
 }
 
 .image-upload-area:hover {
@@ -422,6 +441,25 @@
     opacity: 1;
 }
 
+
+/* image text size */
+
+.image-upload-placeholder i {
+  font-size: 7vh; /* icon size */
+  margin-bottom: 10px;
+}
+
+.image-upload-placeholder p {
+  font-size: 19px; /* main instruction text */
+  font-weight: 800;
+}
+
+.image-upload-placeholder span {
+  font-size: 17px; /* file format info */
+  margin-bottom: 25px;
+  color: #777;
+}
+/* imaeg size end */
 /* ----------------image upload styles ends----------------- */
 /* Price Input Styles */
 .price-input {
@@ -510,6 +548,7 @@
 
 .cancel-btn,
 .save-product-btn,
+.add-variant-btn,
 .publish-btn,
 .submit-btn {
     padding: 10px 20px;
@@ -533,14 +572,17 @@
     background-color: var(--border-color);
 }
 
-.save-product-btn {
+.save-product-btn,.add-variant-btn{
     background-color: transparent;
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
 }
 
 .save-product-btn:hover {
-    background-color: rgba(255, 140, 0, 0.1);
+    background-color: rgba(255, 255, 0, 0.1);
+}
+.add-variant-btn:hover{
+    background-color: rgb(145, 114, 55);
 }
 
 .publish-btn,
@@ -551,7 +593,7 @@
 
 .publish-btn:hover,
 .submit-btn:hover {
-    background-color: var(--primary-dark);
+    background-color: rgb(118, 69, 9);
 }
 
 .error-message {
@@ -665,7 +707,7 @@
                         <div class="form-column">
                             <!-- Basic Information -->
                             <div class="form-card">
-                                <h3>Basic Information</h3>
+                                <h3>Basic Information :</h3>
                                 <div class="form-group">
                                     <label for="product-name">Product Name*</label>
                                     <input type="text" id="product-name" name="productName">
@@ -696,32 +738,7 @@
                                         </select>
                                         <span class="error-message"></span>
                                     </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="description">Description*</label>
-                                    <textarea id="description" name="description" rows="5"></textarea>
-                                    <span class="error-message"></span>
-                                </div>
-                            </div>
-                            
-                            <!-- Variants and Attributes -->
-                            <div class="form-card">
-                                <h3>Attributes:</h3>
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="scale">Scale:</label>
-                                        <select id="scale" name="scale" >
-                                            <option value="" disabled selected>-select-</option>
-                                            <option id="1:64" value="1:64"> 1:64 </option>
-                                            <option id="1:43" value="1:43"> 1:43 </option>
-                                            <option id="1:32" value="1:32"> 1:32 </option>
-                                            <option id="1:24" value="1:24"> 1:24 </option>
-                                            <option id="1:18" value="1:18"> 1:18 </option>
-                                        </select>
-                                        <span class="error-message"></span>
-                                    </div>
-                                    <div class="form-group">
+                                    <div class="form-groups">
                                         <label for="color">Edition:</label>
                                         <select id="edition" name="edition">
                                             <option value="" disabled selected>-select-</option>
@@ -738,32 +755,15 @@
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="stock">Stock Quantity*</label>
-                                    <input type="number" id="product-stock" name="stock" min="0">
-                                    <span  class="error-message"></span>
+                                    <label for="description">Description*</label>
+                                    <textarea id="description" name="description" rows="5"></textarea>
+                                    <span class="error-message"></span>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-column">
-                            <!-- Pricing Information -->
-                            <div class="form-card">
-                                <h3>Pricing & offer Info</h3>
-                                <div class="form-group">
-                                        <label for="product-price">Product Price*</label>
-                                        <input type="number" id="product-price" name="price" min="0">
-                                        <span class="error-message"></span>
-                                </div> 
                                 <div class="form-group">
                                     <label for="product-offer">Product Offer (%)</label>
                                     <input type="number" id="product-offer" name="offer" min="0" max="100" placeholder="e.g : 10">
                                     <span class="error-message"></span>
                                 </div>
-                            </div> 
-                            
-                            <!-- Product Status -->
-                            <div class="form-card">
-                                <h3>Product Status</h3>
                                 <div class="form-group">
                                     <label for="status">Status</label>
                                     <select id="status" name="status">
@@ -773,9 +773,47 @@
                                     </select>
                                     <span class="error-message"></span>
                                 </div>
- 
-                                <div class="form-card">
-                                  <h3>Product Images</h3>
+                            </div>
+                            <div class="form-card">
+                              <h3>Variants :</h3>
+                              <div id="variant-container" class="variant-container">
+                                <div class="variant-block">
+                                  <div class="form-row">
+                                    <div class="form-groups">
+                                      <label>Scale:</label>
+                                      <select name="scale" id="scale" name="scale">
+                                        <option value="" disabled selected>-select-</option>
+                                        <option value="1:64">1:64</option>
+                                        <option value="1:43">1:43</option>
+                                        <option value="1:32">1:32</option>
+                                        <option value="1:24">1:24</option>
+                                        <option value="1:18">1:18</option>
+                                      </select>
+                                      <span class="error-message"></span>
+                                    </div>
+                                  </div>
+                            
+                                  <div class="form-group">
+                                    <label>Stock Quantity*</label>
+                                    <input type="number" name="stock" id="product-stock" min="0">
+                                    <span class="error-message"></span>
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Product Price*</label>
+                                    <input type="number" name="price" id="product-price" min="0">
+                                    <span class="error-message"></span>
+                                  </div>
+                                </div>
+                              </div>
+                            
+                              <button type="button" class="add-variant-btn" id="addVariantBtn">
+                                <i class="fas fa-plus"></i> Add more
+                              </button>
+                            </div>
+                        </div>
+                            <div class="form-card-image"> 
+                                <!-- <div class="form-card"> -->
+                                  <h3>Product Images :</h3>
                                     <p class="form-help-text">Upload multiple images for your product. First image will be used as the featured image.</p>
                                      <div class="image-upload-container">
                                       <div class="image-upload-area" id="image-upload-area">
@@ -786,14 +824,13 @@
                                           </div>
                                           <input type="file" id="product-images" name="productImages" multiple accept="image/*" class="image-upload-input">
                                           <div class="image-preview" id="image-preview"></div>
-                                        </div>
-                                         <span id="error-message" class="error-message"></span>
+                                          <span id="error-message" class="error-message"></span>
+                                      </div>
                                     </div>  
-                                </div>
+                                <!-- </div> -->
                             </div> 
                         </div>
                     </div>
-
                     <div class="form-actions">
                         <button type="button" class="cancel-btn"  id="cancelBtn" onclick="window.location.href='/admin/addProduct'">
                             <i class="fas fa-times"></i> Cancel
@@ -805,7 +842,7 @@
                 </form>
                 <!-----------------cropper modal----------------->
                 <div id="cropperModal" class="modal" style="display:none;">
-                  <div class="modal-content" style="margin-top: 20%;">
+                  <div class="modal-content" style="margin-top: 10%;">
                     <img id="cropperImage" style="max-width: 100%; max-height: 400px;">
                     <div style="margin-top: 10px;">
                         <button type="button" id="cropImageBtn" class="crop-btn">Crop</button>
@@ -819,6 +856,52 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+<script>
+  const variantContainer = document.getElementById("variant-container");
+  const addVariantBtn = document.getElementById("addVariantBtn");
+
+  addVariantBtn.addEventListener("click", () => {
+    const originalBlock = variantContainer.querySelector(".variant-block");
+    const newBlock = originalBlock.cloneNode(true);
+
+    // Clear inputs in the cloned block
+    newBlock.querySelectorAll("input, select").forEach(input => {
+      if (input.tagName === "SELECT") {
+        input.selectedIndex = 0;
+      } else {
+        input.value = "";
+      }
+    });
+
+    // Add remove button if not already present
+    if (!newBlock.querySelector(".remove-variant-btn")) {
+      const removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.innerHTML = "REMOVE";
+      removeBtn.className = "remove-variant-btn";
+      removeBtn.style.marginTop = "-10px";
+      removeBtn.style.marginBottom = "10px";
+      removeBtn.style.marginLeft = "auto";
+      removeBtn.style.background = "none";
+      removeBtn.style.border = "none";
+      removeBtn.style.color = "red";
+      removeBtn.style.fontSize = "15px";
+      removeBtn.style.cursor = "pointer";
+
+      //  click event to remove  variant block
+      removeBtn.addEventListener("click", () => {
+        newBlock.remove();
+      });
+
+      // Append remove button to top of variant block
+      newBlock.insertBefore(removeBtn, newBlock.firstChild);
+    }
+    // Append the new variant block to the container
+    variantContainer.appendChild(newBlock);
+  });
+</script>
+
 
 <!--------------------------------------=======SCRIPT=======----------------------------------------->
 <script>
@@ -923,7 +1006,7 @@ function openCropper(file) {
     const cropper = window.cropperInstance;
     if (!cropper) return;
 
-    const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
+    const canvas = cropper.getCroppedCanvas({ width: 900, height: 900 });
 
     canvas.toBlob(blob => {
       const croppedFile = new File([blob], file.name, { type: 'image/jpeg' });
@@ -1014,7 +1097,11 @@ function openCropper(file) {
         brand.nextElementSibling.textContent = 'Please select a brand';
                 isValid = false;
             }
-    
+        const edition= document.getElementById('edition');
+            if (!edition.value) {
+        edition.nextElementSibling.textContent = 'Please select an edition';
+                isValid = false;
+            }
         // Validate Category 
         const category = document.getElementById('category');
             if (!category.value) {
@@ -1026,20 +1113,6 @@ function openCropper(file) {
         const description = document.getElementById('description');
             if (!description.value.trim()) {
         description.nextElementSibling.textContent = 'Description is required';
-                isValid = false;
-            }
-    
-        // Validate Stock
-        const stock = document.getElementById('product-stock');
-            if (stock.value === '' || isNaN(stock.value) || Number(stock.value) < 0) {
-        stock.nextElementSibling.textContent = 'Please enter a valid stock quantity (0 or more).';
-                isValid = false;
-            }
-    
-        // Validate Price
-        const price = document.getElementById('product-price');
-            if (price.value === '' || isNaN(price.value) || Number(price.value) < 0) {
-        price.nextElementSibling.textContent = 'Please enter a valid price (0 or more).';
                 isValid = false;
             }
     
@@ -1056,7 +1129,36 @@ function openCropper(file) {
         Image.textContent = 'Please upload at least three images.';
                 isValid = false;
             }
+        
+            const variantBlocks = document.querySelectorAll('.variant-block');
+            variantBlocks.forEach((block, index) => {
+                const scale = block.querySelector('select[name="scale"]');
+                const stock = block.querySelector('input[name="stock"]');
+                const price = block.querySelector('input[name="price"]');
     
+            if (!scale.value) {
+              scale.nextElementSibling.textContent = "Scale is required.";
+              isValid = false;
+            }
+
+            if (!stock.value || parseInt(stock.value) < 0 ||isNaN(stock.value)) {
+              stock.nextElementSibling.textContent = "Please enter a valid stock quantity (0 or more).";
+              isValid = false;
+            }
+
+            if (!price.value || parseFloat(price.value) <= 0 ||isNaN(price.value)) {
+              price.nextElementSibling.textContent = "Please enter a valid price (0 or more).";
+              isValid = false;
+            }
+        });
+    
+          // Validate at least one variant exists
+
+        if (variantBlocks.length === 0) {
+          Swal.fire('At least one variant is required.');
+          isValid = false;
+        }
+
         // If any validation failed, stop form submission
             if (!isValid) return;
     
@@ -1069,7 +1171,20 @@ function openCropper(file) {
           showConfirmButton: false,
           timer: 1000
         }).then(() => {
-    
+            
+         const variants = [];
+            const variantBlocks = document.querySelectorAll('.variant-block');
+
+            variantBlocks.forEach((block) => {
+                const scale = block.querySelector('select[name="scale"]').value;
+                const stock = parseInt(block.querySelector('input[name="stock"]').value);
+                const salePrice = parseFloat(block.querySelector('input[name="price"]').value);
+                const variantName = `${productName.value}-${edition.value}-${scale}`;
+                
+                variants.push({ variantName, scale, stock, salePrice });
+            });
+
+      console.log( "variants : ",variants);
         const formData = new FormData();  
     
           //manually appending all data to avoid image duplication 
@@ -1077,18 +1192,22 @@ function openCropper(file) {
       formData.append('brand', document.getElementById('brand').value);
       formData.append('category', document.getElementById('category').value);
       formData.append('description', document.getElementById('description').value);
-      formData.append('scale', document.getElementById('scale').value);
+    //   formData.append('scale', document.getElementById('scale').value);
       formData.append('edition', document.getElementById('edition').value);
-      formData.append('stock', document.getElementById('product-stock').value);
-      formData.append('price', document.getElementById('product-price').value);
-      formData.append('offer', document.getElementById('product-offer').value);
+    //   formData.append('stock', document.getElementById('product-stock').value);
+    //   formData.append('price', document.getElementById('product-price').value);
+      formData.append('product-offer', document.getElementById('product-offer').value);
       formData.append('status', document.getElementById('status').value);
+
+      formData.append("parsedVariants", JSON.stringify(variants))
     
     
       // Append each image file (already selected & stored in selectedFiles)
         selectedFiles.forEach(file => {
             formData.append('productImages', file); // 'images' matches the Multer field name
       });
+
+      console.log("FORMDATA:", formData.get("parsedVariants"));
     
       fetch("/admin/addProduct", {
         method: 'POST',

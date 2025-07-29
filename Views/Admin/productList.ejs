@@ -591,6 +591,18 @@
 .action-btn + .edit-btn {
   margin-top: 10px; 
 }
+
+.variant-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.variant-list li {
+  margin-bottom: 4px;
+}
+
 /* Responsive styles starts here*/
 @media (max-width: 1024px) {
     .form-grid {
@@ -652,7 +664,7 @@
                 <div class="products-table-container">
                     <table class="products-table">
                         <thead>
-                            <tr>
+                              <tr>
                                 <th>SL No:</th>
                                 <th>Image</th>
                                 <th>Product Name</th>
@@ -660,14 +672,12 @@
                                 <th>Brand</th>
                                 <th>Category</th>
                                 <th>Edition</th>
-                                <th>Scale</th>
-                                <th>Price</th>
+                                <th>Variants</th> <!-- 👈 New combined column -->
                                 <th>Offer</th>
-                                <th>Stock</th>
                                 <th>Status</th>
                                 <th>Actions</th>
-                            </tr>
-                        </thead>
+                              </tr>
+                            </thead>
                         <tbody id="products-table-body">
                         <!-- products will be rendered here dynamically by script here -->
                         </tbody>
@@ -698,7 +708,7 @@
     
 document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 1;
-  const productsPerPage = 6;
+  const productsPerPage = 8;
   let allProducts = []; //  this will hold all products
   let filteredProducts = [];
 
@@ -734,45 +744,54 @@ document.addEventListener("DOMContentLoaded", () => {
     paginated.forEach((product, index) => {
       const row = document.createElement("tr");
 
-      row.innerHTML = `
-        <td>${startIndex + index + 1}</td>
-        <td>
-          <img src="${product.productImage?.[0]}" 
-               alt="${product.productName}" 
-               class="brand-logo">
-        </td>
-        <td>${product.productName}</td>
-        <td>${product.description?.substring(0, 100) || ''}...</td>
-        <td>${product.brand?.brandName || 'N/A'}</td>
-        <td>${product.category?.name || 'N/A'}</td>
-        <td>${product.edition || 'N/A'}</td>
-        <td>${product.scale || 'N/A'}</td>
-        <td>₹${product.salePrice}</td>
-        <td>${product.productOffer}%</td>
-        <td>${product.stock}</td>
-        <td>
-              <span class="status-badge ${product.isBlocked ? "status-blocked" : "status-active"}">
-                ${product.isBlocked ? "Blocked" : "Active"}
-              </span>  
-        </td>
-        
-        <td class="action-cell">
-          ${product.isBlocked
-            ? `<button class="btn btn-success action-btn list-btn list-btn-green" data-id="${product._id}">
-                    <i class="fas fa-check-circle"></i> LIST
-                </button>`
-
-            : `<button class="btn btn-danger action-btn list-btn unlist-btn" data-id="${product._id}">
-                    <i class="fas fa-ban"></i> UNLIST
-                </button>`
-          }
-
-          <button class="action-btn edit-btn" onclick="editProduct('${product._id}')">
-            <span class="material-icons">edit</span> EDIT
-          </button>
-        
-        </td>
-      `;
+            row.innerHTML = `
+          <td>${startIndex + index + 1}</td>    
+          <td>
+            <img src="${product.productImage?.[0]}" 
+                 alt="${product.productName}" 
+                 class="brand-logo">
+          </td>
+          <td>${product.productName}</td>
+          <td>${product.description?.substring(0, 100) || ''}...</td>
+          <td>${product.brand?.brandName || 'N/A'}</td>
+          <td>${product.category?.name || 'N/A'}</td>
+          <td>${product.edition || 'N/A'}</td>
+          <td>
+            ${product.variants && product.variants.length > 0
+              ? `<ul class="variant-list">
+                   ${product.variants
+                     .map(variant => `
+                       <li>
+                         <strong>Scale:</strong> ${variant.scale}, 
+                         <strong>Price:</strong> ₹${variant.salePrice}, 
+                         <strong>Stock:</strong> ${variant.stock}
+                       </li>
+                     `)
+                     .join('')}
+                 </ul>`
+              : "N/A"}
+          </td>
+          <td>${product.productOffer || '0'}%</td>
+          <td>
+            <span class="status-badge ${product.isBlocked ? "status-blocked" : "status-active"}">
+              ${product.isBlocked ? "Blocked" : "Active"}
+            </span>  
+          </td>
+          <td class="action-cell">
+            ${product.isBlocked
+              ? `<button class="btn btn-success action-btn list-btn list-btn-green" data-id="${product._id}">
+                      <i class="fas fa-check-circle"></i> LIST
+                  </button>`
+              : `<button class="btn btn-danger action-btn list-btn unlist-btn" data-id="${product._id}">
+                      <i class="fas fa-ban"></i> UNLIST
+                  </button>`
+            }
+              
+            <button class="action-btn edit-btn" onclick="editProduct('${product._id}')">
+              <span class="material-icons">edit</span> EDIT
+            </button>
+          </td>
+        `;
       tbody.appendChild(row);
     });
   

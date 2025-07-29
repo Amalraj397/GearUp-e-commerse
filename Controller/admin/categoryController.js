@@ -1,44 +1,8 @@
 import categorySchema from "../../Models/categoryModel.js";
-// import productSchema from "../../Models/productModel.js";
 
-// Category Info handler
+// ------------------load Category page------------------
 
-// export const getCategory = async (req, res, next) => {
-//   try {
-//     //Pagination
-//     const page = req.query.page * 1 || 1;
-//     const limit = req.query.limit * 1 || 4;
-//     const skip = (page - 1) * limit;
-
-//     // Capture the search Query!
-//     const searchQuery = req.query.search || "";
-
-//     const filter = {};
-//     if (searchQuery) {
-//       filter["name"] = { $regex: new RegExp(searchQuery, "i") };
-//     }
-
-//     const totalCategories = await categorySchema.countDocuments(filter);
-//     const category = await categorySchema
-//       .find(filter)
-//       .skip(skip)
-//       .limit(limit)
-//       .exec();
-
-//     // render
-//     res.status(200).render("category.ejs", {
-//       category,
-//       page,
-//       totalPage: Math.ceil(totalCategories / limit),
-//       searchQuery,
-//     });
-//   }  catch (error) {
-//       console.log("error in loading the page", error);
-//       res.status(500).send("server Error  ");
-//     }
-// };
-
-export const getCategory = async (req, res, next) => {
+export const getCategory = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 4;
@@ -50,7 +14,7 @@ export const getCategory = async (req, res, next) => {
       ? {
           $or: [
             { name: { $regex: searchQuery, $options: "i" } },
-            { description: { $regex: searchQuery, $options: "i" } }, // remove if you don’t have `description`
+            { description: { $regex: searchQuery, $options: "i" } }, 
           ],
         }
       : {};
@@ -74,7 +38,7 @@ export const getCategory = async (req, res, next) => {
   }
 };
 
-// Add category handler
+// ------------------Add category handler----------------
 
 export const getAddCategory = async (req, res, next) => {
   try {
@@ -85,40 +49,8 @@ export const getAddCategory = async (req, res, next) => {
     }
 };
 
-// Category post handler
 
-// export const addNewCategory = async (req, res)=>{
-//     const { name , description } = req.body
-
-//     console.log("------------------------------------");
-//     console.log("data recived: req-",req.body);
-//     console.log("------------------------------------");
-
-//     try {
-//         // Cat: exist or not..!
-//         const existCat = await categorySchema.findOne({name})
-//         if (existCat){
-//             return res.status(400).json({ message: 'Category already exist..!'})
-//         }
-//         // Save category..!
-//         const newCategory = new categorySchema ({ name , description})
-
-//         console.log("------------------------------------");
-//         console.log( newCategory.name );
-//         console.log(newCategory.description );
-//         console.log(newCategory);
-//         console.log("------------------------------------");
-
-//         await newCategory.save()
-//         return res.status(201).json({ message: 'New category added..!'})
-
-    // } catch (error) {
-    //   console.log("error in loading the page", error);
-    //   res.status(500).send("server Error  ");
-    // }
-// }
-
-// ---------------------------------------------------------
+// ----------------Category post handler--------------------
 
 export const addNewCategory = async (req, res) => {
   try {
@@ -126,6 +58,12 @@ export const addNewCategory = async (req, res) => {
 
     if (!name || !description) {
       return res.status(400).json({ message: "Name and description are required." });
+    }
+
+    const existCate = await categorySchema.findOne({name:"name"});
+    
+    if(existCate){
+       return res.status(400).json({message:"category already present. try again..!"})
     }
 
      //saving  data to db
@@ -139,43 +77,7 @@ export const addNewCategory = async (req, res) => {
   }
 };
 
-
-// // Category edit handler
-// exports.getEditCategoryPage = async(req,res, next)=>{
-//     const { id }= req.query
-//     try {
-
-//         const category = await categorySchema.findOne({_id: id})
-//         return res.status(200).render('admin/edit-category',{
-//             category
-//         })
-
-//     } catch (error) {
-//         next(error)
-//     }
-// }
-
-// // Category edit post handler
-// exports.editCategory = async (req, res, next)=>{
-//     const { id }= req.body
-//     const { name, description }=req.body
-//     try {
-//         const updateCategory = await categorySchema.findByIdAndUpdate(id, {
-//             name,
-//             description
-//         },{new : true}) // return the updated document
-
-//         if(!updateCategory){
-//           return  res.status(404).json({message: 'Updation failed..! Category not found'})
-//         }
-//         res.status(200).json({message: 'Category update successfull..!'})
-
-//     } catch (error) {
-//         console.error(error);
-//         next(error)
-
-//     }
-// }
+// ----------------Category List-unlist handler--------------------
 
 export const unlistCategory = async (req, res) => {
   try {
@@ -196,6 +98,7 @@ export const unlistCategory = async (req, res) => {
     res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 };
+// ----------------listcategory----------------
 
 export const listCategory = async (req, res) => {
   try {
@@ -217,6 +120,7 @@ export const listCategory = async (req, res) => {
   }
 };
 
+// ----------------Category search handler--------------------
 
 export const getLiveCategorySearch = async (req, res) => {
   try {
@@ -231,7 +135,7 @@ export const getLiveCategorySearch = async (req, res) => {
         }
       : {};
 
-    const categories = await categorySchema.find(filter).limit(20); // Adjust limit as needed
+    const categories = await categorySchema.find(filter).limit(20); 
 
     res.json({ success: true, categories });
   } catch (error) {
@@ -240,6 +144,7 @@ export const getLiveCategorySearch = async (req, res) => {
   }
 };
 
+// ----------------Category EDIT handler--------------------
 export const getCategoryEditPage = async (req, res) => {
   try {
     const category = await categorySchema.findById(req.params.id);
@@ -251,6 +156,8 @@ export const getCategoryEditPage = async (req, res) => {
       res.status(500).send("server Error  ");
     }
 };
+
+// ----------------Category Update handler--------------------
 
 export const updateCategory = async (req, res) => {
   try {
@@ -270,5 +177,7 @@ export const updateCategory = async (req, res) => {
       res.status(500).send("server Error  ");
     }
 };
+
+// ----------------------------END-------------------------------
 
 

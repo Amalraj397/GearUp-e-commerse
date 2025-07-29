@@ -1,5 +1,4 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
     <style>
         /* Products Page Specific Styles */
 .products-container,
@@ -279,7 +278,7 @@
     gap: 15px;
 }
 
-.form-group,.form-groups label {
+.form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
@@ -587,77 +586,11 @@
   height: 20px;
   cursor: pointer;
 }
-.form-groups select{
-    width: 205%;
-    padding: 10px;
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    background-color: var(--darker-bg);
-    color: var(--text-color);
-    font-size: 14px;
-}
+
 
 /* input.error, select.error, textarea.error {
   border: 1px solid red;
 } */
-
-/* -----------cropper modal--------- */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-
-#cropperModal {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9999;
-}
-.modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.crop-btn, .cancel-btn {
-    padding: 8px 18px;
-    border: none;
-    font-weight: 700;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 0 8px;
-    transition: background-color 0.3s ease;
-}
-
-/* Crop Button - Green */
-.crop-btn {
-    background-color: #208537;
-    color: rgb(248, 244, 244);
-}
-.crop-btn:hover {
-    background-color: #00ff37;
-     color: rgb(31, 30, 30);
-}
-
-/* Cancel Button - Red */
-.cancel-btn {
-    background-color: #850a16;
-    color: white;
-    /* margin-left: 94%; */
-}
-.cancel-btn:hover {
-    background-color: #f1021a;
-}
-/* -----------cropper modal end---------- */
 
 @media (max-width: 768px) {
     .gender-frame-group {
@@ -719,7 +652,7 @@
                         <div class="form-column">
                             <!-- Basic Information -->
                             <div class="form-card">
-                                <h3>Basic Information :</h3>
+                                <h3>Basic Information</h3>
                                 <div class="form-group">
                                     <label for="product-name">Product Name*</label>
                                     <input type="text" id="product-name" name="productName" value="<%= product.productName %>">
@@ -735,7 +668,6 @@
                                         </select>
                                         <span class="error-message"></span>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="category">Category*</label>
                                         <select id="category" name="category">
@@ -745,8 +677,32 @@
                                         </select>
                                         <span class="error-message"></span>
                                     </div>
-
-                                    <div class="form-groups">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="description">Description*</label>
+                                    <textarea id="description" name="description" rows="5"><%= product.description %></textarea>
+                                    <span class="error-message"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Variants and Attributes -->
+                            <div class="form-card">
+                                <h3>Attributes:</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="scale">Scale:</label>
+                                            <select id="scale" name="scale">
+                                               <option value="" disabled <%= !product.scale ? "selected" : "" %>>-select-</option>
+                                               <option value="1:64" <%= product.scale === '1:64' ? "selected" : "" %>>1:64</option>
+                                               <option value="1:43" <%= product.scale === '1:43' ? "selected" : "" %>>1:43</option>
+                                               <option value="1:32" <%= product.scale === '1:32' ? "selected" : "" %>>1:32</option>
+                                               <option value="1:24" <%= product.scale === '1:24' ? "selected" : "" %>>1:24</option>
+                                               <option value="1:18" <%= product.scale === '1:18' ? "selected" : "" %>>1:18</option>
+                                            </select>
+                                        <span class="error-message"></span>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="color">Edition:</label>
                                             <select id="edition" name="edition">
                                                 <option value="Fast & Furious" <%= product.edition === 'Fast & Furious' ? "selected" : "" %>>Fast & Furious</option>
@@ -758,76 +714,50 @@
                                                 <option value="collective" <%= product.edition === 'collective' ? "selected" : "" %>>Collective</option>
                                                 <option value="Forza Motorsports" <%= product.edition === 'Forza Motorsports' ? "selected" : "" %>>Forza Motorsports</option>
                                             </select>
+
                                         <span class="error-message"></span>
                                     </div>
-                                  </div>
-
-                                    <div class="form-group">
-                                        <label for="description">Description*</label>
-                                        <textarea id="description" name="description" rows="5"><%= product.description %></textarea>
-                                        <span class="error-message"></span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="product-offer">Product Offer (%)</label>
-                                        <input type="number" id="product-offer" name="offer" value="<%= product.productOffer %>">
-                                        <span class="error-message"></span>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="status">Status</label>
-                                        <select id="status" name="status">
-                                          <option value="In-stock" <%= product.status === 'In-stock' ? 'selected' : '' %>>In Stock</option>
-                                          <option value="Out-of-stock" <%= product.status === 'Out-of-stock' ? 'selected' : '' %>>Out of Stock</option>
-                                          <option value="Discontinued" <%= product.status === 'Discontinued' ? 'selected' : '' %>>Discontinued</option>
-                                        </select>
-                                        <span class="error-message"></span>
-                                    </div>
-                               </div>
-                            
-                            <!-- Variants Section -->
-
-                             <div class="form-card">
-                              <h3>Variants :</h3>
-                              <div id="variant-container" class="variant-container">
-                                <% product.variants.forEach((variant, index)=> { %>
-                                <div class="variant-block">
-                                  <div class="form-row">
-                                    <div class="form-groups">
-                                      <label>Scale:</label>
-                                      <select id="scale" name="scale">
-                                            <option value="" disabled <%= !variant.scale ? "selected" : "" %>>-select-</option>
-                                            <option value="1:64" <%= variant.scale === '1:64' ? "selected" : "" %>>1:64</option>
-                                            <option value="1:43" <%= variant.scale === '1:43' ? "selected" : "" %>>1:43</option>
-                                            <option value="1:32" <%= variant.scale === '1:32' ? "selected" : "" %>>1:32</option>
-                                            <option value="1:24" <%= variant.scale === '1:24' ? "selected" : "" %>>1:24</option>
-                                            <option value="1:18" <%= variant.scale === '1:18' ? "selected" : "" %>>1:18</option>
-                                      </select>
-                                      <span class="error-message"></span>
-                                    </div>
-                                  </div>
-                            
-                                  <div class="form-group">
-                                    <label>Stock Quantity*</label>
-                                    <input type="number" id="product-stock" name="stock" value="<%= variant.stock %>">
-                                    <span class="error-message"></span>
-                                  </div>
-                                  <div class="form-group">
-                                    <label>Product Price*</label>
-                                    <input type="number" id="product-price" name="price" value="<%= variant.salePrice%>">
-                                    <span class="error-message"></span>
-                                  </div>
                                 </div>
-                              <% }); %>
-                              </div>
+                                
+                                <div class="form-group">
+                                    <label for="stock">Stock Quantity*</label>
+                                    <input type="number" id="product-stock" name="stock" value="<%= product.stock %>">
+                                    <span  class="error-message"></span>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="form-column">
                             <!-- Pricing Information -->
                             <div class="form-card">
+                                <h3>Pricing & offer Info</h3>
+                                <div class="form-group">
+                                    <label for="product-price">Product Price*</label>
+                                    <input type="number" id="product-price" name="price" value="<%= product.salePrice%>">
+                                    <span class="error-message"></span>
+                                </div> 
+                                <div class="form-group">
+                                    <label for="product-offer">Product Offer (%)</label>
+                                    <input type="number" id="product-offer" name="offer" value="<%= product.productOffer %>">
+                                    <span class="error-message"></span>
+                                </div>
+                            </div> 
+                            
+                            <!-- Product Status -->
+                            <div class="form-card">
+                                <h3>Product Status</h3>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="status">
+                                      <option value="In-stock" <%= product.status === 'In-stock' ? 'selected' : '' %>>In Stock</option>
+                                      <option value="Out-of-stock" <%= product.status === 'Out-of-stock' ? 'selected' : '' %>>Out of Stock</option>
+                                      <option value="Discontinued" <%= product.status === 'Discontinued' ? 'selected' : '' %>>Discontinued</option>
+                                    </select>
+                                    <span class="error-message"></span>
+                                </div>
+ 
                                 <div class="form-card">
-                                  <h3>Product Images :</h3>
+                                  <h3>Product Images</h3>
                                     <p class="form-help-text">Upload new images or Edit images for the selected product. The First image will be used as the featured image.</p>
                                      <div class="image-upload-container">
                                       <div class="image-upload-area" id="image-upload-area">
@@ -856,29 +786,10 @@
                         </button>
                     </div>
                 </form>
-
             </div>
-                             <!-----------------cropper modal----------------->
-                      <div id="cropperModal" class="modal" style="display: none;">
-                        <div class="modal-content" style="margin: 10% auto; padding: 20px; width: 50%; background: #fff; border-radius: 10px;">
-                          <button type="button" id="cancelCropBtn" class="cancel-btn" style="position: absolute; top: 10px; right: 10px; background: transparent; border: none; font-size: 20px; cursor: pointer;">&times;</button>
- 
-                          <!-- Cropper Image -->
-                          <img id="cropperImage" style="max-width: 100%; max-height: 400px; display: block; margin: auto;">
-                      
-                          <!-- Crop Button -->
-                          <div style="text-align: center; margin-top: 20px;">
-                            <button type="button" id="cropImageBtn" class="crop-btn" style="padding: 10px 20px; background: #ff6600; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                              Crop
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                <!---------------cropper modal end------------>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
 <!-- --------------------script------------------- -->
 
@@ -993,17 +904,18 @@
   });
 
   imageUploadArea.addEventListener('drop', e => {
-      const file = e.dataTransfer.files[0];  
-      if (!file) return;
-      openCropper(file); 
-    });
+    const files = e.dataTransfer.files;
+    addFiles(files);
+  });
 
-    imageInput.addEventListener('change', e => {
-      const file = e.target.files[0]; 
-      if (!file) return;
-      openCropper(file);  
+  imageInput.addEventListener('change', e => {
+    
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      addFiles(files);
       placeHolder.style.display = 'none';
-    });
+    }
+  });
 
   function addFiles(files) {
     for (const file of files) {
@@ -1023,74 +935,10 @@
       }
 
       selectedFiles.push(file);
-      //  console.log('files-hellooo2-selected files', files);
+       console.log('files-hellooo2-selected files', files);
       previewImage(file);
     }
   }
-  
-// -----------------------image_cropper---------------------
-
-function openCropper(file) {
-  const cropperModal = document.getElementById('cropperModal');
-  const cropperImage = document.getElementById('cropperImage');
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    cropperImage.src = reader.result;
-    cropperModal.style.display = 'block';
-
-    if (window.cropperInstance) {
-      window.cropperInstance.destroy();
-    }
-    window.cropperInstance = new Cropper(cropperImage, {
-      aspectRatio: 1,
-      viewMode: 1,
-      autoCropArea: 1,
-    });
-  };
-  reader.readAsDataURL(file);
-
-  // Attach the crop button event dynamically
-  const cropBtn = document.getElementById('cropImageBtn');
-  const cancelBtn = document.getElementById('cancelCropBtn');
-
-  cropBtn.onclick = function () {
-    const cropper = window.cropperInstance;
-    if (!cropper) return;
-
-    const canvas = cropper.getCroppedCanvas({ width: 800, height: 800 });
-
-    canvas.toBlob(blob => {
-      const croppedFile = new File([blob], file.name, { type: 'image/jpeg' });
-      handleCroppedImage(croppedFile);
-      cropper.destroy();
-      window.cropperInstance = null;
-      cropperModal.style.display = 'none';
-    }, 'image/jpeg');
-  };
-
-  cancelBtn.onclick = function () {
-    if (window.cropperInstance) window.cropperInstance.destroy();
-    window.cropperInstance = null;
-    cropperModal.style.display = 'none';
-  };
-}
-
-function handleCroppedImage(croppedFile) {
-  if (selectedFiles.length >= 8) {
-    Swal.fire({ icon: 'warning', 
-    title: 'Maximum Limit Reached',
-    text: 'You can upload up to 8 images only.' 
-  });
-    return;
-  }
-
-  selectedFiles.push(croppedFile);
-  previewImage(croppedFile); // Show cropped image in preview
-  placeHolder.style.display = 'none';
-}
-
-// --------------------image_cropper ENDS----------------------
 
   function previewImage(file) {
     const reader = new FileReader();
@@ -1176,31 +1024,18 @@ function handleCroppedImage(croppedFile) {
             isValid = false;
         }
 
-     const variantBlocks = document.querySelectorAll('.variant-block');
-            variantBlocks.forEach((block, index) => {
-                const scale = block.querySelector('select[name="scale"]');
-                const stock = block.querySelector('input[name="stock"]');
-                const price = block.querySelector('input[name="price"]');
-    
-            if (!scale.value) {
-              scale.nextElementSibling.textContent = "Scale is required.";
-              isValid = false;
-            }
+    // Validate Stock
+    const stock = document.getElementById('product-stock');
+        if (stock.value === '' || isNaN(stock.value) || Number(stock.value) < 0) {
+    stock.nextElementSibling.textContent = 'Please enter a valid stock quantity (0 or more).';
+            isValid = false;
+        }
 
-            if (!stock.value || parseInt(stock.value) < 0 ||isNaN(stock.value)) {
-              stock.nextElementSibling.textContent = "Please enter a valid stock quantity (0 or more).";
-              isValid = false;
-            }
-
-            if (!price.value || parseFloat(price.value) <= 0 ||isNaN(price.value)) {
-              price.nextElementSibling.textContent = "Please enter a valid price (0 or more).";
-              isValid = false;
-            }
-        });
-
-       if (variantBlocks.length === 0) {
-          Swal.fire('At least one variant is required.');
-          isValid = false;
+    // Validate Price
+    const price = document.getElementById('product-price');
+        if (price.value === '' || isNaN(price.value) || Number(price.value) < 0) {
+    price.nextElementSibling.textContent = 'Please enter a valid price (0 or more).';
+            isValid = false;
         }
 
     // Validate Offer
@@ -1230,18 +1065,6 @@ function handleCroppedImage(croppedFile) {
       timer: 1000
     }).then(() => {
 
-         const variants = [];
-
-      const variantBlocks = document.querySelectorAll('.variant-block');
-      variantBlocks.forEach((block) => {
-          const scale = block.querySelector('select[name="scale"]').value;
-          const stock = parseInt(block.querySelector('input[name="stock"]').value);
-          const salePrice = parseFloat(block.querySelector('input[name="price"]').value);
-          const variantName = `${productName.value}-${edition.value}-${scale}`;
-          
-          variants.push({ variantName, scale, stock, salePrice });
-      });
-
     const formData = new FormData();  
 
       //manually appending all data to avoid image duplication 
@@ -1249,14 +1072,12 @@ function handleCroppedImage(croppedFile) {
   formData.append('brand', document.getElementById('brand').value);
   formData.append('category', document.getElementById('category').value);
   formData.append('description', document.getElementById('description').value);
-  // formData.append('scale', document.getElementById('scale').value);
+  formData.append('scale', document.getElementById('scale').value);
   formData.append('edition', document.getElementById('edition').value);
-  // formData.append('stock', document.getElementById('product-stock').value);
-  // formData.append('price', document.getElementById('product-price').value);
+  formData.append('stock', document.getElementById('product-stock').value);
+  formData.append('price', document.getElementById('product-price').value);
   formData.append('offer', document.getElementById('product-offer').value);
   formData.append('status', document.getElementById('status').value);
-
-  formData.append("parsedVariants", JSON.stringify(variants))
 
   // Append each image file (already selected & stored in selectedFiles)
 
@@ -1265,7 +1086,6 @@ function handleCroppedImage(croppedFile) {
     selectedFiles.forEach(file => {
         formData.append('productImages', file); // 'images' matches the Multer field name
   });
-  // formData.append('deletedImages', JSON.stringify(deletedImages));
 
   Swal.fire({
         title: "Are you sure",
@@ -1285,7 +1105,7 @@ function handleCroppedImage(croppedFile) {
         Swal.fire({
           icon: 'success',
           title: 'Product Updated!',
-          text: 'Your product successfully updated.',
+          text: 'Your product was successfully updated.',
           confirmButtonText: 'OK'
         }).then(() => {
           productForm.reset();            // Clearing  the form

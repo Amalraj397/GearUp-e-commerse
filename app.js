@@ -1,6 +1,7 @@
 import express from "express";
 import session from "express-session";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 import dotenv from 'dotenv';
@@ -45,6 +46,7 @@ app.use(session({
   }
 }));
 
+app.use(cors());
 app.use(cookieParser());
 
 app.use(setUserLocals);

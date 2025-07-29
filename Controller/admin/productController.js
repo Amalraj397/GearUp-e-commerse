@@ -14,7 +14,7 @@ export const loadproductList =async (req, res) => {
   } 
 };
 
-// controller for the productn fetc API
+// controller for the product fetch API
 export const getProductsJson = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -35,6 +35,7 @@ export const getProductsJson = async (req, res) => {
       .find(filter)
       .populate("brand")
       .populate("category")
+      .sort({ createdAt: -1 }) 
       .skip(skip)
       .limit(limit);
 
@@ -72,14 +73,22 @@ export const addnewProduct = async (req, res) => {
     brand,
     category,
     description,
-    scale,
     edition,
-    stock,
-    price,
+    parsedVariants,
     offer,
     status,
-    productImages,
   } = req.body;
+
+  // console.log("parsedvariants:", parsedVariants);
+  // console.log("req.body ::", req.body);
+
+  const variant=JSON.parse(parsedVariants);
+
+  // if(Array.isArray(variant)){
+  //   console.log("this is an array")
+  // }else{
+  //   console.log("anoter ntyrop")
+  // }
 
   // fetching category id
   const categoryId = await categorySchema.findOne({ name: category });
@@ -94,21 +103,10 @@ export const addnewProduct = async (req, res) => {
   }
 
   // Validate required fields again on the backend
-
-  if (
-    !productName ||
-    !brand ||
-    !category ||
-    !description ||
-    !scale ||
-    !edition ||
-    !stock ||
-    !price ||
-    !offer ||
-    !status
-  ) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
+  
+  // if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
+  //   return res.status(400).json({ message: "Missing required fields" });
+  // }
 
   // Image handling
 
@@ -133,10 +131,8 @@ export const addnewProduct = async (req, res) => {
       brand: brandId._id,
       category: categoryId._id,
       description,
-      scale,
-      edition,
-      stock,
-      salePrice: price,
+      edition, 
+      variants: variant, 
       productOffer: offer,
       status,
       productImage: imageUrls,
@@ -208,7 +204,7 @@ export const listProduct = async (req, res) => {
 // ---------------------- List & Unlist  END-------------------
 
 
-// =====================EDIT PRODUCT PAGE=====================
+// =====================GET EDIT PRODUCT PAGE=====================
 
 export const getProductEditpage = async (req, res) => {   // getting edit product_page
   try {
@@ -246,16 +242,16 @@ export const updateProduct = async (req, res) => {
       brand,
       category,
       description,
-      scale,
       edition,
+      parsedVariants,
       status,
-      price,
       offer,
-      stock,
     } = req.body;
 
+      const variant=JSON.parse(parsedVariants);
+
     // Validate mandatory fields
-    if (!productName || !brand || !category || !description || !scale || !edition || !status || !price || !stock) {
+    if (!productName || !brand || !category || !description || !parsedVariants || !edition || !status ) {
       return res.status(400).json({ message: 'All required fields must be filled.' });
     }
 
@@ -266,7 +262,7 @@ export const updateProduct = async (req, res) => {
     ]);
 
     const product = await productSchema.findById(productId);
-    // console.log("product data:", product);    //debugging
+    // console.log("product data ivde und:", product);    //debugging
 
     if (!product) return res.status(404).json({ message: 'Product not found.' });
 
@@ -293,16 +289,14 @@ export const updateProduct = async (req, res) => {
       brand: brandDoc._id,
       category: categoryDoc._id,
       description,
-      scale,
       edition,
+      variants: variant, 
+      productOffer: offer,
       status,
-      price,
-      offer,
-      stock,
       productImage: finalImages,
     });
 
-    const productdata_final = await productSchema.findByIdAndUpdate(productId, {})
+    // const productdata_final = await productSchema.findByIdAndUpdate(productId, {})
 
     // console.log('final product data', productdata_final);     //debugging
 
@@ -321,7 +315,7 @@ export const deleteProductImage = async (req, res) => {
   // console.log("imageId:", imageId);         //debugging
 
   if (!imageId) {
-    return res.status(400).json({ success: false, message: "No image ID provided" });
+    return res.status(400).json({ success: false, message: "No image-ID provided" });
   }
 
   try {
