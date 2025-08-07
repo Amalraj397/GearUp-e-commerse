@@ -1,0 +1,484 @@
+
+<%- include("../../Views/Partials/User/headerLand") %>
+
+<head>
+    <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/User/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <main class="main">
+        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title">Wishlist<span></span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
+
+            <div class="page-content">
+            	<div class="container">
+					<table class="table table-wishlist table-mobile">
+						<thead>
+							<tr>
+								<th>Product</th>
+								<th>Scale:Price</th>
+                                <th>Quantity</th>
+                                <th></th>
+                                <th></th>
+								<th>Stock Status</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+                                    <% if (wishlist && wishlist.length > 0) { %>
+                                        <% wishlist.forEach(item => { %>
+                                            <tr>
+                                                <td class="product-col">
+                                                    <div class="product">
+                                                        <figure class="product-media">
+                                                            <a href="#">
+                                                                <img src="<%= item.productId.productImage[0] %>" alt="Product_image">
+                                                            </a>
+                                                        </figure>
+                                                        <h3 class="product-title">
+                                                            <a href="#"><%= item.productId.productName %></a>
+                                                        </h3>
+                                                    </div>
+                                                </td>
+                                                <td class="variant-col">
+                                                    <select class="variant-select" data-product-id="<%= item.productId._id %>">
+                                                        <% item.productId.variants.forEach(variant => { %>
+                                                            <option value="<%= variant.variantName %>" data-price="<%= variant.salePrice %>">
+                                                                <%= variant.scale %> - ₹<%= variant.salePrice %>
+                                                            </option>
+                                                        <% }) %>
+                                                    </select>
+                                                </td>
+                                                    <td class="quantity-col">
+                                                    <input 
+                                                        type="number" 
+                                                        class="quantity-input" 
+                                                        data-product-id="<%= item.productId._id %>" 
+                                                        value="1" 
+                                                        min="1" style = "width: 50px;">
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="stock-col"><span class="in-stock">In stock</span></td>
+                                                <td class="action-col">
+                                                    <button class="btn btn-block btn-outline-primary-2 add-to-cart-btn" data-product-id="<%= item.productId._id %>">
+                                                        <i class="icon-cart-plus"></i> Add to Cart
+                                                    </button>
+                                                </td>
+                                                <td class="remove-col">
+                                                    <button class="remove-btn" data-product-id="<%= item.productId._id %>">
+                                                        <i class="icon-close"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    <% } else { %>
+                                <tr>
+                                    <td class="product-col"><span>Your wishlist is Empty!</span></td>
+                                </tr>
+                            <% } %>      
+						</tbody>
+					</table><!-- End .table table-wishlist -->
+            	</div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+    </div><!-- End .page-wrapper -->
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Sign in / Register Modal -->
+    
+
+    <!-- Plugins JS File -->
+    <script src="/User/assets/js/jquery.min.js"></script>
+    <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/User/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="/User/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/User/assets/js/superfish.min.js"></script>
+    <script src="/User/assets/js/owl.carousel.min.js"></script>
+    <!-- Main JS File -->
+    <script src="/User/assets/js/main.js"></script>
+    <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+</body>
+
+<script>
+    // Update displayed price when variant changes
+    document.querySelectorAll('.variant-select').forEach(select => {
+        select.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const price = selectedOption.dataset.price;
+            const productId = this.dataset.productId;
+            document.getElementById(`price-${productId}`).textContent = `₹${price}`;
+        });
+    });
+
+    // Handle Add to Cart
+    // document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    //     button.addEventListener('click', function() {
+    //         const productId = this.dataset.productId;
+    //         const select = document.querySelector(`.variant-select[data-product-id="${productId}"]`);
+    //         const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+            
+    //         const selectedOption = select.options[select.selectedIndex];
+    //         const variantId = selectedOption.value;
+    //         const scale = selectedOption.text.split('-')[0].trim();
+    //         const price = selectedOption.dataset.price;
+    //         const quantity = parseInt(quantityInput.value);
+
+    //         fetch('/addToCart', {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({
+    //                 productId,
+    //                 variantId,
+    //                 scale,
+    //                 price,
+    //                 quantity
+    //             })
+    //         })
+    //         .then(res => res.json())
+    //         .then(data => {
+    //             if (data.success) {
+    //             Toastify({
+    //                 text: "product Added to cart🛒 successfully!",
+    //                 duration: 3000,
+    //                 gravity: "top", 
+    //                 position: "right", 
+    //                 backgroundColor: "#28a745",
+    //             }).showToast();
+    //         } else {
+    //             Toastify({
+    //                 text: data.message || "Failed to add to cart",
+    //                 duration: 3000,
+    //                 gravity: "top",
+    //                 position: "right",
+    //                 backgroundColor: "#dc3545",
+    //             }).showToast();
+    //         }
+    //         });
+    //     });
+        // });
+
+        // -------------------------------------------------
+        
+    // document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    //   button.addEventListener('click', function () {
+    //     const productId = this.dataset.productId;
+    //     const select = document.querySelector(`.variant-select[data-product-id="${productId}"]`);
+    //     const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+
+    //     const selectedOption = select.options[select.selectedIndex];
+    //     const variantName = selectedOption.value; // This should be variantName, not variantId
+    //     const scale = selectedOption.text.split('-')[0].trim();
+    //     const quantity = parseInt(quantityInput.value);
+
+    //     fetch('/addToCart', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({
+    //         productId,
+    //         variantName,       
+    //         scale,
+    //         quantity,
+    //         fromWishlist: true   // for removing from wishlist
+    //       })
+    //     }) 
+    //       .then(res => res.json())
+    //       .then(data => {
+    //         if (data.success) {
+    //           Toastify({
+    //             text: "Product added to cart 🛒 successfully!",
+    //             duration: 3000,
+    //             gravity: "top",
+    //             position: "right",
+    //             backgroundColor: "#28a745",
+    //           }).showToast();
+
+    //           // Optional: Remove the product row from wishlist in the DOM
+    //           const card = this.closest(".wishlist-card");
+    //           if (card) card.remove();
+
+    //         } else {
+    //           Toastify({
+    //             text: data.message || "Failed to add to cart",
+    //             duration: 3000,
+    //             gravity: "top",
+    //             position: "right",
+    //             backgroundColor: "#dc3545",
+    //           }).showToast();
+    //         }
+    //       })
+    //       .catch(err => {
+    //         Toastify({
+    //           text: "Something went wrong",
+    //           duration: 3000,
+    //           gravity: "top",
+    //           position: "right",
+    //           backgroundColor: "#dc3545",
+    //         }).showToast();
+    //       });
+    //   });
+    // });
+
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const productId = this.dataset.productId;
+        const select = document.querySelector(`.variant-select[data-product-id="${productId}"]`);
+        const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
+        
+        const selectedOption = select.options[select.selectedIndex];
+        // const variantId = selectedOption.value;
+        const variantName = selectedOption.value;
+        const scale = selectedOption.text.split('-')[0].trim();
+        const price = selectedOption.dataset.price;
+        const quantity = parseInt(quantityInput.value);
+
+        fetch('/addToCart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                productId,
+                variantName,
+                scale,
+                price,
+                quantity
+            })
+        })
+        .then(res => res.json())
+        // .then(async data => {
+        //     if (data.success) {
+        //         //  Success
+        //         Toastify({
+        //             text: "Product added to cart 🛒 successfully!",
+        //             duration: 2500,
+        //             gravity: "top",
+        //             position: "right",
+        //             backgroundColor: "#28a745",
+        //         }).showToast();
+
+        //         // Remove from WishList
+        //         try {
+        //             const response = await fetch(`/removeFromWishlist/${productId}`, {
+        //                 method: 'DELETE',
+        //                 headers: { 'Content-Type': 'application/json' }
+        //             });
+
+        //             const result = await response.json();
+
+        //             if (response.ok) {
+        //                 // Remove from  wishlist dixcply
+        //                 const row = button.closest("tr");
+        //                 if (row) row.remove();
+
+        //                 // updating count
+        //                 document.querySelector(".wishlist-badge").textContent = result.wishlistCount;
+
+        //                 // Optional: Toast
+        //                 Toastify({
+        //                     text: "Removed from wishlist ❤️",
+        //                     duration: 2000,
+        //                     gravity: "top",
+        //                     position: "right",
+        //                     backgroundColor: "#ffc107",
+        //                 }).showToast();
+        //             }
+        //         } catch (err) {
+        //             console.error("Error removing from wishlist:", err);
+        //         }
+
+        //     } else {
+        //         Toastify({
+        //             text: data.message || "Failed to add to cart",
+        //             duration: 3000,
+        //             gravity: "top",
+        //             position: "right",
+        //             backgroundColor: "#dc3545",
+        //         }).showToast();
+        //     }
+        // });
+
+        .then(async data => {
+    if (data.success) {
+        // Success - Product added
+        Toastify({
+            text: "Product added to cart 🛒 successfully!",
+            duration: 2500,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#28a745",
+        }).showToast();
+
+        // Remove from WishList
+        try {
+            const response = await fetch(`/removeFromWishlist/${productId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                const row = button.closest("tr");
+                if (row) row.remove();
+
+                document.querySelector(".wishlist-badge").textContent = result.wishlistCount;
+
+                Toastify({
+                    text: "Removed from wishlist ❤️",
+                    duration: 2000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ffc107",
+                }).showToast();
+            }
+        } catch (err) {
+            console.error("Error removing from wishlist:", err);
+        }
+
+    } else if (data.alreadyInCart) {
+        // Product already in cart - Show SweetAlert confirmation
+        const result = await Swal.fire({
+            title: 'Already in Cart',
+            text: data.message,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, increase quantity',
+            cancelButtonText: 'Cancel'
+        });
+
+        if (result.isConfirmed) {
+            // Call separate API to increase quantity
+            fetch("/increaseCartQuantity", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId, variantName, scale, quantity })
+            })
+            .then(res => res.json())
+            .then(updateData => {
+                if (updateData.success) {
+                    Toastify({
+                        text: updateData.message || "Quantity updated!",
+                        duration: 2500,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#28a745",
+                    }).showToast();
+                } else {
+                    Toastify({
+                        text: updateData.message || "Failed to update quantity",
+                        duration: 2500,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "#dc3545",
+                    }).showToast();
+                }
+            });
+        }
+    } else {
+        Toastify({
+            text: data.message || "Failed to add to cart",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#dc3545",
+        }).showToast();
+    }
+});
+
+    });
+});
+
+
+    document.querySelectorAll(".remove-btn").forEach(button => {
+      button.addEventListener("click", async () => {
+        const productId = button.getAttribute("data-product-id");
+
+        Swal.fire({
+          title: "Are you sure?",
+          text: "This item will be removed from your wishlist.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "Yes, remove it!"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const response = await fetch(`/removeFromWishlist/${productId}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                // Remove item from DOM
+                button.closest("tr").remove();
+
+                if (document.querySelector(".wishlist-badge")) {
+                  document.querySelector(".wishlist-badge").textContent = data.wishlistCount;
+                }
+                // Show Toastify success
+                Toastify({
+                  text: data.message,
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "#28a745",
+                  stopOnFocus: true
+                }).showToast();
+
+              } else {
+                // Toastify error
+                Toastify({
+                  text: data.message,
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "#dc3545",
+                  stopOnFocus: true
+                }).showToast();
+              }
+            } catch (error) {
+              Toastify({
+                text: "Something went wrong. Please try again.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#dc3545",
+                stopOnFocus: true
+              }).showToast();
+            }
+          }
+        });
+      });
+    });
+
+
+</script>
+
+
+
+<%- include("../../Views/Partials/User/footerLand") %>

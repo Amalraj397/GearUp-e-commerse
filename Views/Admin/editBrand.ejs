@@ -180,6 +180,7 @@
  const brandImage = document.getElementById("brand-image");
   const brandLogoPreview = document.getElementById("existing-brand-logo");
   const submitButton = document.getElementById("submit-button");
+  const brandForm = document.getElementById("add-brand-form");
   let imageflag = false;
 
    brandImage.addEventListener("change", function () {
@@ -197,9 +198,7 @@
       });
 
 
-  document
-    .getElementById("add-brand-form")
-    .addEventListener("submit", function (e) {
+ brandForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
       const brandName = document.getElementById("brand-name").value;
@@ -271,7 +270,8 @@
                 title: data.message || "Success!",
                 icon: "success",
               }).then(() => {
-                location.reload();
+                brandForm.reset();
+                window.location.href = '/admin/brands'; 
               });
             })
             .catch((err) => {

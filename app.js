@@ -13,6 +13,7 @@ import userRoute from "./Routes/userRoute.js";
 import adminRoute from "./Routes/adminRoute.js";
 
 import { setUserLocals } from './middlewares/setUserLocals.js';
+import { cartCountMiddleware,wishlistCountmiddleware} from './middlewares/cartCount.js'
 // import cors from 'cors';
 
 
@@ -50,6 +51,8 @@ app.use(cors());
 app.use(cookieParser());
 
 app.use(setUserLocals);
+app.use(cartCountMiddleware);
+app.use(wishlistCountmiddleware);
 app.use("/",userRoute);
 app.use("/admin",adminRoute);
 

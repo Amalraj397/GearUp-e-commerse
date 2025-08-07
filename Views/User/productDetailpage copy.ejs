@@ -1,0 +1,212 @@
+
+<head>
+  
+    <title>AutoMinima - precesion in every scale</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+    <!--<link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png"> -->
+    <link rel="manifest" href="/User/assets/images/icons/site.html">
+    <!-- <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666"> -->
+    <link rel="shortcut icon" href="/User/assets/images/icons/autominima-logo.png">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+    <!-- <meta name="theme-color" content="#ffffff"> -->
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/User/assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="/User/assets/css/plugins/magnific-popup/magnific-popup.css">
+    <!-- Main CSS File -->
+    <!-- <link rel="stylesheet" href="/User/assets/css/style.css"> -->
+    <link rel="stylesheet" href="/User/assets/css/style.css">
+    <link rel="stylesheet" href="/User/assets/css/styles.css">
+    <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
+</head>
+
+<body>
+    <%-include("../../Views/Partials/User/headerLand")%>
+    <!-- <div class="page-wrapper">
+        <header class="header">
+            <div class="header-top"></div>
+        </header>End .header -->
+
+        <main class="main">
+            <div class="page-content">
+                <div class="container">
+                    <div class="product-details-top">
+                        <div class="row">
+                            <div class="col-md-6" id="product-gallery-container">
+                                <div class="product-gallery product-gallery-vertical">
+                                    <div class="row">
+                                        <figure class="product-main-image">
+                                            <img id="product-zoom" src="<%= product.productImage[0] %>" data-zoom-image="<%= product.productImage[0] %>" alt="product image">
+
+                                            <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                                                <i class="icon-arrows"></i>
+                                            </a>
+                                        </figure><!-- End .product-main-image -->
+
+                                        <div id="product-zoom-gallery" class="product-image-gallery">
+
+                                            <% product.productImage.forEach((image, index)=> { %>
+                                            <a class="product-gallery-item <%= index === 0 ? 'active' : '' %>" href="#" data-image="<%= image %>" data-zoom-image="<%= image %>">
+                                                <img src="<%= image %>" alt="product side">
+                                            </a>
+                                            <% }) %>
+                                        </div><!-- End .product-image-gallery -->
+                                    </div><!-- End .row -->
+                                </div><!-- End .product-gallery -->
+                            </div><!-- End .col-md-6 -->
+
+                            <div class="col-md-6"  id="product-galler-details">
+                                <div class="product-details">
+                                     <label for="scale">Edition:</label><h4><%=product.edition%></h4>
+                                    <h1 class="product-title"><%=product.productName%></h1><!-- End .product-title -->
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="scale">Brand:</label><h4><%=product.brand.brandName%></h4>
+                                    </div><!-- End .select-custom -->
+                                    
+                                   
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
+                                    </div><!-- End .rating-container -->
+
+                                    <div class="product-price">
+                                       <span class="new-price"> ₹ <%=product.salePrice%></span>
+                                    </div><!-- End .product-price -->
+                                    
+                                    <div class="product-content">
+                                      <p class="short-desc" style="display: block;"><%= product.description.split(" ").slice(0, 25).join(" ") %>...</p>
+                                      <p class="full-desc" style="display: none;"><%= product.description %></p><button class="toggle-desc-btn">See More..</button>
+                                    </div>
+
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="scale">Scale:</label><h3><%=product.scale%></h3>
+                                    </div><!-- End .select-custom -->
+                                </div><!-- End .details-filter-row -->
+
+                                    <div class="details-filter-row details-row-size">
+                                        <label for="qty">Qty:</label>
+                                        <div class="product-details-quantity">
+                                            <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+                                        </div><!-- End .product-details-quantity -->
+                                    </div><!-- End .details-filter-row -->
+                                    <div class="product-cat">
+                                            <span>Category:</span>
+                                            <a href="#"><%=product.category.name%></a>,
+                                            <a href="#"><%=product.productName%></a>
+                                             
+                                        </div><!-- End .product-cat -->
+
+                                    <div class="product-details-action">
+                                        <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')"><span>add to cart</span></a>
+                                    </div><!-- End .product-details-action -->
+                                    <div class="social-icons social-icons-sm">
+                                            <span class="social-label">Share:</span>
+                                            <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                                            <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                                            <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                                            <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                                    </div>
+                                      <p>Experience premium craftsmanship with AutoMinima’s diecast models. Built for collectors and enthusiasts. Perfect for display or gifting — Precision in Every Scale.</p>
+                                </div><!-- End .product-details -->
+                            </div><!-- End .col-md-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .product-details-top -->
+
+                    <div class="product-details-tab">
+                        <ul class="nav nav-pills justify-content-center" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
+                            </li>
+                            <li class="nav-item">
+                                <!-- <a class="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a> -->
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
+                            </li>
+                        </ul>  
+                    </div><!-- End .product-details-tab -->
+
+        <!-- ------------------related product  ----------------------->
+
+         <h2 class="title text-center mb-4">You May Also Like</h2><!-- End .title text-center -->
+
+                    <div class="related-product-list">                    
+                                  <% if (relatedProducts.length === 0) { %>
+                                     <p>No any related products found</p>
+                                  <% } else { %>
+                                  <% relatedProducts.forEach(product => { %>
+                                    <div class="col-md-6 col-lg-4 col-xl-3 products-container">
+                                        <a href="/productDetail/<%=product._id%>">
+                                          <div class="product-card">
+                                            <img src="<%= product.productImage[0] %>" class="img-fluid w-100 rounded-top" alt="<%= product.productName %>">
+                                          </div>
+                                          <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+                                            <%= product.category.name %>
+                                          </div>
+                                          <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                            <h4><%= product.productName %></h4>
+                                            <p><%= product.scale %> | <%= product.edition %></p>
+                                            <div class="d-flex justify-content-between flex-lg-wrap">
+                                              <p class="text-dark fs-5 fw-bold mb-0">₹<%= product.salePrice %></p>
+                                              <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                              </a>
+                                            </div>
+                                          </div>
+                                        </a>
+                                    </div>
+                                  <% }) %>
+                                  <% } %>
+                     </div>
+
+            <!-- ------------------------related product ends--------------------- -->
+
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Plugins JS File -->
+    <script src="/User/assets/js/jquery.min.js"></script>
+    <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/User/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="/User/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/User/assets/js/superfish.min.js"></script>
+    <script src="/User/assets/js/owl.carousel.min.js"></script>
+    <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/User/assets/js/jquery.elevateZoom.min.js"></script>
+    <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/User/assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Main JS File -->
+    <script src="/User/assets/js/main.js"></script>
+    <script>
+        document.querySelectorAll('.toggle-desc-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const productContent = btn.closest('.product-content');
+            const shortDesc = productContent.querySelector('.short-desc');
+            const fullDesc = productContent.querySelector('.full-desc');
+        
+            const isExpanded = fullDesc.style.display === 'block';
+        
+            shortDesc.style.display = isExpanded ? 'block' : 'none';
+            fullDesc.style.display = isExpanded ? 'none' : 'block';
+            btn.textContent = isExpanded ? 'See More' : 'See Less';
+          });
+        });
+    </script>
+       <%-include("../../Views/Partials/User/footerLand")%>
+</body>
+</html>

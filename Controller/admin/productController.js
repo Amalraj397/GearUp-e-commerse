@@ -104,9 +104,9 @@ export const addnewProduct = async (req, res) => {
 
   // Validate required fields again on the backend
   
-  // if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
-  //   return res.status(400).json({ message: "Missing required fields" });
-  // }
+  if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
 
   // Image handling
 

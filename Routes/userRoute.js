@@ -26,7 +26,6 @@ import{
     forgotresendOTP,
     getSetnewPassword,
     confirmResetPassword,
-
 }from "../Controller/user/forgotPasswordController.js";
     
 
@@ -44,7 +43,6 @@ import{
    //  userAuthenticated,
  } from "../middlewares/Auth.js";
 
-
 import{
     getUserDashboard,
     geteditUserprofile,
@@ -59,6 +57,21 @@ import{
     edit_userAddress,
     delete_userAddress,
 }from "../Controller/user/userAddressController.js";
+
+
+import {
+    getCartPage,
+    addToCartpage,
+    removeFromCartpage,
+    increaseCartQuantity,
+}from "../Controller/user/userCartController.js";
+
+import {
+    getUserWishlist,
+    addToWishlist,
+    removefromwishlist,
+    
+} from "../Controller/user/userWishlistController.js"
 
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -99,14 +112,14 @@ userRoute.get("/getOtp", getOtpPage);
 userRoute.post("/otpVerify", verifyOtp);
 userRoute.post("/resendOtp", resendOTP);
 
-//product details
+//-------------product details-------------
 userRoute.get("/shopPage",getshopPage);
 userRoute.get("/categoryPage",getcategoryPage);
 userRoute.get("/brandPage",getBrandPage);
 userRoute.get("/filterProducts",filterProducts);
 userRoute.get("/productDetail/:id",getproductDetailpage);
 
-//  userprofile managament-section
+// --------------userprofile managament section---------------
 userRoute.get("/userDashboard",getUserDashboard);
 userRoute.get("/getEditProfile",geteditUserprofile);
 userRoute.put("/EditUserprofile",uploadMiddleware('Users').single('userProfileImage'), updateUserprofile);
@@ -120,5 +133,16 @@ userRoute.put("/updateUserAddress/:id",edit_userAddress);
 // delete
 userRoute.delete("/remove-address/:id",delete_userAddress);
 
+
+// ---------------cart managements------------
+userRoute.get ("/userCart",getCartPage);
+userRoute.post("/addToCart",addToCartpage);
+userRoute.delete("/removeFromCart/:id",removeFromCartpage);
+
+//-----------wishlist management----------
+userRoute.get("/Wishlist",getUserWishlist);
+userRoute.post("/addToWishlist",addToWishlist);
+userRoute.delete("/removeFromWishlist/:id",removefromwishlist);
+userRoute.post("/increaseCartQuantity",increaseCartQuantity)
 
 export default userRoute

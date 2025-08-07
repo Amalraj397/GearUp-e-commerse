@@ -30,6 +30,7 @@ export const getshopPage = async (req, res) => {
     const products = await productSchema.find(filter)
       .populate("brand")
       .populate("category")
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean();
@@ -66,33 +67,40 @@ export const getshopPage = async (req, res) => {
   }
 };
 
-
 export const getproductDetailpage = async (req, res) => {
-      const {id} = req.params;
-   
+    const { id } = req.params;
+
     try {
-        // const user = req.session.user;
-        const product = await productSchema.findById(id).populate('category').populate('brand');
+        const product = await productSchema
+            .findById(id)
+            .populate('category')
+            .populate('brand');
 
-        if(!product || product.isBlocked){
-            // return res.status(404).render('404');
-            return res.redirect('/user/store')
+        console.log("Product Details:", product);
+
+        if (!product || product.isBlocked) {
+            return res.redirect('/user/store');
         }
-        // const userDate = user ? await User.findById(user.id) : null
-        const relatedProducts = await productSchema.find({_id: { $ne: product._id}, // Exclude current product
-                                category: product.category,
-                                scale: product.scale,
-                              }).limit(10).populate('category');
 
-        // console.log("product 0-----", product);  // debugging
+        const relatedProducts = await productSchema.find({
+            _id: { $ne: product._id },
+            category: product.category,
+            "variants.scale": product.variants[0]?.scale || "", // ✅ Fix here
+        })
+        .limit(10)
+        .populate('category');
 
-        res.status(200).render('productDetailpage.ejs',{product, relatedProducts:relatedProducts});
+        res.status(200).render('productDetailpage.ejs', {
+            product,
+            relatedProducts
+        });
 
     } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
-  }
-}
+        console.log("Error loading product detail page:", error);
+        res.status(500).send("Server Error");
+    }
+};
+
 
 //   -------getting categroy page---------
 export const getcategoryPage = (req, res) => {

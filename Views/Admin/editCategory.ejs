@@ -196,7 +196,7 @@
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                id: '<%= category._id %>',
+                // id: '<%= category._id %>',
                 name: categoryName.trim(),
                 description: categoryDescription.trim(),
               }),
@@ -209,7 +209,8 @@
                   title: data.message || "Success!",
                   icon: "success",
                 }).then(() => {
-                  location.reload();
+                form.reset();
+                window.location.href = '/admin/category'; 
                 });
               })
               .catch((err) => {
@@ -222,33 +223,6 @@
               });
           }
         });
-        // .fetch("/admin/editCategory", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     name: categoryName.trim(),
-        //     description: categoryDescription.trim(),
-        //   }),
-        // })
-        // .then(async (response) => {
-        //   const data = await response.json().catch(() => ({}));
-        //   if (!response.ok) throw new Error(data.message || "Request failed");
-        //   Swal.fire({
-        //     title: data.message || "Success!",
-        //     icon: "success",
-        //   }).then(() => {
-        //     location.reload();
-        //   });
-        // })
-        // .catch((err) => {
-        //   Swal.fire({
-        //     title: "Error!",
-        //     text: err.message || "Something went wrong. Please try again.",
-        //     icon: "error",
-        //   });
-        // });
       });
     }
   });

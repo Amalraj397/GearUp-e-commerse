@@ -52,7 +52,7 @@ export const userAuth = async (req, res, next) => {
 
 // Middleware for checking authentication
 // export const userAuthenticated = (req, res,next) => {
-//   console.log("middle call vannu")
+//   console.log("middle call vannea")
 //   if (req.session.user) {
 //     console.log("usr retyju::::::", req.session.user); 
 //       return res.redirect("/")

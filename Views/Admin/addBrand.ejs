@@ -163,6 +163,7 @@
       const brandName = document.getElementById("brand-name").value;
       const brandDescription = document.getElementById("brand-description").value;
       const brandImage = document.getElementById("brand-image").value;
+       const brandForm = document.getElementById("add-brand-form");
 
       const errorMessage = [];
 
@@ -228,7 +229,8 @@
       title: data.message || "Success!",
       icon: "success",
     }).then(() => {
-      location.reload();
+     brandForm.reset();
+    window.location.href = '/admin/brands'; 
     });
   })
   .catch(() => {

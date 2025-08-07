@@ -13,25 +13,6 @@
 
 </head>
 <body>
-    <!-- <header>
-        <nav class="navbar">
-            <div class="logo">
-                <h1>RIDEZ</h1>
-                <div class="logo-underline"></div>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#" class="nav-link">Go to Store</a></li>
-                <li><a href="#" class="nav-link">Contact Us</a></li>
-                <li><a href="#" class="nav-link">About Us</a></li>
-            </ul>
-            <div class="auth-buttons">
-                <li><a href="/login" class="nav-link">Login</a></li>
-                <li><a href="/signup" class="nav-link">Sign-up</a></li>
-            </div>
-
-        </nav>
-    </header> -->
-
     <header class="header">
         <nav class="navbar">
           <div class="logo">
@@ -41,7 +22,7 @@
           </div>
       
           <ul class="nav-links">
-            <li><a href="/" class="nav-link">Home </a></li>
+            <li><a href="/" class="nav-link" >Home </a></li>
             <li><a href="#" class="nav-link">Offer-Zone</a></li>
             <li><a href="/shopPage" class="nav-link">Go to Store</a></li>
             <li><a href="#" class="nav-link">Category </a></li>
@@ -53,11 +34,24 @@
           <ul class="auth-buttons">
             <% if (user) { %>
                 <% console.log("user data:::", user); %>
-              <li class="nav-link"  id="user-name"> welcome <%= user.name %></li>
+              <li class="nav-link"  id="user-name">Hi, <%= user.name %></li>
              <div class="dropdown">
+              
+              <!-- User Icon -->
               <button class="dropdown-btn">
-                 <i class="fas fa-user"></i>
+                 <i class="fas fa-user" style="font-size: larger;"></i>
               </button>
+
+              <!-- Wishlist Icon -->
+              <button class="dropdown-btn-heart" onclick="window.location.href='/Wishlist'">
+                 <i class="fas fa-heart"></i><span class="wishlist-badge"><%= wishlistCount ||0 %></span>
+              </button>
+              
+              <!-- Cart Icon -->
+              <button class="dropdown-btn-shop" onclick="window.location.href='/userCart'">
+                 <i class="fas fa-shopping-cart"></i><span class="cart-badge"><%= cartCount ||0 %></span>
+              </button>
+
               <div class="dropdown-content">
                 <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
                 <a href="#"><i class="fas fa-shopping-bag"></i> Orders</a>

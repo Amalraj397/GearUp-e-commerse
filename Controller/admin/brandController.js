@@ -15,7 +15,7 @@ export const getBrands = async (req, res) => {
     const filter = {};
     if (searchQuery) {
       filter.brandName = { $regex: new RegExp(searchQuery, "i") }; // case-insensitive search
-  }
+    }
 
     const totalBrands = await brandSchema.countDocuments(filter);
     // const brand = await brandSchema.find(filter).skip(skip).limit(limit).exec();
@@ -44,44 +44,44 @@ export const getAddBrandPage = async (req, res) => {
   }
 };
 
-// new addbrand function   firstone 26/4--04:05 pm
+// new addbrand function  
 export const addNewBrand = async (req, res) => {
-    const { name, description } = req.body;
-  
-    if (!req.file) {
-      return res.status(400).json({ message: 'Please upload a logo image' });
-    }
-  
-    //  Get the Cloudinary-hosted image URL
-    const logo = req.file?.path || req.file?.secure_url;
-  
+  const { name, description } = req.body;
+
+  if (!req.file) {
+    return res.status(400).json({ message: 'Please upload a logo image' });
+  }
+
+  //  Get the Cloudinary-hosted image URL
+  const logo = req.file?.path || req.file?.secure_url;
+
   try {
     const brand = await brandSchema.findOne({
-        brandName: { $regex: `^${name}$`, $options: 'i' }
+      brandName: { $regex: `^${name}$`, $options: 'i' }
     });
 
-  if (brand) {
-    return res.status(400).json({ message: 'Brand name already exists' });
+    if (brand) {
+      return res.status(400).json({ message: 'Brand already exists..try again!' });
     }
-  
-      const newBrand = new brandSchema({
-        brandName: name,
-        description,
-        brandImage: logo, //  Here we are storing Cloudinary image URL
-      });
-  
-      await newBrand.save();
-  
-      res.status(201).json({ message: 'New brand added successfully..!' });
-    } catch (error) {
-      console.log("Error in adding brand", error);
-      res.status(500).send("Server Error");
-    }
-  };
+
+    const newBrand = new brandSchema({
+      brandName: name,
+      description,
+      brandImage: logo, //  Here we are storing Cloudinary image URL
+    });
+
+    await newBrand.save();
+
+    res.status(201).json({ message: 'New brand added successfully..!' });
+  } catch (error) {
+    console.log("Error in adding brand", error);
+    res.status(500).send("Server Error");
+  }
+};
 
 
- // ---------------------unlisting a Brand -------------------
-  export const unlistBrand = async (req, res) => {
+// ---------------------unlisting a Brand -------------------
+export const unlistBrand = async (req, res) => {
   try {
     const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: true });
     res.json({ success: true, message: "Brand unlisted successfully" });
@@ -89,7 +89,7 @@ export const addNewBrand = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to unlist brand" });
   }
 };
- 
+
 //---------------------listng a Brand----------------------
 export const listBrand = async (req, res) => {
   try {
@@ -104,7 +104,7 @@ export const listBrand = async (req, res) => {
 export const getBrandEditPage = async (req, res) => {
   try {
     const brand = await brandSchema.findById(req.params.id);
-    res.status(200).render("editBrand.ejs", { 
+    res.status(200).render("editBrand.ejs", {
       brand,
     });
   } catch (error) {
@@ -124,13 +124,19 @@ export const updateBrand = async (req, res) => {
     if (!brand) {
       return res.status(404).json({ message: "Brand not found." });
     }
-    const existBrand = await brandSchema.findOne({
-        brandName: { $regex: `^${name}$`, $options: 'i' }
-    });
 
-    if(existBrand){
-       return res.status(404).json({ message: "Brand name already exists" });
+    if (name && name.toLowerCase() !== brand.brandName.toLowerCase()) {
+
+      const existBrand = await brandSchema.findOne({
+        brandName: { $regex: `^${name}$`, $options: 'i' },
+        _id: { $ne: id }
+      });
+
+      if(existBrand){
+         return res.status(404).json({ message: "Brand name already exists" });
+      }
     }
+
     //  Update fields
     if (name) brand.brandName = name;
     if (description) brand.description = description;
@@ -150,4 +156,3 @@ export const updateBrand = async (req, res) => {
     res.status(500).json({ message: "Server error while updating brand." });
   }
 };
-  

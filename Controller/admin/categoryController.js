@@ -60,10 +60,11 @@ export const addNewCategory = async (req, res) => {
       return res.status(400).json({ message: "Name and description are required." });
     }
 
-    const existCate = await categorySchema.findOne({name:"name"});
+    const existCate = await categorySchema.findOne({
+      name:{$regex: `^${name}$`, $options:'i'}});
     
     if(existCate){
-       return res.status(400).json({message:"category already present. try again..!"})
+       return res.status(400).json({message: "category already exists..try again!"})
     }
 
      //saving  data to db
@@ -163,20 +164,40 @@ export const updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body;
-    const updatedCategory = await categorySchema.findByIdAndUpdate(
-      id,
-      { name, description },
-      { new: true }
-    );
-    if (!updatedCategory) {
+
+    const category = await categorySchema.findById(id);
+    if (!category) {
       return res.status(404).json({ message: "Category not found." });
     }
-    res.json({ message: "Category updated successfully." });
-  } catch (error) {
-      console.log("error in loading the page", error);
-      res.status(500).send("server Error  ");
+
+    // here we are Checking  if name is being updated and already exists
+
+    if (name && name.toLowerCase() !== category.name.toLowerCase()) {
+      const existCategory = await categorySchema.findOne({
+        name: { $regex: `^${name}$`, $options: 'i' },
+        _id: { $ne: id }
+      });
+
+      if (existCategory) {
+        return res.status(400).json({ message: "Category already exists..try again!" });
+      }
+
+      category.name = name;
     }
+
+    if (description) {
+      category.description = description;
+    }
+
+    await category.save();
+
+    res.status(200).json({ message: "Category updated successfully." });
+  } catch (error) {
+    console.error("Error updating category:", error);
+    res.status(500).json({ message: "Server error while updating category." });
+  }
 };
+
 
 // ----------------------------END-------------------------------
 

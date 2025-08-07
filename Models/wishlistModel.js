@@ -1,25 +1,18 @@
-import mongoose from "mongoose";
+import  mongoose from "mongoose";
 
 const wishlistSchema = new mongoose.Schema({
     userId :{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
-
+        required: [true, "UserData is required"],
     },
-
-    products: [{
+    
+    products:[{
         productId:{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product',
-            required: true
+            required: [true, "Product is required"],
         },
-       
-        createdOn:{
-            type: Date,
-            default: Date.now
-        }
-
     }]
 },{timestamps: true})
 
