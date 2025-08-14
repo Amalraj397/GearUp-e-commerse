@@ -38,42 +38,40 @@
 											<th><p></p></th>
 										</tr>
 									</thead>
-                                <tbody>
-                                    <% if (cart && cart.items.length > 0) { %>
-                                      <% cart.items.forEach(item => { %>
-                                        <tr>
-                                          <td class="product-col">
-                                            <div class="product">
-                                              <figure class="product-media">
-                                                <a href="#">
-                                                  <img src="<%= item.productId.productImage[0] %>" alt="Product image">
-                                                </a>
-                                              </figure>
-                                              <h3 class="product-title">
-                                                <a href="#"><%= item.productId.productName %> - <%= item.variantName %> (<%= item.scale %>)</a>
-                                              </h3>
-                                            </div>
-                                          </td>
-                                          <td class="price-col">₹<%= item.salePrice %></td>
-                                          <td class="quantity-col">
-                                            <div class="cart-product-quantity">
-                                              <input type="number" class="form-control" value="<%= item.quantity %>" min="1" max="5" step="1" data-decimals="0" required>
-                                            </div>
-                                          </td>
-                                          <td class="total-col">₹<%= item.totalProductprice %></td>
-                                          <td class="remove-col">
-                                            <!-- <button class="btn-remove" data-id="<%= item._id %>"><i class="icon-close"></i></button> -->
-                                             <button class="remove-btn" data-product-id="<%= item.productId._id %>">Remove</button>
-
-
-                                          </td>
-                                        </tr>
-                                      <% }) %>
-                                    <% } else { %>
-                                      <tr>
-                                        <td colspan="5" class="text-center">Your cart is empty</td>
-                                      </tr>
-                                    <% } %>
+                        <tbody>
+                            <% if (cart && cart.items.length > 0) { %>  
+                              <% cart.items.forEach(item => { %>
+                                <tr>
+                                  <td class="product-col">
+                                    <div class="product">
+                                      <figure class="product-media">
+                                        <a href="#">
+                                          <img src="<%= item.productId.productImage[0] %>" alt="Product image">
+                                        </a>
+                                      </figure>
+                                      <h3 class="product-title">
+                                        <a href="#"><%= item.productId.productName.split("").slice(0,0).join("")%> - <%= item.variantName %> (<%= item.scale %>)</a>
+                                      </h3>
+                                    </div>
+                                  </td>
+                                  <td class="price-col">₹<%= item.salePrice %></td>
+                                  <td class="quantity-col">
+                                    <div class="cart-product-quantity">
+                                      <input type="number" class="form-control" value="<%= item.quantity %>" min="1" max="5" step="1" data-decimals="0" required>
+                                    </div>
+                                  </
+                                  <td class="total-col">₹<%= item.totalProductprice %></td>
+                                  <td class="remove-col">
+                                    <!-- <button class="remove-btn" data-id="<%= item._id %>"><i class="icon-close"></i></button> -->
+                                     <button class="btn btn-outline-dark-2 removeCart" data-product-id="<%= item.productId._id %>"> Remove</button>
+                                  </td>
+                                </tr>
+                              <% }) %>
+                            <% } else { %>
+                              <tr>
+                                <td colspan="5" class="text-center">Your cart is empty</td>
+                              </tr>
+                            <% } %>
                                 </tbody>
 								</table><!-- End .table table-wishlist -->
 
@@ -89,7 +87,7 @@
 			            				</form>
 			            			</div><!-- End .cart-discount -->
 
-			            			<a href="/userCart" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
+			            			<!-- <a href="/userCart" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> -->
 		            			</div><!-- End .cart-bottom -->
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
@@ -111,7 +109,7 @@
 	                							<td>
 													<div class="custom-control custom-radio">
 														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="free-shipping">Free Shipping</label>
+														<label class="custom-control-label" for="free-shipping">Free Shipping :</label>
 													</div><!-- End .custom-control -->
 	                							</td>
 	                							<td>₹0.00</td>
@@ -121,7 +119,7 @@
 	                							<td>
 	                								<div class="custom-control custom-radio">
 														<input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="standart-shipping">Standart:</label>
+														<label class="custom-control-label" for="standart-shipping">Normal Shipping :</label>
 													</div><!-- End .custom-control -->
 	                							</td>
 	                							<td>₹10.00</td>
@@ -131,14 +129,15 @@
 	                							<td>
 	                								<div class="custom-control custom-radio">
 														<input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="express-shipping">Express:</label>
+														<label class="custom-control-label" for="express-shipping">Express Shipping:</label>
 													</div><!-- End .custom-control -->
 	                							</td>
 	                							<td>₹20.00</td>
 	                						</tr><!-- End .summary-shipping-row -->
 
 	                						<tr class="summary-shipping-estimate">
-	                							<td>Estimate for Your Country<br> <a href="dashboard.html">Change address</a></td>
+	                							<!-- <td>Estimate for Your Country<br>  -->
+                                  <!-- <a href="dashboard.html">Change address</a></td> -->
 	                							<td>&nbsp;</td>
 	                						</tr><!-- End .summary-shipping-estimate -->
 
@@ -149,7 +148,7 @@
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                				<a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
 
 		            			<a href="/shopPage" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
@@ -180,40 +179,9 @@
     <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
-		  
-    // Update Quantity
-//     document.querySelectorAll(".cart-qty").forEach(input => {
-//     input.addEventListener("change", function () {
-//         const itemId = this.dataset.itemId;
-//         const quantity = this.value;
 
-//         fetch(`/cart/update/${itemId}`, {
-//             method: "PUT",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify({ quantity })
-//         })
-//         .then(res => res.json())
-//         .then(data => {
-//             if (data.success) {
-//                 Swal.fire({
-//                     icon: "success",
-//                     title: "Updated!",
-//                     text: "Cart quantity updated successfully",
-//                     timer: 1500,
-//                     showConfirmButton: false
-//                 }).then(() => location.reload());
-//             } else {
-//                 Swal.fire({
-//                     icon: "error",
-//                     title: "Oops!",
-//                     text: data.message
-//                 });
-//             }
-//         });
-//     });
-// });
 
-  document.querySelectorAll(".remove-btn").forEach(button => {
+  document.querySelectorAll(".removeCart").forEach(button => {
     button.addEventListener("click", async () => {
       const productId = button.getAttribute("data-product-id");
 

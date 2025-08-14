@@ -85,7 +85,7 @@ export const getproductDetailpage = async (req, res) => {
         const relatedProducts = await productSchema.find({
             _id: { $ne: product._id },
             category: product.category,
-            "variants.scale": product.variants[0]?.scale || "", // ✅ Fix here
+            "variants.scale": product.variants[0]?.scale || "", 
         })
         .limit(10)
         .populate('category');

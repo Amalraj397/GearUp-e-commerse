@@ -36,7 +36,7 @@ export const getCartPage = async (req, res) => {
     res.render("userCart.ejs", {
       userData,
       cart,
-      cartCount,
+      cartCount,   
       grandTotal
     });
   } catch (error) {
@@ -47,8 +47,9 @@ export const getCartPage = async (req, res) => {
 
 export const addToCartpage = async (req, res) => {
   try {
-    const { productId, variantName, scale, quantity, fromWishlist } = req.body;
+    const { productId, variantName, scale, quantity } = req.body;
     const userId = req.session.user?.id;
+    const usermaxQuantity = 5;
 
     console.log("req.body in add to cart page::", req.body);
     
@@ -56,8 +57,23 @@ export const addToCartpage = async (req, res) => {
       return res.status(400).json({ success: false, message: "Missing required cart data." });
     }
 
-    const product = await productSchema.findById(productId);
+    const product = await productSchema.findById(productId)
+                      .populate('brand')
+                      .populate('category');
     if (!product) return res.status(404).json({ success: false, message: "Product not found." });
+
+    if (
+        product.isBlocked ||
+        product.brand?.isBlocked ||
+        product.category?.isBlocked ||
+        product.status === "Discontinued" ||
+        product.status === "Out-of-stock"
+      ) {
+        return res.status(404).json({
+          success: false, 
+          message: "This product is unavailable!, Try again later."
+        });
+    }
 
     const selectedVariant = product.variants.find(
       (vart) => vart.variantName === variantName && vart.scale === scale
@@ -65,6 +81,10 @@ export const addToCartpage = async (req, res) => {
 
     if (!selectedVariant) {
       return res.status(404).json({ success: false, message: "Selected variant not found." });
+    }
+
+    if (quantity>usermaxQuantity) {
+      return res.status(400).json({ success: false, message: "Maximum quantity limit reached." });
     }
 
     if (quantity > selectedVariant.stock) {
@@ -87,13 +107,6 @@ export const addToCartpage = async (req, res) => {
         item.scale === scale
     );
 
-    // if (existingItem) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "This variant is already in your cart.",
-    //   });
-    // }
-
     if (existingItem) {
       return res.status(200).json({
         success: false,
@@ -102,7 +115,6 @@ export const addToCartpage = async (req, res) => {
       });
     }
 
-    // If from wishlist or product is in wishlist, remove it
     const {wishlist} = await wishlistSchema.findOne({ userId });
 
     let removedFromWishlist = false;
@@ -155,118 +167,6 @@ export const addToCartpage = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export const addToCartpage = async (req, res) => {
-//   try {
-//     const { productId, variantName, scale, quantity } = req.body;
-
-//     const user = req.session.user;
-//     const userId = user?.id;
-
-//     // Validate input
-//     if (!productId || !variantName || !scale || !quantity) {
-//       return res.status(400).json({ message: "Missing required cart data." });
-//     }
-
-//     // Fetch product
-//     const product = await productSchema.findById(productId);
-//     if (!product)
-//       return res.status(404).json({ message: "Product not found." });
-
-//     // Find the correct variant
-//     const selectedVariant = product.variants.find(
-//       (vart) => vart.variantName === variantName && vart.scale === scale
-//     );
-
-//     if (!selectedVariant) {
-//       return res.status(404).json({ message: "Selected variant not found." });
-//     }
-
-//     //  stock ckeck
-//     if (quantity > selectedVariant.stock) {
-//       return res
-//         .status(400)
-//         .json({ message: "Requested quantity exceeds available stock." });
-//     }
-
-//     // Findthe cart alreaday there  or createing  new  cart
-//     let cart = await cartSchema.findOne({ userDetails: userId });
-//     if (!cart) {
-//       cart = new cartSchema({
-//         userDetails: userId,
-//         items: [],
-//         grandTotalprice: 0,
-//       });
-//     }
-
-//     // Checking if this exact variant of product already exists
-//     const existingItem = cart.items.find(
-//       (item) =>
-//         item.productId.toString() === productId &&
-//         item.variantName === variantName &&
-//         item.scale === scale
-//     );
-
-//     if (existingItem) {
-//       return res
-//         .status(400)
-//         .json({ message: "This variant is already in your cart." });
-//     }
-//       //new product to cart
-//     const salePrice = selectedVariant.salePrice;
-//     const totalPrice = salePrice * quantity;
-
-//     cart.items.push({
-//       productId,
-//       variantName,
-//       scale,
-//       quantity,
-//       salePrice,
-//       totalProductprice: totalPrice,
-//     });
-
-//     // ReCalculating the cart grand total
-//     cart.grandTotalprice = cart.items.reduce(
-//       (sum, item) => sum + item.totalProductprice,
-//       0
-//     );
-
-//     // Saveing the cart
-//     await cart.save();
-
-//     return res.status(200).json({
-//       message: "Product added to cart successfully",
-//       cartCount: cart.items.length,
-//     });
-//   } catch (error) {
-//     console.log("error in adding to cart", error);
-//     res.status(500).send("server Error  ");
-//   }
-// };
-
-
-
 export const removeFromCartpage = async (req, res) => {
   const user = req.session.user;
   const userId = user?.id;
@@ -314,8 +214,6 @@ export const removeFromCartpage = async (req, res) => {
 
 // ----increase quantity------
 
-// controller/cartController.js
-
 export const increaseCartQuantity = async (req, res) => {
   try {
     const { productId, variantName, scale, quantity } = req.body;
@@ -354,144 +252,3 @@ export const increaseCartQuantity = async (req, res) => {
 };
 
 
-// exports.getUserCart = async (req, res, next)=>{
-
-//     const userId = req.session.user.id;
-
-//     try {
-//         // Finding User details..!
-//         const userData = await User.findById(userId);
-//         // check if the user has cart..?
-//         const cart = await Cart.findOne({userId}).populate('items.productId')
-
-//         if(cart){
-//             const validItems = [];
-//             for (const item of cart.items) {
-2//                 if (isValid) {
-//                     validItems.push(item);
-//                 }
-//             }
-//             cart.items = validItems;
-//         }
-
-//         // count cart documents..!
-//         const cartCount = await Cart.countDocuments()
-
-//         return res.status(200).render('user/cart',{cart,user:userData,cartCount})
-//     } catch (error) {
-//        console.error('Error occured while loading cart page', error)
-//        next(error)
-//     }
-// }
-
-// Add to cart handler..!
-
-// exports.addToCart = async (req, res, next) => {
-//     const { productId, color, quantity } = req.body;
-//     const flag = req.body?.flag;
-//     const userId = req.session.user.id;
-
-//     try {
-//         // Check if the user already has a cart
-//         let cart = await Cart.findOne({ userId })
-
-//         // If no cart exists, create a new one
-//         if (!cart) {
-//             cart = new Cart({ userId });
-//         }
-
-//         // Check if the product is already in the cart with the same color
-//         let existingItem = cart.items.find(item =>
-//             item.productId.toString() === productId && item.selectedColor === color
-//         );
-
-//         // Fetch product details
-//         const product = await Product.findById(productId);
-
-//         if (!product) {
-//             return res.status(404).json({ message: 'Product not found..!' });
-//         }
-
-//         // Find the color stock for the specific selected color
-//         const colorStock = product.colorStock.find(stock => stock.color === color);
-
-//         if (!colorStock) {
-//             return res.status(404).json({ message: 'Color stock not found..!' });
-//         }
-
-//         // Check  the requested quantity exceeds available stock
-//         if (quantity > colorStock.quantity) {
-//             return res.status(400).json({ message: 'Product is out of stock' });
-//         }
-
-//         if (existingItem) {
-//             // If the item already exists in the cart, show a message instead of updating
-//             return res.status(400).json({ message: 'This item is already in your cart.' });
-//         } else {
-//             // Create a new item object since it doesn't exist in the cart
-//             const newItem = {
-//                 productId,
-//                 quantity,
-//                 price: product.salePrice,
-//                 actualPrice:product.regularPrice,
-//                 totalPrice: product.salePrice * quantity,
-//                 selectedColor: color
-//             };
-//             // Add new item to the cart's items array
-//             cart.items.push(newItem);
-//         }
-
-//         // Calculate subtotal for the cart
-//         cart.subTotal = cart.items.reduce((acc, item) => acc + item.totalPrice, 0);
-
-//         // Save updated cart
-//         await cart.save();
-
-//         // remove item from wishlist
-
-//         if(flag){
-//              await Wishlist.findOneAndUpdate(
-//                 {userId},
-//                 {$pull : {products: {productId :productId}}},
-//                 {new:true}
-//             )
-//         }
-
-//         return res.status(200).json(cart); // Return updated cart as response
-
-//     } catch (error) {
-//         console.error('An error occurred while adding new item to cart', error);
-//         next(error);
-//     }
-// };
-
-// Remove Cart item Handler..!
-
-// exports.removeCartItem = async(req, res, next)=>{
-//     const userId = req.session.user.id;
-//     const {id}= req.params;
-
-//     try {
-//         let cart = await Cart.findOne({userId})
-
-//         if(!cart){
-//             return res.status(400).json({message: 'User not found..!'})
-//         }
-
-//         // Item remove..!
-//         cart.items = cart.items.filter(item => item._id.toString() !== id)
-
-//         // Re calculate subtotal..!
-//         cart.subTotal = cart.items.reduce((acc, item)=> acc+item.totalPrice,0)
-
-//         // Save Updated cart..!
-//         await cart.save();
-
-//         return res.status(200).json({message: 'Item removed from cart..!'})
-
-//     } catch (error) {
-//         console.error('An error occured while removing item from cart..!')
-//         next(error)
-
-//     }
-// }

@@ -39,7 +39,7 @@ import{
 
  import {
     nocache,
-   //  userAuth,
+    userAuth,
    //  userAuthenticated,
  } from "../middlewares/Auth.js";
 
@@ -64,6 +64,7 @@ import {
     addToCartpage,
     removeFromCartpage,
     increaseCartQuantity,
+
 }from "../Controller/user/userCartController.js";
 
 import {
@@ -72,6 +73,12 @@ import {
     removefromwishlist,
     
 } from "../Controller/user/userWishlistController.js"
+
+import {
+    getCheckoutpage,
+    getAddressById,
+    placeOrder,
+} from "../Controller/user/userOrderController.js"
 
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -144,5 +151,10 @@ userRoute.get("/Wishlist",getUserWishlist);
 userRoute.post("/addToWishlist",addToWishlist);
 userRoute.delete("/removeFromWishlist/:id",removefromwishlist);
 userRoute.post("/increaseCartQuantity",increaseCartQuantity)
+
+//--------------checkout---------------
+userRoute.get("/checkout",getCheckoutpage);
+userRoute.get("/getAddressById/:id",getAddressById);
+userRoute.post("/orderPlace", userAuth,placeOrder);
 
 export default userRoute

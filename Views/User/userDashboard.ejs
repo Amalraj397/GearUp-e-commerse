@@ -148,7 +148,7 @@
                                                 <div class="address-row">
                                                     <!-- <input type="text" class="form-control"
                                                         value="<%= typeof userData.address === 'string' && userData.address.trim() ? userData.address : 'No address, update now' %>"> -->
-														<% if (addresses.length > 0) { %>
+														                            <% if (addresses.length > 0) { %>
                                                           <% const addr = addresses[0]; %>
                                                           <input type="text" class="form-control" value="<%= `${addr.houseName}, ${addr.city}, ${addr.state} - ${addr.pincode}` %>">
                                                         <% } else { %>

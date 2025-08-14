@@ -68,6 +68,7 @@ export const loadAddproduct = async (req, res) => {
 // addProduct controller
 
 export const addnewProduct = async (req, res) => {
+  console.log("product controller starting")
   const {
     productName,
     brand,
@@ -79,46 +80,50 @@ export const addnewProduct = async (req, res) => {
     status,
   } = req.body;
 
-  // console.log("parsedvariants:", parsedVariants);
-  // console.log("req.body ::", req.body);
+  // console.log("parsedvariants:", parsedVariants);   //dubugg
+  // console.log("req.body ::", req.body); 
+  // console.log("productName: category", productName,category); 
+  // console.log("brand:", brand);
+
+  // Validate required fields again on the backend
+  
+  // if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
+  //   return res.status(400).json({ message: "Missing required fields" });
+  // }
+
+  // console.log("aftervalidation:::")
+
 
   const variant=JSON.parse(parsedVariants);
 
-  // if(Array.isArray(variant)){
-  //   console.log("this is an array")
-  // }else{
-  //   console.log("anoter ntyrop")
-  // }
+  // console.log("variant::", variant);  //dubugg
+  
+  // Image handling
 
-  // fetching category id
+  if (!req.files || req.files.length < 3) {
+    return res.status(400).json({ message: "At least 3 images required" });
+  }
+  // console.log("image length", req.files.length);  //dubugg
+
+  const imageUrls = req.files.map((file) => file.path);
+  // console.log("imageUrls::", imageUrls);      //dubugg
+
+  try {
+     // fetching category id
   const categoryId = await categorySchema.findOne({ name: category });
+  // console.log("category fetched:::", categoryId);   //dubugg
   if (!categoryId) {
     return res.status(400).json("Invalid category name");
   }
 
   // Fetch brand id
   const brandId = await brandSchema.findOne({ brandName: brand });
+  // console.log("brand fetched:::", categoryId);     //dubugg
   if (!brandId) {
     return res.status(400).json("Invalid brand name");
   }
-
-  // Validate required fields again on the backend
-  
-  if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
-
-  // Image handling
-
-  if (!req.files || req.files.length < 3) {
-    return res.status(400).json({ message: "At least 3 images required" });
-  }
-
-  const imageUrls = req.files.map((file) => file.path);
-
-  try {
     const product = await productSchema.findOne({ productName });
-
+    // console.log("fetching product:::", product);     //dubugg
     if (product) {
       return res.status(400).json({
         success: false,
@@ -139,6 +144,7 @@ export const addnewProduct = async (req, res) => {
     });
 
     await newProduct.save();
+    // console.log("product savingggggggggg.....")     //dubugg
     res.status(201).json({
       success: true,
       message: "New product added successfully..!",

@@ -100,8 +100,6 @@
         </main><!-- End .main -->
     </div><!-- End .page-wrapper -->
     <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-
-    <!-- Sign in / Register Modal -->
     
 
     <!-- Plugins JS File -->
@@ -132,113 +130,6 @@
     });
 
     // Handle Add to Cart
-    // document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    //     button.addEventListener('click', function() {
-    //         const productId = this.dataset.productId;
-    //         const select = document.querySelector(`.variant-select[data-product-id="${productId}"]`);
-    //         const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
-            
-    //         const selectedOption = select.options[select.selectedIndex];
-    //         const variantId = selectedOption.value;
-    //         const scale = selectedOption.text.split('-')[0].trim();
-    //         const price = selectedOption.dataset.price;
-    //         const quantity = parseInt(quantityInput.value);
-
-    //         fetch('/addToCart', {
-    //             method: 'POST',
-    //             headers: { 'Content-Type': 'application/json' },
-    //             body: JSON.stringify({
-    //                 productId,
-    //                 variantId,
-    //                 scale,
-    //                 price,
-    //                 quantity
-    //             })
-    //         })
-    //         .then(res => res.json())
-    //         .then(data => {
-    //             if (data.success) {
-    //             Toastify({
-    //                 text: "product Added to cart🛒 successfully!",
-    //                 duration: 3000,
-    //                 gravity: "top", 
-    //                 position: "right", 
-    //                 backgroundColor: "#28a745",
-    //             }).showToast();
-    //         } else {
-    //             Toastify({
-    //                 text: data.message || "Failed to add to cart",
-    //                 duration: 3000,
-    //                 gravity: "top",
-    //                 position: "right",
-    //                 backgroundColor: "#dc3545",
-    //             }).showToast();
-    //         }
-    //         });
-    //     });
-        // });
-
-        // -------------------------------------------------
-        
-    // document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    //   button.addEventListener('click', function () {
-    //     const productId = this.dataset.productId;
-    //     const select = document.querySelector(`.variant-select[data-product-id="${productId}"]`);
-    //     const quantityInput = document.querySelector(`.quantity-input[data-product-id="${productId}"]`);
-
-    //     const selectedOption = select.options[select.selectedIndex];
-    //     const variantName = selectedOption.value; // This should be variantName, not variantId
-    //     const scale = selectedOption.text.split('-')[0].trim();
-    //     const quantity = parseInt(quantityInput.value);
-
-    //     fetch('/addToCart', {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify({
-    //         productId,
-    //         variantName,       
-    //         scale,
-    //         quantity,
-    //         fromWishlist: true   // for removing from wishlist
-    //       })
-    //     }) 
-    //       .then(res => res.json())
-    //       .then(data => {
-    //         if (data.success) {
-    //           Toastify({
-    //             text: "Product added to cart 🛒 successfully!",
-    //             duration: 3000,
-    //             gravity: "top",
-    //             position: "right",
-    //             backgroundColor: "#28a745",
-    //           }).showToast();
-
-    //           // Optional: Remove the product row from wishlist in the DOM
-    //           const card = this.closest(".wishlist-card");
-    //           if (card) card.remove();
-
-    //         } else {
-    //           Toastify({
-    //             text: data.message || "Failed to add to cart",
-    //             duration: 3000,
-    //             gravity: "top",
-    //             position: "right",
-    //             backgroundColor: "#dc3545",
-    //           }).showToast();
-    //         }
-    //       })
-    //       .catch(err => {
-    //         Toastify({
-    //           text: "Something went wrong",
-    //           duration: 3000,
-    //           gravity: "top",
-    //           position: "right",
-    //           backgroundColor: "#dc3545",
-    //         }).showToast();
-    //       });
-    //   });
-    // });
-
 
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     button.addEventListener('click', function () {
@@ -265,58 +156,6 @@
             })
         })
         .then(res => res.json())
-        // .then(async data => {
-        //     if (data.success) {
-        //         //  Success
-        //         Toastify({
-        //             text: "Product added to cart 🛒 successfully!",
-        //             duration: 2500,
-        //             gravity: "top",
-        //             position: "right",
-        //             backgroundColor: "#28a745",
-        //         }).showToast();
-
-        //         // Remove from WishList
-        //         try {
-        //             const response = await fetch(`/removeFromWishlist/${productId}`, {
-        //                 method: 'DELETE',
-        //                 headers: { 'Content-Type': 'application/json' }
-        //             });
-
-        //             const result = await response.json();
-
-        //             if (response.ok) {
-        //                 // Remove from  wishlist dixcply
-        //                 const row = button.closest("tr");
-        //                 if (row) row.remove();
-
-        //                 // updating count
-        //                 document.querySelector(".wishlist-badge").textContent = result.wishlistCount;
-
-        //                 // Optional: Toast
-        //                 Toastify({
-        //                     text: "Removed from wishlist ❤️",
-        //                     duration: 2000,
-        //                     gravity: "top",
-        //                     position: "right",
-        //                     backgroundColor: "#ffc107",
-        //                 }).showToast();
-        //             }
-        //         } catch (err) {
-        //             console.error("Error removing from wishlist:", err);
-        //         }
-
-        //     } else {
-        //         Toastify({
-        //             text: data.message || "Failed to add to cart",
-        //             duration: 3000,
-        //             gravity: "top",
-        //             position: "right",
-        //             backgroundColor: "#dc3545",
-        //         }).showToast();
-        //     }
-        // });
-
         .then(async data => {
     if (data.success) {
         // Success - Product added
@@ -356,7 +195,7 @@
         }
 
     } else if (data.alreadyInCart) {
-        // Product already in cart - Show SweetAlert confirmation
+        // Product already in cart --- Show SweetAlert 
         const result = await Swal.fire({
             title: 'Already in Cart',
             text: data.message,
@@ -367,7 +206,7 @@
         });
 
         if (result.isConfirmed) {
-            // Call separate API to increase quantity
+            //  increase quantity api
             fetch("/increaseCartQuantity", {
                 method: 'POST',
                 headers: {
@@ -410,7 +249,6 @@
     });
 });
 
-
     document.querySelectorAll(".remove-btn").forEach(button => {
       button.addEventListener("click", async () => {
         const productId = button.getAttribute("data-product-id");
@@ -434,13 +272,13 @@
               const data = await response.json();
 
               if (response.ok) {
-                // Remove item from DOM
+                // Remove item from  table
                 button.closest("tr").remove();
 
                 if (document.querySelector(".wishlist-badge")) {
                   document.querySelector(".wishlist-badge").textContent = data.wishlistCount;
                 }
-                // Show Toastify success
+                //  Toastify success
                 Toastify({
                   text: data.message,
                   duration: 3000,

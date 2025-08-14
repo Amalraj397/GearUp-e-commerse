@@ -1199,7 +1199,10 @@ function openCropper(file) {
       formData.append('product-offer', document.getElementById('product-offer').value);
       formData.append('status', document.getElementById('status').value);
 
-      formData.append("parsedVariants", JSON.stringify(variants))
+      formData.append("parsedVariants", JSON.stringify(variants));
+
+      const parsedVariants = JSON.stringify(variants);   // d
+      console.log("parsedVariants string:", parsedVariants);  //d
     
     
       // Append each image file (already selected & stored in selectedFiles)
@@ -1221,12 +1224,13 @@ function openCropper(file) {
               text: 'Your product was successfully uploaded.',
               confirmButtonText: 'OK'
             }).then(() => {
-              productForm.reset();            // Clearing  the form
+              productForm.reset();    // Clearing  the form
               document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
-              selectedFiles = [];             // Reset selected files array
+              selectedFiles = [];       // Reset selected files array
             });
         })
         .catch(err => {
+        console.log('Add product error:', err); //   d
           Swal.fire({
             icon: 'error',
             title: 'Server Error',

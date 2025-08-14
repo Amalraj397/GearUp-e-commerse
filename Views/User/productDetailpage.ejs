@@ -104,10 +104,9 @@
 
               <div class="details-filter-row details-row-size">
                 <label for="qty">Quantity </label>
-                <div class="product-details-quantity">
-                  <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" required>
-                </div>
-
+                  <div class="product-details-quantity">
+                    <input type="number" id="qty" class="form-control" value="1" min="1" max="5" step="1" required>
+                  </div>
               </div>
 
               <div class="product-cat">
@@ -141,7 +140,7 @@
       </div>
 
       <div class="product-details-tab">
-        <ul class="nav nav-pills justify-content-center" role="tablist">
+        <ul class="nav nav-pills justify-content-center" role="tablist" style=" border: 2px solid; width: 100%;">
           <li class="nav-item"><a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab">Description</a></li>
           <li class="nav-item"><a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab">Additional information</a></li>
           <li class="nav-item"><a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab">Reviews (2)</a></li>
@@ -203,6 +202,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
         document.querySelectorAll('.toggle-desc-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             const productContent = btn.closest('.product-content');
@@ -217,84 +217,13 @@
           });
         });
     </script>
-    <!-- JS FUNCTIONALITY -->
-<!-- <script>
-  let selectedVariant = <%- JSON.stringify(product.variants[0]) %>;
-
-  const priceTag = document.querySelector(".new-price");
-  const stockBadge = document.getElementById("stock-badge");
-
- 
-  const updatePriceAndStock = () => {
-    priceTag.textContent = `₹ ${selectedVariant.price}`;
-    if (selectedVariant.stock === 0) {
-      stockBadge.textContent = "Out of Stock";
-      stockBadge.style.color = "red";
-    } else if (selectedVariant.stock <= 10) {
-      stockBadge.textContent = "Limited Stock";
-      stockBadge.style.color = "orange";
-    } else {
-      stockBadge.textContent = "In Stock";
-      stockBadge.style.color = "green";
-    }
-  };
-
-  document.querySelectorAll(".scale-btn").forEach(button => {
-    button.addEventListener("click", () => {
-      document.querySelectorAll(".scale-btn").forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
-      selectedVariant = JSON.parse(button.getAttribute("data-variant"));
-      updatePriceAndStock();
-    });
-  });
-
-  updatePriceAndStock();
-
-  function addToCart(productId) {
-    const quantity = document.getElementById("qty").value;
-    const payload = {
-      productId,
-      variantName: selectedVariant.variantName,
-      scale: selectedVariant.scale,
-      quantity: parseInt(quantity),
-    };
-
-    fetch("/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Toastify({
-          text: "Added to cart",
-          duration: 3000,
-          backgroundColor: "green"
-        }).showToast();
-        document.getElementById("cart-icon-badge").style.display = "block";
-      } else {
-        Swal.fire("Oops!", data.message, "error");
-      }
-    })
-    .catch(err => {
-      Swal.fire("Error", "Something went wrong", "error");
-    });
-  }
-
-  document.querySelector(".toggle-desc-btn").addEventListener("click", () => {
-    document.querySelector(".short-desc").style.display = "none";
-    document.querySelector(".full-desc").style.display = "block";
-  });
-</script> -->
-
+   
 <script>
   let selectedVariant = <%- JSON.stringify(product.variants[0]) %>;
 
   const priceTag = document.querySelector(".new-price");
   const stockBadge = document.getElementById("stock-badge");
+  const usermaxQuantity = 5;
 
   const updatePriceAndStock = () => {
     priceTag.textContent = `₹ ${selectedVariant.salePrice}`;
@@ -302,10 +231,16 @@
     if (selectedVariant.stock === 0) {
       stockBadge.textContent = "Out of Stock";
       stockBadge.style.color = "red";
-    } else if (selectedVariant.stock <= 10) {
+
+    } else if (selectedVariant.stock == usermaxQuantity) {
       stockBadge.textContent = "Limited Stock";
       stockBadge.style.color = "orange";
-    } else {
+
+    }else if(selectedVariant.stock < usermaxQuantity){
+      stockBadge.textContent = `Only (${selectedVariant.stock} left)`;
+      stockBadge.style.color = "red";
+
+    }else {
       stockBadge.textContent = "In Stock";
       stockBadge.style.color = "green";
     }
@@ -321,90 +256,9 @@
     });
   });
 
-  updatePriceAndStock(); // initialize with default variant
+  updatePriceAndStock(); 
 
-  // function addToCart(productId) {
-  //   const quantity = document.getElementById("qty").value;
-
-  //   const productCartdata = {
-  //     productId,
-  //     variantName: selectedVariant.variantName,
-  //     scale: selectedVariant.scale,
-  //     quantity: parseInt(quantity)
-  //   };
-
-  //   fetch("/addToCart", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(productCartdata)
-  //   })
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     if (data.success) {
-  //       Toastify({
-  //         text: data.message || "mission successful",
-  //         gravity: "top",
-  //         position: "right",
-  //         duration: 2000,
-  //         backgroundColor: "green"
-  //       }).showToast();
-
-  //       document.getElementById("cart-icon-badge").style.display = "block"; 
-  //     } else {
-  //       Swal.fire("Oops!", data.message || "Unable to add to cart", "error");
-  //     }
-  //   })
-  //   .catch(err => {
-  //     Swal.fire("Error", "Something went wrong......", "error");
-  //   });
-  // }
-
-//   function addToCart(productId) {
-//   const quantity = document.getElementById("qty").value;
-
-//   const productCartdata = {
-//     productId,
-//     variantName: selectedVariant.variantName,
-//     scale: selectedVariant.scale,
-//     quantity: parseInt(quantity)
-//   };
-
-//   fetch("/addToCart", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(productCartdata)
-//   })
-//   .then(async res => {
-//     let data;
-//     try {
-//       data = await res.json();
-//     } catch (err) {
-//       throw new Error("Invalid JSON response from server.");
-//     }
-
-//     if (res.ok && data.success) {
-//       Toastify({
-//         text: data.message || "Mission successful",
-//         gravity: "top",
-//         position: "right",
-//         duration: 2000,
-//         backgroundColor: "green"
-//       }).showToast();
-
-//       document.getElementById("cart-icon-badge").style.display = "block"; 
-//     } else {
-//       Swal.fire("Oops!", data.message || "Unable to add to cart", "error");
-//     }
-//   })
-//   .catch(err => {
-//     console.error("Caught error in addToCart:", err);
-
-//   });
-// }
+  
 // -------------- addtoCart with increment----------
 function addToCart(productId) {
   const quantity = document.getElementById("qty").value;
@@ -431,7 +285,7 @@ function addToCart(productId) {
       throw new Error("Invalid JSON response from server.");
     }
 
-    // ✅ Already in cart case
+    // Already in cart
     if (data.alreadyInCart) {
       Swal.fire({
         title: "Already in Cart",
@@ -442,7 +296,8 @@ function addToCart(productId) {
         cancelButtonText: "No, cancel"
       }).then(result => {
         if (result.isConfirmed) {
-          // ✅ Call endpoint to increase quantity
+
+          //increase quantity api
           fetch("/increaseCartQuantity", {
             method: "POST",
             headers: {
@@ -468,7 +323,7 @@ function addToCart(productId) {
       });
     }
 
-    // ✅ Normal success case
+    //  success 
     else if (res.ok && data.success) {
       Toastify({
         text: data.message || "Product added to cart successfully!",
@@ -481,7 +336,7 @@ function addToCart(productId) {
       document.getElementById("cart-icon-badge").style.display = "block";
     }
 
-    // ❌ Error case
+    // Error
     else {
       Swal.fire("Oops!", data.message || "Unable to add to cart", "error");
     }
@@ -517,11 +372,9 @@ function addToCart(productId) {
         }
     })
     .catch(() => {
-        Swal.fire("Error", "Something went wrong----", "error");
+        Swal.fire("Error", "Something went wrong!", "error");
     });
 }
-
-
 </script>
        <%-include("../../Views/Partials/User/footerLand")%>
 </body>
