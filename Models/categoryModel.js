@@ -1,31 +1,32 @@
-import mongoose  from "mongoose"
+import mongoose from "mongoose";
 
-const categorySchema = new mongoose.Schema({
-    name:{
-        type: String,
-        required: [true, 'name is required field'],
-        unique: true
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "name is required field"],
+      unique: true,
     },
 
-    description:{
-        type: String,
-        required: true
+    description: {
+      type: String,
+      required: true,
     },
 
     isBlocked: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
-    categoryOffer:{
-        type: Number,
-        default: 0
+    categoryOffer: {
+      type: Number,
+      default: 0,
     },
-    createdAt:{
-        type: Date,
-        default: Date.now()
-    }
-
-
-},{timestamps: true})
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+  },
+  { timestamps: true },
+);
 
 export default mongoose.model("Category", categorySchema);

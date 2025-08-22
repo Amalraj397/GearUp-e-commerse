@@ -1,1068 +1,1026 @@
 {
-	"info": {
-		"_postman_id": "6148e818-33c9-4b7f-b2e4-8f180958d758",
-		"name": "gearup",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
-		"_exporter_id": "20764105",
-		"_collection_link": "https://gearup-6399.postman.co/workspace/gearup~bb19e6ed-1e71-4355-9b3a-63de62878748/collection/20764105-6148e818-33c9-4b7f-b2e4-8f180958d758?action=share&source=collection_link&creator=20764105"
-	},
-	"item": [
-		{
-			"name": "user",
-			"item": [
-				{
-					"name": "Profile",
-					"item": [
-						{
-							"name": "authenticationForProfile",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/authentication"
-							},
-							"response": []
-						},
-						{
-							"name": "profileInformation",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/profileinfo"
-							},
-							"response": []
-						},
-						{
-							"name": "postprofileInformation",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "firstname",
-											"value": "\"firstname\"",
-											"type": "text"
-										},
-										{
-											"key": "lastname",
-											"value": "\"lastname\"",
-											"type": "text"
-										},
-										{
-											"key": "phone",
-											"value": "\"123456789\"",
-											"type": "text"
-										},
-										{
-											"key": "photo",
-											"type": "file",
-											"src": "/C:/Users/aAugg/Desktop/GEAR-UP/gemini/Gemini_Generated_Image_vduw5kvduw5kvduw.jpg"
-										},
-										{
-											"key": "country",
-											"value": "\"country\"",
-											"type": "text"
-										},
-										{
-											"key": "state",
-											"value": "\"state\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/profileinfo"
-							},
-							"response": []
-						},
-						{
-							"name": "changePassword",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/changepassword"
-							},
-							"response": []
-						},
-						{
-							"name": "changePassword",
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "currentPassword",
-											"value": "\"oldpassword\"",
-											"type": "text"
-										},
-										{
-											"key": "newPassword",
-											"value": "newpasspword\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "https://www.api.com/profile/changepassword"
-							},
-							"response": []
-						},
-						{
-							"name": "viewAddress",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/viewaddress"
-							},
-							"response": []
-						},
-						{
-							"name": "get-editAddress",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/editaddress"
-							},
-							"response": []
-						},
-						{
-							"name": "editAddress",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "name",
-											"value": "\"user fullname\"",
-											"type": "text"
-										},
-										{
-											"key": "mobile",
-											"value": "\"123456789\"",
-											"type": "text"
-										},
-										{
-											"key": "pincode",
-											"value": "\"959566\"",
-											"type": "text"
-										},
-										{
-											"key": "house no",
-											"value": "\"AR-123\"",
-											"type": "text"
-										},
-										{
-											"key": "landmark",
-											"value": "\"near random landmark",
-											"type": "text"
-										},
-										{
-											"key": "city",
-											"value": "\"city name\"",
-											"type": "text"
-										},
-										{
-											"key": "town",
-											"value": "\"town name\"",
-											"type": "text"
-										},
-										{
-											"key": "city",
-											"value": "\"cty name\"",
-											"type": "text"
-										},
-										{
-											"key": "street",
-											"value": "\"stret name\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "https://www.api.com/profile/editaddress"
-							},
-							"response": []
-						},
-						{
-							"name": "get-Addaddress",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/addaddress"
-							},
-							"response": []
-						},
-						{
-							"name": "post-addAddress",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "address",
-											"value": "\"full address housename \"",
-											"description": " ",
-											"type": "text"
-										},
-										{
-											"key": "city",
-											"value": "\"name of city\"",
-											"type": "text"
-										},
-										{
-											"key": "landmark",
-											"value": "\" some random lamdmark\"",
-											"type": "text"
-										},
-										{
-											"key": "pin",
-											"value": "\"12345\"",
-											"type": "text"
-										},
-										{
-											"key": "phone",
-											"value": "\"123456789",
-											"type": "text"
-										},
-										{
-											"key": "save address as",
-											"value": "\"office,home,others\"",
-											"type": "text"
-										},
-										{
-											"key": "buildingname",
-											"value": "\"name of the building\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "https://www.api.com/profile/addAddress"
-							},
-							"response": []
-						},
-						{
-							"name": "orderspage",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/orderspage"
-							},
-							"response": []
-						},
-						{
-							"name": "orderdetails",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/orderdetails"
-							},
-							"response": []
-						},
-						{
-							"name": "wallet",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/wallet"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Home",
-					"item": [
-						{
-							"name": "landingPage",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Homepage",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "serach",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "searchItem",
-											"value": "\"searchquery\"",
-											"description": "search",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/search"
-							},
-							"response": []
-						},
-						{
-							"name": "viewProduct",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/viewProduct"
-							},
-							"response": []
-						},
-						{
-							"name": "getCart",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/getCart"
-							},
-							"response": []
-						},
-						{
-							"name": "addToCart",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "productId",
-											"value": "\"product_123\"",
-											"description": "id of the product",
-											"type": "text"
-										},
-										{
-											"key": "quantity",
-											"value": "\"1\"",
-											"description": "no: of quantity",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/addtocart"
-							},
-							"response": []
-						},
-						{
-							"name": "getWishlist",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "postWishlist",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "productId",
-											"value": "\"product_Id\"",
-											"type": "text"
-										},
-										{
-											"key": "userId",
-											"value": "\"user_Id\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/wishlistPost"
-							},
-							"response": []
-						},
-						{
-							"name": "getCheckout",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/checkOut"
-							},
-							"response": []
-						},
-						{
-							"name": "getSuccess",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/success"
-							},
-							"response": []
-						},
-						{
-							"name": "reviewPost",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "productId",
-											"value": "\"12345\"",
-											"type": "text"
-										},
-										{
-											"key": "rating",
-											"value": "\"5 star\"",
-											"type": "text"
-										},
-										{
-											"key": "message",
-											"value": "\"message  on review\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/review"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "login/signup",
-					"item": [
-						{
-							"name": "loginGet",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "loginPost",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "email",
-											"value": "\"userEmail\"",
-											"type": "text"
-										},
-										{
-											"key": "Pasword",
-											"value": "\"UserPassword\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/loginPost"
-							},
-							"response": []
-						},
-						{
-							"name": "registerGet",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/registerUser"
-							},
-							"response": []
-						},
-						{
-							"name": "registerPost",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "Name",
-											"value": "\"userName\"",
-											"type": "text"
-										},
-										{
-											"key": "email",
-											"value": "\"userEmail\"",
-											"type": "text"
-										},
-										{
-											"key": "phone",
-											"value": "\"userPhnone\"",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "\"userPassword\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/registerPost"
-							},
-							"response": []
-						},
-						{
-							"name": "otpVerification",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "contactEmail",
-											"value": "\"Examplemail1@gmail.com\"",
-											"description": "useremail",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/sentOtp"
-							},
-							"response": []
-						},
-						{
-							"name": "getForget",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "/forgotPassword"
-							},
-							"response": []
-						},
-						{
-							"name": "postForget",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "useremail",
-											"value": "\"examplemail1@gmail.com\"",
-											"description": "user email",
-											"type": "text"
-										}
-									]
-								},
-								"url": "/forgotPassword"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Logout",
-					"request": {
-						"method": "DELETE",
-						"header": []
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "admin",
-			"item": [
-				{
-					"name": "dashboard",
-					"item": [
-						{
-							"name": "getDashboard",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/dashboard"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "login",
-					"item": [
-						{
-							"name": "LoginGet",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "LoginPost",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "email",
-											"value": "\"admin12@gmail.com\"",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "\"admin12345\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "https://www.api.com/profile/login"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "customer-Mangement",
-					"item": [
-						{
-							"name": "getCoustomers",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/coustomers"
-							},
-							"response": []
-						},
-						{
-							"name": "blockCoustomers",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/blockcoustomer"
-							},
-							"response": []
-						},
-						{
-							"name": "deleteCoustomers",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/profile/deleteCoustomers?userId=\"123456\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"profile",
-										"deleteCoustomers"
-									],
-									"query": [
-										{
-											"key": "userId",
-											"value": "\"123456\""
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "product-Mangement",
-					"item": [
-						{
-							"name": "getProducts",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/products"
-							},
-							"response": []
-						},
-						{
-							"name": "deleteProduct",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/admin/delproduct?productId=\"123456\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"admin",
-										"delproduct"
-									],
-									"query": [
-										{
-											"key": "productId",
-											"value": "\"123456\""
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "addProduct",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/addproduct"
-							},
-							"response": []
-						},
-						{
-							"name": "addproduct",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "productname",
-											"value": "\"name of the product\"",
-											"type": "text"
-										},
-										{
-											"key": "descreption",
-											"value": "\"details about the  product\"",
-											"type": "text"
-										},
-										{
-											"key": "category",
-											"value": "\"category \"",
-											"type": "text"
-										},
-										{
-											"key": "colour",
-											"value": "\"color of the product\"",
-											"type": "text"
-										},
-										{
-											"key": "brand",
-											"value": "\"brand name\"",
-											"type": "text"
-										},
-										{
-											"key": "stock",
-											"value": "\"1234\"",
-											"type": "text"
-										},
-										{
-											"key": "price",
-											"value": "\"98777\"",
-											"type": "text"
-										},
-										{
-											"key": "product image",
-											"type": "file",
-											"src": []
-										}
-									]
-								},
-								"url": "https://www.api.com/admin/addproduct"
-							},
-							"response": []
-						},
-						{
-							"name": "editProduct",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "product_name",
-											"value": "\"name  of the  product\"",
-											"type": "text"
-										},
-										{
-											"key": "description",
-											"value": "\"description about the  product\"",
-											"type": "text"
-										},
-										{
-											"key": "categry",
-											"value": "\"category details",
-											"type": "text"
-										},
-										{
-											"key": "color",
-											"value": "\"color\"",
-											"type": "text"
-										},
-										{
-											"key": "brand",
-											"value": "\"brand name\"",
-											"type": "text"
-										},
-										{
-											"key": "stock",
-											"value": "\"122\"",
-											"type": "text"
-										},
-										{
-											"key": "price",
-											"value": "\" salling price\"",
-											"type": "text"
-										},
-										{
-											"key": " product image",
-											"type": "file",
-											"src": []
-										}
-									]
-								},
-								"url": "https://www.api.com/admin/editProduct"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Order Management",
-					"item": [
-						{
-							"name": "getOrders",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/admin/orders"
-							},
-							"response": []
-						},
-						{
-							"name": "editOrders",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/editOrders"
-							},
-							"response": []
-						},
-						{
-							"name": "post editOrders",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/profile/editorders?ordr status=\"delivered\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"profile",
-										"editorders"
-									],
-									"query": [
-										{
-											"key": "ordr status",
-											"value": "\"delivered\""
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "deleteOrder",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/profile/deleteOrder?orderId=\"1311\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"profile",
-										"deleteOrder"
-									],
-									"query": [
-										{
-											"key": "orderId",
-											"value": "\"1311\""
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "coupons-Management",
-					"item": [
-						{
-							"name": "getCoupons",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/profile/coupons"
-							},
-							"response": []
-						},
-						{
-							"name": "addCoupons",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "couponcode",
-											"value": "\"gearup100\"",
-											"type": "text"
-										},
-										{
-											"key": "dsicount",
-											"value": "\"35%\"",
-											"type": "text"
-										},
-										{
-											"key": "minimumpurchase",
-											"value": "\"25000\"",
-											"type": "text"
-										},
-										{
-											"key": "valid-from",
-											"value": "\"date\"",
-											"type": "text"
-										},
-										{
-											"key": "valid-to",
-											"value": "\"date\"",
-											"type": "text"
-										}
-									]
-								},
-								"url": "https://www.api.com/profile/coupons"
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Offer-Management",
-					"item": [
-						{
-							"name": "getOffers",
-							"request": {
-								"method": "GET",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "addOffers",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/admin/addoffers?productId=\"12345\"&offer-percentage=\"35%\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"admin",
-										"addoffers"
-									],
-									"query": [
-										{
-											"key": "productId",
-											"value": "\"12345\""
-										},
-										{
-											"key": "offer-percentage",
-											"value": "\"35%\""
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "category-Management",
-					"item": [
-						{
-							"name": "gategory",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": "https://www.api.com/admin/category"
-							},
-							"response": []
-						},
-						{
-							"name": "addCategory",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "https://www.api.com/admin/addcategory?category-name=\"name of category\"",
-									"protocol": "https",
-									"host": [
-										"www",
-										"api",
-										"com"
-									],
-									"path": [
-										"admin",
-										"addcategory"
-									],
-									"query": [
-										{
-											"key": "category-name",
-											"value": "\"name of category\""
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Logout",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": "https://www.api.com/admin/logout"
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "6148e818-33c9-4b7f-b2e4-8f180958d758",
+    "name": "gearup",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "20764105",
+    "_collection_link": "https://gearup-6399.postman.co/workspace/gearup~bb19e6ed-1e71-4355-9b3a-63de62878748/collection/20764105-6148e818-33c9-4b7f-b2e4-8f180958d758?action=share&source=collection_link&creator=20764105"
+  },
+  "item": [
+    {
+      "name": "user",
+      "item": [
+        {
+          "name": "Profile",
+          "item": [
+            {
+              "name": "authenticationForProfile",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/authentication"
+              },
+              "response": []
+            },
+            {
+              "name": "profileInformation",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/profileinfo"
+              },
+              "response": []
+            },
+            {
+              "name": "postprofileInformation",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "firstname",
+                      "value": "\"firstname\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "lastname",
+                      "value": "\"lastname\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "\"123456789\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "photo",
+                      "type": "file",
+                      "src": "/C:/Users/aAugg/Desktop/GEAR-UP/gemini/Gemini_Generated_Image_vduw5kvduw5kvduw.jpg"
+                    },
+                    {
+                      "key": "country",
+                      "value": "\"country\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "state",
+                      "value": "\"state\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/profileinfo"
+              },
+              "response": []
+            },
+            {
+              "name": "changePassword",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/changepassword"
+              },
+              "response": []
+            },
+            {
+              "name": "changePassword",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "currentPassword",
+                      "value": "\"oldpassword\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "newPassword",
+                      "value": "newpasspword\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/profile/changepassword"
+              },
+              "response": []
+            },
+            {
+              "name": "viewAddress",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/viewaddress"
+              },
+              "response": []
+            },
+            {
+              "name": "get-editAddress",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/editaddress"
+              },
+              "response": []
+            },
+            {
+              "name": "editAddress",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": "\"user fullname\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "mobile",
+                      "value": "\"123456789\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pincode",
+                      "value": "\"959566\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "house no",
+                      "value": "\"AR-123\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "landmark",
+                      "value": "\"near random landmark",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "\"city name\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "town",
+                      "value": "\"town name\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "\"cty name\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "street",
+                      "value": "\"stret name\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/profile/editaddress"
+              },
+              "response": []
+            },
+            {
+              "name": "get-Addaddress",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/addaddress"
+              },
+              "response": []
+            },
+            {
+              "name": "post-addAddress",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "address",
+                      "value": "\"full address housename \"",
+                      "description": " ",
+                      "type": "text"
+                    },
+                    {
+                      "key": "city",
+                      "value": "\"name of city\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "landmark",
+                      "value": "\" some random lamdmark\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "pin",
+                      "value": "\"12345\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "\"123456789",
+                      "type": "text"
+                    },
+                    {
+                      "key": "save address as",
+                      "value": "\"office,home,others\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "buildingname",
+                      "value": "\"name of the building\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/profile/addAddress"
+              },
+              "response": []
+            },
+            {
+              "name": "orderspage",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/orderspage"
+              },
+              "response": []
+            },
+            {
+              "name": "orderdetails",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/orderdetails"
+              },
+              "response": []
+            },
+            {
+              "name": "wallet",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/wallet"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Home",
+          "item": [
+            {
+              "name": "landingPage",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "Homepage",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "serach",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "searchItem",
+                      "value": "\"searchquery\"",
+                      "description": "search",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/search"
+              },
+              "response": []
+            },
+            {
+              "name": "viewProduct",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/viewProduct"
+              },
+              "response": []
+            },
+            {
+              "name": "getCart",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/getCart"
+              },
+              "response": []
+            },
+            {
+              "name": "addToCart",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "productId",
+                      "value": "\"product_123\"",
+                      "description": "id of the product",
+                      "type": "text"
+                    },
+                    {
+                      "key": "quantity",
+                      "value": "\"1\"",
+                      "description": "no: of quantity",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/addtocart"
+              },
+              "response": []
+            },
+            {
+              "name": "getWishlist",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "postWishlist",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "productId",
+                      "value": "\"product_Id\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "\"user_Id\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/wishlistPost"
+              },
+              "response": []
+            },
+            {
+              "name": "getCheckout",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/checkOut"
+              },
+              "response": []
+            },
+            {
+              "name": "getSuccess",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/success"
+              },
+              "response": []
+            },
+            {
+              "name": "reviewPost",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "productId",
+                      "value": "\"12345\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "rating",
+                      "value": "\"5 star\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "message",
+                      "value": "\"message  on review\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/review"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "login/signup",
+          "item": [
+            {
+              "name": "loginGet",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "loginPost",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "\"userEmail\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "Pasword",
+                      "value": "\"UserPassword\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/loginPost"
+              },
+              "response": []
+            },
+            {
+              "name": "registerGet",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/registerUser"
+              },
+              "response": []
+            },
+            {
+              "name": "registerPost",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "\"userName\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "\"userEmail\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "phone",
+                      "value": "\"userPhnone\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "\"userPassword\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/registerPost"
+              },
+              "response": []
+            },
+            {
+              "name": "otpVerification",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "contactEmail",
+                      "value": "\"Examplemail1@gmail.com\"",
+                      "description": "useremail",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/sentOtp"
+              },
+              "response": []
+            },
+            {
+              "name": "getForget",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "/forgotPassword"
+              },
+              "response": []
+            },
+            {
+              "name": "postForget",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "useremail",
+                      "value": "\"examplemail1@gmail.com\"",
+                      "description": "user email",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "/forgotPassword"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "admin",
+      "item": [
+        {
+          "name": "dashboard",
+          "item": [
+            {
+              "name": "getDashboard",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/dashboard"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "login",
+          "item": [
+            {
+              "name": "LoginGet",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "LoginPost",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "\"admin12@gmail.com\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "\"admin12345\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/profile/login"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "customer-Mangement",
+          "item": [
+            {
+              "name": "getCoustomers",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/coustomers"
+              },
+              "response": []
+            },
+            {
+              "name": "blockCoustomers",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/blockcoustomer"
+              },
+              "response": []
+            },
+            {
+              "name": "deleteCoustomers",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/profile/deleteCoustomers?userId=\"123456\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["profile", "deleteCoustomers"],
+                  "query": [
+                    {
+                      "key": "userId",
+                      "value": "\"123456\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "product-Mangement",
+          "item": [
+            {
+              "name": "getProducts",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/products"
+              },
+              "response": []
+            },
+            {
+              "name": "deleteProduct",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/admin/delproduct?productId=\"123456\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["admin", "delproduct"],
+                  "query": [
+                    {
+                      "key": "productId",
+                      "value": "\"123456\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProduct",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/addproduct"
+              },
+              "response": []
+            },
+            {
+              "name": "addproduct",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "productname",
+                      "value": "\"name of the product\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "descreption",
+                      "value": "\"details about the  product\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "category",
+                      "value": "\"category \"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "colour",
+                      "value": "\"color of the product\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "brand",
+                      "value": "\"brand name\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "stock",
+                      "value": "\"1234\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "price",
+                      "value": "\"98777\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "product image",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/admin/addproduct"
+              },
+              "response": []
+            },
+            {
+              "name": "editProduct",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "product_name",
+                      "value": "\"name  of the  product\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "\"description about the  product\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "categry",
+                      "value": "\"category details",
+                      "type": "text"
+                    },
+                    {
+                      "key": "color",
+                      "value": "\"color\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "brand",
+                      "value": "\"brand name\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "stock",
+                      "value": "\"122\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "price",
+                      "value": "\" salling price\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": " product image",
+                      "type": "file",
+                      "src": []
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/admin/editProduct"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Order Management",
+          "item": [
+            {
+              "name": "getOrders",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/admin/orders"
+              },
+              "response": []
+            },
+            {
+              "name": "editOrders",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/editOrders"
+              },
+              "response": []
+            },
+            {
+              "name": "post editOrders",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/profile/editorders?ordr status=\"delivered\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["profile", "editorders"],
+                  "query": [
+                    {
+                      "key": "ordr status",
+                      "value": "\"delivered\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteOrder",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/profile/deleteOrder?orderId=\"1311\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["profile", "deleteOrder"],
+                  "query": [
+                    {
+                      "key": "orderId",
+                      "value": "\"1311\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "coupons-Management",
+          "item": [
+            {
+              "name": "getCoupons",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/profile/coupons"
+              },
+              "response": []
+            },
+            {
+              "name": "addCoupons",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "couponcode",
+                      "value": "\"gearup100\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "dsicount",
+                      "value": "\"35%\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "minimumpurchase",
+                      "value": "\"25000\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "valid-from",
+                      "value": "\"date\"",
+                      "type": "text"
+                    },
+                    {
+                      "key": "valid-to",
+                      "value": "\"date\"",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": "https://www.api.com/profile/coupons"
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Offer-Management",
+          "item": [
+            {
+              "name": "getOffers",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "addOffers",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/admin/addoffers?productId=\"12345\"&offer-percentage=\"35%\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["admin", "addoffers"],
+                  "query": [
+                    {
+                      "key": "productId",
+                      "value": "\"12345\""
+                    },
+                    {
+                      "key": "offer-percentage",
+                      "value": "\"35%\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "category-Management",
+          "item": [
+            {
+              "name": "gategory",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "https://www.api.com/admin/category"
+              },
+              "response": []
+            },
+            {
+              "name": "addCategory",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "https://www.api.com/admin/addcategory?category-name=\"name of category\"",
+                  "protocol": "https",
+                  "host": ["www", "api", "com"],
+                  "path": ["admin", "addcategory"],
+                  "query": [
+                    {
+                      "key": "category-name",
+                      "value": "\"name of category\""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "https://www.api.com/admin/logout"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }

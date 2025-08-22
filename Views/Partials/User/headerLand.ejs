@@ -18,7 +18,7 @@
           <div class="logo">
             <!-- <h1>Gear-UP</h1> -->
              <img src="/User/assets/images/GEAR-UP/Autominima.PNG" alt="gearup logo" class="logo-img">
-            <div class="logo-underline"></div>
+            <!-- <div class="logo-underli"></div> -->
           </div>
       
           <ul class="nav-links">
@@ -28,7 +28,7 @@
             <li><a href="#" class="nav-link">Category </a></li>
             <li><a href="/brandPage" class="nav-link">Brands</a></li>
             <li><a href="#" class="nav-link">Contact</a></li>
-            <li><a href="#" class="nav-link">About Us</a></li>
+            <li><a href="/aboutUs" class="nav-link">About Us</a></li>
           </ul>
       
           <ul class="auth-buttons">
@@ -38,9 +38,19 @@
              <div class="dropdown">
               
               <!-- User Icon -->
-              <button class="dropdown-btn">
-                 <i class="fas fa-user" style="font-size: larger;"></i>
-              </button>
+               <div class="dropdown-user">
+                 <button class="dropdown-btn">
+                   <i class="fas fa-user" style="font-size: larger;"></i>
+                  </button>
+                  <div class="dropdown-content">
+                    <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
+                    <a href="/myOrders"><i class="fas fa-shopping-bag"></i>My Orders</a>
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Your Address</a>
+                    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#"><i class="fas fa-headset"></i> Contact Us</a>
+                    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                  </div>
+                </div>
 
               <!-- Wishlist Icon -->
               <button class="dropdown-btn-heart" onclick="window.location.href='/Wishlist'">
@@ -54,7 +64,7 @@
 
               <div class="dropdown-content">
                 <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
-                <a href="#"><i class="fas fa-shopping-bag"></i> Orders</a>
+                <a href="/myOrders"><i class="fas fa-shopping-bag"></i>My Orders</a>
                 <a href="#"><i class="fas fa-map-marker-alt"></i> Your Address</a>
                 <a href="#"><i class="fas fa-cog"></i> Settings</a>
                 <a href="#"><i class="fas fa-headset"></i> Contact Us</a>

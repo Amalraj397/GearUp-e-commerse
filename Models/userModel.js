@@ -1,59 +1,61 @@
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
-const userSchema=new mongoose.Schema({
-    firstName:{
-        type:String,
-        required:true
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
     },
-    lastName:{
-        type:String,
-        required:true
-    },
-
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-        lowercase: true,
-        trim: true,
-        // parse:true
+    lastName: {
+      type: String,
+      required: true,
     },
 
-    phone:{
-        type:Number,
-        required:false,
-        // default:null
-    },
-    password:{
-        type:String,
-        required:true
-    },
-    googleId:{
-        type:String,
-        required: false,
-        unique:false
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      // parse:true
     },
 
-    isAdmin:{
-        type:Boolean,
-        default:false
+    phone: {
+      type: Number,
+      required: false,
+      // default:null
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    googleId: {
+      type: String,
+      required: false,
+      unique: false,
     },
 
-    isBlocked:{
-        type:Boolean,
-        default:false
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
     profilePicture: {
-         type: String 
+      type: String,
     },
-  
+
     address: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Address' 
-        }
-    ]
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
-},{timestamps: true})
-
-export default mongoose.model('User', userSchema)    
+export default mongoose.model("User", userSchema);

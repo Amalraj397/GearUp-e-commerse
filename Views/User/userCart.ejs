@@ -38,7 +38,7 @@
 											<th><p></p></th>
 										</tr>
 									</thead>
-                        <tbody>
+                          <tbody>
                             <% if (cart && cart.items.length > 0) { %>  
                               <% cart.items.forEach(item => { %>
                                 <tr>
@@ -58,9 +58,10 @@
                                   <td class="quantity-col">
                                     <div class="cart-product-quantity">
                                       <input type="number" class="form-control" value="<%= item.quantity %>" min="1" max="5" step="1" data-decimals="0" required>
+                                      <td class="total-col">₹<%= item.totalProductprice %></td>
                                     </div>
-                                  </
-                                  <td class="total-col">₹<%= item.totalProductprice %></td>
+                                
+                                  
                                   <td class="remove-col">
                                     <!-- <button class="remove-btn" data-id="<%= item._id %>"><i class="icon-close"></i></button> -->
                                      <button class="btn btn-outline-dark-2 removeCart" data-product-id="<%= item.productId._id %>"> Remove</button>
@@ -69,10 +70,15 @@
                               <% }) %>
                             <% } else { %>
                               <tr>
-                                <td colspan="5" class="text-center">Your cart is empty</td>
+                                <td colspan="5" class="text-center">
+                                  <div class="empty-cart">
+                                    <h2><%= emptyMessage || "Your cart is empty" %></h2>
+                                    <a href="/shopPage" class="btn btn-outline-primary-2 mt-3">Continue Shopping</a>
+                                  </div>
+                                </td>
                               </tr>
                             <% } %>
-                                </tbody>
+                          </tbody>
 								</table><!-- End .table table-wishlist -->
 
 	                			<div class="cart-bottom">
@@ -87,7 +93,6 @@
 			            				</form>
 			            			</div><!-- End .cart-discount -->
 
-			            			<!-- <a href="/userCart" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a> -->
 		            			</div><!-- End .cart-bottom -->
 	                		</div><!-- End .col-lg-9 -->
 	                		<aside class="col-lg-3">
@@ -96,59 +101,50 @@
 
 	                				<table class="table table-summary">
 	                					<tbody>
+                              <tr>
+                                <td colspan="2">
+                                  <span 
+                                    id="shippingNote" 
+                                    class="<%= TotalAmount >= 1999 ? 'text-success' : 'text-decoration-line-through' %>"
+                                  >
+                                    Free Shipping on purchase above ₹1999/-
+                                  </span>
+                                </td>
+                              </tr>
 	                						<tr class="summary-subtotal">
 	                							<td>Subtotal:</td>
-	                							<td>₹<%= grandTotal.toFixed(2) %></td>
+	                							<td>₹ <%= TotalAmount.toFixed(2) %></td>
 	                						</tr><!-- End .summary-subtotal -->
-	                						<tr class="summary-shipping">
-	                							<td>Shipping:</td>
-	                							<td>&nbsp;</td>
-	                						</tr>
+                                
+	                						
 
-	                						<tr class="summary-shipping-row">
-	                							<td>
-													<div class="custom-control custom-radio">
-														<input type="radio" id="free-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="free-shipping">Free Shipping :</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>₹0.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="standart-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="standart-shipping">Normal Shipping :</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>₹10.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="custom-control custom-radio">
-														<input type="radio" id="express-shipping" name="shipping" class="custom-control-input">
-														<label class="custom-control-label" for="express-shipping">Express Shipping:</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>₹20.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
-
-	                						<tr class="summary-shipping-estimate">
-	                							<!-- <td>Estimate for Your Country<br>  -->
-                                  <!-- <a href="dashboard.html">Change address</a></td> -->
-	                							<td>&nbsp;</td>
-	                						</tr><!-- End .summary-shipping-estimate -->
+                              <tr>
+                                <td colspan="2">
+                                  <span 
+                                    id="shippingNote" 
+                                    class="<%= TotalAmount >= 1999 ? 'text-success' : 'text-decoration-line-through' %>"
+                                  >
+                                    Cash On Delivery Available.
+                                  </span>
+                                </td>
+                              </tr>
 
 	                						<tr class="summary-total">
-	                							<td>Total:</td>
-	                							<td><td>₹<%= grandTotal.toFixed(2) %></td></td>
+	                							<td>TotalAmount:</td>
+	                							<td><td>₹ <%= (TotalAmount).toFixed(2) %></td></td>
 	                						</tr><!-- End .summary-total -->
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
-
-	                				<a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+                          <% if (cart && cart.items.length > 0) { %>
+                            <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">
+                              PROCEED TO CHECKOUT
+                            </a>
+                          <% } else { %>
+                            <a href="#" class="btn btn-outline-secondary btn-order btn-block disabled" tabindex="-1" aria-disabled="true">
+                              PROCEED TO CHECKOUT
+                            </a>
+                          <% } %>
+	                				<!-- <a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a> -->
 	                			</div><!-- End .summary -->
 
 		            			<a href="/shopPage" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>

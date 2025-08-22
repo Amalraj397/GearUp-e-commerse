@@ -27,8 +27,8 @@ export const showSignup = (req, res) => {
 
 export const showLogin = (req, res) => {
   // console.log("login paeg vannu")
-  if(req.session.user) return res.redirect("/");
-  if(req.session.admin) return res.redirect("/admin/dashboard");
+  if (req.session.user) return res.redirect("/");
+  if (req.session.admin) return res.redirect("/admin/dashboard");
   try {
     res.render("loginLanding.ejs");
   } catch (error) {
@@ -47,7 +47,7 @@ export const userSignup = async (req, res) => {
     registerPassword,
   } = req.body;
 
-  console.log("email", req.body);     // debugging
+  console.log("email", req.body); // debugging
 
   try {
     // check email already exists..
@@ -70,7 +70,7 @@ export const userSignup = async (req, res) => {
     // generate OTP and Time
     const otpExpirationT = Date.now() + 60 * 1000;
     const otp = generateOTP();
-    console.log(" userLogin OTP:",otp);  //   diplay OTP in console
+    console.log(" userLogin OTP:", otp); //   diplay OTP in console
     //send OTP email
     await sendEmail({ to: registerEmail, otp });
 
@@ -105,7 +105,6 @@ export const getOtpPage = async (req, res) => {
     const otpExpiration = req.session.otpExpiration || null;
     return res.status(200).render("enterOtp", { otpExpiration });
   } catch (error) {
-
     console.error(error);
     res.status(500).send("internal server Error  ");
     // next(error);
@@ -136,8 +135,7 @@ export const verifyOtp = async (req, res) => {
 
       // Hashing password
       // const sPassword = await securePassword(getUser.password);
-      const sPassword = await securePassword(req.session.userData.password);     // hashing the password
-
+      const sPassword = await securePassword(req.session.userData.password); // hashing the password
 
       //  Storing User data in DB
       const user = new userschema({
@@ -185,36 +183,30 @@ export const resendOTP = async (req, res) => {
     // Prevent resend with-in 60 seconds
     if (
       req.session.newotpExpiration &&
-      Date.now()-req.session.newotpExpiration < 60 * 1000
-    )
-     {
+      Date.now() - req.session.newotpExpiration < 60 * 1000
+    ) {
       return res
         .status(429)
         .json({ message: "Please wait before requesting a new OTP." });
     }
 
-    const otp = generateOTP(); 
-     console.log("resend OTP:",otp);
+    const otp = generateOTP();
+    console.log("resend OTP:", otp);
 
     const newExpirationTime = Date.now() + 60 * 2000; // 2 minute cooldown
 
     req.session.otp = otp;
-     const otpExpiration = newExpirationTime;
+    const otpExpiration = newExpirationTime;
 
-    await sendEmail({ to: email, otp }); 
+    await sendEmail({ to: email, otp });
 
-    res
-      .status(200) 
-      .json({ message: "A new OTP has been sent to your email." });
+    res.status(200).json({ message: "A new OTP has been sent to your email." });
   } catch (error) {
     console.error("Error resending OTP:", error);
-    
   }
 };
 
-
 // ---------------------------------otp end------------------------------------
-
 
 //  --------------------------userlogin controller------------------------------
 
@@ -226,7 +218,9 @@ export const userLogin = async (req, res) => {
       return res.status(401).json({ message: "User not found..! Sign up now" });
     }
     if (user.isBlocked) {
-      return res.status(401).json({ message: "Sorry, you're blocked from accessing." });
+      return res
+        .status(401)
+        .json({ message: "Sorry, you're blocked from accessing." });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -239,16 +233,22 @@ export const userLogin = async (req, res) => {
         id: user._id,
         name: user.firstName,
       };
-      return res.status(200).json({ success: true, redirectTo: "/admin/dashboard", message: "Welcome Admin!" });
+      return res
+        .status(200)
+        .json({
+          success: true,
+          redirectTo: "/admin/dashboard",
+          message: "Welcome Admin!",
+        });
     }
 
     req.session.user = {
       id: user._id,
       name: user.firstName,
     };
-    
-    console.log("req.session.user : user indd", req.session.user);   // debugging
-    
+
+    console.log("req.session.user : user indd", req.session.user); // debugging
+
     //  FINAL SUCCESS RESPONSE for normal user login
     return res.status(200).json({
       success: true,
@@ -291,22 +291,28 @@ export const userLogout = async (req, res) => {
 
 // -----------------------google authentication-----------------
 
-
 export const handleGoogleSignup = async (req, res) => {
   try {
     const { email, displayName, googleId, photo } = req.body;
 
     if (!email || !displayName || !googleId) {
-      return res.status(400).json({ success: false, message: "Missing fields" });
-    } 
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing fields" });
+    }
 
     // Check if user already exists
     let user = await userschema.findOne({ email });
-    
+
     //check if user is blocked or not
 
-     if (user.isBlocked) {
-      return res.status(403).json({ success: false, message: 'Your account has been blocked by the admin' });
+    if (user.isBlocked) {
+      return res
+        .status(403)
+        .json({
+          success: false,
+          message: "Your account has been blocked by the admin",
+        });
     }
 
     if (user) {
@@ -333,26 +339,26 @@ export const handleGoogleSignup = async (req, res) => {
     });
 
     res.status(201).json({ success: true, user });
-
   } catch (error) {
     console.error("Google Signup Error:", error);
-    res.status(500).json({ success: false, message: "Server error during Google signup" });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error during Google signup" });
   }
 };
 
 // ----------------------------google auth ENDS------------------------
 
-
 //-------------------forgot password section-------------------
 
 // export const forgotverifyEmail = async (req, res)=>{
 //     const {email} = req.body;
-  
+
 //     try {
 //         // Check the email address already have ?
 //         const userExist = await userschema.findOne({email:email});
 //           // req.session.email=userExist.email;
-       
+
 //         if(!userExist){
 //             return res.status(500).json({message:'User email not registered..!'})
 //         }
@@ -367,7 +373,7 @@ export const handleGoogleSignup = async (req, res) => {
 //          req.session.otp = otp;
 //          req.session.otpExpiration = expiryTime;
 //          req.session.email = email;
-       
+
 //         //  res.status(200).json({ message: 'Email verified successfully! Enter the OTP'})
 
 //         return res.status(200).json({
@@ -391,7 +397,6 @@ export const handleGoogleSignup = async (req, res) => {
 //         res.status(500).send("server Error");
 //       }
 //     };
-
 
 // export const forgotverifyOtp = async (req, res) => {
 //   try {
@@ -432,8 +437,6 @@ export const handleGoogleSignup = async (req, res) => {
 //   }
 // };
 
-
-
 // export const forgotresendOTP = async (req, res) => {
 //   try {
 //     // if (!req.session.email) {
@@ -451,9 +454,6 @@ export const handleGoogleSignup = async (req, res) => {
 //     const { email } = req.session;
 //     console.log("forgotPassword:resend OTP: ",email);
 
-
-
-
 //     // Prevent resend with-in 60 seconds
 //     if (
 //       req.session.newotpExpiration &&
@@ -465,7 +465,7 @@ export const handleGoogleSignup = async (req, res) => {
 //         .json({ message: "Please wait before requesting a new OTP." });
 //     }
 
-//     const otp = generateOTP(); 
+//     const otp = generateOTP();
 //      console.log("forgotPassword:resend OTP: ",otp);
 
 //     const newExpirationTime = Date.now() + 60 * 2000; // 2 minute cooldown
@@ -473,10 +473,10 @@ export const handleGoogleSignup = async (req, res) => {
 //     req.session.otp = otp;
 //      const otpExpiration = newExpirationTime;
 
-//     await sendEmail({ to: email, otp }); 
+//     await sendEmail({ to: email, otp });
 
 //     res
-//       .status(200) 
+//       .status(200)
 //       .json({ message: "A new OTP has been sent to your email." });
 //   } catch (error) {
 //     console.error("Error resending OTP:", error);
@@ -498,12 +498,12 @@ export const handleGoogleSignup = async (req, res) => {
 // export const confirmResetPassword = async(req, res, next)=>{
 //     const email = req.session.email;
 //     const {newPassword} = req.body;
-  
+
 //    try{
 
 //     // Finding user details with email
 //     const user = await userschema.findOne({email})
-  
+
 //     if(!user){
 //         return res.status(404).json({message:'User not found..! try again'});
 
@@ -521,8 +521,7 @@ export const handleGoogleSignup = async (req, res) => {
 //         message: 'Password updation success..!',
 //          redirectUrl:'/login'
 //     })
-     
-    
+
 //    }catch(error){
 //     console.error('An error occured..!',error)
 //     next(error)
@@ -548,5 +547,14 @@ export const pageNotFound = (req, res) => {
   } catch (error) {
     // res.redirect("/pageNotFound");
     console.log("page not found", error);
+  }
+};
+
+export const getAboutPage = (req, res) => {
+  try {
+    res.render("aboutUs.ejs");
+  } catch (error) {
+    console.log("error in loading About page..!", error);
+    res.status(500).send("server Error");
   }
 };

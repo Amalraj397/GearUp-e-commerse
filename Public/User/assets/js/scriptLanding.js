@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   // Navigation menu hover effect
   // const navLinks = document.querySelectorAll(".nav-link");
@@ -15,33 +14,32 @@ document.addEventListener("DOMContentLoaded", function () {
   //   ---------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
-      const userDisplayName = document.getElementById("user-name");
-      const loginLink = document.getElementById("login-link");
-      const signupLink = document.getElementById("signup-link");
-      const logoutLink = document.getElementById("logout-link");
+    const userDisplayName = document.getElementById("user-name");
+    const loginLink = document.getElementById("login-link");
+    const signupLink = document.getElementById("signup-link");
+    const logoutLink = document.getElementById("logout-link");
 
-      const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
 
-      if (loggedInUser) {
-        const name = loggedInUser.displayName || loggedInUser.firstName || "Guest";
-        userDisplayName.innerText = `Hi, welcomeee ${name}`;
-        userDisplayName.style.display = "block";    // Show the username
-        logoutLink.style.display = "block";           // Show logout
-        loginLink.style.display = "none";             // Hide login
-        signupLink.style.display = "none";              // Hide signup
-      }
-       else {
-        userDisplayName.style.display = "none";
-        logoutLink.style.display = "none";
-        loginLink.style.display = "block";
-        signupLink.style.display = "block";
-      }
+    if (loggedInUser) {
+      const name =
+        loggedInUser.displayName || loggedInUser.firstName || "Guest";
+      userDisplayName.innerText = `Hi, welcomeee ${name}`;
+      userDisplayName.style.display = "block"; // Show the username
+      logoutLink.style.display = "block"; // Show logout
+      loginLink.style.display = "none"; // Hide login
+      signupLink.style.display = "none"; // Hide signup
+    } else {
+      userDisplayName.style.display = "none";
+      logoutLink.style.display = "none";
+      loginLink.style.display = "block";
+      signupLink.style.display = "block";
+    }
 
-      logoutLink.addEventListener("click", () => {
-        localStorage.removeItem("loggedInUser");
-      });
+    logoutLink.addEventListener("click", () => {
+      localStorage.removeItem("loggedInUser");
     });
-
+  });
 
   // Hero slider functionality
   const dots = document.querySelectorAll(".dot");
@@ -55,28 +53,28 @@ document.addEventListener("DOMContentLoaded", function () {
       price: "₹2999.00",
       description:
         "High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.",
-      img:'User/assets/images/backgrounds/2018-Ferrari-FXX-K-Evo-001-1080-removebg-preview.png'
+      img: "User/assets/images/backgrounds/2018-Ferrari-FXX-K-Evo-001-1080-removebg-preview.png",
     },
     {
       name: "BUGATTI BOLIDE",
       price: "₹4299.00",
       description:
         "Lightweight, extreme and uncompromising. The BOLIDE is BUGATTI's track-only hypercar built around the iconic W16 engine.s.",
-        img:'User/assets/images/backgrounds/2019-Audi-R8-LMS-GT3-001-1080-removebg-preview.png'
+      img: "User/assets/images/backgrounds/2019-Audi-R8-LMS-GT3-001-1080-removebg-preview.png",
     },
     {
       name: "Road Master Elite",
       price: "₹2599.00",
       description:
         "Lightweight frame and aerodynamic design for maximum speed on the open road.",
-      img:'User/assets/images/backgrounds/2022-Formula1-Mercedes-AMG-W13-F1-E-Performance-008-2160-Photoroom.png'
+      img: "User/assets/images/backgrounds/2022-Formula1-Mercedes-AMG-W13-F1-E-Performance-008-2160-Photoroom.png",
     },
     {
       name: "Urban Commuter X1",
       price: "₹2999.00",
       description:
         "Perfect for city riding with comfortable geometry and practical features.",
-      img:'User/assets/images/backgrounds/2024-Chevrolet-Corvette-Z06-GT3.R-001-1440w-Photoroom.png'  
+      img: "User/assets/images/backgrounds/2024-Chevrolet-Corvette-Z06-GT3.R-001-1440w-Photoroom.png",
     },
   ];
 

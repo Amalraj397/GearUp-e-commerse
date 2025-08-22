@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/User/assets/css/style.css">
+	    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 
@@ -34,38 +35,48 @@
 		                				<div class="row">
 		                					<div class="col-sm-6">
 		                						<label>First Name *</label>
-		                						<input type="text" name ="firstName" class="form-control" 
+		                						<input type="text" name ="firstName" id="firstName" class="form-control" 
 												value="<%= defaultAddress ? defaultAddress.firstName : '' %>" required>
 		                					</div>
 
 		                					<div class="col-sm-6">
 		                						<label>Last Name *</label>
-		                						<input type="text" name="lastName" class="form-control" 
+		                						<input type="text" name="lastName" id="lastName" class="form-control" 
 												value = "<%= defaultAddress ? defaultAddress.lastName : '' %>" required>
 		                					</div>
 		                				</div>
 
 	            						<label>Email ID:</label>
-	            						<input type="email" name="email" class="form-control"
+	            						<input type="email" name="Email" id="Email" class="form-control"
 										value=" <%= defaultAddress ? defaultAddress.email : '' %>">
 
 	            						<label>Full Address</label>
 	            						<!-- <input type="text" class="form-control" required> -->
-										<textarea class="form-control" cols="15" rows="2" 
-										placeholder="your full address will be  here "
+										<textarea class="form-control" id="address" cols="15" rows="2" 
+										placeholder="your full address will be here..."
 										readonly name="fullAddress"> <%= defaultAddress ? `${defaultAddress.firstName} ${defaultAddress.lastName}
 ${defaultAddress.houseName} 
 ,${defaultAddress.city}, ${defaultAddress.state},${defaultAddress.country} - ${defaultAddress.pincode},
 Landmark: ${defaultAddress.landmark}
 Type: ${defaultAddress.addressType} ` : '' %></textarea>
 
+										<input type="hidden" name="name" id="name" value="<%= defaultAddress ? defaultAddress.firstName + ' ' + defaultAddress.lastName : '' %>">
+										<input type="hidden" name="address" id="addressField" value="<%= defaultAddress ? defaultAddress.houseName : '' %>">
+										<input type="hidden" name="city" id="city" value="<%= defaultAddress ? defaultAddress.city : '' %>">
+										<input type="hidden" name="state" id="state" value="<%= defaultAddress ? defaultAddress.state : '' %>">
+										<input type="hidden" name="country" id="country" value="<%= defaultAddress ? defaultAddress.country : '' %>">
+										<input type="hidden" name="landMark" id="landMark" value="<%= defaultAddress ? defaultAddress.landmark : '' %>">
+										<input type="hidden" name="pincode" id="pincode" value="<%= defaultAddress ? defaultAddress.pincode : '' %>">
+										<input type="hidden" name="phone" id="phone" value="<%= defaultAddress ? defaultAddress.phone : '' %>">
+										<input type="hidden" name="email" id="email" value="<%= defaultAddress ? defaultAddress.email : '' %>">
 		                				<div class="row"></div>	                					
 										
                                         <!-- <button type="button" class="btn btn-outline-primary-2 btn-order" data-bs-toggle="modal" data-bs-target="#addressModal">Change Address</button> -->
 										<button type="button" class="btn btn-outline-primary-2 btn-order" data-bs-toggle="modal" data-bs-target="#changeAddressModal">
 										  Change Address
 										</button>
-										<button type="submit" class="btn btn-outline-primary-2 btn-order "> ADD NEW ADDRESS</button>
+										<a href="/addUserAddress" class="btn btn-outline-primary-2 btn-order"> ADD NEW ADDRESS</a>
+										<!-- <button   href="/addUserAddress" class="btn btn-outline-primary-2 btn-order "> ADD NEW ADDRESS</button> -->
 
 		                		</div><!-- End .col-lg-9 -->
 		                		<aside class="col-lg-3">
@@ -93,32 +104,41 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
                                                                     <%= item.quantity %>
                                                                 </span>
                                                                 <span class="product-price">
-                                                                    ₹<%= (item.salePrice * item.quantity).toFixed(2) %>
+                                                                    ₹ <%= (item.salePrice * item.quantity).toFixed(2) %>
                                                                 </span>
                                                             </div>
                                                         <% }) %>
                                                     </div>
                                                 
                                                     <div class="order-totals">
+
                                                         <div class="total-row">
-                                                            <span>Subtotal:</span>
-                                                            <span>₹<%= grandTotal.toFixed(2) %></span>
+                                                            <span>Festival Offer: 10% OFF</span>
+                                                            <span>- ₹ <%= festivalOFF.toFixed(2) %></span>
                                                         </div>
+
                                                         <div class="total-row">
-                                                            <span>Shipping:</span>
-                                                            <span>Free shipping</span>
+                                                        <span>Shipping:</span>
+                                                          <span class="<%= grandTotal >= 1999 ? 'text-success' : '' %>">
+                                                            <%= grandTotal >= 1999 ? "Free shipping" : "Shipping Charge: + ₹120.00" %>
+                                                          </span>
                                                         </div>
-														<div>
-															 <span><%= grandTotal >= 999 ? "COD Available" : "COD not-Available" %></span>
-														</div>
+                                                        
+                                                        <div>
+                                                          <span class="<%= grandTotal >= 1999 ? 'text-success' : 'text-decoration-line-through text-muted' %>">
+                                                            <%= grandTotal >= 1999 ? "Cash-On-Delivery Available" : "COD not-Available" %>
+                                                          </span>
+                                                        </div>
+
                                                         <div class="total-row total-final">
-                                                            <span>Total:</span>
+                                                            <span>GrandTotal:</span>
                                                             <span>₹<%= grandTotal.toFixed(2) %></span>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
-		                				<button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" id="placeOrderBtn">Place Order</button>
+		                	    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" id="placeOrderBtn">Place Order</button>
 										<button type="submit" class="btn btn-outline-primary-2 btn-cancel btn-block" id="cancelOrderBtn">Cancel Order</button>
 		                			</div><!-- End .summary -->
 		                		</aside><!-- End .col-lg-3 -->
@@ -173,6 +193,9 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
     <script src="/User/assets/js/jquery.waypoints.min.js"></script>
     <script src="/User/assets/js/superfish.min.js"></script>
     <script src="/User/assets/js/owl.carousel.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Main JS File -->
     <script src="/User/assets/js/main.js"></script>
 
@@ -211,22 +234,29 @@ document.getElementById('confirmAddressChange').addEventListener('click', functi
         .catch(err => console.error(err));
 });
 </script>
-
 <script>
 document.getElementById("placeOrderBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
+  // collect billing details from inputs by ID
+  const billingDetails = {
+    name: document.getElementById("name").value,
+    address: document.getElementById("addressField").value,
+    city: document.getElementById("city").value,
+    state: document.getElementById("state").value,
+    country: document.getElementById("country").value,
+    landMark: document.getElementById("landMark").value,
+    pincode: document.getElementById("pincode").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value
+  };
+
+  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash-On-Delivery";
+
+    // const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
   const orderData = {
-    name: document.querySelector('input[name="firstName"]').value + " " + document.querySelector('input[name="lastName"]').value,
-    address: document.querySelector('textarea[name="fullAddress"]').value,
-    city: document.querySelector('input[name="city"]')?.value || "Unknown",
-    state: document.querySelector('input[name="state"]')?.value || "Unknown",
-    country: document.querySelector('input[name="country"]')?.value || "Unknown",
-    landMark: document.querySelector('input[name="landMark"]')?.value || "",
-    pincode: document.querySelector('input[name="pincode"]')?.value || "",
-    phone: document.querySelector('input[name="phone"]')?.value || "",
-    email: document.querySelector('input[name="email"]').value,
-    paymentMethod: document.querySelector('input[name="paymentMethod"]:checked')?.value || "COD"
+    billingDetails,
+    paymentMethod
   };
 
   try {
@@ -239,17 +269,36 @@ document.getElementById("placeOrderBtn").addEventListener("click", async (e) => 
     const data = await res.json();
 
     if (data.success) {
-      alert(data.message);
-      window.location.href = "/getOrderSuccesspage";
+      Swal.fire({
+        icon: "success",
+        title: "Order Confirmed!",
+        text: data.message || "Your order has been placed successfully",
+        confirmButtonColor: "#3085d6"
+      }).then(() => {
+        window.location.href = `/orderSuccess?orderId=${data.orderId}`;
+      });
     } else {
-      alert("Failed to place order");
+      Toastify({
+        text: data.message || "Failed to place order ",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#ff4d4d"
+      }).showToast();
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.log("Error submitting order!", error);
+    Toastify({
+      text: "Something went wrong. Please try again.",
+      duration: 4000,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "#ff4d4d"
+    }).showToast();
   }
 });
-
 </script>
+
 </body>
 
-<%- include("../../Views/Partials/User/footerLand") %>
+<%- include("../../Views/Partials/User/footerLand") %>            

@@ -1,51 +1,47 @@
+export const forgotverifyEmail = async (req, res) => {
+  const { email } = req.body;
 
-export const forgotverifyEmail = async (req, res)=>{
-    const {email} = req.body;
-  
-    try {
-        // Check the email address already have ?
-        const userExist = await userschema.findOne({email:email});
-          // req.session.email=userExist.email;
-       
-        if(!userExist){
-            return res.status(500).json({message:'User email not registered..!'})
-        }
-        //
-        const otp = generateOTP();
-        const expiryTime = Date.now()+ 60 *3000;
-        console.log(" Forgot Password -OTP :",otp);
+  try {
+    // Check the email address already have ?
+    const userExist = await userschema.findOne({ email: email });
+    // req.session.email=userExist.email;
 
-         // Send OTP corresponding email!
-         await sendEmail({to: email, otp})
+    if (!userExist) {
+      return res.status(500).json({ message: "User email not registered..!" });
+    }
+    //
+    const otp = generateOTP();
+    const expiryTime = Date.now() + 60 * 3000;
+    console.log(" Forgot Password -OTP :", otp);
 
-         req.session.otp = otp;
-         req.session.otpExpiration = expiryTime;
-         req.session.email = email;
-       
-        //  res.status(200).json({ message: 'Email verified successfully! Enter the OTP'})
+    // Send OTP corresponding email!
+    await sendEmail({ to: email, otp });
 
-        return res.status(200).json({
-          success: true,
-          message: "Email verification successful! Please enter the OTP.",
-          redirectTo: "/forgotGetotp",
-        });
+    req.session.otp = otp;
+    req.session.otpExpiration = expiryTime;
+    req.session.email = email;
 
-    }  catch (error) {
+    //  res.status(200).json({ message: 'Email verified successfully! Enter the OTP'})
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verification successful! Please enter the OTP.",
+      redirectTo: "/forgotGetotp",
+    });
+  } catch (error) {
     console.log("error in while verifying the E-mail", error);
     res.status(500).send("server Error");
   }
+};
 
-}
-
-    export const forgotGetOtp = (req, res) => {
-      try {
-        res.render("forgotOTP.ejs");
-      } catch (error) {
-        console.log("error in loading the OTP page", error);
-        res.status(500).send("server Error");
-      }
-    };
-
+export const forgotGetOtp = (req, res) => {
+  try {
+    res.render("forgotOTP.ejs");
+  } catch (error) {
+    console.log("error in loading the OTP page", error);
+    res.status(500).send("server Error");
+  }
+};
 
 export const forgotverifyOtp = async (req, res) => {
   try {
@@ -66,7 +62,7 @@ export const forgotverifyOtp = async (req, res) => {
     // Validate OTP
     if (otp == storedOtp) {
       const userEmail = req.session.email;
-      console.log("userEmail",userEmail);
+      console.log("userEmail", userEmail);
 
       delete req.session.otp; // clear OTP from session after successfull registration
       delete req.session.otpExpiration;
@@ -86,7 +82,6 @@ export const forgotverifyOtp = async (req, res) => {
   }
 };
 
-
 export const forgotresendOTP = async (req, res) => {
   try {
     // if (!req.session.email) {
@@ -94,80 +89,72 @@ export const forgotresendOTP = async (req, res) => {
     // }
 
     const { email } = req.session;
-    console.log("forgotPassword:resend OTP: ",email);
-
+    console.log("forgotPassword:resend OTP: ", email);
 
     // Prevent resend with-in 60 seconds
     if (
       req.session.newotpExpiration &&
-      Date.now()-req.session.newotpExpiration < 60 * 1000
-    )
-     {
+      Date.now() - req.session.newotpExpiration < 60 * 1000
+    ) {
       return res
         .status(429)
         .json({ message: "Please wait before requesting a new OTP." });
     }
 
-    const otp = generateOTP(); 
-     console.log("forgotPassword:resend OTP: ",otp);
+    const otp = generateOTP();
+    console.log("forgotPassword:resend OTP: ", otp);
 
     const newExpirationTime = Date.now() + 60 * 2000; // 2 minute cooldown
 
     req.session.otp = otp;
-     const otpExpiration = newExpirationTime;
+    const otpExpiration = newExpirationTime;
 
-    await sendEmail({ to: email, otp }); 
+    await sendEmail({ to: email, otp });
 
-    res
-      .status(200) 
-      .json({ message: "A new OTP has been sent to your email." });
+    res.status(200).json({ message: "A new OTP has been sent to your email." });
   } catch (error) {
     console.error("Error resending OTP:", error);
     res.status(500).send("internal server Error  ");
   }
 };
 
-    // get reset password page
-  export const getSetnewPassword = (req, res) => {
-    try {
-      res.render("updatePassword.ejs");
-    } catch (error) {
-      console.log("error in loading the page", error);
-      res.status(500).send("server Error  ");
-    }
-  };
+// get reset password page
+export const getSetnewPassword = (req, res) => {
+  try {
+    res.render("updatePassword.ejs");
+  } catch (error) {
+    console.log("error in loading the page", error);
+    res.status(500).send("server Error  ");
+  }
+};
 
-  //  updating new password controller
-export const confirmResetPassword = async(req, res, next)=>{
-    const email = req.session.email;
-    const {newPassword} = req.body;
-  
-   try{
+//  updating new password controller
+export const confirmResetPassword = async (req, res, next) => {
+  const email = req.session.email;
+  const { newPassword } = req.body;
 
+  try {
     // Finding user details with email
-    const user = await userschema.findOne({email})
-  
-    if(!user){
-        return res.status(404).json({message:'User not found..! try again'});
+    const user = await userschema.findOne({ email });
 
+    if (!user) {
+      return res.status(404).json({ message: "User not found..! try again" });
     }
 
     // Bycript new password.
-    const resetPassword = await securePassword(newPassword)
-    user.password=resetPassword;
+    const resetPassword = await securePassword(newPassword);
+    user.password = resetPassword;
 
-    await user.save()
+    await user.save();
 
     delete req.session.email;
 
     return res.status(200).json({
-        message: 'Password updation success..!',
-         redirectUrl:'/login'
-    })
-     
-    
-   }catch(error){
-    console.error('An error occured..!',error)
-    next(error)
-   }
-}
+      message: "Password updation success..!",
+      redirectUrl: "/login",
+    });
+  } catch (error) {
+    console.error("An error occured..!", error);
+    next(error);
+  }
+};

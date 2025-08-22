@@ -1,16 +1,41 @@
-import addressSchema from "../../Models/userAddressModel.js"
+import addressSchema from "../../Models/userAddressModel.js";
 
-export const getAdd_UseraddressPage = (req, res) =>{
-    try{
-        res.render("userAddressPage.ejs");
-    }catch(error){
-        console.log("error in loading the page", error);
-        res.status(500).send("server Error  ");
+export const getAdd_UseraddressPage = (req, res) => {
+  try {
+    res.render("userAddressPage.ejs");
+  } catch (error) {
+    console.log("error in loading the page", error);
+    res.status(500).send("server Error  ");
+  }
+};
+
+export const add_UserAddress = async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    altPhone,
+    houseName,
+    city,
+    state,
+    country,
+    pincode,
+    landmark,
+    addressType,
+  } = req.body;
+
+  try {
+    const userId = req.session.user?.id;
+    console.log("userid in address adding:", userId);
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ message: "Unauthoirzed access..! please login..!" });
     }
-}
-
-export const add_UserAddress = async (req, res)=>{
-    const {
+    const newAddress = new addressSchema({
+      userId: userId,
       firstName,
       lastName,
       email,
@@ -23,105 +48,83 @@ export const add_UserAddress = async (req, res)=>{
       pincode,
       landmark,
       addressType,
-    }= req.body;
-
-    try{
-         const userId = req.session.user?.id;
-         console.log("userid in address adding:",userId);
-
-         if(!userId){
-            return res.status(400).json({message:"Unauthoirzed access..! please login..!"});
-         }
-        const newAddress = new addressSchema({
-            userId:userId,
-            firstName,
-            lastName,
-            email,
-            phone,
-            altPhone,
-            houseName,
-            city,
-            state,
-            country,
-            pincode,
-            landmark,
-            addressType,
-         });
-         await newAddress.save();
-         res.status(201).json({message:"User address saved successfully..!"});
-
-    }catch(error){
-        console.log("error in saving user address", error);
-        res.status(500).send("internal server Error..!");
-    }
-}
+    });
+    await newAddress.save();
+    res.status(201).json({ message: "User address saved successfully..!" });
+  } catch (error) {
+    console.log("error in saving user address", error);
+    res.status(500).send("internal server Error..!");
+  }
+};
 
 //===================== EDIT USER ADDRESS ===================
 
-  export const getEdit_userAddressPage = async (req, res) => {
-    try {
-      const address = await addressSchema.findById(req.params.id);
-      res.status(200).render("editUserAddressPage.ejs", {
-        address,
-      });
-    } catch (error) {
-      console.log("error in loading the page", error);
-      res.status(500).send("server Error  ");
-    }
-  };
+export const getEdit_userAddressPage = async (req, res) => {
+  try {
+    const address = await addressSchema.findById(req.params.id);
+    res.status(200).render("editUserAddressPage.ejs", {
+      address,
+    });
+  } catch (error) {
+    console.log("error in loading the page", error);
+    res.status(500).send("server Error  ");
+  }
+};
 
-  export const edit_userAddress = async (req, res) => {
-    const user = req.session.user;
-    const userId = user?.id;
+export const edit_userAddress = async (req, res) => {
+  const user = req.session.user;
+  const userId = user?.id;
 
-    console.log("userid in edit useraddress", userId)     //debugging
-     if(!userId){
-      return res.status(401).json({message: "Unauthorised Access..!please login"});
-     }
+  console.log("userid in edit useraddress", userId); //debugging
+  if (!userId) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorised Access..!please login" });
+  }
 
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      altPhone,
-      houseName,
-      city,
-      state,
-      country,
-      pincode,
-      landmark,
-      addressType,
-    } = req.body;
-       
-    //  const userId = req.params.id;
-    try {
-      const address = await addressSchema.findById(req.params.id);
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    altPhone,
+    houseName,
+    city,
+    state,
+    country,
+    pincode,
+    landmark,
+    addressType,
+  } = req.body;
 
-      if (!address) {
+  //  const userId = req.params.id;
+  try {
+    const address = await addressSchema.findById(req.params.id);
+
+    if (!address) {
       return res.status(404).json({ message: "Address not found" });
     }
 
-         if (firstName) address.firstName = firstName;
-         if (lastName) address.lastName = lastName;
-         if (email) address.email = email;
-         if (phone) address.phone = phone;
-         if (altPhone) address.altPhone = altPhone;
-         if (houseName) address.houseName = houseName;
-         if (city) address.city = city;
-         if (state) address.state = state;
-         if (country) address.country = country;
-         if (pincode) address.pincode = pincode;
-         if (landmark) address.landmark = landmark;
-         if (addressType) address.addressType = addressType;
-      await address.save();
+    if (firstName) address.firstName = firstName;
+    if (lastName) address.lastName = lastName;
+    if (email) address.email = email;
+    if (phone) address.phone = phone;
+    if (altPhone) address.altPhone = altPhone;
+    if (houseName) address.houseName = houseName;
+    if (city) address.city = city;
+    if (state) address.state = state;
+    if (country) address.country = country;
+    if (pincode) address.pincode = pincode;
+    if (landmark) address.landmark = landmark;
+    if (addressType) address.addressType = addressType;
+    await address.save();
 
-      res.status(200).json({ message: "Address updated successfully" });
-    } catch (error) {
-      console.log("error in loading the page", error);
-      res.status(500).send("server Error  ");
-    }
-  };
+    res.status(200).json({ message: "Address updated successfully" });
+  } catch (error) {
+    console.log("error in loading the page", error);
+    res.status(500).send("server Error  ");
+  }
+};
 
 export const delete_userAddress = async (req, res) => {
   try {

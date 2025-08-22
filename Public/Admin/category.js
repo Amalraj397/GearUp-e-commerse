@@ -1,4 +1,5 @@
-{/* <script>
+{
+  /* <script>
     // Js functions 
     function confirmListCategory(id, button) {
         Swal.fire({
@@ -111,4 +112,5 @@
         }
     })
     
-</script> */}
+</script> */
+}

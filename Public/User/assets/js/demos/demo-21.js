@@ -1,10 +1,10 @@
 // Demo 21 Js file
 $(document).ready(function () {
-    'use strict';
+  "use strict";
 
-    // Notification
+  // Notification
 
-    $('.notify-action a').on('click', function() {
-    	$('.notification').css('display', 'none');
-    })
+  $(".notify-action a").on("click", function () {
+    $(".notification").css("display", "none");
+  });
 });

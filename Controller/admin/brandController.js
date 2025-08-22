@@ -44,12 +44,12 @@ export const getAddBrandPage = async (req, res) => {
   }
 };
 
-// new addbrand function  
+// new addbrand function
 export const addNewBrand = async (req, res) => {
   const { name, description } = req.body;
 
   if (!req.file) {
-    return res.status(400).json({ message: 'Please upload a logo image' });
+    return res.status(400).json({ message: "Please upload a logo image" });
   }
 
   //  Get the Cloudinary-hosted image URL
@@ -57,11 +57,13 @@ export const addNewBrand = async (req, res) => {
 
   try {
     const brand = await brandSchema.findOne({
-      brandName: { $regex: `^${name}$`, $options: 'i' }
+      brandName: { $regex: `^${name}$`, $options: "i" },
     });
 
     if (brand) {
-      return res.status(400).json({ message: 'Brand already exists..try again!' });
+      return res
+        .status(400)
+        .json({ message: "Brand already exists..try again!" });
     }
 
     const newBrand = new brandSchema({
@@ -72,18 +74,19 @@ export const addNewBrand = async (req, res) => {
 
     await newBrand.save();
 
-    res.status(201).json({ message: 'New brand added successfully..!' });
+    res.status(201).json({ message: "New brand added successfully..!" });
   } catch (error) {
     console.log("Error in adding brand", error);
     res.status(500).send("Server Error");
   }
 };
 
-
 // ---------------------unlisting a Brand -------------------
 export const unlistBrand = async (req, res) => {
   try {
-    const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: true });
+    const brand = await brandSchema.findByIdAndUpdate(req.params.id, {
+      isBlocked: true,
+    });
     res.json({ success: true, message: "Brand unlisted successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to unlist brand" });
@@ -93,7 +96,9 @@ export const unlistBrand = async (req, res) => {
 //---------------------listng a Brand----------------------
 export const listBrand = async (req, res) => {
   try {
-    const brand = await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: false });
+    const brand = await brandSchema.findByIdAndUpdate(req.params.id, {
+      isBlocked: false,
+    });
     res.json({ success: true, message: "Brand listed successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to list brand" });
@@ -126,14 +131,13 @@ export const updateBrand = async (req, res) => {
     }
 
     if (name && name.toLowerCase() !== brand.brandName.toLowerCase()) {
-
       const existBrand = await brandSchema.findOne({
-        brandName: { $regex: `^${name}$`, $options: 'i' },
-        _id: { $ne: id }
+        brandName: { $regex: `^${name}$`, $options: "i" },
+        _id: { $ne: id },
       });
 
-      if(existBrand){
-         return res.status(404).json({ message: "Brand name already exists" });
+      if (existBrand) {
+        return res.status(404).json({ message: "Brand name already exists" });
       }
     }
 

@@ -2,30 +2,23 @@
 import adminSchema from "../Models/adminModel.js";
 import userSchema from "../Models/userModel.js";
 
-export const adminAuth = async (req, res,next) => {
+export const adminAuth = async (req, res, next) => {
   try {
     if (!req.session.admin) {
-
       return res.redirect("/admin/login");
-
     }
     // Find admin by id
     const admin = await adminSchema.findById(req.session.admin._id);
-    
+
     if (req.session.admin) {
-
       return next();
-
     } else {
-
       return res.redirect("/admin/login");
-
     }
-      } catch (error) {
-
-        console.error("Error in admin Authentication", error.message);
-        res.status(500).send("Internal server error");
-    }
+  } catch (error) {
+    console.error("Error in admin Authentication", error.message);
+    res.status(500).send("Internal server error");
+  }
 };
 
 // For user
@@ -43,7 +36,6 @@ export const userAuth = async (req, res, next) => {
       res.redirect("/login"); // Redirect if user is blocked or not found..!
     }
     next();
-
   } catch (error) {
     console.error("Error in user Authentication", error.message);
     res.status(500).send("Internal server error");
@@ -54,7 +46,7 @@ export const userAuth = async (req, res, next) => {
 // export const userAuthenticated = (req, res,next) => {
 //   console.log("middle call vannea")
 //   if (req.session.user) {
-//     console.log("usr retyju::::::", req.session.user); 
+//     console.log("usr retyju::::::", req.session.user);
 //       return res.redirect("/")
 //   }
 //   //  return res.redirect("/login")
@@ -72,8 +64,11 @@ export const userAuth = async (req, res, next) => {
 // };
 
 export const nocache = (req, res, next) => {
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
+  res.setHeader(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, private",
+  );
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   next();
 };

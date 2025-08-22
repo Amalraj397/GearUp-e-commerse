@@ -1,4 +1,5 @@
-{/* <script>
+{
+  /* <script>
     document.addEventListener('DOMContentLoaded', () => {
         const productForm = document.getElementById('add-product-form');
         const imageUploadArea = document.getElementById('image-upload-area');
@@ -422,15 +423,13 @@
             window.location.href = '/admin/productList';
         });
     });
-</script> */}
-
-
-
+</script> */
+}
 
 // ---------------------------------------------------
 
-
-{/* <script> 
+{
+  /* <script> 
 
 // Form submission,
 document.getElementById('add-product-form').addEventListener('submit', async function(e){
@@ -628,13 +627,13 @@ Array.from(errorElements).forEach(element =>{
     element.innerText = '';
 });
 }
-</script> */}
-
-
+</script> */
+}
 
 // ------------------- product  script  just before autominima---------------
 
-{/* <script>
+{
+  /* <script>
     // ================== DOM REFERENCES ==================
     const productForm = document.getElementById('addProduct-form');
     const imageInput = document.getElementById('product-images');
@@ -974,5 +973,6 @@ Array.from(errorElements).forEach(element =>{
 
     viewProductsBtn.addEventListener('click', () => {
         window.location.href = '/admin/productList';
-    }); */}
+    }); */
+}
 // </script>

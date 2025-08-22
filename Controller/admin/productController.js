@@ -5,13 +5,13 @@ import cloudinary from "../../Config/cloudinary_Config.js";
 
 // import {validateProductData} from "../../utils/validateProduct.js";
 
-export const loadproductList =async (req, res) => {
+export const loadproductList = async (req, res) => {
   try {
     res.render("productList.ejs");
   } catch (error) {
     console.log("Error loading product list:", error);
     res.status(500).send("Internal Server Error");
-  } 
+  }
 };
 
 // controller for the product fetch API
@@ -35,7 +35,7 @@ export const getProductsJson = async (req, res) => {
       .find(filter)
       .populate("brand")
       .populate("category")
-      .sort({ createdAt: -1 }) 
+      .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
@@ -68,7 +68,7 @@ export const loadAddproduct = async (req, res) => {
 // addProduct controller
 
 export const addnewProduct = async (req, res) => {
-  console.log("product controller starting")
+  console.log("product controller starting");
   const {
     productName,
     brand,
@@ -81,23 +81,22 @@ export const addnewProduct = async (req, res) => {
   } = req.body;
 
   // console.log("parsedvariants:", parsedVariants);   //dubugg
-  // console.log("req.body ::", req.body); 
-  // console.log("productName: category", productName,category); 
+  // console.log("req.body ::", req.body);
+  // console.log("productName: category", productName,category);
   // console.log("brand:", brand);
 
   // Validate required fields again on the backend
-  
+
   // if (!productName || !brand ||!category || !description ||  !edition ||  !parsedVariants||  !offer || !status ) {
   //   return res.status(400).json({ message: "Missing required fields" });
   // }
 
   // console.log("aftervalidation:::")
 
-
-  const variant=JSON.parse(parsedVariants);
+  const variant = JSON.parse(parsedVariants);
 
   // console.log("variant::", variant);  //dubugg
-  
+
   // Image handling
 
   if (!req.files || req.files.length < 3) {
@@ -109,19 +108,19 @@ export const addnewProduct = async (req, res) => {
   // console.log("imageUrls::", imageUrls);      //dubugg
 
   try {
-     // fetching category id
-  const categoryId = await categorySchema.findOne({ name: category });
-  // console.log("category fetched:::", categoryId);   //dubugg
-  if (!categoryId) {
-    return res.status(400).json("Invalid category name");
-  }
+    // fetching category id
+    const categoryId = await categorySchema.findOne({ name: category });
+    // console.log("category fetched:::", categoryId);   //dubugg
+    if (!categoryId) {
+      return res.status(400).json("Invalid category name");
+    }
 
-  // Fetch brand id
-  const brandId = await brandSchema.findOne({ brandName: brand });
-  // console.log("brand fetched:::", categoryId);     //dubugg
-  if (!brandId) {
-    return res.status(400).json("Invalid brand name");
-  }
+    // Fetch brand id
+    const brandId = await brandSchema.findOne({ brandName: brand });
+    // console.log("brand fetched:::", categoryId);     //dubugg
+    if (!brandId) {
+      return res.status(400).json("Invalid brand name");
+    }
     const product = await productSchema.findOne({ productName });
     // console.log("fetching product:::", product);     //dubugg
     if (product) {
@@ -136,8 +135,8 @@ export const addnewProduct = async (req, res) => {
       brand: brandId._id,
       category: categoryId._id,
       description,
-      edition, 
-      variants: variant, 
+      edition,
+      variants: variant,
       productOffer: offer,
       status,
       productImage: imageUrls,
@@ -209,10 +208,10 @@ export const listProduct = async (req, res) => {
 };
 // ---------------------- List & Unlist  END-------------------
 
-
 // =====================GET EDIT PRODUCT PAGE=====================
 
-export const getProductEditpage = async (req, res) => {   // getting edit product_page
+export const getProductEditpage = async (req, res) => {
+  // getting edit product_page
   try {
     const productId = req.params.id;
 
@@ -254,31 +253,42 @@ export const updateProduct = async (req, res) => {
       offer,
     } = req.body;
 
-      const variant=JSON.parse(parsedVariants);
+    const variant = JSON.parse(parsedVariants);
 
     // Validate mandatory fields
-    if (!productName || !brand || !category || !description || !parsedVariants || !edition || !status ) {
-      return res.status(400).json({ message: 'All required fields must be filled.' });
+    if (
+      !productName ||
+      !brand ||
+      !category ||
+      !description ||
+      !parsedVariants ||
+      !edition ||
+      !status
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All required fields must be filled." });
     }
 
     // finding brand and category
     const [brandDoc, categoryDoc] = await Promise.all([
       brandSchema.findOne({ brandName: brand }),
-      categorySchema.findOne({ name: category })
+      categorySchema.findOne({ name: category }),
     ]);
 
     const product = await productSchema.findById(productId);
     // console.log("product data ivde und:", product);    //debugging
 
-    if (!product) return res.status(404).json({ message: 'Product not found.' });
+    if (!product)
+      return res.status(404).json({ message: "Product not found." });
 
     // Remove deleted images
     let existingImages = product.productImage;
 
     // Add new uploaded images
-    const newImages = req.files?.map(file => file.path) || [];
+    const newImages = req.files?.map((file) => file.path) || [];
 
-    // console.log('controller- imagres', newImages);         // debugging 
+    // console.log('controller- imagres', newImages);         // debugging
 
     const finalImages = [...existingImages, ...newImages];
 
@@ -287,7 +297,9 @@ export const updateProduct = async (req, res) => {
     // console.log("---------------------------")
 
     if (finalImages.length < 3) {
-      return res.status(400).json({ message: 'At least 3 images are required.' });
+      return res
+        .status(400)
+        .json({ message: "At least 3 images are required." });
     }
     // Update product
     await productSchema.findByIdAndUpdate(productId, {
@@ -296,7 +308,7 @@ export const updateProduct = async (req, res) => {
       category: categoryDoc._id,
       description,
       edition,
-      variants: variant, 
+      variants: variant,
       productOffer: offer,
       status,
       productImage: finalImages,
@@ -306,10 +318,10 @@ export const updateProduct = async (req, res) => {
 
     // console.log('final product data', productdata_final);     //debugging
 
-    res.status(200).json({ message: 'Product updated successfully!' });
+    res.status(200).json({ message: "Product updated successfully!" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error while updating product.' });
+    res.status(500).json({ message: "Server error while updating product." });
   }
 };
 
@@ -321,7 +333,9 @@ export const deleteProductImage = async (req, res) => {
   // console.log("imageId:", imageId);         //debugging
 
   if (!imageId) {
-    return res.status(400).json({ success: false, message: "No image-ID provided" });
+    return res
+      .status(400)
+      .json({ success: false, message: "No image-ID provided" });
   }
 
   try {
@@ -332,19 +346,21 @@ export const deleteProductImage = async (req, res) => {
     const product = await productSchema.findByIdAndUpdate(
       productId,
       { $pull: { productImage: imageId.deletedImagesUrl } },
-      { new: true });
+      { new: true },
+    );
 
     if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
     // console.log("product:", product);         //debugging
 
     return res.json({ success: true, message: "Image deleted" });
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
-}
+};
 
 // =====================EDIT PRODUCT PAGE END=====================
