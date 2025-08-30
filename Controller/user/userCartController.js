@@ -215,7 +215,7 @@ export const removeFromCartpage = async (req, res) => {
   const userId = user?.id;
   const productId = req.params.id;
 
-  console.log("productId  in  removefrom cart::", productId);
+  console.log("productId in removefrom cart::", productId);
   try {
     // if (!userId) {
     //   return res

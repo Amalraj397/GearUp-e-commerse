@@ -62,6 +62,7 @@ export const updateUserprofile = async (req, res) => {
     firstName,
     lastName,
     phone,
+    email,
     userProfileImage,
     oldPassword,
     newPassword,
@@ -87,6 +88,7 @@ export const updateUserprofile = async (req, res) => {
 
     if (firstName) userData.firstName = firstName;
     if (lastName) userData.lastName = lastName;
+    if (email) userData.email = email;
     if (phone) userData.phone = phone;
     if (userProfileImage) userData.profilePicture = userProfileImage;
 

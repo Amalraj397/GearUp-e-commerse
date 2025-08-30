@@ -1,0 +1,92 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Orders data from backend
+    let orders = <%- JSON.stringify(orderdata) %>; 
+    let currentPage = 1;
+    const ordersPerPage = 5;
+    let filteredOrders = [...orders]; // in case you add search/filter later
+
+    // Render orders into table body
+    function renderOrders() {
+      const tableBody = document.getElementById("orders-table-body");
+      tableBody.innerHTML = "";
+
+      const startIndex = (currentPage - 1) * ordersPerPage;
+      const endIndex = startIndex + ordersPerPage;
+      const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+      paginatedOrders.forEach((order, index) => {
+        const row = document.createElement("tr");
+        const slNo = startIndex + index + 1;
+
+        // ⚠️ Keep this structure matching your existing Orders table
+        row.innerHTML = `
+          <td>${slNo}</td>
+          <td>${order._id}</td>
+          <td>${order.user?.firstName || ""} ${order.user?.lastName || ""}</td>
+          <td>₹${order.totalAmount}</td>
+          <td>${order.status}</td>
+          <td>${new Date(order.createdAt).toLocaleDateString()}</td>
+          <td>
+            <button class="view-btn" data-id="${order._id}">
+              <i class="fas fa-eye"></i> View
+            </button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      updatePagination();
+    }
+
+    // Update pagination buttons
+    function updatePagination() {
+      const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+      const pageNumbers = document.getElementById("page-numbers");
+      const prevBtn = document.getElementById("prev-page");
+      const nextBtn = document.getElementById("next-page");
+
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+
+      pageNumbers.innerHTML = "";
+
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(totalPages, startPage + 4);
+
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement("button");
+        pageBtn.className = `page-number ${i === currentPage ? "active" : ""}`;
+        pageBtn.textContent = i;
+        pageBtn.addEventListener("click", () => {
+          currentPage = i;
+          renderOrders();
+        });
+        pageNumbers.appendChild(pageBtn);
+      }
+    }
+
+    // Prev / Next
+    document.getElementById("prev-page").addEventListener("click", function () {
+      if (currentPage > 1) {
+        currentPage--;
+        renderOrders();
+      }
+    });
+
+    document.getElementById("next-page").addEventListener("click", function () {
+      const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderOrders();
+      }
+    });
+
+    // Init render
+    renderOrders();
+  });
+</script>

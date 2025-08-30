@@ -51,14 +51,14 @@
 								    <li class="nav-item">
 								        <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
 								    </li>
-                                    <li class="nav-item">
+                    <li class="nav-item">
 								        <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-wallet" role="tab" aria-controls="tab-wallet" aria-selected="false">Wallet</a>
 								    </li>
 								    <li class="nav-item">
 								        <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
 								    </li>
 								    <li class="nav-item">
-								        <a class="nav-link" href="#">Sign Out</a>
+								        <a class="nav-link logoutBtn" href="/logout" >Sign Out</a>
 								    </li>
 								</ul>
 	                		</aside><!-- End .col-lg-3 -->
@@ -72,8 +72,8 @@
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-								    	<p>No order has been made yet.</p>
-								    	<a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+								    	<a href="/myOrders" class="btn btn-outline-primary-2"><span>View Orders</span><i class="icon-long-arrow-right"></i></a>
+                      <!-- <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a> -->
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
@@ -104,22 +104,28 @@
                                                     <% if (addr.isDefault) { %>
                                                       <span class="badge bg-success">Default</span>
                                                     <% } else { %>
-                                                      <a href="/set-default-address/<%= addr._id %>" class="btn btn-sm btn-outline-success confirm-default">Set as Default</a>
+                                                      <a href="#" 
+   class="btn btn-sm btn-outline-success confirm-default" 
+   data-id="<%= addr._id %>">
+   Set as Default
+</a>
+
                                                     <% } %>
                                                   </div>
                                                 </div>
                                               </div>
-                                              <a href="/addUserAddress" class="btn btn-outline-primary-2" style="margin-bottom: 10px;">
-                                                        <span>ADD NEW ADDRESS</span>
-                                                        <i class="icon-long-arrow-right"></i>
-                                                    </a>
+                                              
                                             </div>
                                           <% }); %>
                                         </div>
+                                        <a href="/addUserAddress" class="btn btn-outline-primary-2" style="margin-bottom: 10px;">
+                                                        <span>ADD NEW ADDRESS</span>
+                                                        <i class="icon-long-arrow-right"></i>
+                                                    </a>
 								    </div><!-- .End .tab-pane -->
 								    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
 								    	<form id="userForm">
-										<div class="profile-image-container text-center mb-4">
+										         <div class="profile-image-container text-center mb-4">
                                             <img src="<%= userData.profilePicture ? userData.profilePicture : '/User/assets/images/icons/userProfileDemo.png' %>" 
                                                  alt="Profile Picture" 
                                                  id="profileImage" 
@@ -227,6 +233,66 @@
          });
        });
     </script>
+    <script>
+  document.querySelectorAll('.confirm-default').forEach(button => {
+    button.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const id = button.getAttribute('data-id');
+
+      const confirm = await Swal.fire({
+        title: "Set as default?",
+        text: "This will make this address your default.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, set it!"
+      });
+
+      if (confirm.isConfirmed) {
+        try {
+          const res = await fetch(`/set-default-address/${id}`, {
+            method: 'PATCH',
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const result = await res.json();
+          if (res.ok) {
+            Swal.fire("Updated!", result.message, "success").then(() => {
+              window.location.reload();
+            });
+          } else {
+            Swal.fire("Error", result.message || "Failed to update address", "error");
+          }
+        } catch (err) {
+          Swal.fire("Error", "Something went wrong", "error");
+        }
+      }
+    });
+  });
+</script>
+<script>
+  document.querySelectorAll(".logoutBtn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault(); // stop immediate logout
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your account.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, logout",
+        cancelButtonText: "Cancel"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = btn.getAttribute("href"); 
+          // uses the original href="/logout"
+        }
+      });
+    });
+  });
+</script>
+
 
 </body>
 

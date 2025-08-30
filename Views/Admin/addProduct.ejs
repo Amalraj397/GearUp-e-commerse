@@ -761,11 +761,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="product-offer">Product Offer (%)</label>
-                                    <input type="number" id="product-offer" name="offer" min="0" max="100" placeholder="e.g : 10">
+                                    <input type="number" id="product-offer" name="offer" placeholder="e.g : 10">
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label for="status">Status</label>
+                                    <label for="status">Status</label> 
                                     <select id="status" name="status">
                                         <option value="In-stock">In Stock</option>
                                         <option value="Out-of-stock">Out of Stock</option>
@@ -795,12 +795,12 @@
                             
                                   <div class="form-group">
                                     <label>Stock Quantity*</label>
-                                    <input type="number" name="stock" id="product-stock" min="0">
+                                    <input type="number" name="stock" id="product-stock">
                                     <span class="error-message"></span>
                                   </div>
                                   <div class="form-group">
                                     <label>Product Price*</label>
-                                    <input type="number" name="price" id="product-price" min="0">
+                                    <input type="number" name="price" id="product-price">
                                     <span class="error-message"></span>
                                   </div>
                                 </div>
@@ -1118,11 +1118,26 @@ function openCropper(file) {
     
         // Validate Offer
         const offer = document.getElementById('product-offer');
-            if (offer.value === '' || isNaN(offer.value) || Number(offer.value) < 0) {
-        offer.nextElementSibling.textContent = 'Offer must be between 0 and 100';
-                isValid = false;
-            }
-    
+        //     if (offer.value === '' || isNaN(offer.value) || Number(offer.value) < 0 || Number(offer.value) > 100) {
+        // offer.nextElementSibling.textContent = 'Offer must be Number between 0 and 100';
+        //         isValid = false;
+            // }
+
+        if (!offer.value) {
+          offer.nextElementSibling.textContent = "Please enter an offer percentage.";
+          isValid = false;
+        } 
+
+        if (!/^\d+$/.test(offer.value)) {
+          offer.nextElementSibling.textContent = "Offer must be a whole number.";
+          isValid = false;
+        }
+
+        if (Number(offer.value) < 0 || Number(offer.value) > 100) {
+          offer.nextElementSibling.textContent = "Offer must be between 0 and 100.";
+          isValid = false;
+        }
+
         // Validate Image Uploads
         const Image = document.getElementById('error-message');
             if (selectedFiles.length < 3) {
@@ -1137,17 +1152,27 @@ function openCropper(file) {
                 const price = block.querySelector('input[name="price"]');
     
             if (!scale.value) {
-              scale.nextElementSibling.textContent = "Scale is required.";
+              scale.nextElementSibling.textContent = "Scale is required.!";
               isValid = false;
             }
 
-            if (!stock.value || parseInt(stock.value) < 0 ||isNaN(stock.value)) {
-              stock.nextElementSibling.textContent = "Please enter a valid stock quantity (0 or more).";
-              isValid = false;
+            if (!stock.value){
+                stock.nextElementSibling.textContent ="please enter stock quantity (0 or more)." ;
+                isValid = false;
             }
 
-            if (!price.value || parseFloat(price.value) <= 0 ||isNaN(price.value)) {
-              price.nextElementSibling.textContent = "Please enter a valid price (0 or more).";
+            if (parseInt(stock.value, 10) < 0 || !/^\d+$/.test(stock.value)) {
+              stock.nextElementSibling.textContent = "Stock must be a valid whole number (0 or more).";
+              isValid = false;
+            }
+            
+            if (!price.value){
+                price.nextElementSibling.textContent ="please enter a price(0 or more)";
+                isValid = false;
+            }
+
+            if (!/^\d+(\.\d{1,2})?$/.test(price.value) || parseFloat(price.value) <= 0) {
+              price.nextElementSibling.textContent = "Price must be a positive number (up to 2 decimal places).";
               isValid = false;
             }
         });
@@ -1227,6 +1252,7 @@ function openCropper(file) {
               productForm.reset();    // Clearing  the form
               document.getElementById('image-preview').innerHTML = ''; // Clearing  image preview
               selectedFiles = [];       // Reset selected files array
+              window.location.href = '/admin/productList';
             });
         })
         .catch(err => {

@@ -1,0 +1,567 @@
+
+    <%-include("../../Views/Partials/Admin/header")%>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1a1d23;
+            --bg-darker: #151820;
+            --text-light: #e8eaed;
+            --text-muted: #9aa0a6;
+            --border-color: #3c4043;
+            --orange-accent: #ff6b35;
+            --orange-hover: #e55a2b;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background-color: var(--bg-darker);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .controls-section {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 15px;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--orange-accent);
+            box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.2);
+        }
+
+        .btn-orange {
+            background-color: var(--orange-accent);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-orange:hover {
+            background-color: var(--orange-hover);
+            color: white;
+        }
+
+        .btn-outline-orange {
+            border: 1px solid var(--orange-accent);
+            color: var(--orange-accent);
+            background: transparent;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-orange:hover {
+            background-color: var(--orange-accent);
+            color: white;
+        }
+
+        .filter-select {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 12px;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--orange-accent);
+        }
+
+        .orders-table {
+            background-color: var(--bg-dark);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .table-dark {
+            --bs-table-bg: var(--bg-dark);
+            --bs-table-border-color: var(--border-color);
+        }
+
+        .table-dark th {
+            background-color: var(--bg-darker);
+            border-bottom: 2px solid var(--border-color);
+            color: var(--orange-accent);
+            font-weight: 600;
+            padding: 15px 10px;
+        }
+
+        .table-dark td {
+            padding: 15px 10px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background-color: var(--warning-color); color: #000; }
+        .status-shipped { background-color: var(--info-color); color: white; }
+        .status-delivered { background-color: var(--success-color); color: white; }
+        .status-cancelled { background-color: var(--danger-color); color: white; }
+        .status-returned { background-color: #6c757d; color: white; }
+
+        .status-select {
+            background-color: var(--bg-darker);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            border-color: var(--info-color);
+        }
+
+        .pagination {
+            --bs-pagination-bg: var(--bg-dark);
+            --bs-pagination-border-color: var(--border-color);
+            --bs-pagination-color: var(--text-light);
+            --bs-pagination-hover-bg: var(--orange-accent);
+            --bs-pagination-hover-border-color: var(--orange-accent);
+            --bs-pagination-active-bg: var(--orange-accent);
+            --bs-pagination-active-border-color: var(--orange-accent);
+        }
+
+        .modal-dark {
+            --bs-modal-bg: var(--bg-darker);
+            --bs-modal-color: var(--text-light);
+            --bs-modal-border-color: var(--border-color);
+        }
+
+        .modal-dark .modal-header {
+            border-bottom-color: var(--border-color);
+        }
+
+        .modal-dark .modal-footer {
+            border-top-color: var(--border-color);
+        }
+
+        .order-detail-card {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+        .status-label.cancelled {
+            color: #fff;
+            background-color: rgb(174, 36, 36);
+            padding: 6px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .controls-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .table-responsive {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <h1 class="page-title">Order Management</h1>
+        </div>
+    
+        <!-- Controls Section -->
+        <div class="controls-section">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search orders...">
+            <button class="btn btn-outline-orange" onclick="clearSearch()">
+                <i class="fas fa-times"></i> Clear
+            </button>
+            
+            <select class="filter-select" id="statusFilter">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Shipped">Shipped</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="Returned">Returned</option>
+            </select>
+
+            <select class="filter-select" id="sortFilter">
+                <option value="date-desc">Order Date (Newest)</option>
+                <option value="date-asc">Order Date (Oldest)</option>
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+            </select>
+
+            <button class="btn btn-orange" onclick="applyFilters()">
+                <i class="fas fa-filter"></i> Apply Filters
+            </button>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="orders-table">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>SL No.</th>
+                            <th>Order ID</th>
+                            <th>User Name</th>
+                            <th>Order Date</th>
+                            <th>Product Image</th>
+                            <th>Payment</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <!-- Orders will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Orders pagination" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination will be populated here by JavaScript -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade modal-dark" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- <div class="modal-body" id="orderDetailsContent">
+                    Order details will be populated here
+                </div> -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        
+        const orders = <%- JSON.stringify(orders) %>;
+
+        let currentPage = 1;
+        const ordersPerPage = 5;
+        let filteredOrders = [...orders];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayOrders();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('searchInput').addEventListener('input', function() {
+                applyFilters();
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', function() {
+                applyFilters();
+            });
+
+            document.getElementById('sortFilter').addEventListener('change', function() {
+                applyFilters();
+            });
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+    // Filter orders
+    filteredOrders = orders.filter(order => {
+        const userName = order.userDetails?.firstName?.toLowerCase() || "";
+        const orderId = order.orderNumber?.toLowerCase() || "";
+        const productName = order.items?.[0]?.productId?.productName?.toLowerCase() || "";
+
+        const matchesSearch =
+            userName.includes(searchTerm) ||
+            orderId.includes(searchTerm) ||
+            productName.includes(searchTerm);
+
+        const matchesStatus = !statusFilter || order.orderStatus === statusFilter;
+
+        return matchesSearch && matchesStatus;
+    });
+
+    // Sort orders
+    filteredOrders.sort((a, b) => {
+        switch (sortFilter) {
+            case "date-desc":
+                return new Date(b.createdAt) - new Date(a.createdAt);
+            case "date-asc":
+                return new Date(a.createdAt) - new Date(b.createdAt);
+            case "name-asc":
+                return (a.userDetails?.firstName || "").localeCompare(b.userDetails?.firstName || "");
+            case "name-desc":
+                return (b.userDetails?.firstName || "").localeCompare(a.userDetails?.firstName || "");
+            default:
+                return 0;
+        }
+    });
+
+    currentPage = 1;
+    displayOrders();
+}
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('sortFilter').value = 'date-desc';
+            applyFilters();
+        }
+        function displayOrders() {
+            const startIndex = (currentPage - 1) * ordersPerPage;
+            const endIndex = startIndex + ordersPerPage;
+            const ordersToShow = filteredOrders.slice(startIndex, endIndex);
+
+            const tbody = document.getElementById('ordersTableBody');
+            tbody.innerHTML = '';
+
+            ordersToShow.forEach((order, index) => {
+                const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${startIndex + index + 1}</td>
+              <td>
+                  ${order.items.length > 0 && order.items[0].productId?.productImage?.length > 0 
+                    ? `<img src="${order.items[0].productId.productImage[0]}" alt="Product" class="product-image">`
+                    : "No Image"}
+              </td>
+              <td><strong>${order.orderNumber}</strong></td>
+              <td>${order.userDetails?.firstName || "N/A"}</td>
+              <td>${formatDate(order.createdAt)}</td>
+              <td><strong>${order.paymentStatus}</strong></td>
+              <td>
+                  ${
+                    order.orderStatus === "Cancelled"
+                    ? `<span class="status-label cancelled">Cancelled</span>`
+                    : `<select class="status-select" onchange="updateOrderStatus('${order._id}', this.value)">
+                          <option value="Pending" ${order.orderStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                          <option value="Shipped" ${order.orderStatus === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                          <option value="Delivered" ${order.orderStatus === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                          <option value="Returned" ${order.orderStatus === 'Returned' ? 'selected' : ''}>Returned</option>
+                      </select>`
+                  }
+              </td>
+              <td>
+                  <a href="/admin/orderdetails/${order._id}" class="btn btn-info btn-sm">
+                      <i class="fas fa-eye"></i> View
+                  </a>
+              </td>
+            `;
+        tbody.appendChild(row);
+});
+            displayPagination();
+        }
+
+        function displayPagination() {
+            const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>`;
+            pagination.appendChild(prevLi);
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
+                pagination.appendChild(li);
+            }
+
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>`;
+            pagination.appendChild(nextLi);
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayOrders();
+            }
+        }
+
+       async function updateOrderStatus(orderId, newStatus) {
+  // Confirm with SweetAlert
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: `Do you want to change the status to "${newStatus}"?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, update it!',
+    background: '#1e1e1e',
+    color: '#fff'
+  });
+
+  if (!result.isConfirmed) {
+    // Reset dropdown back to old value if cancelled
+    const order = orders.find(o => o._id === orderId);
+    const selectEl = document.querySelector(`select[onchange*="${orderId}"]`);
+    if (order && selectEl) selectEl.value = order.orderStatus;
+    return;
+  }
+
+  // Show loader
+  Swal.fire({
+    title: 'Updating...',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  try { 
+    const response = await fetch(`/admin/update-order-status/${orderId}`, {   
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Update local data
+      const order = orders.find(o => o._id === orderId);
+      if (order) order.orderStatus = newStatus;
+
+        // console.log("newStatus::", newStatus);    //d
+      Swal.close();
+
+      Toastify({
+        text: `Order status updated to ${newStatus}`,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#28a745",
+      }).showToast();
+    } else {
+      throw new Error(data.message || "Failed to update status");
+    }
+  } catch (error) {
+    Swal.close();
+    Toastify({
+      text: `Error: ${error.message}`,
+      duration: 3000,
+      gravity: "top",
+      position: "right",
+      backgroundColor: "#dc3545",
+    }).showToast();
+  }
+}
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'});
+        }
+    </script>
+</body>
+</html>

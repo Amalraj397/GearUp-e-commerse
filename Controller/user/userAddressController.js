@@ -71,11 +71,13 @@ export const getEdit_userAddressPage = async (req, res) => {
   }
 };
 
+
+
 export const edit_userAddress = async (req, res) => {
   const user = req.session.user;
   const userId = user?.id;
 
-  console.log("userid in edit useraddress", userId); //debugging
+  // console.log("userid in edit useraddress", userId); //debugging
   if (!userId) {
     return res
       .status(401)
@@ -125,6 +127,48 @@ export const edit_userAddress = async (req, res) => {
     res.status(500).send("server Error  ");
   }
 };
+
+
+export const makedefault = async (req, res) => {
+  const user = req.session.user;
+  const userID =user?.id;
+  try {
+    if (!user) {
+      return res.redirect("/login");
+    }
+    const addressId = req.params.id;
+
+    await addressSchema.updateMany(
+      { userId: userID}, 
+      { $set: { isDefault: false } }
+    );
+
+    // console.log("---------------------------")
+    //  console.log("userID-----:", userID);
+    //  console.log("---------------------------")
+
+
+    const address = await addressSchema.findOneAndUpdate(
+      { _id: addressId, userId: userID },
+      { $set: { isDefault: true } },
+      { new: true }
+    );
+
+    //  console.log("---------------------------")
+    //  console.log("address-----:", address);
+    //  console.log("---------------------------")
+
+    if (!address) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    res.status(200).json({ message: "Default address updated successfully" });
+  } catch (error) {
+    console.log("error in setting default address", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 export const delete_userAddress = async (req, res) => {
   try {

@@ -28,7 +28,7 @@
 
         .breadcrumb-section {
             /* background-color: #e9e9e9; */
-            padding: 60px 0;
+            padding: 30px 0;
             border-bottom: 1px solid #ddd;
         }
 
@@ -72,13 +72,13 @@
 
          */
          .search-btn{
-            border:1px solid whitesmoke;
+            border:1px solid #c7b2b2;
             padding: 8px 18px !important;
          }
 
         .filter-section {
             background-color: white;
-            border: 1px solid #ddd;
+            border: 1px solid #c7b2b2;
             border-radius: 8px;
             padding: 20px;
             margin-top: 15px;
@@ -101,9 +101,10 @@
         }
 
         .sort-section select {
-            border: 1px solid #ddd;
+            border: 1px solid #c7b2b2;
+            margin-top:  5px;
             border-radius: 5px;
-            padding: 8px 12px;
+            padding: 14px 30px;
             background-color: white;
         }
 
@@ -269,6 +270,57 @@
             align-items: center;
         }
 
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+          margin: 20px 0;
+          font-family: "Poppins", sans-serif;
+        }
+
+        .pagination-btn,
+        .page-number {
+          padding: 8px 14px;
+          border: none;
+          border-radius: 8px;
+          background: #f3f3f3;
+          color: #333;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .pagination-btn i {
+          font-size: 12px;
+        }
+
+        .page-number {
+          background: #fff;
+        }
+
+        .page-number.active {
+          background: #ff6600; /* highlight active page */
+          color: #fff;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(255, 102, 0, 0.4);
+        }
+
+        .pagination-btn:hover,
+        .page-number:hover {
+          background: #ff6600;
+          color: #fff;
+          transform: translateY(-2px);
+        }
+
+        .pagination-btn:disabled {
+          background: #ddd;
+          color: #999;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+
 
         @media (max-width: 768px) {
             .header-section h1 {
@@ -294,18 +346,20 @@
             }
         }
     </style>
-    <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="/User/assets/css/style.css">
+
+    <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="/User/assets/css/styles.css"> -->
 </head>
 <body>
-    <!-- Header Section -->
-    <!-- <div class="header-section"> -->
-        <div class="page-header text-center" style="background-image: url('/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg')">
-        		<div class="container">
-        			<h1 class="page-title">My Orders<span></span></h1>
-        		</div><!-- End .container -->
-        	</div><!-- End .page-header -->
-    <!-- </div> -->
+    
+    <div class="page-header text-center" style="background-image: url('/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg')">
+    		<div class="container">
+    			<h1 class="page-title">My Orders<span></span></h1>
+    		</div><!-- End .container -->
+    	</div><!-- End .page-header -->
+    
 
     <!-- Breadcrumb Section -->
     <div class="breadcrumb-section">
@@ -330,15 +384,8 @@
                     <i class="fas fa-search"></i>
                   </button>
                 </div>
-            </div>
-        </div>
-        <div class="d-flex">
-            <div class="controls-section">
-                <!-- Search on top -->
-    
-                <div class="row flex-column align-items-start">
-                    <!-- Sort filter on the left -->
-                        <div class="sort-section">
+
+                <div class="sort-section">
                             <!-- <label for="sortSelect" class="form-label">Sort by:</label> -->
                             <select id="sortSelect" class="form-select w-100">
                                 <option value="date-desc">Date (Newest First)</option>
@@ -347,50 +394,21 @@
                                 <option value="price-asc">Price (Low to High)</option>
                             </select>
                         </div>
-    
-                    <!-- Filters stretch horizontally -->
-                    <div class="w-100">
-                        <div class="filter-section">
-                            <div class="filter-title">Filter by Status:</div>
-                            <div class="d-flex flex-column flex-wrap gap-3">
-                                <div class="filter-group">
-                                    <input type="checkbox" id="delivered" class="status-filter" value="delivered" checked>
-                                    <label for="delivered">Delivered</label>
-                                </div>
-                                <div class="filter-group">
-                                    <input type="checkbox" id="not-delivered" class="status-filter" value="not-delivered" checked>
-                                    <label for="not-delivered">Not Delivered</label>
-                                </div>
-                                <div class="filter-group">
-                                    <input type="checkbox" id="cancelled" class="status-filter" value="cancelled" checked>
-                                    <label for="cancelled">Cancelled</label>
-                                </div>
-                                <div class="filter-group">
-                                    <input type="checkbox" id="refund-completed" class="status-filter" value="refund-completed" checked>
-                                    <label for="refund-completed">Refund Completed</label>
-                                </div>
-                                <div class="filter-group">
-                                    <input type="checkbox" id="out-for-delivery" class="status-filter" value="out-for-delivery" checked>
-                                    <label for="out-for-delivery">Out for Delivery</label>
-                                </div>
-                                <div class="filter-group">
-                                    <input type="checkbox" id="on-the-way" class="status-filter" value="on-the-way" checked>
-                                    <label for="on-the-way">On the Way</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
+        </div>
+        <div class="d-flex">
     
             <!-- Orders Table -->
             <div class="table-responsive w-100 px-3">
                 <table class="table orders-table">
                     <thead class="table-header">
                         <tr>
-                            <th><b>Product</b></th>
+                            <th><b>Sl NO:</b></th>
+                            <th><b>Imag</b></th>
                             <th><b>Name</b></th>
+                            <th></th>
                             <th><b>Date of Purchase</b></th>
+                            <th><b>Total-Qnty</b></th>
                             <th><b>Price</b></th>
                             <th><b>Status</b></th>
                             <th><b>Action</b></th>
@@ -410,241 +428,282 @@
             <h4>No orders found</h4>
             <p>Try adjusting your search or filter criteria</p>
         </div>
-    </div>
-<!-- ------------------------------ view modal--------------------------------- -->
-    <!-- Order Details Modal -->
-<!-- Order Details Modal -->
-<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <!-- Modal Body -->
-      <div class="modal-body">
-
-        <!-- Order Info -->
-        <div class="mb-3">
-          <p><strong>Order Number:</strong> <span id="modalOrderNumber"></span></p>
-          <p><strong>Order Date:</strong> <span id="modalPurchaseDate"></span></p>
-          <p><strong>Order Status:</strong> <span id="modalOrderStatus"></span></p>
+        <div class="pagination">
+            <button id="prev-page" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+                <div id="page-numbers" class="page-numbers">
+                    <button class="page-number active">1</button>
+                    <button class="page-number">2</button>
+                    <button class="page-number">3</button>
+                </div>
+            <button id="next-page" class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
         </div>
-
-        <hr>
-
-        <!-- Products List -->
-        <h5>Ordered Items</h5>
-        <div id="modalItemsList"></div>
-
-        <hr>
-
-        <!-- Billing & Payment -->
-        <h5>Billing Details</h5>
-        <p id="modalBilling"></p>
-
-        <h5>Payment</h5>
-        <p><strong>Method:</strong> <span id="modalPaymentMethod"></span></p>
-        <p><strong>Status:</strong> <span id="modalPaymentStatus"></span></p>
-        <p><strong>Shipping Charge:</strong> ₹<span id="modalShippingCharge"></span></p>
-        <p><strong>Grand Total:</strong> ₹<span id="modalGrandTotal"></span></p>
-
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back</button>
-         <button type="button" id="downloadInvoiceBtn" class="btn btn-primary">Download Invoice</button>
-      </div>
-
     </div>
-  </div>
-</div>
 
-<!-- ------------------------------modal ends----------------------------------- -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-   <script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
     const userOrders = <%- JSON.stringify(userOrders) %>;
-let filteredOrders = [...userOrders];
 
-function formatDate(dateString) {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-}
+    // Pagination variables
+    let currentPage = 1;
+    const ordersPerPage = 5;
+    let filteredOrders = [...userOrders];
 
-function getStatusBadge(status) {
-    const statusMap = {
-        'Pending': { class: 'status-pending', text: 'Pending' },
-        'Shipped': { class: 'status-shipped', text: 'Shipped' },
-        'Delivered': { class: 'status-delivered', text: 'Delivered' },
-        'Cancelled': { class: 'status-cancelled', text: 'Cancelled' },
-        'Returned': { class: 'status-returned', text: 'Returned' },
-    };
-    const statusInfo = statusMap[status] || { class: 'status-unknown', text: 'Unknown' };
-    return `<span class="status-badge ${statusInfo.class}">${statusInfo.text}</span>`;
-}
-
-function getActionButtons(status, orderId) {
-    const viewBtn = `<button class="btn-view" onclick="viewOrder('${orderId}')">View</button>`;
-    if (status === "Pending" || status === "Shipped") {
-        return `<div class="action-buttons">${viewBtn}<button class="btn-cancel" onclick="cancelOrder('${orderId}')">Cancel</button></div>`;
-    } else if (status === "Delivered") {
-        return `<div class="action-buttons">${viewBtn}<button class="btn-return" onclick="returnOrder('${orderId}')">Return</button></div>`;
-    } else {
-        return `<div class="action-buttons">${viewBtn}<button class="btn-disabled" disabled>No Action</button></div>`;
-    }
-}
-
-function renderOrders(orders) {
-    const tbody = document.getElementById('ordersTableBody');
-    const noOrders = document.getElementById('noOrdersMessage');
-
-    if (!orders.length) {
-        tbody.innerHTML = '';
-        noOrders.style.display = 'block';
-        return;
+    // Format Date
+    function formatDate(dateString) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
     }
 
-    noOrders.style.display = 'none';
-    tbody.innerHTML = orders.map(order => {
-        const firstItem = order.items[0];
-        const product = firstItem.productId;
-        const image = product?.productImage?.[0] || "/images/no-image.png";
-        const name = product?.productName || "Unknown Product";
-
-        return `
-            <tr>
-                <td><img src="${image}" class="product-image" alt="${name}"></td>
-                <td style="max-width:200px;" class="col-2 text-truncate">${name}</td>
-                <td>${formatDate(order.createdAt)}</td>
-                <td>₹${order.grandTotalprice.toFixed(2)}</td>
-                <td>${getStatusBadge(order.orderStatus)}</td>
-                <td>${getActionButtons(order.orderStatus, order._id)}</td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Cancel order
-function cancelOrder(orderId) {
-    if (confirm(`Cancel order ${orderId}?`)) {
-        fetch(`/orders/cancel/${orderId}`, { method: "PUT" })
-            .then(res => res.json())
-            .then(data => location.reload())
-            .catch(err => console.error(err));
+    // Status badge
+    function getStatusBadge(status) {
+        const statusMap = {
+            'Pending': { class: 'status-pending', text: 'Pending' },
+            'Shipped': { class: 'status-shipped', text: 'Shipped' },
+            'Delivered': { class: 'status-delivered', text: 'Delivered' },
+            'Cancelled': { class: 'status-cancelled', text: 'Cancelled' },
+            'Returned': { class: 'status-returned', text: 'Returned' },
+        };
+        const s = statusMap[status] || { class: 'status-unknown', text: 'Unknown' };
+        return `<span class="status-badge ${s.class}">${s.text}</span>`;
     }
-}
 
-// Return order
-function returnOrder(orderId) {
-    if (confirm(`Return order ${orderId}?`)) {
-        fetch(`/orders/return/${orderId}`, { method: "PUT" })
-            .then(res => res.json())
-            .then(data => location.reload())
-            .catch(err => console.error(err));
+    // Action buttons
+    function getActionButtons(status, orderId) {
+       const viewBtn = `<a href="/orderdetails/${orderId}" class="btn-view">View</a>`;
+
+        if (status === "Pending" || status === "Shipped") {
+            return `<div class="action-buttons">${viewBtn}<button class="btn-cancel" onclick="cancelOrder('${orderId}')">Cancel</button></div>`;
+        } else if (status === "Delivered") {
+            return `<div class="action-buttons">${viewBtn}<button class="btn-return" onclick="returnOrder('${orderId}')">Return</button></div>`;
+        } else if (status === "Cancelled"){
+            return `<div class="action-buttons"> ${viewBtn} <span class="status-label cancelled">  </span></div>`;
+        } 
+        else {
+            return `<div class="action-buttons">${viewBtn}<button class="btn-disabled" disabled>No Action</button></div>`;
+        }
     }
-}
 
-function viewOrder(orderId) {
-    window.location.href = `/orders/${orderId}`;
-}
 
-/* 🔹 SEARCH function */
-function handleSearch() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    filteredOrders = userOrders.filter(order => {
-        const productName = order.items[0]?.productId?.productName?.toLowerCase() || "";
-        return productName.includes(query);
+    // Render orders with pagination
+    function renderOrders() {
+        const tbody = document.getElementById('ordersTableBody');
+        const noOrders = document.getElementById('noOrdersMessage');
+
+        if (!filteredOrders.length) {
+            tbody.innerHTML = '';
+            noOrders.style.display = 'block';
+            return;
+        }
+
+        const startIndex = (currentPage - 1) * ordersPerPage;
+        const endIndex = startIndex + ordersPerPage;
+        const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+
+        noOrders.style.display = 'none';
+        tbody.innerHTML = paginatedOrders.map((order, index) => {
+            const firstItem = order.items[0];
+            const product = firstItem?.productId;
+            const image = product?.productImage?.[0] || "/images/no-image.png";
+            const name = product?.productName || "Unknown Product";
+            const quantity = order.items.reduce((qty, item) => qty + (item.quantity || 0), 0);
+            const slNo = startIndex + index + 1;
+
+            return `
+                <tr>
+                    <td>${slNo}</td>
+                    <td><img src="${image}" class="product-image" alt="${name}"></td>
+                    <td style="max-width:200px;" class="col-2 text-truncate">${name}</td>
+                    <td></td>
+                    <td>${formatDate(order.createdAt)}</td>
+                    <td>${quantity}</td>
+                    <td>₹${order.grandTotalprice.toFixed(2)}</td>
+                    <td>${getStatusBadge(order.orderStatus)}</td>
+                    <td>${getActionButtons(order.orderStatus, order._id)}</td>
+                </tr>
+            `;
+        }).join('');
+
+        updatePagination();
+    }
+
+    // Update pagination controls
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+        const pageNumbers = document.getElementById("page-numbers");
+        const prevBtn = document.getElementById("prev-page");
+        const nextBtn = document.getElementById("next-page");
+
+        prevBtn.disabled = currentPage === 1;
+        nextBtn.disabled = currentPage === totalPages;
+
+        pageNumbers.innerHTML = "";
+
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const btn = document.createElement("button");
+            btn.className = `page-number ${i === currentPage ? "active" : ""}`;
+            btn.textContent = i;
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderOrders();
+            });
+            pageNumbers.appendChild(btn);
+        }
+    }
+
+    // Prev / Next
+    document.getElementById("prev-page").addEventListener("click", function () {
+        if (currentPage > 1) {
+            currentPage--;
+            renderOrders();
+        }
     });
-    renderOrders(filteredOrders);
-}
-
-/* 🔹 SORT function */
-function handleSort() {
-    const sortValue = document.getElementById("sortSelect").value;
-
-    filteredOrders.sort((a, b) => {
-        if (sortValue === "date-desc") {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        } else if (sortValue === "date-asc") {
-            return new Date(a.createdAt) - new Date(b.createdAt);
-        } else if (sortValue === "price-desc") {
-            return b.grandTotalprice - a.grandTotalprice;
-        } else if (sortValue === "price-asc") {
-            return a.grandTotalprice - b.grandTotalprice;
+    document.getElementById("next-page").addEventListener("click", function () {
+        const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderOrders();
         }
     });
 
-    renderOrders(filteredOrders);
+    /* SEARCH */
+    function handleSearch() {
+        const query = document.getElementById("searchInput").value.toLowerCase();
+        filteredOrders = userOrders.filter(order => {
+            const productName = order.items[0]?.productId?.productName?.toLowerCase() || "";
+            return productName.includes(query);
+        });
+        currentPage = 1;
+        renderOrders(); 
+    }
+
+    /* SORT */
+    function handleSort() {
+        const sortValue = document.getElementById("sortSelect").value;
+        filteredOrders.sort((a, b) => {
+            if (sortValue === "date-desc") return new Date(b.createdAt) - new Date(a.createdAt);
+            if (sortValue === "date-asc") return new Date(a.createdAt) - new Date(b.createdAt);
+            if (sortValue === "price-desc") return b.grandTotalprice - a.grandTotalprice;
+            if (sortValue === "price-asc") return a.grandTotalprice - b.grandTotalprice;
+        });
+        currentPage = 1;
+        renderOrders();
+    }
+
+    // Event Listeners
+    document.getElementById("searchInput").addEventListener("input", handleSearch);
+    document.getElementById("sortSelect").addEventListener("change", handleSort);
+
+    // Init render
+    renderOrders();
+});
+
+// ---------------- ORDER ACTIONS ----------------
+
+async function cancelOrder(orderId) {
+    Swal.fire({
+        title: `Are you sure want to Cancel order?`,
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel it",
+        cancelButtonText: "No, keep it",
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            // Show loading
+            Swal.fire({
+                title: "Processing...",
+                text: "Cancelling your order",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            try {
+                const res = await fetch(`/orders/cancel/${orderId}`, { method: "PUT" });
+                const data = await res.json();
+
+                Swal.close(); // close loading
+
+                Toastify({
+                    text: "Order cancelled successfully ✅",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f56565",
+                    stopOnFocus: true
+                }).showToast();
+
+                setTimeout(() => location.reload(), 1000);
+
+            } catch (err) {
+                Swal.close();
+                console.error(err);
+                Swal.fire("Error", "Something went wrong!", "error");
+            }
+        }
+    });
 }
 
-// Event Listeners
-document.getElementById("searchInput").addEventListener("input", handleSearch);
-document.getElementById("sortSelect").addEventListener("change", handleSort);
+async function returnOrder(orderId) {
+    Swal.fire({
+        title: `Do you really want to Return order ${orderId}?`,
+        text: "Make sure the item is eligible for return.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, return it",
+        cancelButtonText: "No, keep it",
+        reverseButtons: true
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            // Show loading
+            Swal.fire({
+                title: "Processing...",
+                text: "Returning your order",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
 
-// Initial render
-renderOrders(filteredOrders);
+            try {
+                const res = await fetch(`/orders/return/${orderId}`, { method: "PUT" });
+                const data = await res.json();
 
-// ----------------------------------- view-modal-----------------------------
+                Swal.close(); // close loading
 
-function viewOrder(orderId) {
-    const order = userOrders.find(o => o._id === orderId);
-    if (!order) return;
+                Toastify({
+                    text: "Order returned successfully 🔄",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#48bb78",
+                    stopOnFocus: true
+                }).showToast();
 
-    // ... existing code filling modal ...
-    // Order info
-    document.getElementById("modalOrderNumber").textContent = order.orderNumber;
-    document.getElementById("modalPurchaseDate").textContent = formatDate(order.createdAt);
-    document.getElementById("modalOrderStatus").innerHTML = getStatusBadge(order.orderStatus);
+                setTimeout(() => location.reload(), 1000);
 
-    // Items list
-    const itemsContainer = document.getElementById("modalItemsList");
-    itemsContainer.innerHTML = order.items.map(item => {
-        const product = item.productId || {};
-        const image = product.productImage?.[0] || "/images/no-image.png";
-
-        return `
-          <div class="d-flex mb-3 border rounded p-2">
-            <div class="me-3">
-              <img src="${image}" alt="${product.productName}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;">
-            </div>
-            <div>
-              <h6>${product.productName || "Unknown Product"}</h6>
-              <p class="mb-1"><strong>Variant:</strong> ${item.variantName} | <strong>Scale:</strong> ${item.scale}</p>
-              <p class="mb-1"><strong>Qty:</strong> ${item.quantity}</p>
-              <p class="mb-1"><strong>Price:</strong> ₹${item.salePrice.toFixed(2)}</p>
-              <p class="mb-1"><strong>Total:</strong> ₹${item.totalProductprice.toFixed(2)}</p>
-              <p><strong>Status:</strong> ${getStatusBadge(item.itemStatus)}</p>
-            </div>
-          </div>
-        `;
-    }).join("");
-
-    // Billing Details
-    const b = order.billingDetails;
-    document.getElementById("modalBilling").textContent =
-      `${b.name}, ${b.address}, ${b.city}, ${b.state}, ${b.country}, Landmark: ${b.landMark}, Pincode: ${b.pincode}, Phone: ${b.phone}, Email: ${b.email}`;
-
-    // Payment
-    document.getElementById("modalPaymentMethod").textContent = order.paymentMethod;
-    document.getElementById("modalPaymentStatus").textContent = order.paymentStatus;
-    document.getElementById("modalShippingCharge").textContent = order.shippingCharge.toFixed(2);
-    document.getElementById("modalGrandTotal").textContent = order.grandTotalprice.toFixed(2);
-
-
-    // Bind invoice button
-    document.getElementById("downloadInvoiceBtn").onclick = function() {
-        window.open(`/orders/${orderId}/invoice`, "_blank");
-    };
-
-    const modal = new bootstrap.Modal(document.getElementById("orderDetailsModal"));
-    modal.show();
+            } catch (err) {
+                Swal.close();
+                console.error(err);
+                Swal.fire("Error", "Something went wrong!", "error");
+            }
+        }
+    });
 }
+</script>
+
 
 </script>
 

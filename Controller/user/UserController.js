@@ -277,11 +277,8 @@ export const userLogout = async (req, res) => {
         res.status(500).send("internal server Error  ");
       }
       // clear cookie
-
-      // res.clearCookie(user.id);     // clearing the userid
       res.clearCookie("connect.sid"); // clearing the session id
       return res.redirect("/");
-      // res.status(200).json({ message: "Logout successfull..!" });
     });
   } catch (error) {
     console.error("Error login failed", error);

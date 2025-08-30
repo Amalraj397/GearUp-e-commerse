@@ -48,7 +48,7 @@
                     <a href="#"><i class="fas fa-map-marker-alt"></i> Your Address</a>
                     <a href="#"><i class="fas fa-cog"></i> Settings</a>
                     <a href="#"><i class="fas fa-headset"></i> Contact Us</a>
-                    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    <a href="/logout" class="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
                   </div>
                 </div>
 
@@ -89,4 +89,29 @@
           
         </nav>
       </header>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.querySelectorAll(".logoutBtn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault(); // stop immediate logout
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your account.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, logout",
+        cancelButtonText: "Cancel"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = btn.getAttribute("href"); 
+          // uses the original href="/logout"
+        }
+      });
+    });
+  });
+</script>
+
       

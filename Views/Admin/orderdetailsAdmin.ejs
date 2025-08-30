@@ -1,0 +1,387 @@
+   <%-include("../../Views/Partials/Admin/header")%>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-orange: #ff6b35;
+            --light-orange: #ff8c5a;
+            --dark-orange: #e55a2b;
+            --orange-bg: #fff5f2;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .btn-orange {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
+        }
+
+        .btn-orange:hover {
+            background-color: var(--dark-orange);
+            border-color: var(--dark-orange);
+            color: white;
+        }
+
+        .btn-outline-orange {
+            color: var(--primary-orange);
+            border-color: var(--primary-orange);
+        }
+
+        .btn-outline-orange:hover {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+           
+        }
+
+        .order-header {
+            background: linear-gradient(135deg, var(--orange-bg) 0%, #fff 100%);
+            border-radius: 12px 12px 0 0;
+             min-width: 90% !important;
+        }
+
+        .tracking-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .tracking-step {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .tracking-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50px;
+            width: 2px;
+            height: 60px;
+            background-color: #e9ecef;
+        }
+
+        .tracking-step.completed::after {
+            background-color: var(--primary-orange);
+        }
+
+        .tracking-step.active::after {
+            background: linear-gradient(to bottom, var(--primary-orange) 50%, #e9ecef  50%);
+        }
+
+        .tracking-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-right: 1rem;
+        }
+
+        .tracking-step.completed .tracking-icon {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+
+        .tracking-step.active .tracking-icon {
+            background-color: var(--light-orange);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .tracking-step.pending .tracking-icon {
+            background-color: #e9ecef;
+            color: #6c757d;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .product-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            background-color: var(--orange-bg);
+            color: var(--dark-orange);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            color: #212529;
+            font-weight: 500;
+        }
+    </style>
+    <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" href="/User/assets/css/style.css"> -->
+    <link rel="stylesheet" href="/User/assets/css/styles.css">
+</head>
+
+<body>
+    
+    <div class="container my-4" style="display: contents";>
+        <!-- Back Button -->
+        <div class="mb-4">
+            <button class="btn btn-orange" onclick="goBackToOrders()">
+                <i class="fas fa-arrow-left me-2"></i>Back to Orders
+            </button>
+        </div>
+
+        <!-- Order Details Card -->
+        <div class="card mb-4">
+            <div class="card-header order-header">
+                <h4 class="mb-3">Order Details</h4>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="info-label">Order ID:</div>
+                        <div class="info-value" id="orderId">#ORD-2024-001</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-label">Order Date:</div>
+                        <div class="info-value" id="orderDate">25 August 2024</div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info-label">No. of Items:</div>
+                        <div class="info-value" id="itemCount">1</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="card-body">
+                <div class="d-flex gap-2 mb-3">
+                    <button class="btn btn-orange" onclick="downloadInvoice()">
+                        <i class="fas fa-download me-2"></i>Download Invoice
+                    </button>
+                </div>
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Download saves PDF to your device
+                </small>
+            </div> -->
+        </div>
+
+        <!-- Order Tracking -->
+        <!-- <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Order Tracking</h5>
+            </div>
+            <div class="card-body">
+                <div id="trackingSteps">
+                    <div class="tracking-step completed">
+                        <div class="d-flex align-items-center">
+                            <div class="tracking-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">Order Confirmed</div>
+                                <small class="text-muted">Your order has been confirmed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tracking-step active">
+                        <div class="d-flex align-items-center">
+                            <div class="tracking-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">Processing</div>
+                                <small class="text-muted">Your order is being prepared</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tracking-step pending">
+                        <div class="d-flex align-items-center">
+                            <div class="tracking-icon">
+                                <i class="fas fa-truck"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">Shipped</div>
+                                <small class="text-muted">Your order is on the way</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tracking-step pending">
+                        <div class="d-flex align-items-center">
+                            <div class="tracking-icon">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold">Delivered</div>
+                                <small class="text-muted">Order delivered successfully</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>f
+            </div>
+        </div> -->
+
+        <div class="row">
+            <!-- Order Items -->
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Ordered Items</h5>
+                    </div>
+                    <div class="card-body" id="orderItems">
+                        <!-- Items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary & Customer Info -->
+            <div class="col-lg-4">
+                <!-- Order Summary -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Order Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">₹0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Shipping:</span>
+                            <span id="shipping" class="text-success">Free</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax:</span>
+                            <span id="tax">₹0</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span>Total:</span>
+                            <span id="total">₹0</span>
+                        </div>
+                        <div class="mt-3">
+                            <div class="info-label">Payment Method:</div>
+                            <div class="info-value" id="paymentMethod">Cash on Delivery</div>
+                        </div>
+                        <div class="mt-2">
+                            <div class="info-label">Payment Status:</div>
+                            <span class="status-badge" id="paymentStatus">Processing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Information -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Customer Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="info-label">Name:</div>
+                            <div class="info-value" id="customerName"></div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="info-label">Email:</div>
+                            <div class="info-value" id="customerEmail"> </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="info-label">Phone:</div>
+                            <div class="info-value" id="customerPhone"> </div>
+                        </div>
+                        <div>
+                            <div class="info-label">Delivery Address:</div>
+                            <div class="info-value" id="deliveryAddress">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Inject order data from backend
+    const orderData = <%- JSON.stringify(order) %>;
+
+    function populateOrderDetails() {
+        document.getElementById('orderId').textContent = orderData.orderNumber;
+        document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
+        document.getElementById('itemCount').textContent = orderData.items.length;
+        document.getElementById('subtotal').textContent = `₹${orderData.grandTotalprice.toLocaleString()}`;
+        document.getElementById('shipping').textContent = orderData.shippingCharge === 0 ? 'Free' : `₹${orderData.shippingCharge}`;
+        document.getElementById('tax').textContent = `₹0`; // if no tax field, keep 0
+        document.getElementById('total').textContent = `₹${orderData.grandTotalprice.toLocaleString()}`;
+        document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
+        document.getElementById('paymentStatus').textContent = orderData.paymentStatus;
+        document.getElementById('customerName').textContent = orderData.billingDetails.name;
+        document.getElementById('customerEmail').textContent = orderData.billingDetails.email;
+        document.getElementById('customerPhone').textContent = orderData.billingDetails.phone;
+        document.getElementById('deliveryAddress').innerHTML =
+            `${orderData.billingDetails.address}, ${orderData.billingDetails.city}, ${orderData.billingDetails.state}, ${orderData.billingDetails.country}, ${orderData.billingDetails.pincode}<br>Landmark: ${orderData.billingDetails.landMark}`;
+        
+        populateOrderItems();
+    }
+
+    function populateOrderItems() {
+        const container = document.getElementById('orderItems');
+        container.innerHTML = '';
+        orderData.items.forEach(item => {
+            const product = item.productId;
+            const itemHtml = `
+                <div class="d-flex align-items-center p-3 border rounded mb-3">
+                    <img src="${product.productImage[0] || '/placeholder.svg'}" alt="${product.productName}" class="product-image me-3">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">${product.productName}</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">Variant: ${item.variantName}</small><br>
+                                <small class="text-muted">Scale: ${item.scale}</small><br>
+                                <small class="text-muted">Brand: ${product.brand?.name || ''}</small><br>
+                                <small class="text-muted">Category: ${product.category?.name || ''}</small>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-end">
+                                    <div class="fw-bold">₹${item.salePrice.toLocaleString()}</div>
+                                    <small class="text-muted">Qty: ${item.quantity}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += itemHtml;
+        });
+    }
+
+    function goBackToOrders() {
+        window.location.href = "/admin/orders"; // redirect back to orders list
+    }
+
+    document.addEventListener('DOMContentLoaded', populateOrderDetails);
+</script>
+</body>
+</html>

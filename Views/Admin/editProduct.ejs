@@ -730,7 +730,7 @@
                                         <label for="brand">Brand*</label>
                                         <select id="brand" name="brand">
                                              <% brand.forEach(b => { %>
-                                              <option value="<%= b.brandName %>" <%= b.brandName === product.brand ? "selected" : "" %>><%= b.brandName %></option>
+                                              <option value="<%= b._id %>" <%= String(b._id) === String(product.brand._id) ? "selected" : "" %>><%= b.brandName %></option>
                                              <% }) %>
                                         </select>
                                         <span class="error-message"></span>
@@ -740,7 +740,7 @@
                                         <label for="category">Category*</label>
                                         <select id="category" name="category">
                                             <% category.forEach(c => { %>
-                                              <option value="<%= c.name %>" <%= c.name === product.category ? "selected" : "" %>><%= c.name %></option>
+                                              <option value="<%= c._id %>" <%= String(c._id) === String(product.category._id) ? "selected" : "" %>><%= c.name %></option>
                                             <% }) %>
                                         </select>
                                         <span class="error-message"></span>

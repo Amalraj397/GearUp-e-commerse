@@ -5,18 +5,21 @@ import {
   adminAuth,
   nocache,
   //  adminAuthenticated,
+
 } from "../middlewares/Auth.js";
 
 import {
   loadAdminlogin,
   loadAdminDash,
   adminLogout,
+
 } from "../Controller/admin/adminController.js";
 
 import {
   getuserData,
   blockUser,
   unblockUser,
+
 } from "../Controller/admin/AdminuserController.js";
 
 import {
@@ -29,6 +32,7 @@ import {
   listProduct,
   updateProduct,
   deleteProductImage,
+
 } from "../Controller/admin/productController.js";
 
 import {
@@ -39,6 +43,7 @@ import {
   listBrand,
   getBrandEditPage,
   updateBrand,
+
 } from "../Controller/admin/brandController.js";
 
 import {
@@ -50,7 +55,16 @@ import {
   getLiveCategorySearch,
   getCategoryEditPage,
   updateCategory,
+
 } from "../Controller/admin/categoryController.js";
+
+import {
+  getuserOrders,
+  updateOrderStatus,
+  adminviewDetails,
+
+} from"../Controller/admin/orderController.js";
+
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
@@ -129,5 +143,14 @@ adminRoute.patch("/editCategory/:id", adminAuth, updateCategory); // update cate
 adminRoute.patch("/unlist-category/:id", adminAuth, unlistCategory); //unlisting category
 adminRoute.patch("/list-category/:id", adminAuth, listCategory); //listing category
 adminRoute.get("/category/search", adminAuth, getLiveCategorySearch); //live search
+
+
+
+// ------------------------------order management------------------------------
+adminRoute.get("/orders", getuserOrders);  //getting Admin side userOrders
+
+adminRoute.put("/update-order-status/:orderId", updateOrderStatus);
+adminRoute.get("/orderdetails/:id", adminviewDetails);
+
 
 export default adminRoute;

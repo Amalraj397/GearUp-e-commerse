@@ -1,18 +1,19 @@
 import userSchema from "../../Models/userModel.js";
 import productSchema from "../../Models/productModel.js";
 import cartSchema from "../../Models/cartModel.js";
-import wishlistSchema from "../../Models/wishlistModel.js";
 import addressSchema from "../../Models/userAddressModel.js";
 import orderSchema from "../../Models/orderModel.js";
 import PDFDocument from "pdfkit";
 import path from "path";
+import { MESSAGES } from "../../utils/messagesConfig.js";
+import { STATUS } from "../../utils/statusCodes.js";
 
 export const getCheckoutpage = async (req, res) => {
   const user = req.session.user;
   const userId = user?.id;
   const usermaxQuantity = 5;
 
-  console.log("userId  and user in Checkout  page::", userId, req.session.user);
+  // console.log("userId  and user in Checkout  page::", userId, req.session.user);      //D
   try {
     if (!userId) {
       return res.redirect("/login");
@@ -20,8 +21,8 @@ export const getCheckoutpage = async (req, res) => {
     const userData = await userSchema.findById(userId);
     if (!userData) {
       return res
-        .status(404)
-        .json({ message: "User not found..! plaease Login" });
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.NO_USER });
     }
 
     const cart = await cartSchema
@@ -33,11 +34,11 @@ export const getCheckoutpage = async (req, res) => {
     const defaultAddress =
       addressData.find((addr) => addr.isDefault) || addressData[0];
 
-    console.log("default Address::", defaultAddress);
-    console.log("address::", addressData);
+    // console.log("default Address::", defaultAddress);        //D
+    // console.log("address::", addressData);                   //D
 
     if (!cart || cart.items.length === 0) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.NO_CART });
     }
     const validCart = [];
 
@@ -56,7 +57,7 @@ export const getCheckoutpage = async (req, res) => {
       ) {
         if (item.quantity > usermaxQuantity) {
           return res
-            .status(400)
+            .status(STATUS.BAD_REQUEST)
             .json({
               message: `You Can only order upto ${usermaxQuantity} units per product.`,
             });
@@ -68,14 +69,14 @@ export const getCheckoutpage = async (req, res) => {
         );
         if (!variant) {
           return res
-            .status(400)
+            .status(STATUS.BAD_REQUEST)
             .json({
               message: `variant not found for product: ${product.productName}`,
             });
         }
 
         if (item.quantity > variant.stock) {
-          return res.status(400).json({
+          return res.status(STATUS.BAD_REQUEST).json({
             message: `Only ${variant.stock} units left for ${product.productName} (${variant.scale})`,
           });
         }
@@ -91,7 +92,7 @@ export const getCheckoutpage = async (req, res) => {
 
     const discountTotal = TotalAmount - festivalOFF; // calulating  festical discount price
 
-    console.log("festivalOFF", festivalOFF);
+    // console.log("festivalOFF", festivalOFF);      //D
 
     let shippingcharge = 0;
     if (discountTotal < 1999) {
@@ -100,8 +101,8 @@ export const getCheckoutpage = async (req, res) => {
       // calculating shipping charges
       shippingcharge = 0;
     }
-    console.log("shippingCharge", shippingcharge);
-    console.log("discountTotal", discountTotal);
+    // console.log("shippingCharge", shippingcharge);        //D
+    // console.log("discountTotal", discountTotal);             //D
 
     const grandTotal = discountTotal + shippingcharge;
 
@@ -115,12 +116,11 @@ export const getCheckoutpage = async (req, res) => {
       defaultAddress,
       cart,
       grandTotal,
-
     });
 
   } catch (error) {
-    console.log("error in loading check-out Page", error);
-    res.status(500).send("server error");
+    console.log(MESSAGES.PAGE_ERROR, error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
   }
 };
 
@@ -128,17 +128,17 @@ export const getAddressById = async (req, res) => {
   try {
     const address = await addressSchema.findById(req.params.id);
     if (!address) {
-      return res.status(404).json({ message: "Address not found" });
+      return res.status(STATUS.NOT_FOUND).json({ message: "Address not found" });
     }
-    res.status(200).json(address);
+    res.status(STATUS.OK).json(address);
   } catch (error) {
     console.log("error in getting address", error);
-    res.status(500).send("server error");
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
   }
 };
 
 export const placeOrder = async (req, res) => {
-  console.log(" Controller started");
+  // console.log(" Controller started");        //D
 
   try {
     const {
@@ -155,20 +155,20 @@ export const placeOrder = async (req, res) => {
     const user = req.session.user;
     const userId = user?.id;
 
-    console.log(" Incoming Order Data:", req.body);
-    console.log(" User ID:", userId);
+    // console.log(" Incoming Order Data:", req.body);
+    // console.log(" User ID:", userId);
 
     //  Step 1: Get cart from DB
     const cart = await cartSchema
       .findOne({ userDetails: userId })
       .populate("items.productId");
-    console.log(" Cart from DB:", cart);
+    // console.log(" Cart from DB:", cart);
 
     if (!cart || cart.items.length === 0) {
-      console.log(" No items found in cart");
+      // console.log(" No items found in cart");
       return res
-        .status(400)
-        .json({ success: false, message: "No items in cart" });
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.NO_CART});
     }
 
     //  Step 2: Process cart items
@@ -184,7 +184,7 @@ export const placeOrder = async (req, res) => {
         totalProductprice,
       };
     });
-    console.log(" Processed itemsss::", processedItems);
+    // console.log(" Processed itemsss::", processedItems);
 
     //  Step 3: Calculate totals
     const itemsTotal = processedItems.reduce(
@@ -211,13 +211,18 @@ export const placeOrder = async (req, res) => {
     );
 
     //  Step 4: Payment status
-    let paymentStatus = "Pending";
+    let paymentStatus = "Processing";
+
     if (paymentMethod === "Online") {
       paymentStatus = paymentId ? "Completed" : "Failed";
+    }if(paymentMethod ==="Cash-On-Delivery"){
+      paymentStatus= "Processing"
     }
-    console.log(" Payment Method:", paymentMethod, " | Status:", paymentStatus);
+
+    // console.log(" Payment Method:", paymentMethod, " | Status:", paymentStatus);    //D
 
     //  Step 5: Create order object
+
     const newOrder = new orderSchema({
       userDetails: userId,
       items: processedItems,
@@ -235,20 +240,21 @@ export const placeOrder = async (req, res) => {
     // generating  random-Order Number
     const year = new Date().getFullYear();
     newOrder.orderNumber = `#AM-${year}-${newOrder._id.toString().slice(-7).toUpperCase()}`;
-    console.log(" Order Number:", newOrder.orderNumber);
+    // console.log(" Order Number:", newOrder.orderNumber);             //D
 
     //  Step 6: Save order
     const savedOrder = await newOrder.save();
-    console.log(" Order saved successfully:", savedOrder._id);
+    // console.log(" Order saved successfully:", savedOrder._id);     //D
 
     // Step 7: Clear cart
     await cartSchema.findOneAndUpdate(
       { userDetails: userId },
       { $set: { items: [], grandTotalpride: 0 } },
     );
-    console.log(" Cart cleared after  successfull order");
 
-    return res.status(201).json({
+    // console.log(" Cart cleared after oRDER");            //D
+
+    return res.status(STATUS.CREATED).json({
       success: true,
       message: "Order placed successfully",
       order: savedOrder,
@@ -257,8 +263,8 @@ export const placeOrder = async (req, res) => {
   } catch (error) {
     console.log(" Place order error:", error);
     res
-      .status(500)
-      .json({ success: false, message: "Server Error", error: error.message });
+      .status(STATUS.INTERNAL_SERVER_ERROR)
+      .json({ success: false, message:MESSAGES.SERVER_ERROR, error: error.message });
   }
 };
 
@@ -269,50 +275,53 @@ export const getOrderSuccesspage = async (req, res) => {
   try {
     const user = await userSchema.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: "user not found..!" });
+      return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.NO_USER });
     }
     res.render("orderSuccess.ejs");
   } catch (error) {
     console.log("error in loading order success page", error);
-    res.status(500).send("server error");
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
   }
 };
-
 
 
 export const getmyOrders = async (req, res) => {
   const user = req.session.user;
   const userId = user?.id;
   try {
-    const userdata = await userSchema.findById(userId);
-    console.log("------------------user----------------------");
-    // console.log("user details on userOrder page", userdata);
-    console.log("--------------------------------------------");
 
+    const userdata = await userSchema.findById(userId);
+  
     if (!userdata) {
       return res.redirect("/login");
       // return res.status(404).json({ message: "user not found..!" });
     }
+
+     const page  = parseInt(req.query.page) || 1;
+     const limit = parseInt(req.query.limit)
+     const skip = (page-1)* limit;
+    
+   
+    
     const userOrders = await orderSchema
       .find({ userDetails: userId })
       .populate("items.productId")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    console.log("---------------orders-------------------------");
-    // console.log("userOrders::", userOrders);
-    console.log("----------------------------------------------");
-
-    res.render("myOrders.ejs", {
+    res.render("myOrders.ejs", { 
       userOrders,
     });
   } catch (error) {
-    console.log("error in loading order page", error);
-    res.status(500).send("server error");
+    console.log(MESSAGES.PAGE_ERROR, error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
   }
 };
+
 // ------------------------------------------------------------------------
 export const cancelOrder = async (req, res) => {
-   console.log("cancel controller call vannu");   //d
+  //  console.log("cancel controller call vannu");   //d
   try {
     const user = req.session.user;
     const userId = user?.id;
@@ -320,35 +329,35 @@ export const cancelOrder = async (req, res) => {
     const userdata = await userSchema.findById(userId);
 
     if (!userdata) {
-      return redirect("/login");
-      // return res.status(404).json({ message: "User not found.." });
+      return res.status(STATUS.UNAUTHORIZED).json({ message: MESSAGES.NO_USER});
     }
     const orderData = await orderSchema.findOne({
-      // _id: orderId,
       userDetails: userId,
     });
-     console.log("orderData:: in cancelOrder", orderData);   // D
+    //  console.log("orderData:: in cancelOrder", orderData);   // D
 
     if (!orderData) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.NO_ORDER});
     }
 
     if (["Pending", "Shipped"].includes(orderData.orderStatus)) {
       orderData.orderStatus = "Cancelled";
+
       orderData.items.forEach((item) => (item.itemStatus = "Cancelled")); // update each item
       await orderData.save();
       return res.json({
         success: true,
-        message: "Order cancelled successfully",
+        message: MESSAGES.DELETED,
       });
     }
 
-    res.status(400).json({ message: "This order cannot be cancelled" });
+    res.status(STATUS.BAD_REQUEST).json({ message: MESSAGES.UPDATION_FAILED });
   } catch (error) {
-    console.error("Cancel order error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error(MESSAGES.PAGE_ERROR, error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ message: MESSAGES.SERVER_ERROR });
   }
 };
+
 
 // ----------------------------------------------------------------------------
 
@@ -363,7 +372,7 @@ export const returnOrder = async (req, res) => {
       _id: orderId,
       userDetails: userId,
     });
-    if (!order) return res.status(404).json({ message: "Order not found" });
+    if (!order) return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.NO_ORDER });
 
     if (order.orderStatus === "Delivered") {
       order.orderStatus = "Returned";
@@ -375,22 +384,22 @@ export const returnOrder = async (req, res) => {
       });
     }
 
-    res.status(400).json({ message: "This order cannot be returned" });
+    res.status(STATUS.BAD_REQUEST).json({ message: "This order cannot be returned" });
   } catch (error) {
     console.error("Return order error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ message: MESSAGES.SERVER_ERROR });
   }
 };
 
 
-// --------------------------------------------------------------------
+// -----------------------------invoce---------------------------------------
 
 export const downloadInvoice = async (req, res) => {
   try {
     const orderId = req.params.id;
     const order = await orderSchema.findById(orderId).populate("items.productId");
 
-    if (!order) return res.status(404).send("Order not found");
+    if (!order) return res.status(STATUS.NOT_FOUND).send(MESSAGES.NO_ORDER);
 
     const doc = new PDFDocument({ margin: 50 });
     res.setHeader("Content-Type", "application/pdf");
@@ -400,6 +409,10 @@ export const downloadInvoice = async (req, res) => {
     );
     doc.pipe(res);
 
+    /* -------- ORANGE BORDER (TOP) -------- */
+    doc.rect(0, 0, doc.page.width, 20).fill("#bf5720");
+    doc.fillColor("black");
+
     /* -------- HEADER -------- */
     const logoPath = path.join(
       process.cwd(),
@@ -408,85 +421,160 @@ export const downloadInvoice = async (req, res) => {
       "assets",
       "images",
       "icons",
-      "autominima-logo.png" 
-      ); 
+      "autominima-logo.png"
+    );
 
-    doc.image(logoPath, 50, 45, { width: 75 })
-      .fontSize(20)
-      .text("AutoMinima", 120, 57)
-      .fontSize(10)
-      .text("Precision in Every Scale", 120, 75)
-      .moveDown();
+    // Bigger logo
+    doc.image(logoPath, 50, 40, { width: 170, height: 100 });
 
-    doc.fontSize(20).text("INVOICE", { align: "right" });
-    doc.moveDown(2);
+    // Invoice No & Date (Top Left)
+    doc.fontSize(11).fillColor("black").text(`Invoice #: ${order.orderNumber}`, 58, 130);
+    doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 58, 145);
+    doc.text(`Payment: ${order.paymentMethod}`, 58, 160);
 
-    /* -------- ORDER INFO -------- */
-    doc.fontSize(12)
-      .text(`Order Number: ${order.orderNumber}`)
-      .text(`Order Date: ${new Date(order.createdAt).toLocaleDateString()}`)
-      .text(`Payment Method: ${order.paymentMethod}`)
-      .text(`Payment Status: ${order.paymentStatus}`)
-      .text(`Order Status: ${order.orderStatus}`)
-      .moveDown();
+    // Company Name & Tagline
+    // doc.fontSize(20).text("AutoMinima", 200, 50);
+    // doc.fontSize(10).fillColor("gray").text("Precision in Every Scale", 200, 72);
+
+    // "INVOICE" aligned right
+    doc.fontSize(25).fillColor("black").text("INVOICE", 0, 40, { align: "right" });
+
+    doc.moveDown(3);
 
     /* -------- BILLING DETAILS -------- */
     const b = order.billingDetails;
-    doc.fontSize(12).text("Billing Details:", { underline: true });
+    doc.moveDown(1.5);
+    doc.font("Helvetica-Bold").fontSize(12).fillColor("black").text("Invoice To:", 50, doc.y + 10);
+    doc.font("Helvetica").fontSize(11);
     doc.text(`${b.name}`);
     doc.text(`${b.address}, ${b.city}, ${b.state}, ${b.country}`);
     doc.text(`Landmark: ${b.landMark}`);
     doc.text(`Pincode: ${b.pincode}`);
     doc.text(`Phone: ${b.phone}`);
     doc.text(`Email: ${b.email}`);
+
     doc.moveDown(2);
 
-    /* -------- ITEMS TABLE -------- */
-    doc.fontSize(12).text("Items:", { underline: true }).moveDown(0.5);
-
-    // Table headers
-    const tableTop = doc.y;
+    /* -------- ITEMS TABLE (WIDER) -------- */
+    const tableTop = doc.y + 20;
     const itemX = 50;
-    const colWidths = [150, 70, 50, 70, 70];
+    const tableWidth = 500; // wider
+    const colWidths = [200, 80, 60, 80, 80]; // adjust widths
 
-    doc.font("Helvetica-Bold");
-    doc.text("Product", itemX, tableTop, { width: colWidths[0] });
-    doc.text("Variant", itemX + colWidths[0], tableTop, { width: colWidths[1] });
-    doc.text("Qty", itemX + colWidths[0] + colWidths[1], tableTop, { width: colWidths[2] });
-    doc.text("Price", itemX + colWidths[0] + colWidths[1] + colWidths[2], tableTop, { width: colWidths[3] });
-    doc.text("Total", itemX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3], tableTop, { width: colWidths[4] });
-    doc.moveDown();
-    doc.font("Helvetica");
+    // Table header background
+    doc.rect(itemX, tableTop, tableWidth, 20).fill("#000000");
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(11);
+    doc.text("Product", itemX + 5, tableTop + 5, { width: colWidths[0] });
+    doc.text("Variant", itemX + colWidths[0], tableTop + 5, { width: colWidths[1] });
+    doc.text("Qty", itemX + colWidths[0] + colWidths[1], tableTop + 5, { width: colWidths[2] });
+    doc.text("Price", itemX + colWidths[0] + colWidths[1] + colWidths[2], tableTop + 5, { width: colWidths[3] });
+    doc.text("Total", itemX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3], tableTop + 5, { width: colWidths[4] });
 
-    let y = tableTop + 20;
+    // Reset font
+    doc.font("Helvetica").fillColor("black");
 
-    order.items.forEach((item, idx) => {
-      const product = item.productId || {};
-      doc.text(product.productName || "Unknown", itemX, y, { width: colWidths[0] });
-      doc.text(item.variantName, itemX + colWidths[0], y, { width: colWidths[1] });
-      doc.text(item.quantity.toString(), itemX + colWidths[0] + colWidths[1], y, { width: colWidths[2] });
-      doc.text(`₹${item.salePrice.toFixed(2)}`, itemX + colWidths[0] + colWidths[1] + colWidths[2], y, { width: colWidths[3] });
-      doc.text(`₹${item.totalProductprice.toFixed(2)}`, itemX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3], y, { width: colWidths[4] });
-      y += 20;
-    });
+   let y = tableTop + 25;
+  order.items.forEach((item, idx) => {
+  const product = item.productId || {};
+  
+  // Measure row height dynamically based on tallest cell
+  const rowHeights = [
+    doc.heightOfString(product.productName || "Unknown", { width: colWidths[0] }),
+    doc.heightOfString(item.variantName || "", { width: colWidths[1] }),
+    doc.heightOfString(item.quantity.toString(), { width: colWidths[2] }),
+    doc.heightOfString(`₹${item.salePrice.toFixed(2)}`, { width: colWidths[3] }),
+    doc.heightOfString(`₹${item.totalProductprice.toFixed(2)}`, { width: colWidths[4] })
+  ];
+  const rowHeight = Math.max(...rowHeights) + 10; // add padding
 
-    doc.moveDown(2);
+  // Alternate row background
+  if (idx % 2 === 0) {
+    doc.rect(itemX, y - 5, tableWidth, rowHeight).fill("#f5f5f5").stroke("#625b5b");
+    doc.fillColor("black");
+  } else {
+    // border for odd rows
+    doc.rect(itemX, y - 5, tableWidth, rowHeight).stroke("#615b5b");
+  }
+
+  // Write text
+  let x = itemX + 5;
+  doc.text(product.productName || "Unknown", x, y, { width: colWidths[0] });
+  x += colWidths[0];
+  doc.text(item.variantName, x, y, { width: colWidths[1] });
+  x += colWidths[1];
+  doc.text(item.quantity.toString(), x, y, { width: colWidths[2] });
+  x += colWidths[2];
+  doc.text(`₹${item.salePrice.toFixed(2)}`, x, y, { width: colWidths[3] });
+  x += colWidths[3];
+  doc.text(`₹${item.totalProductprice.toFixed(2)}`, x, y, { width: colWidths[4] });
+
+  y += rowHeight; // move down based on actual row height
+});
+
+
+    doc.moveDown(3);
 
     /* -------- TOTALS SECTION -------- */
-    doc.font("Helvetica-Bold");
-    doc.text(`Shipping Charge: ₹${order.shippingCharge.toFixed(2)}`, { align: "right" });
-    doc.text(`Grand Total: ₹${order.grandTotalprice.toFixed(2)}`, { align: "right" });
-    doc.moveDown(2);
+    const totalsY = doc.y + 45;
+    doc.font("Helvetica-Bold").fontSize(12).text(`Subtotal : ₹${order.grandTotalprice.toFixed(2)}`, 350, totalsY);
+    doc.font("Helvetica").text(`Shipping : ₹${order.shippingCharge.toFixed(2)}`, 350);
+    doc.font("Helvetica").text(`Tax : ₹0.00`, 350);
+
+    // Highlighted final total
+    const finalTotalY = doc.y + 10;
+    doc.rect(320, finalTotalY, 180, 25).fill("#fa8f0b");
+    doc.fillColor("white").font("Helvetica-Bold").fontSize(12).text(
+      `Total: ₹${order.grandTotalprice.toFixed(2)}`,
+      355,
+      finalTotalY + 7
+    );
+
+    doc.moveDown(4);
 
     /* -------- FOOTER -------- */
-    doc.fontSize(10).font("Helvetica-Oblique").text(
-      "Thank you for shopping with AutoMinima..!",
+    doc.moveDown(2);
+    doc.fontSize(10).fillColor("gray").text(
+      "Thank you for shopping. Keep shopping with AutoMinima.",
       { align: "center" }
     );
+
+    // Bottom orange border
+    const pageHeight = doc.page.height;
+    doc.rect(0, pageHeight - 25, doc.page.width, 25).fill("#bf5720");
 
     doc.end();
   } catch (err) {
     console.error(err);
-    res.status(500).send("Error generating invoice");
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send("Error generating invoice");
+  }
+};
+
+
+export const viewDetails = async (req, res) => {
+  console.log("detail controller called");
+
+  try {
+    const user = req.session.user;
+    const userId = user?.id;
+    const orderId = req.params.id;
+
+    // console.log("Order ID from params:", orderId);      //D
+    // console.log("User ID from session:", userId);        //D 
+
+    const order = await orderSchema
+      .findOne({ _id: orderId, userDetails: userId }) 
+      .populate("userDetails")
+      .populate("items.productId");
+
+    if (!order) {
+      // console.log("No order IN DB");
+
+      return res.status(STATUS.NOT_FOUND).send(MESSAGES.NO_ORDER);
+    }
+
+    res.render("orderDetails.ejs", { order });
+  } catch (error) {
+    console.log(MESSAGES.PAGE_ERROR, error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
   }
 };

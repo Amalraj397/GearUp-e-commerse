@@ -1,4 +1,5 @@
 import categorySchema from "../../Models/categoryModel.js";
+import productSchema  from"../../Models/productModel.js";
 
 // ------------------load Category page------------------
 
@@ -90,7 +91,14 @@ export const unlistCategory = async (req, res) => {
 
     const updatedCategory = await categorySchema.findByIdAndUpdate(id, {
       isBlocked: true,
+
     });
+    //  while unlisting catefory  need to delete products were stock under 5
+
+    // const product = await productSchema.deleteMany({
+    //   category:id,  
+    //   "variants.stock":{$lte: 5},               code test
+    //   })                                      
 
     if (!updatedCategory) {
       return res

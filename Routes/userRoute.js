@@ -54,6 +54,7 @@ import {
   getEdit_userAddressPage,
   edit_userAddress,
   delete_userAddress,
+  makedefault,
 } from "../Controller/user/userAddressController.js";
 
 import {
@@ -78,6 +79,7 @@ import {
   cancelOrder,
   returnOrder,
   downloadInvoice,
+  viewDetails,
 
 } from "../Controller/user/userOrderController.js";
 
@@ -142,6 +144,8 @@ userRoute.get("/edit-address/:id", getEdit_userAddressPage);
 userRoute.put("/updateUserAddress/:id", edit_userAddress);
 // delete
 userRoute.delete("/remove-address/:id", delete_userAddress);
+//default
+userRoute.patch("/set-default-address/:id", makedefault);
 
 // ---------------cart managements------------
 userRoute.get("/userCart", getCartPage);
@@ -164,6 +168,11 @@ userRoute.get("/orderSuccess", getOrderSuccesspage);
 userRoute.get("/myOrders", getmyOrders);
 userRoute.put("/orders/cancel/:id", cancelOrder);
 userRoute.put("/orders/return/:id", returnOrder);
-// userRoute.get("/downloadInvoice/:id", downloadInvoice);
+
 userRoute.get("/orders/:id/invoice", downloadInvoice);
+
+userRoute.get("/orderdetails/:id", viewDetails);
+
+
+
 export default userRoute;

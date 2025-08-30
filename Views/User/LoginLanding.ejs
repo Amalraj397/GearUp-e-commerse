@@ -283,12 +283,6 @@
       <input type="email" placeholder=" Enter your Email" id="login-email" name="email" />
       <div id="emailError" class="errorMessage"></div>
 
-      <!-- <input type="password" placeholder=" Enter your Password" id="login-password" name="password"/>
-      <span id="togglePassword" style="position:absolute; right: 520px; top: 47%; transform: translateY(-50%); cursor: pointer; color: #f36d07;">
-        <i class="fa-solid fa-eye" id="eyeIcon"></i>
-      </span>
-      <div id="passwordError" class="errorMessage"></div> -->
-
       <div class="password-wrapper">
         <input type="password" placeholder=" Enter your Password" id="login-password" name="password" />
         <span id="togglePassword">
@@ -351,7 +345,6 @@
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
-      // const modalEmail = document.getElementById("modalEmail").value.trim();
 
       try {
         const response = await
@@ -447,9 +440,30 @@
           .forEach((error) => (error.innerText = ""));
       }
     });
-
-
   </script>
+  <script>
+  // Attach confirmation to all logout buttons/links
+  document.querySelectorAll(".logoutBtn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault(); // stop default logout
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You will be logged out of your account.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, logout",
+        cancelButtonText: "Cancel"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "/logout"; // go to logout route
+        }
+      });
+    });
+  });
+</script>
 </body>
 
 </html>
