@@ -1,40 +1,45 @@
-export const loadAdminlogin = async (req, res) => {
+import { MESSAGES } from "../../utils/messagesConfig.js";
+import { STATUS } from "../../utils/statusCodes.js";
+
+export const loadAdminlogin = async (req, res, next) => {
   if (req.session.admin) return res.redirect("/admin/dashboard");
   try {
     res.render("LoginLanding.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.log(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error)
   }
 };
 
-export const loadAdminDash = async (req, res) => {
+export const loadAdminDash = async (req, res, next) => {
   try {
     res.render("adminDash.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.log(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error)
   }
 };
 
-// -------------------------------adminlogin-------------------------------
+// ------------------------------- admin logout -------------------------------
 
-export const adminLogout = async (req, res) => {
+export const adminLogout = async (req, res, next) => {
   try {
     req.session.destroy((err) => {
       if (err) {
-        console.error("Error during logout", err);
-        res.status(500).send("internal server Error  ");
+        console.error(MESSAGES.Auth.LOGOUT_FAILED, err);
+        return res
+          .status(STATUS.INTERNAL_SERVER_ERROR)
+          .send(MESSAGES.System.SERVER_ERROR);
       }
       // clear cookie
-
-      // res.clearCookie(user.id);     // clearing the userid
       res.clearCookie("connect.sid"); // clearing the session id
       return res.redirect("/");
-      // res.status(200).json({ message: "Logout successfull..!" });
     });
   } catch (error) {
-    console.error("Error login failed", error);
-    res.status(500).send("internal server Error  ");
+    console.error(MESSAGES.Auth.LOGOUT_FAILED, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error)
   }
 };

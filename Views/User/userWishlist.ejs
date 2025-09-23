@@ -29,14 +29,15 @@
 					<table class="table table-wishlist table-mobile">
 						<thead>
 							<tr>
-								<th><b>Product</b></th>
-								<th>Scale:Price</th>
-                                <th>Quantity</th>
+								<th><b>PRODUCT</b></th>
+								<th><b>SCALE: - PRICE</b></th>
+                                <!-- <th>Quantity</th> -->
+                                <!-- <th></th> -->
                                 <th></th>
-                                <th></th>
-								<th>Stock Status</th>
-                                <th>Action</th>
-                                <th></th>
+								<th><b>STOCK STATUS</b></th>
+                                <th><b>ACTION</b></th>
+                                <!-- <th></th> -->
+                                <th><b>X</b></th>
 							</tr>
 						</thead>
 
@@ -65,7 +66,7 @@
                                                         <% }) %>
                                                     </select>
                                                 </td>
-                                                    <td class="quantity-col">
+                                                    <!-- <td class="quantity-col">
                                                     <input 
                                                         type="number" 
                                                         class="quantity-input" 
@@ -73,7 +74,7 @@
                                                         value="1" 
                                                         min="1" style = "width: 50px;">
                                                 </td>
-                                                <td></td>
+                                                <td></td> -->
                                                 <td></td>
                                                 <td class="stock-col"><span class="in-stock">In stock</span></td>
                                                 <td class="action-col">
@@ -166,33 +167,7 @@
             position: "right",
             backgroundColor: "#28a745",
         }).showToast();
-
-        // Remove from WishList
-        try {
-            const response = await fetch(`/removeFromWishlist/${productId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                const row = button.closest("tr");
-                if (row) row.remove();
-
-                document.querySelector(".wishlist-badge").textContent = result.wishlistCount;
-
-                Toastify({
-                    text: "Removed from wishlist ❤️",
-                    duration: 2000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#ffc107",
-                }).showToast();
-            }
-        } catch (err) {
-            console.error("Error removing from wishlist:", err);
-        }
+        
 
     } else if (data.alreadyInCart) {
         // Product already in cart --- Show SweetAlert 
@@ -270,6 +245,7 @@
               });
 
               const data = await response.json();
+               console.log("data wishlist remove::",data);
 
               if (response.ok) {
                 // Remove item from  table
@@ -313,7 +289,6 @@
         });
       });
     });
-
 
 </script>
 

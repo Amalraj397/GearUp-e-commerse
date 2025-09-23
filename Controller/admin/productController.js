@@ -6,19 +6,18 @@ import cloudinary from "../../Config/cloudinary_Config.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
-// import {validateProductData} from "../../utils/validateProduct.js";
-
-export const loadproductList = async (req, res) => {
+export const loadproductList = async (req, res, next) => {
   try {
     res.render("productList.ejs");
   } catch (error) {
-    console.log(MESSAGES.PAGE_ERROR, error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
+    console.log(MESSAGES.Products.PRODUCT_LISTING_FAIL, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
 // controller for the product fetch API
-export const getProductsJson = async (req, res) => {
+export const getProductsJson = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit);
@@ -48,13 +47,16 @@ export const getProductsJson = async (req, res) => {
       totalPage: Math.ceil(totalProducts / limit),
     });
   } catch (error) {
-    console.error("API error loading product list:", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ message: MESSAGES.SERVER_ERROR });
+    console.error(MESSAGES.Products.PRODUCT_CRE_FAILED, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.System.SERVER_ERROR });
+    next(error);
   }
 };
 
 //loading add-product page
-export const loadAddproduct = async (req, res) => {
+export const loadAddproduct = async (req, res, next) => {
   try {
     const category = await categorySchema.find({ isBlocked: false });
     const brand = await brandSchema.find({ isBlocked: false });
@@ -63,14 +65,14 @@ export const loadAddproduct = async (req, res) => {
       brand,
     });
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
+    console.log(MESSAGES.Products.ADD_PRODUCT_PAGE_FAILED, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
 // addProduct controller
-
-export const addnewProduct = async (req, res) => {
+export const addnewProduct = async (req, res, next) => {
   console.log("product controller starting");
   const {
     productName,
@@ -83,21 +85,15 @@ export const addnewProduct = async (req, res) => {
     status,
   } = req.body;
 
-  // console.log("parsedvariants:", parsedVariants);   //dubugg
-  // console.log("req.body ::", req.body);
-  // console.log("productName: category", productName,category);
-  // console.log("brand:", brand);
-
-  // console.log("aftervalidation:::")
-
   const variant = JSON.parse(parsedVariants);
 
   // console.log("variant::", variant);  //dubugg
 
-  // Image handling
-
+  // Imsge handling
   if (!req.files || req.files.length < 3) {
-    return res.status(STATUS.BAD_REQUEST).json({ message: "At least 3 images required" });
+    return res
+      .status(STATUS.BAD_REQUEST)
+      .json({ message: MESSAGES.Products.IMAGE_REQUIRED });
   }
   // console.log("image length", req.files.length);  //dubugg
 
@@ -109,21 +105,25 @@ export const addnewProduct = async (req, res) => {
     const categoryId = await categorySchema.findOne({ name: category });
     // console.log("category fetched:::", categoryId);   //dubugg
     if (!categoryId) {
-      return res.status(STATUS.BAD_REQUEST).json("Invalid category name");
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json(MESSAGES.Products.INVALID_CATEGORY);
     }
 
     // Fetch brand id
     const brandId = await brandSchema.findOne({ brandName: brand });
     // console.log("brand fetched:::", categoryId);     //dubugg
     if (!brandId) {
-      return res.status(STATUS.BAD_REQUEST).json("Invalid brand name");
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json(MESSAGES.Products.INVALID_BRAND);
     }
     const product = await productSchema.findOne({ productName });
     // console.log("fetching product:::", product);     //dubugg
     if (product) {
       return res.status(STATUS.BAD_REQUEST).json({
         success: false,
-        message: MESSAGES.PRODUCT_EXSIST,
+        message: MESSAGES.Products.PRODUCT_EXSIST,
       });
     }
 
@@ -140,25 +140,25 @@ export const addnewProduct = async (req, res) => {
     });
 
     await newProduct.save();
-    // console.log("product savingggggggggg.....")     //dubugg
+    // console.log("product savingggggggggg.....")     //
     res.status(STATUS.CREATED).json({
       success: true,
-      message: MESSAGES.PRODUCT_CREATED ,
+      message: MESSAGES.Products.PRODUCT_CREATED,
       data: newProduct,
     });
   } catch (error) {
-    console.log("Error in adding product", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      message: MESSAGES.PAGE_ERROR,
-      error: error.message,
-    });
+    console.log(MESSAGES.Products.PRODUCT_CRE_FAILED, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
+    //   success: false,
+    //   message: MESSAGES.Products.PRODUCT_CRE_FAILED,
+    //   error: error.message,
+    // });
+    next(error);
   }
 };
 
 //-------------------list and unlist product-----------------
-
-export const unlistProduct = async (req, res) => {
+export const unlistProduct = async (req, res, next) => {
   try {
     const productId = req.params.id;
 
@@ -167,21 +167,24 @@ export const unlistProduct = async (req, res) => {
     });
     // console.log("Unlisting product ID:", productId);  //D
     if (!updatedProduct) {
-      return res
-        .status(STATUS.NOT_FOUND)
-        .json({ success: false, message: MESSAGES.PRODUCT_NOT_FOUND });
+      return res.status(STATUS.NOT_FOUND).json({
+        success: false,
+        message: MESSAGES.Products.PRODUCT_NOT_FOUND,
+      });
     }
-
     return res
       .status(STATUS.OK)
-      .json({ success: true, message: MESSAGES.PRODUCT_UNLISTED });
+      .json({ success: true, message: MESSAGES.Products.PRODUCT_UNLISTED });
   } catch (error) {
-    console.error(MESSAGES.PAGE_ERROR, error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: MESSAGES.SERVER_ERROR });
+    console.error(MESSAGES.Products.PRODUCT_UNLIST_FAILED, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ success: false, message: MESSAGES.System.SERVER_ERROR });
+    next(error);
   }
 };
 
-export const listProduct = async (req, res) => {
+export const listProduct = async (req, res, next) => {
   try {
     const productId = req.params.id;
 
@@ -189,25 +192,29 @@ export const listProduct = async (req, res) => {
       isBlocked: false,
     });
     // console.log("Listing product ID:", productId);   ///d
-    if (!updatedProduct) { 
-      return res
-        .status(STATUS.NOT_FOUND)
-        .json({ success: false, message: MESSAGES.PRODUCT_NOT_FOUND });
+    if (!updatedProduct) {
+      return res.status(STATUS.NOT_FOUND).json({
+        success: false,
+        message: MESSAGES.Products.PRODUCT_NOT_FOUND,
+      });
     }
 
     return res
       .status(STATUS.OK)
-      .json({ success: true, message:MESSAGES.PRODUCT_LISTED });
+      .json({ success: true, message: MESSAGES.Products.PRODUCT_LISTED });
   } catch (error) {
-    console.error(MESSAGES.PAGE_ERROR, error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: MESSAGES.SERVER_ERROR });
+    console.error(MESSAGES.Products.PRODUCT_LIST_FAILED, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
+    //   success: false,
+    //   message: MESSAGES.System.SERVER_ERROR,
+    // });
+    next(error);
   }
 };
 // ---------------------- List & Unlist  END-------------------
 
 // =====================GET EDIT PRODUCT PAGE=====================
-
-export const getProductEditpage = async (req, res) => {
+export const getProductEditpage = async (req, res, next) => {
   // getting edit product_page
   try {
     const productId = req.params.id;
@@ -220,7 +227,10 @@ export const getProductEditpage = async (req, res) => {
     const brand = await brandSchema.find(); // To show all available brands
     const category = await categorySchema.find(); // To show all available categories
 
-    if (!product) return res.status(STATUS.NOT_FOUND).send(MESSAGES.PRODUCT_NOT_FOUND);
+    if (!product)
+      return res
+        .status(STATUS.NOT_FOUND)
+        .send(MESSAGES.Products.PRODUCT_NOT_FOUND);
 
     res.render("editProduct.ejs", {
       product,
@@ -228,15 +238,15 @@ export const getProductEditpage = async (req, res) => {
       category,
       images: Array.isArray(product.images) ? product.images : [product.images],
     });
-  } catch (err) {
-    console.log(MESSAGES.PAGE_ERROR, err);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
+  } catch (error) {
+    console.log(MESSAGES.System.PAGE_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
 // -------------------update product-----------------
-
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   try {
     const productId = req.params.id;
     const {
@@ -264,7 +274,7 @@ export const updateProduct = async (req, res) => {
     ) {
       return res
         .status(STATUS.BAD_REQUEST)
-        .json({ message: MESSAGES.ALL_REQUIRED});
+        .json({ message: MESSAGES.System.ALL_REQUIRED });
     }
 
     // finding brand and category
@@ -277,7 +287,9 @@ export const updateProduct = async (req, res) => {
     // console.log("product data ivde und:", product);    //debugging
 
     if (!product)
-      return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.PRODUCT_NOT_FOUND });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Products.PRODUCT_NOT_FOUND });
 
     // Remove deleted images
     let existingImages = product.productImage;
@@ -289,14 +301,10 @@ export const updateProduct = async (req, res) => {
 
     const finalImages = [...existingImages, ...newImages];
 
-    // console.log("---------------------------")           //debugging
-    // console.log("finalImages:", finalImages);
-    // console.log("---------------------------")
-
     if (finalImages.length < 3) {
       return res
         .status(STATUS.BAD_REQUEST)
-        .json({ message: "At least 3 images are required." });
+        .json({ message: MESSAGES.Products.IMAGE_REQUIRED });
     }
     // Update product
     await productSchema.findByIdAndUpdate(productId, {
@@ -311,18 +319,19 @@ export const updateProduct = async (req, res) => {
       productImage: finalImages,
     });
 
-    // const productdata_final = await productSchema.findByIdAndUpdate(productId, {})
-
     // console.log('final product data', productdata_final);     //debugging
 
-    res.status(STATUS.OK).json({ message: MESSAGES.PRODUCT_UPDATED });
-  } catch (err) {
-    console.error(err);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ message: MESSAGES.SERVER_ERROR});
+    res.status(STATUS.OK).json({ message: MESSAGES.Products.PRODUCT_UPDATED });
+  } catch (error) {
+    console.error(MESSAGES.Products.PRODUCT_UPLOAD_PAGE_FAIL ,error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Products.PRODUCT_UPD_FAILED });
+    next(error);
   }
 };
 
-export const deleteProductImage = async (req, res) => {
+export const deleteProductImage = async (req, res, next) => {
   const productId = req.params.id;
   // console.log("productId:", productId);      //debugging
 
@@ -332,14 +341,13 @@ export const deleteProductImage = async (req, res) => {
   if (!imageId) {
     return res
       .status(STATUS.BAD_REQUEST)
-      .json({ success: false, message: "No image-ID provided" });
+      .json({ success: false, message: MESSAGES.Products.NO_IMAGE_ID });
   }
 
   try {
-    // 1. Delete from cloudinary
+    // Delete from cloudinary
     await cloudinary.uploader.destroy(imageId);
 
-    // 2. Remove from DB (find the product that has this image and update)
     const product = await productSchema.findByIdAndUpdate(
       productId,
       { $pull: { productImage: imageId.deletedImagesUrl } },
@@ -347,17 +355,24 @@ export const deleteProductImage = async (req, res) => {
     );
 
     if (!product) {
-      return res
-        .status(STATUS.NOT_FOUND)
-        .json({ success: false, message: MESSAGES.PRODUCT_NOT_FOUND });
+      return res.status(STATUS.NOT_FOUND).json({
+        success: false,
+        message: MESSAGES.Products.PRODUCT_NOT_FOUND,
+      });
     }
     // console.log("product:", product);         //debugging
 
-    return res.json({ success: true, message: MESSAGES.PRODUCT_DELETED});
+    return res.json({
+      success: true,
+      message: MESSAGES.Products.PRODUCT_DELETED,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: MESSAGES.SERVER_ERROR });
+    console.error(MESSAGES.Products.PRODUCT_DEL_FAILED,error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
+    //   success: false,
+    //   message: MESSAGES.Products.PRODUCT_DEL_FAILED,
+    // });
+    next(error);
   }
 };
-
 // =====================EDIT PRODUCT PAGE END=====================

@@ -5,21 +5,18 @@ import {
   adminAuth,
   nocache,
   //  adminAuthenticated,
-
 } from "../middlewares/Auth.js";
 
 import {
   loadAdminlogin,
   loadAdminDash,
   adminLogout,
-
 } from "../Controller/admin/adminController.js";
 
 import {
   getuserData,
   blockUser,
   unblockUser,
-
 } from "../Controller/admin/AdminuserController.js";
 
 import {
@@ -32,7 +29,6 @@ import {
   listProduct,
   updateProduct,
   deleteProductImage,
-
 } from "../Controller/admin/productController.js";
 
 import {
@@ -43,7 +39,6 @@ import {
   listBrand,
   getBrandEditPage,
   updateBrand,
-
 } from "../Controller/admin/brandController.js";
 
 import {
@@ -55,18 +50,23 @@ import {
   getLiveCategorySearch,
   getCategoryEditPage,
   updateCategory,
-
 } from "../Controller/admin/categoryController.js";
 
 import {
   getuserOrders,
   updateOrderStatus,
   adminviewDetails,
-
-} from"../Controller/admin/orderController.js";
-
+} from "../Controller/admin/orderController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
+
+import {
+  getOrderReturnPage,
+  rejectReturn,
+  approveReturn,
+} from "../Controller/admin/orderReturnController.js";
+
+// import { formAnnotation } from "pdfkit";
 
 // import { adminOnly } from "../middlewares/adminOnly.js";
 
@@ -144,13 +144,15 @@ adminRoute.patch("/unlist-category/:id", adminAuth, unlistCategory); //unlisting
 adminRoute.patch("/list-category/:id", adminAuth, listCategory); //listing category
 adminRoute.get("/category/search", adminAuth, getLiveCategorySearch); //live search
 
-
-
 // ------------------------------order management------------------------------
-adminRoute.get("/orders", getuserOrders);  //getting Admin side userOrders
+adminRoute.get("/orders", getuserOrders); //getting Admin side userOrders
 
 adminRoute.put("/update-order-status/:orderId", updateOrderStatus);
 adminRoute.get("/orderdetails/:id", adminviewDetails);
 
+//---------------- order return management-----------------
+adminRoute.get("/orderReturn", getOrderReturnPage);
+adminRoute.put("/orderReturn/:returnId/approve", approveReturn);
+adminRoute.put("/orderReturn/:returnId/reject", rejectReturn);
 
 export default adminRoute;

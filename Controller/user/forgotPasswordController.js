@@ -1,160 +1,174 @@
-export const forgotverifyEmail = async (req, res) => {
+import userschema from "../../Models/userModel.js";
+import { MESSAGES } from "../../utils/messagesConfig.js"
+import { STATUS } from "../../utils/statusCodes.js";
+
+// Verify email and send OTP
+export const forgotverifyEmail = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    // Check the email address already have ?
+    // Check if the email address already exists
     const userExist = await userschema.findOne({ email: email });
-    // req.session.email=userExist.email;
 
     if (!userExist) {
-      return res.status(500).json({ message: "User email not registered..!" });
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.Users.NO_USER,
+      });
     }
-    //
+
     const otp = generateOTP();
     const expiryTime = Date.now() + 60 * 3000;
-    console.log(" Forgot Password -OTP :", otp);
+    console.log(" Forgot Password - OTP :", otp);
 
-    // Send OTP corresponding email!
+    // Send OTP to corresponding email
     await sendEmail({ to: email, otp });
 
     req.session.otp = otp;
     req.session.otpExpiration = expiryTime;
     req.session.email = email;
 
-    //  res.status(200).json({ message: 'Email verified successfully! Enter the OTP'})
-
-    return res.status(200).json({
+    return res.status(STATUS.OK).json({
       success: true,
-      message: "Email verification successful! Please enter the OTP.",
+      message: MESSAGES.Auth.OTP_SENT,
       redirectTo: "/forgotGetotp",
     });
   } catch (error) {
-    console.log("error in while verifying the E-mail", error);
-    res.status(500).send("server Error");
+    console.error(MESSAGES.Auth.EMAIL_VERIFY_FAIL, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error);
   }
 };
 
-export const forgotGetOtp = (req, res) => {
+// Render OTP page
+export const forgotGetOtp = (req, res, next) => {
   try {
     res.render("forgotOTP.ejs");
   } catch (error) {
-    console.log("error in loading the OTP page", error);
-    res.status(500).send("server Error");
+    console.error(MESSAGES.Auth.OTP_PAGE_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error);
   }
 };
 
-export const forgotverifyOtp = async (req, res) => {
+// Verify OTP
+export const forgotverifyOtp = async (req, res, next) => {
   try {
     const { otp } = req.body;
-
     const storedOtp = req.session.otp?.toString();
-    const otpExpiration = req.session.otpExpiration; //time for otp
+    const otpExpiration = req.session.otpExpiration;
 
-    //  Check if the OTP has expired..!
-
+    // Check if OTP expired
     if (Date.now() > otpExpiration) {
       delete req.session.otp;
       delete req.session.otpExpiration;
-      return res
-        .status(400)
-        .json({ message: "OTP expired. please request a new OTP" });
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.Auth.OTP_EXPIRED,
+      });
     }
+
     // Validate OTP
     if (otp == storedOtp) {
       const userEmail = req.session.email;
       console.log("userEmail", userEmail);
 
-      delete req.session.otp; // clear OTP from session after successfull registration
+      delete req.session.otp;
       delete req.session.otpExpiration;
-      return res.status(200).json({
+
+      return res.status(STATUS.OK).json({
         success: true,
-        message: "OTP verification successfull..!",
+        message: MESSAGES.Auth.OTP_VERIFIED,
         redirectUrl: "/updatePassword",
       });
     } else {
-      return res
-        .status(400)
-        .json({ message: "Invalid OTP. Please try again..!" });
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.Auth.OTP_INVALID,
+      });
     }
   } catch (error) {
-    console.error("Error during OTP verifivation", error);
-    res.status(500).send("internal server Error  ");
+    console.error(MESSAGES.Auth.OTP_VERIFY_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error);
   }
 };
 
-export const forgotresendOTP = async (req, res) => {
+// Resend OTP
+export const forgotresendOTP = async (req, res, next) => {
   try {
-    // if (!req.session.email) {
-    //   return res.status(400).json({ message: "User data not found..!" });
-    // }
-
     const { email } = req.session;
-    console.log("forgotPassword:resend OTP: ", email);
+    console.log("forgotPassword: resend OTP for:", email);
 
-    // Prevent resend with-in 60 seconds
     if (
       req.session.newotpExpiration &&
       Date.now() - req.session.newotpExpiration < 60 * 1000
     ) {
-      return res
-        .status(429)
-        .json({ message: "Please wait before requesting a new OTP." });
+      return res.status(STATUS.TOO_MANY_REQUESTS).json({
+        success: false,
+        message: MESSAGES.Auth.OTP_RESEND_WAIT,
+      });
     }
 
     const otp = generateOTP();
-    console.log("forgotPassword:resend OTP: ", otp);
+    console.log("forgotPassword: resend OTP:", otp);
 
-    const newExpirationTime = Date.now() + 60 * 2000; // 2 minute cooldown
-
+    const newExpirationTime = Date.now() + 60 * 2000; // 2 minutes
     req.session.otp = otp;
-    const otpExpiration = newExpirationTime;
+    req.session.otpExpiration = newExpirationTime;
 
     await sendEmail({ to: email, otp });
 
-    res.status(200).json({ message: "A new OTP has been sent to your email." });
+    res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Auth.OTP_RESENT,
+    });
   } catch (error) {
-    console.error("Error resending OTP:", error);
-    res.status(500).send("internal server Error  ");
+    console.error(MESSAGES.Auth.RESENT_OTP_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
-// get reset password page
-export const getSetnewPassword = (req, res) => {
+// Get reset password page
+export const getSetnewPassword = (req, res, next) => {
   try {
     res.render("updatePassword.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Auth.ERR_RESET_PASS_PAGE, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error);
   }
 };
 
-//  updating new password controller
+// Confirm reset password
 export const confirmResetPassword = async (req, res, next) => {
   const email = req.session.email;
   const { newPassword } = req.body;
 
   try {
-    // Finding user details with email
     const user = await userschema.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found..! try again" });
+      return res.status(STATUS.NOT_FOUND).json({
+        success: false,
+        message: MESSAGES.Users.NO_USER,
+      });
     }
 
-    // Bycript new password.
     const resetPassword = await securePassword(newPassword);
     user.password = resetPassword;
 
     await user.save();
-
     delete req.session.email;
 
-    return res.status(200).json({
-      message: "Password updation success..!",
+    return res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Auth.PASSWORD_UPDATED,
       redirectUrl: "/login",
     });
   } catch (error) {
-    console.error("An error occured..!", error);
+    console.error(MESSAGES.Auth.PASSWORD_UPDATE_FAILED, error);
     next(error);
   }
 };

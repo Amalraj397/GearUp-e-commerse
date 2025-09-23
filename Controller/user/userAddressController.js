@@ -1,15 +1,20 @@
 import addressSchema from "../../Models/userAddressModel.js";
+import { MESSAGES } from "../../utils/messagesConfig.js"
+import { STATUS } from "../../utils/statusCodes.js";
 
-export const getAdd_UseraddressPage = (req, res) => {
+//===================== GET USER ADDRESS PAGE ===================
+export const getAdd_UseraddressPage = (req, res,next) => {
   try {
     res.render("userAddressPage.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Address.AddressLogger.ADD_LOAD_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.PAGE_ERROR);
+    next(error);
   }
 };
 
-export const add_UserAddress = async (req, res) => {
+//===================== ADD USER ADDRESS ===================
+export const add_UserAddress = async (req, res, next) => {
   const {
     firstName,
     lastName,
@@ -27,15 +32,15 @@ export const add_UserAddress = async (req, res) => {
 
   try {
     const userId = req.session.user?.id;
-    console.log("userid in address adding:", userId);
-
+    
     if (!userId) {
       return res
-        .status(400)
-        .json({ message: "Unauthoirzed access..! please login..!" });
+        .status(STATUS.UNAUTHORIZED)
+        .json({ message: MESSAGES.System.UNAUTHORIZED });
     }
+
     const newAddress = new addressSchema({
-      userId: userId,
+      userId,
       firstName,
       lastName,
       email,
@@ -49,39 +54,41 @@ export const add_UserAddress = async (req, res) => {
       landmark,
       addressType,
     });
+
     await newAddress.save();
-    res.status(201).json({ message: "User address saved successfully..!" });
+    res.status(STATUS.CREATED).json({ message: MESSAGES.Address.ADDED });
   } catch (error) {
-    console.log("error in saving user address", error);
-    res.status(500).send("internal server Error..!");
+    console.error(MESSAGES.Address.AddressLogger.ADD_SAVE_EROR, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Address.ADD_FAILED });
+    next(error);
+  }
+};
+
+//===================== EDIT USER ADDRESS PAGE ===================
+export const getEdit_userAddressPage = async (req, res ,next) => {
+  try {
+    const address = await addressSchema.findById(req.params.id);
+    res
+    .status(STATUS.OK)
+    .render("editUserAddressPage.ejs", { address });
+    
+  } catch (error) {
+    console.error(MESSAGES.Address.AddressLogger.ADD_LOAD_EDIT_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.PAGE_ERROR);
+     next(error);
   }
 };
 
 //===================== EDIT USER ADDRESS ===================
+export const edit_userAddress = async (req, res, next) => {
+  const userId = req.session.user?.id;
 
-export const getEdit_userAddressPage = async (req, res) => {
-  try {
-    const address = await addressSchema.findById(req.params.id);
-    res.status(200).render("editUserAddressPage.ejs", {
-      address,
-    });
-  } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
-  }
-};
-
-
-
-export const edit_userAddress = async (req, res) => {
-  const user = req.session.user;
-  const userId = user?.id;
-
-  // console.log("userid in edit useraddress", userId); //debugging
   if (!userId) {
     return res
-      .status(401)
-      .json({ message: "Unauthorised Access..!please login" });
+      .status(STATUS.UNAUTHORIZED)
+      .json({ message: MESSAGES.System.UNAUTHORIZED });
   }
 
   const {
@@ -99,12 +106,13 @@ export const edit_userAddress = async (req, res) => {
     addressType,
   } = req.body;
 
-  //  const userId = req.params.id;
   try {
     const address = await addressSchema.findById(req.params.id);
 
     if (!address) {
-      return res.status(404).json({ message: "Address not found" });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Address.NOT_FOUND });
     }
 
     if (firstName) address.firstName = firstName;
@@ -119,63 +127,76 @@ export const edit_userAddress = async (req, res) => {
     if (pincode) address.pincode = pincode;
     if (landmark) address.landmark = landmark;
     if (addressType) address.addressType = addressType;
+
     await address.save();
 
-    res.status(200).json({ message: "Address updated successfully" });
+    res
+    .status(STATUS.OK)
+    .json({ message: MESSAGES.Address.UPDATED });
+
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Address.AddressLogger.ADD_UPD_EROR, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Address.UPDATE_FAILED });
+    next(error);
   }
 };
 
+//===================== MAKE DEFAULT ADDRESS ===================
+export const makedefault = async (req, res, next) => {
+  const userId = req.session.user?.id;
 
-export const makedefault = async (req, res) => {
-  const user = req.session.user;
-  const userID =user?.id;
   try {
-    if (!user) {
-      return res.redirect("/login");
+    if (!userId) {
+      return res
+        .status(STATUS.UNAUTHORIZED)
+        .json({ message: MESSAGES.System.UNAUTHORIZED });
     }
+
     const addressId = req.params.id;
 
-    await addressSchema.updateMany(
-      { userId: userID}, 
-      { $set: { isDefault: false } }
-    );
-
-    // console.log("---------------------------")
-    //  console.log("userID-----:", userID);
-    //  console.log("---------------------------")
-
+    await addressSchema.updateMany({ userId }, { $set: { isDefault: false } });
 
     const address = await addressSchema.findOneAndUpdate(
-      { _id: addressId, userId: userID },
+      { _id: addressId, userId },
       { $set: { isDefault: true } },
-      { new: true }
+      { new: true },
     );
 
-    //  console.log("---------------------------")
-    //  console.log("address-----:", address);
-    //  console.log("---------------------------")
-
     if (!address) {
-      return res.status(404).json({ message: "Address not found" });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Address.NOT_FOUND });
     }
 
-    res.status(200).json({ message: "Default address updated successfully" });
+    res.status(STATUS.OK).json({ message: MESSAGES.Address.DEFAULT_UPDATED });
   } catch (error) {
-    console.log("error in setting default address", error);
-    res.status(500).json({ message: "Server error" });
+    console.error(MESSAGES.Address.AddressLogger.ADD_DEF_EROR, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Address.DEFAULT_FAILED });
+    next(error);
   }
 };
 
-
-export const delete_userAddress = async (req, res) => {
+//===================== DELETE USER ADDRESS ===================
+export const delete_userAddress = async (req, res, next) => {
   try {
-    await addressSchema.findByIdAndDelete(req.params.id);
-    return res.status(200).json({ message: "Address deleted successfully" });
+    const address = await addressSchema.findByIdAndDelete(req.params.id);
+
+    if (!address) {
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Address.NOT_FOUND });
+    }
+
+    return res.status(STATUS.OK).json({ message: MESSAGES.Address.DELETED });
   } catch (error) {
-    console.log("error in loading the page", error);
-    return res.status(500).send("Server Error");
+    console.error(MESSAGES.Address.AddressLogger.ADD_DEL_EROR, error);
+    // return res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Address.DELETE_FAILED });
+     next(error);
   }
 };

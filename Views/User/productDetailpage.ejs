@@ -111,7 +111,7 @@
 
               <div class="product-cat">
                 <span>Category:</span>
-                <a href="#"><%= product.category.name %></a>,
+                <a href="#"><%= product.category ? product.category.name : '' %></a>,
                 <a href="#"><%= product.productName %></a>
               </div>
 
@@ -310,7 +310,7 @@ function addToCart(productId) {
             if (data.success) {
               Toastify({
                 text: "Quantity increased in cart 🛒",
-                duration: 2000,
+                duration: 1500,
                 gravity: "top",
                 position: "right",
                 backgroundColor: "green",
@@ -329,7 +329,7 @@ function addToCart(productId) {
         text: data.message || "Product added to cart successfully!",
         gravity: "top",
         position: "right",
-        duration: 2000,
+        duration: 1500,
         backgroundColor: "green"
       }).showToast();
 
@@ -364,7 +364,7 @@ function addToCart(productId) {
                 text: "Product Added to wishlist ❤",
                 gravity: "top",
                 position: "right",
-                duration: 2000,
+                duration: 1000,
                 backgroundColor: "green"
             }).showToast();
         } else {

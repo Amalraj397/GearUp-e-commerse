@@ -3,143 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found</title>
+    <title>404 - Page Not Found | Autominima</title>
     <style>
-        /* General Styles */
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* body {
             font-family: 'Arial', sans-serif;
-            height: 100vh;
+            /* background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%); */
+            /* background: url("your-image.jpg") no-repeat center center fixed;  */
+            /* background-size: cover; makes the image cover the whole screen */
+            /* min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            background-color: #f3f4f6;
-            color: #333;
-        }
-
-        /* Site Header */
-        .site-name {
-            width: 100%;
-            padding: 20px 0;
-            background-color: #121212; /* Blue color */
-            color: #fff;
-            font-size: 26px;
-            font-weight: bold;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .site-name:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Wrapper for Main Content */
-        .wrapper {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            flex: 1;
-            width: 100%;
-            margin-top: 80px; /* Adjust for fixed header */
+            justify-content: center;
             padding: 20px;
+            overflow: hidden; */
+        /* } */ 
+
+            body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+        /* Background video */
+        video.background-video {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: -1; /* stays behind content */
         }
 
-        /* Container Styles */
         .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            position: relative;
+            animation: slideIn 1s ease-out;
         }
 
-        /* Headline */
-        h1 {
-            font-size: 96px;
-            margin: 0;
-            color: #656667;
-            animation: bounce 1s infinite alternate;
+        .hamburger {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 30px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 10;
         }
 
-        /* Subtext */
-        p {
-            font-size: 18px;
-            margin: 20px 0 30px;
-            color: #555;
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: #333;
+            margin: 4px 0;
+            border-radius: 2px;
+            transition: all 0.3s ease;
         }
 
-        /* Button Styles */
-        a {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #036f3e;
-            color: #fff;
-            text-decoration: none;
-            font-size: 16px;
+        .hamburger:hover span {
+            background: #e76f51;
+        }
+
+        .car-container {
+            margin-bottom: 40px;
+            position: relative;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .car {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            animation: carShake 2s infinite ease-in-out;
+        }
+
+        .car:hover {
+            transform: scale(1.1);
+        }
+
+        .car svg {
+            width: 200px;
+            height: 100px;
+        }
+
+        .smoke {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.7;
+            animation: smokeRise 3s infinite ease-out;
+        }
+
+        .smoke-particle {
+            width: 20px;
+            height: 20px;
+            background: #666;
+            border-radius: 50%;
+            position: absolute;
+            animation: smokeFloat 2s infinite ease-out;
+        }
+
+        .smoke-particle:nth-child(1) {
+            animation-delay: 0s;
+            left: -10px;
+        }
+
+        .smoke-particle:nth-child(2) {
+            animation-delay: 0.5s;
+            left: 0px;
+        }
+
+        .smoke-particle:nth-child(3) {
+            animation-delay: 1s;
+            left: 10px;
+        }
+
+        .error-code {
+            font-size: 120px;
             font-weight: bold;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        a:hover {
-            background-color: #014527;
-            transform: translateY(-2px);
+            color: #f4a261;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            animation: bounceIn 1.5s ease-out;
         }
 
-        /* Animation for the Heading */
-        @keyframes bounce {
-            0% {
+        .tire-zero {
+            width: 120px;
+            height: 120px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: tireRotate 4s linear infinite;
+        }
+
+        .tire-zero::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .tire-zero::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 3px solid #555;
+            border-radius: 50%;
+            border-style: dashed;
+        }
+
+        .main-text {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .sub-text {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+            animation: fadeInUp 2.5s ease-out;
+        }
+
+        .home-button {
+            background: linear-gradient(135deg, #f4a261, #e76f51);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(244, 162, 97, 0.3);
+            animation: fadeInUp 3s ease-out;
+        }
+
+        .home-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(244, 162, 97, 0.4);
+        }
+
+        .home-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        @keyframes carShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        @keyframes smokeRise {
+            0% {
+                opacity: 0.7;
+                transform: translateX(-50%) translateY(0) scale(0.5);
+            }
             100% {
-                transform: translateY(-10px);
+                opacity: 0;
+                transform: translateX(-50%) translateY(-50px) scale(1.5);
             }
         }
 
-        /* Responsive Design */
+        @keyframes smokeFloat {
+            0% {
+                opacity: 0.8;
+                transform: translateY(0) scale(0.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-30px) scale(1.2);
+            }
+        }
+
+        @keyframes tireRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 72px;
+            .container {
+                padding: 40px 20px;
             }
-            p {
-                font-size: 16px;
+            
+            .error-code {
+                font-size: 80px;
             }
-            a {
-                font-size: 14px;
-                padding: 10px 20px;
+            
+            .tire-zero {
+                width: 80px;
+                height: 80px;
             }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 56px;
+            
+            .tire-zero::before {
+                width: 40px;
+                height: 40px;
             }
-            p {
-                font-size: 14px;
+            
+            .tire-zero::after {
+                width: 70px;
+                height: 70px;
             }
-            a {
-                font-size: 12px;
-                padding: 8px 16px;
+            
+            .main-text {
+                font-size: 24px;
+            }
+            
+            .car svg {
+                width: 150px;
+                height: 75px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Fixed Header -->
-    <div class="site-name">Chronex</div>
+    <video class="background-video" autoplay muted loop>
+    <source src="User/assets/videos/Hotwheels_Jeep_Muddy_Mountain_Adventure.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
-    <!-- Centered Content -->
-    <div class="wrapper">
-        <div class="container">
-            <h1>404</h1>
-            <p>Oops! The page you’re looking for cannot be found. It might have been moved or deleted.</p>
-            <a href="/">Go Back Home</a>
+    <div class="container">
+        <div class="error-code">
+            <span>4</span>
+            <div class="tire-zero"></div>
+            <span>4</span>
         </div>
+
+        <h1 class="main-text">Oops... Looks like you got lost</h1>
+        <p class="sub-text">Get back home by clicking the car</p>
+
+        <button class="home-button" onclick="goHome()">
+             Return to Garage
+        </button>
     </div>
+
+    <script>
+        function goHome() {
+            window.location.href = '/'; // Change this to your actual home page URL
+        }
+
+        function toggleMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            hamburger.style.transform = 'rotate(90deg)';
+            
+            setTimeout(() => {
+                hamburger.style.transform = 'rotate(0deg)';
+                // Add your menu functionality here
+                alert('Menu clicked! Add your navigation logic here.');
+            }, 200);
+        }
+
+        // Add some interactive sparkle effects
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.style.position = 'absolute';
+            sparkle.style.width = '4px';
+            sparkle.style.height = '4px';
+            sparkle.style.background = '#f4a261';
+            sparkle.style.borderRadius = '50%';
+            sparkle.style.pointerEvents = 'none';
+            sparkle.style.left = Math.random() * window.innerWidth + 'px';
+            sparkle.style.top = Math.random() * window.innerHeight + 'px';
+            sparkle.style.animation = 'sparkleFloat 2s ease-out forwards';
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => {
+                sparkle.remove();
+            }, 2000);
+        }
+
+        // Add sparkle animation CSS
+        const sparkleStyle = document.createElement('style');
+        sparkleStyle.textContent = `
+            @keyframes sparkleFloat {
+                0% {
+                    opacity: 1;
+                    transform: translateY(0) scale(0);
+                }
+                50% {
+                    opacity: 1;
+                    transform: translateY(-20px) scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(-40px) scale(0);
+                }
+            }
+        `;
+        document.head.appendChild(sparkleStyle);
+
+        // Create sparkles periodically
+        setInterval(createSparkle, 3000);
+
+        // Add car honk sound effect on click (optional)
+        function playHonk() {
+            // You can add an audio element here if you want sound effects
+            console.log('Beep beep! 🚗');
+        }
+
+        // Add click event to car for honk sound
+        document.querySelector('.car').addEventListener('click', playHonk);
+    </script>
 </body>
 </html>

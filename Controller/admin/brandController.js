@@ -1,58 +1,56 @@
 import brandSchema from "../../Models/brandModel.js";
-import cloudinary from "../../Config/cloudinary_Config.js";
+import { STATUS } from "../../utils/statusCodes.js";
+import { MESSAGES } from "../../utils/messagesConfig.js";
 
 // get brand page
-export const getBrands = async (req, res) => {
+export const getBrands = async (req, res, next) => {
   try {
-    //Pagination
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 7;
-    const skip = (page - 1) * limit;
-
-    // capture search query!
     const searchQuery = req.query.search || "";
 
     const filter = {};
     if (searchQuery) {
-      filter.brandName = { $regex: new RegExp(searchQuery, "i") }; // case-insensitive search
+      filter.brandName = { $regex: new RegExp(searchQuery, "i") };
     }
 
     const totalBrands = await brandSchema.countDocuments(filter);
-    // const brand = await brandSchema.find(filter).skip(skip).limit(limit).exec();
     const brand = await brandSchema.find(filter).sort({ createdAt: -1 });
 
-    // render
-    res.status(200).render("brands.ejs", {
+    res.status(STATUS.OK).render("brands.ejs", {
       brand,
       page,
       totalPage: Math.ceil(totalBrands / limit),
       searchQuery,
     });
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Brand.BRAND_LISTING_ERR, error);
+   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+   next(error);
   }
 };
 
 // ADD brand page
-export const getAddBrandPage = async (req, res) => {
+export const getAddBrandPage = async (req, res, next) => {
   try {
-    return res.status(200).render("addBrand.ejs");
+    return res.status(STATUS.OK).render("addBrand.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Brand.BRAND_ADD_PAGE_ERR, error);
+   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+   next(error);
   }
 };
 
-// new addbrand function
-export const addNewBrand = async (req, res) => {
+// add new brand
+export const addNewBrand = async (req, res, next) => {
   const { name, description } = req.body;
 
   if (!req.file) {
-    return res.status(400).json({ message: "Please upload a logo image" });
+    return res
+      .status(STATUS.BAD_REQUEST)
+      .json({ message: MESSAGES.Brand.IMAGE_REQUIRED });
   }
 
-  //  Get the Cloudinary-hosted image URL
   const logo = req.file?.path || req.file?.secure_url;
 
   try {
@@ -62,72 +60,77 @@ export const addNewBrand = async (req, res) => {
 
     if (brand) {
       return res
-        .status(400)
-        .json({ message: "Brand already exists..try again!" });
+        .status(STATUS.BAD_REQUEST)
+        .json({ message: MESSAGES.Brand.ALREADY_EXISTS });
     }
 
     const newBrand = new brandSchema({
       brandName: name,
       description,
-      brandImage: logo, //  Here we are storing Cloudinary image URL
+      brandImage: logo,
     });
 
     await newBrand.save();
 
-    res.status(201).json({ message: "New brand added successfully..!" });
+    res.status(STATUS.CREATED).json({ message: MESSAGES.Brand.ADDED_SUCCESS });
   } catch (error) {
-    console.log("Error in adding brand", error);
-    res.status(500).send("Server Error");
+    console.error(MESSAGES.Brand.BRAND_ADD_PAGE_ERR, error);
+   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+    next(error);
   }
 };
 
-// ---------------------unlisting a Brand -------------------
-export const unlistBrand = async (req, res) => {
+// unlist brand
+export const unlistBrand = async (req, res, next) => {
   try {
-    const brand = await brandSchema.findByIdAndUpdate(req.params.id, {
-      isBlocked: true,
-    });
-    res.json({ success: true, message: "Brand unlisted successfully" });
+    await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: true });
+    res.json({ success: true, message: MESSAGES.Brand.UNLIST_SUCCESS });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to unlist brand" });
+    console.error(MESSAGES.Brand.UNLIST_FAILED,error)
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ success: false, message: MESSAGES.Brand.UNLIST_FAILED });
+    next(error);
   }
 };
 
-//---------------------listng a Brand----------------------
-export const listBrand = async (req, res) => {
+// list brand
+export const listBrand = async (req, res, next) => {
   try {
-    const brand = await brandSchema.findByIdAndUpdate(req.params.id, {
-      isBlocked: false,
-    });
-    res.json({ success: true, message: "Brand listed successfully" });
+    await brandSchema.findByIdAndUpdate(req.params.id, { isBlocked: false });
+    res.json({ success: true, message: MESSAGES.Brand.LIST_SUCCESS });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Failed to list brand" });
+    console.error(MESSAGES.Brand.LIST_FAILED,error)
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ success: false, message: MESSAGES.Brand.LIST_FAILED });
+    next(error);
   }
 };
 
-//  getting the brand edit page
-export const getBrandEditPage = async (req, res) => {
+// get edit brand page
+export const getBrandEditPage = async (req, res, next) => {
   try {
     const brand = await brandSchema.findById(req.params.id);
-    res.status(200).render("editBrand.ejs", {
-      brand,
-    });
+    res.status(STATUS.OK).render("editBrand.ejs", { brand });
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Brand.BRAND_EDIT_PAGE_ERR, error);
+   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+    next(error);
   }
 };
 
-// updating the brand
-
-export const updateBrand = async (req, res) => {
+// update brand
+export const updateBrand = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name, description } = req.body;
 
     const brand = await brandSchema.findById(id);
     if (!brand) {
-      return res.status(404).json({ message: "Brand not found." });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Brand.NOT_FOUND });
     }
 
     if (name && name.toLowerCase() !== brand.brandName.toLowerCase()) {
@@ -137,26 +140,24 @@ export const updateBrand = async (req, res) => {
       });
 
       if (existBrand) {
-        return res.status(404).json({ message: "Brand name already exists" });
+        return res
+          .status(STATUS.BAD_REQUEST)
+          .json({ message: MESSAGES.Brand.ALREADY_EXISTS });
       }
     }
 
-    //  Update fields
     if (name) brand.brandName = name;
     if (description) brand.description = description;
+    if (req.file) brand.brandImage = req.file.path;
 
-    //  If a new image was uploaded
-    if (req.file) {
-      const oldImageUrl = brand.brandImage;
-      brand.brandImage = req.file.path;
-    }
-
-    // Save the updated brand
     await brand.save();
 
-    res.status(200).json({ message: "Brand updated successfully." });
+    res.status(STATUS.OK).json({ message: MESSAGES.Brand.UPDATE_SUCCESS });
   } catch (error) {
-    console.error("Brand update error:", error);
-    res.status(500).json({ message: "Server error while updating brand." });
+    console.error(MESSAGES.Brand.UPDATE_FAILED, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ message: MESSAGES.Brand.UPDATE_FAILED });
+     next(error);
   }
 };

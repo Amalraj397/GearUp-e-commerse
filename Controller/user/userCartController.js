@@ -3,18 +3,24 @@ import productSchema from "../../Models/productModel.js";
 import cartSchema from "../../Models/cartModel.js";
 import wishlistSchema from "../../Models/wishlistModel.js";
 
-export const getCartPage = async (req, res) => {
+import { MESSAGES } from "../../utils/messagesConfig.js"
+import { STATUS } from "../../utils/statusCodes.js";
+
+export const getCartPage = async (req, res, next) => {
   const user = req.session.user;
   const userId = user?.id;
 
-  console.log("userId  and user in cart page::", userId, req.session.user);
+  // console.log("userId  and user in cart page::", userId, req.session.user);
   try {
     if (!userId) {
       return res.redirect("/login");
     }
     const userData = await userschema.findById(userId);
+
     if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+      return res  
+      .status(STATUS.NOT_FOUND)
+      .json({ message: MESSAGES.Users.NO_USER });
     }
 
     const cart = await cartSchema
@@ -24,7 +30,7 @@ export const getCartPage = async (req, res) => {
     const cartCount = cart ? cart.items.length : 0;
 
     if (!cart || cart.items.length === 0) {
-      // return res.status(404).json({ message: "Cart not found..!" });
+      // return res.status(404).json({ message: MESSAGES.Cart.NO_CART });
       return res.render("userCart.ejs", {
         userData,
         cart: null,
@@ -33,7 +39,7 @@ export const getCartPage = async (req, res) => {
         shippingCharge: 0,
         grandTotal: 0,
         TotalAmount: 0,
-        emptyMessage: "Your cart is empty.!",
+        emptyMessage: MESSAGES.Cart.CART_EMPTY,
       });
     }
 
@@ -43,15 +49,11 @@ export const getCartPage = async (req, res) => {
     }, 0);
 
     const festivalOFF = (TotalAmount * 10) / 100; // calcaulating te festival discount
-
     const discountTotal = TotalAmount - festivalOFF; // calulating  festical discount price
 
     console.log("festivalOFF", festivalOFF);
-
     // let shippingCharge = 0;
-  
     console.log("discountTotal", discountTotal);
-
     // const grandTotal = discountTotal + shippingCharge;
 
     res.render("userCart.ejs", {
@@ -59,39 +61,54 @@ export const getCartPage = async (req, res) => {
       cart,
       cartCount,
       TotalAmount,
-      // shippingCharge,
       discountTotal,
-      // grandTotal,
       festivalOFF,
     });
   } catch (error) {
-    console.log("error in loading cart page", error);
-    res.status(500).send("server Error  ");
+    console.error(MESSAGES.Cart.CartLogger.CART_PAGE_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+     next(error);
   }
 };
 
-export const addToCartpage = async (req, res) => {
+export const addToCartpage = async (req, res, next) => {
   try {
+
     const { productId, variantName, scale, quantity } = req.body;
-    const userId = req.session.user?.id;
+    const user = req.session.user;
     const usermaxQuantity = 5;
+
+     if (!user) {
+      return res.redirect("/login");
+    }
+    const userId = user.id;
+    const userData = await userschema.findById(userId);
+
+    if (!userData) {
+      return res  
+      .status(STATUS.NOT_FOUND)
+      .json({ message: MESSAGES.Users.NO_USER });
+    }
 
     console.log("req.body in add to cart page::", req.body);
 
     if (!productId || !variantName || !scale || !quantity) {
       return res
-        .status(400)
-        .json({ success: false, message: "Missing required cart data." });
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.System.ALL_REQUIRED });
+      
     }
 
     const product = await productSchema
       .findById(productId)
       .populate("brand")
       .populate("category");
-    if (!product)
+
+    if (!product){  
       return res
-        .status(404)
-        .json({ success: false, message: "Product not found." });
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Products.PRODUCT_NOT_FOUND });
+      }
 
     if (
       product.isBlocked ||
@@ -100,9 +117,9 @@ export const addToCartpage = async (req, res) => {
       product.status === "Discontinued" ||
       product.status === "Out-of-stock"
     ) {
-      return res.status(404).json({
+      return res.status(STATUS.NOT_FOUND).json({
         success: false,
-        message: "This product is unavailable!, Try again later.",
+        message: MESSAGES.Products.PRODUCT_NOT_FOUND,
       });
     }
 
@@ -112,23 +129,20 @@ export const addToCartpage = async (req, res) => {
 
     if (!selectedVariant) {
       return res
-        .status(404)
-        .json({ success: false, message: "Selected variant not found." });
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Cart.ITEM_NOT_FOUND });
     }
 
     if (quantity > usermaxQuantity) {
       return res
-        .status(400)
-        .json({ success: false, message: "Maximum quantity limit reached." });
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.Cart.MAX_QUANTITY });
     }
 
     if (quantity > selectedVariant.stock) {
       return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Requested quantity exceeds available stock.",
-        });
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.Cart.EXCEEDS_STOCK });
     }
 
     let cart = await cartSchema.findOne({ userDetails: userId });
@@ -148,21 +162,21 @@ export const addToCartpage = async (req, res) => {
     );
 
     if (existingItem) {
-      return res.status(200).json({
+      return res.status(STATUS.OK).json({
         success: false,
         alreadyInCart: true,
-        message:
-          "This variant is already in your cart. Do you want to increase quantity?",
+        message: MESSAGES.Cart.ITEM_ALREADY_IN_CART,
       });
     }
 
-    const { wishlist } = await wishlistSchema.findOne({ userId });
-
+    const wishlist  = await wishlistSchema.findOne({ userId });
     let removedFromWishlist = false;
 
+    console.log( wishlist);
+
     if (wishlist) {
-      const initialLength = wishlist.items.length;
-      wishlist.items = wishlist.items.filter(
+      const initialLength = wishlist.products.length;
+      wishlist.products = wishlist.products.filter(
         (item) =>
           !(
             item.productId.toString() === productId &&
@@ -171,7 +185,7 @@ export const addToCartpage = async (req, res) => {
           ),
       );
 
-      if (wishlist.items.length < initialLength) {
+      if (wishlist.products.length < initialLength) {
         removedFromWishlist = true;
         await wishlist.save();
       }
@@ -197,82 +211,86 @@ export const addToCartpage = async (req, res) => {
 
     await cart.save();
 
-    res.status(200).json({
+    res.status(STATUS.OK).json({
       success: true,
       message: removedFromWishlist
-        ? "Product added to cart and removed from wishlist."
-        : "Product added to cart successfully.",
+        ? MESSAGES.Cart.ITEM_ADDED_FROM_WISHLIST
+        : MESSAGES.Cart.ITEM_ADDED,
       cartCount: cart.items.length,
     });
-  } catch (error) {
-    console.error("error in adding to cart", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+  } catch (error){
+    console.error(MESSAGES.Cart.CartLogger.CART_ADD_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
+    //   success: false,
+    //   message: MESSAGES.System.SERVER_ERROR,
+    // });
+    next(error);
   }
 };
 
-export const removeFromCartpage = async (req, res) => {
+export const removeFromCartpage = async (req, res, next) => {
   const user = req.session.user;
   const userId = user?.id;
   const productId = req.params.id;
 
-  console.log("productId in removefrom cart::", productId);
+  // console.log("productId in removefrom cart::", productId);
   try {
-    // if (!userId) {
-    //   return res
-    //     .status(401)
-    //     .json({ message: "Unauthorised Access..!please login" })
-    //     .redirect("/login");
-    // }
-
     if (!userId) {
       return res.redirect("/login");
     }
     const userData = await userschema.findById(userId);
+
     if (!userData) {
-      return res.status(404).json({ message: "User not found" });
+      return res  
+      .status(STATUS.NOT_FOUND)
+      .json({ message: MESSAGES.Users.NO_USER });
     }
-    // const { productId } = req.params.productId;
+
     const cart = await cartSchema.findOne({ userDetails: userId });
+
     if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Cart.NO_CART });
     }
 
     // removing from cart page
-
     cart.items = cart.items.filter(
       (item) => item.productId.toString() !== productId,
     );
 
     await cart.save(); // save cart
 
-    return res.status(200).json({
-      message: "Item removed successfully",
+    return res.status(STATUS.OK).json({
+      message: MESSAGES.Cart.ITEM_REMOVED,
       cartCount: cart.items.length,
     });
   } catch (error) {
-    console.log("error in removing from cart", error);
-    res.status(500).send("Server Error!");
+    console.error(MESSAGES.Cart.CartLogger.CART_REM_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
 // ----increase quantity------
 
-export const increaseCartQuantity = async (req, res) => {
+export const increaseCartQuantity = async (req, res, next) => {
   try {
     const { productId, variantName, scale, quantity } = req.body;
     const userId = req.session.user?.id;
 
     if (!productId || !variantName || !scale || !quantity) {
       return res
-        .status(400)
-        .json({ success: false, message: "Missing required fields." });
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.System.ALL_REQUIRED });
     }
 
     const cart = await cartSchema.findOne({ userDetails: userId });
+
     if (!cart) {
       return res
-        .status(404)
-        .json({ success: false, message: "Cart not found." });
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Cart.NO_CART });
     }
 
     const item = cart.items.find(
@@ -284,8 +302,8 @@ export const increaseCartQuantity = async (req, res) => {
 
     if (!item) {
       return res
-        .status(404)
-        .json({ success: false, message: "Item not found in cart." });
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Cart.ITEM_NOT_FOUND });
     }
 
     item.quantity += quantity;
@@ -297,11 +315,16 @@ export const increaseCartQuantity = async (req, res) => {
     );
     await cart.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "Quantity updated successfully." });
+    res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Cart.UPDATED,
+    });
   } catch (error) {
-    console.error("Error increasing cart quantity:", error);
-    res.status(500).json({ success: false, message: "Server error." });
+    console.error(MESSAGES.Cart.CartLogger.CART_QTY_EROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
+    //   success: false,
+    //   message: MESSAGES.System.SERVER_ERROR,
+    // });
+    next(error);
   }
 };

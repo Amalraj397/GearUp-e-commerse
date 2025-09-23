@@ -6,8 +6,7 @@ import orderSchema from "../../Models/orderModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
-
-export const getuserOrders = async (req, res) => {
+export const getuserOrders = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
@@ -26,12 +25,10 @@ export const getuserOrders = async (req, res) => {
       ];
     }
 
-
     if (statusFilter) {
       query.orderStatus = statusFilter;
     }
 
-   
     let sortQuery = {};
     if (sort === "newest") {
       sortQuery = { createdAt: -1 };
@@ -59,68 +56,79 @@ export const getuserOrders = async (req, res) => {
       sort,
     });
   } catch (error) {
-    console.log(" Error in loading admin order page:", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
+    console.log(MESSAGES.System.ORDER_ADMINPAGE_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
-
-export const updateOrderStatus = async (req, res) => {
- 
+export const updateOrderStatus = async (req, res,next) => {
   try {
-
-    console.log("Incoming body:", req.body); 
-
     const { orderId } = req.params;
     const { status } = req.body;
 
     const validStatuses = ["Pending", "Shipped", "Delivered", "Returned"];
 
     if (!validStatuses.includes(status)) {
-      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.STATUS_INV });
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.System.STATUS_INV });
     }
 
-    const order = await orderSchema.findById(orderId); 
-     console.log("order:: ", order)
+    const order = await orderSchema.findById(orderId);
     if (!order) {
-      return res.status(STATUS.BAD_REQUEST).json({ success: false,message: MESSAGES.NOT_FOUND});
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
     }
 
     order.orderStatus = status;
 
-     console.log("order.orderStatus :", order.orderStatus)
+    order.items.forEach((item) => {
+      if (
+        item.itemStatus !== "Cancelled" &&
+        item.itemStatus !== "Returned" &&
+        item.itemStatus !== "Return-accepted" &&
+        item.itemStatus !== "Return-rejected"
+      ) {
+        item.itemStatus = status;
+      }
+    });
 
     await order.save();
 
-    return res.json({ success: true, message: MESSAGES.UPDATED, order });
+    return res.json({
+      success: true,
+      message: MESSAGES.System.UPDATED,
+      order,
+    });
   } catch (error) {
-    console.error("Error updating order status:", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: MESSAGES.SERVER_ERROR });
+    console.error(MESSAGES.System.ORDER_UPDATE_ERROR, error);
+    // res
+    //   .status(STATUS.INTERNAL_SERVER_ERROR)
+    //   .json({ success: false, message: MESSAGES.System.SERVER_ERROR });
+    next(error);
+
   }
 };
 
-
-
-export const adminviewDetails = async (req, res) => {
-  console.log("detail controller called");
-
+export const adminviewDetails = async (req, res, next) => {
   try {
     const orderId = req.params.id;
-    console.log("Order ID from params in Admin order details:", orderId);
-
-    const order =  await orderSchema
-        .findById(orderId)
-        .populate("userDetails")
-        .populate("items.productId");
+    const order = await orderSchema
+      .findById(orderId)
+      .populate("userDetails")
+      .populate("items.productId");
 
     if (!order) {
-      console.log("No matching order found in DB");
-      return res.status(STATUS.NOT_FOUND).send(MESSAGES.NO_ORDER);
+      console.log(MESSAGES.Orders.NO_ORDER);
+      return res.status(STATUS.NOT_FOUND).send(MESSAGES.Orders.NO_ORDER);
     }
 
     res.render("orderdetailsAdmin.ejs", { order });
   } catch (error) {
-    console.log("Error in loading order detail page:", error);
-    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
+    console.log(MESSAGES.Orders.ORDER_DETAIL_ERROR, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };

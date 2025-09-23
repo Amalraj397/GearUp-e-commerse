@@ -1,8 +1,11 @@
+
 import productSchema from "../../Models/productModel.js";
 import categorySchema from "../../Models/categoryModel.js";
 import brandSchema from "../../Models/brandModel.js";
+import { MESSAGES } from "../../utils/messagesConfig.js";
+import { STATUS } from "../../utils/statusCodes.js";
 
-export const getshopPage = async (req, res) => {
+export const getshopPage = async (req, res, next) => {
   try {
     const searchQuery = req.query.search?.trim() || "";
     console.log("searchQuery : ", searchQuery);
@@ -14,22 +17,14 @@ export const getshopPage = async (req, res) => {
     if (searchQuery) {
       const regex = new RegExp(searchQuery, "i"); // case-insensitive'i';
       filter.productName = { $regex: regex };
-      //   filter.$or = [
-      //   { productName: regex },
-      //   // { 'brand.name': regex },
-      //   // { 'category.name': regex },
-      //   // { tags: regex },
-      //   // { edition: regex },
-      //   // { scale: regex }
-      // ];
     }
     console.log("filter : ", filter);
 
     // Fetch filtered and paginated products
     const products = await productSchema
       .find(filter)
-      .populate("brand")
-      .populate("category")
+      .populate("brand", "brandName")
+      .populate("category", "name")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -63,12 +58,12 @@ export const getshopPage = async (req, res) => {
       searchQuery,
     });
   } catch (error) {
-    console.error("Error loading product page:", error);
-    res.status(500).render("error", { message: "Something went wrong." });
+    console.error(MESSAGES.Store.ERROR_LOADING_PRODUCTS, error);
+    next(error)
   }
 };
 
-export const getproductDetailpage = async (req, res) => {
+export const getproductDetailpage = async (req, res, next) => {
   const { id } = req.params;
 
   try {
@@ -77,7 +72,7 @@ export const getproductDetailpage = async (req, res) => {
       .populate("category")
       .populate("brand");
 
-    console.log("Product Details:", product);
+    // console.log("Product Details:", product);
 
     if (!product || product.isBlocked) {
       return res.redirect("/user/store");
@@ -92,37 +87,40 @@ export const getproductDetailpage = async (req, res) => {
       .limit(10)
       .populate("category");
 
-    res.status(200).render("productDetailpage.ejs", {
+    res.status(STATUS.OK).render("productDetailpage.ejs", {
       product,
       relatedProducts,
     });
+    
   } catch (error) {
-    console.log("Error loading product detail page:", error);
-    res.status(500).send("Server Error");
+    console.log(MESSAGES.Store.ERROR_LOADING_PRODUCT_DETAIL, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR)
+    // .send(MESSAGES.Store.SERVER_ERROR);
+    next(error)
   }
 };
 
 //   -------getting categroy page---------
-export const getcategoryPage = (req, res) => {
+export const getcategoryPage = (req, res, next) => {
   try {
     res.render("categoryPage.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.log(MESSAGES.Store.ERROR_LOADING_CATEGORY, error);
+    next(error)
   }
 };
 
 //   -------getting Brand page---------
-export const getBrandPage = (req, res) => {
+export const getBrandPage = (req, res, next) => {
   try {
     res.render("brandPage.ejs");
   } catch (error) {
-    console.log("error in loading the page", error);
-    res.status(500).send("server Error  ");
+    console.log(MESSAGES.Store.ERROR_LOADING_BRAND, error);
+    next(error)
   }
 };
 
-export const filterProducts = async (req, res) => {
+export const filterProducts = async (req, res, next) => {
   try {
     const { categories, brands, editions, scales, page = 1 } = req.query;
     const searchQuery = req.query.search?.trim() || "";
@@ -167,7 +165,7 @@ export const filterProducts = async (req, res) => {
       scales: [...new Set(await productSchema.distinct("scale"))],
     });
   } catch (error) {
-    console.error("Error filtering products:", error);
-    res.status(500).send("Server error");
+    console.error(MESSAGES.Store.ERROR_FILTERING_PRODUCTS, error);
+    next(error)
   }
 };

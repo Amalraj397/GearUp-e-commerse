@@ -77,10 +77,9 @@ import {
   getOrderSuccesspage,
   getmyOrders,
   cancelOrder,
-  returnOrder,
   downloadInvoice,
   viewDetails,
-
+  returnOrder,
 } from "../Controller/user/userOrderController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -136,7 +135,7 @@ userRoute.put(
   updateUserprofile,
 );
 
-// useraddress managemamet
+// ---------------useraddress managemamet------------------
 userRoute.get("/addUserAddress", getAdd_UseraddressPage);
 userRoute.post("/addUserAddress", add_UserAddress);
 //edit address
@@ -167,12 +166,10 @@ userRoute.get("/orderSuccess", getOrderSuccesspage);
 //-------------order management-----------
 userRoute.get("/myOrders", getmyOrders);
 userRoute.put("/orders/cancel/:id", cancelOrder);
-userRoute.put("/orders/return/:id", returnOrder);
+userRoute.post("/orders/return/:id", returnOrder);
 
 userRoute.get("/orders/:id/invoice", downloadInvoice);
 
 userRoute.get("/orderdetails/:id", viewDetails);
-
-
 
 export default userRoute;

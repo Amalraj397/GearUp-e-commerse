@@ -1,68 +1,66 @@
+<%- include("../../Views/Partials/User/headerLand") %>
 
-    
-    <%- include("../../Views/Partials/User/headerLand") %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+  body {
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f5f5f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
-        }
+  .header-section {
+    background: linear-gradient(135deg, #666 0%, #888 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    margin-bottom: 0;
+  }
 
-        .header-section {
-            background: linear-gradient(135deg, #666 0%, #888 100%);
-            color: white;
-            padding: 60px 0;
-            text-align: center;
-            margin-bottom: 0;
-        }
+  .header-section h1 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin: 0;
+  }
 
-        .header-section h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 3px;
-            margin: 0;
-        }
+  .breadcrumb-section {
+    /* background-color: #e9e9e9; */
+    padding: 30px 0;
+    border-bottom: 1px solid #ddd;
+  }
 
-        .breadcrumb-section {
-            /* background-color: #e9e9e9; */
-            padding: 30px 0;
-            border-bottom: 1px solid #ddd;
-        }
+  .breadcrumb {
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
 
-        .breadcrumb {
-            background: none;
-            margin: 0;
-            padding: 0;
-        }
+  .breadcrumb-item a {
+    color: #666;
+    text-decoration: none;
+  }
 
-        .breadcrumb-item a {
-            color: #666;
-            text-decoration: none;
-        }
+  .breadcrumb-item.active {
+    color: #333;
+  }
 
-        .breadcrumb-item.active {
-            color: #333;
-        }
+  .main-container {
+    background-color: white;
+    margin: 30px auto;
+    max-width: 1200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
 
-        .main-container {
-            background-color: white;
-            margin: 30px auto;
-            max-width: 1200px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+  .controls-section {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-bottom: 1px solid #dee2e6;
+  }
 
-        .controls-section {
-            background-color: #f8f9fa;
-            padding: 25px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        /* .search-box input {
+  /* .search-box input {
             border: 1px solid #ddd;
             border-radius: 25px;
             padding: 12px 45px 12px 20px;
@@ -71,470 +69,579 @@
         }
 
          */
-         .search-btn{
-            border:1px solid #c7b2b2;
-            padding: 8px 18px !important;
-         }
+  .search-btn {
+    border: 1px solid #c7b2b2;
+    padding: 8px 18px !important;
+  }
 
-        .filter-section {
-            background-color: white;
-            border: 1px solid #c7b2b2;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 15px;
-        }
+  .filter-section {
+    background-color: white;
+    border: 1px solid #c7b2b2;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+  }
 
-        .filter-title {
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #333;
-        }
+  .filter-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+  }
 
-        .filter-group {
-            margin-bottom: 15px;
-        }
+  .filter-group {
+    margin-bottom: 15px;
+  }
 
-        .filter-group label {
-            font-weight: normal;
-            margin-left: 8px;
-            cursor: pointer;
-        }
+  .filter-group label {
+    font-weight: normal;
+    margin-left: 8px;
+    cursor: pointer;
+  }
 
-        .sort-section select {
-            border: 1px solid #c7b2b2;
-            margin-top:  5px;
-            border-radius: 5px;
-            padding: 14px 30px;
-            background-color: white;
-        }
+  .sort-section select {
+    border: 1px solid #c7b2b2;
+    margin-top: 5px;
+    border-radius: 5px;
+    padding: 14px 30px;
+    background-color: white;
+  }
 
-        .orders-table {
-            margin: 0;
-        }
+  .orders-table {
+    margin: 0;
+  }
 
-        .table-header {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-        }
+  .table-header {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+  }
 
-        .table-header th {
-            font-weight: 600;
-            color: #495057;
-            padding: 20px 15px;
-            border: none;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+  .table-header th {
+    font-weight: 600;
+    color: #495057;
+    padding: 20px 15px;
+    border: none;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-        .order-row {
-            border-bottom: 1px solid #f0f0f0;
-            transition: background-color 0.2s ease;
-        }
+  .order-row {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+  }
 
-        .order-row:hover {
-            background-color: #f8f9fa;
-        }
+  .order-row:hover {
+    background-color: #f8f9fa;
+  }
 
-        .order-row td {
-            padding: 20px 15px;
-            vertical-align: middle;
-            border: none;
-        }
+  .order-row td {
+    padding: 20px 15px;
+    vertical-align: middle;
+    border: none;
+  }
 
-        .product-image {
-            width: 60px;
-            height: 45px;
-            object-fit: cover;
-            border-radius: 4px;
-            border: 1px solid #eee;
-        }
+  .product-image {
+    width: 60px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #eee;
+  }
 
-        .product-name {
-            font-weight: 500;
-            color: #333;
-            font-size: 14px;
-            line-height: 1.4;
-        }
+  .product-name {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.4;
+  }
 
-        .order-date {
-            color: #666;
-            font-size: 13px;
-        }
+  .order-date {
+    color: #666;
+    font-size: 13px;
+  }
 
-        .order-price {
-            font-weight: 600;
-            color: #333;
-            font-size: 15px;
-        }
+  .order-price {
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+  }
 
-        .status-badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+  .status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-        .status-delivered {
-            background-color: #d4edda;
-            color: #155724;
-        }
+  .status-delivered {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  .status-returned{
+    background-color: #afe2ba;
+    color: rgb(87, 168, 11);
+  }
 
-        .status-not-delivered {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+  .status-pending {
+    background-color: #ebe06d;
+    color: #44433b;
+  }
 
-        .status-cancelled {
-            background-color: #f5c6cb;
-            color: #721c24;
-        }
+  .status-shipped{
+    background-color: #c2d8d5;
+    color: #075d52;
+  }
+  .status-not-delivered {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
 
-        .status-refund-completed {
-            background-color: #d1ecf1;
-            color: #0c5460;
-        }
+  .status-cancelled {
+    background-color: #e99ea6;
+    color: #ff0019;
+  }
 
-        .status-out-for-delivery {
-            background-color: #fff3cd;
-            color: #856404;
-        }
+  .status-refund-completed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
 
-        .status-on-the-way {
-            background-color: #cce5ff;
-            color: #004085;
-        }
+  .status-out-for-delivery {
+    background-color: #fff3cd;
+    color: #856404;
+  }
 
-        /* .action-buttons {
+  .status-on-the-way {
+    background-color: #cce5ff;
+    color: #004085;
+  }
+.status-return-accepted{
+  background-color: #bee6c2;
+    color: #048347;
+
+} 
+.status-return-rejected{
+  background-color: #e99ea6;
+    color: #ff0019;
+}
+
+
+  
+
+  /* .action-buttons {
             display: flex;
             gap: 8px;
         } */
 
-        .btn-view {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
+  .btn-view {
+    background-color: #1261b6;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-        .btn-view:hover {
-            background-color: #0056b3;
-        }
+  .btn-view:hover {
+    background-color: #007bff;
+    color: black;
+  }
 
-        .btn-cancel {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
+  .btn-cancel {
+    background-color: #a32f3a;
+    color: white;
+    font-weight: 600;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-        .btn-cancel:hover {
-            background-color: #c82333;
-        }
+  .btn-cancel:hover {
+    background-color: #fc0019;
+  }
 
-        .btn-cancel:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
+  .btn-return {
+    background-color: #ffd901;
+    color: rgb(32, 30, 30);
+    border: none;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-        .no-orders {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
+  .btn-return:hover {
+    background-color: #f8fc05;
+  }
 
-        .no-orders i {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #ccc;
-        }
-        /* Extra orientation tweaks */
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 6px; /* space between stacked buttons */
-        }
+  .btn-cancel:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
 
-        .filter-section .filter-group {
-            display: flex;
-            align-items: center;
-        }
+  .no-orders {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+  }
 
-        .pagination {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 10px;
-          margin: 20px 0;
-          font-family: "Poppins", sans-serif;
-        }
+  .no-orders i {
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #ccc;
+  }
 
-        .pagination-btn,
-        .page-number {
-          padding: 8px 14px;
-          border: none;
-          border-radius: 8px;
-          background: #f3f3f3;
-          color: #333;
-          font-size: 14px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
+  /* Extra orientation tweaks */
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    /* space between stacked buttons */
+  }
 
-        .pagination-btn i {
-          font-size: 12px;
-        }
+  .filter-section .filter-group {
+    display: flex;
+    align-items: center;
+  }
 
-        .page-number {
-          background: #fff;
-        }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    font-family: "Poppins", sans-serif;
+  }
 
-        .page-number.active {
-          background: #ff6600; /* highlight active page */
-          color: #fff;
-          font-weight: 600;
-          box-shadow: 0 2px 8px rgba(255, 102, 0, 0.4);
-        }
+  .pagination-btn,
+  .page-number {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #f3f3f3;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
 
-        .pagination-btn:hover,
-        .page-number:hover {
-          background: #ff6600;
-          color: #fff;
-          transform: translateY(-2px);
-        }
+  .pagination-btn i {
+    font-size: 12px;
+  }
 
-        .pagination-btn:disabled {
-          background: #ddd;
-          color: #999;
-          cursor: not-allowed;
-          box-shadow: none;
-        }
+  .page-number {
+    background: #fff;
+  }
 
+  .page-number.active {
+    background: #ff6600;
+    /* highlight active page */
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(255, 102, 0, 0.4);
+  }
 
-        @media (max-width: 768px) {
-            .header-section h1 {
-                font-size: 2rem;
-                letter-spacing: 2px;
-            }
+  .pagination-btn:hover,
+  .page-number:hover {
+    background: #ff6600;
+    color: #fff;
+    transform: translateY(-2px);
+  }
 
-            .main-container {
-                margin: 15px;
-                border-radius: 0;
-            }
+  .pagination-btn:disabled {
+    background: #ddd;
+    color: #999;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+.order-row {
+  border-bottom: 2px solid #000; /* strong separator between orders */
+}
 
-            .controls-section {
-                padding: 15px;
-            }
+  @media (max-width: 768px) {
+    .header-section h1 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
 
-            .table-responsive {
-                font-size: 13px;
-            }
+    .main-container {
+      margin: 15px;
+      border-radius: 0;
+    }
 
-            .action-buttons {
-                flex-direction: column; 
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link rel="stylesheet" href="/User/assets/css/style.css">
+    .controls-section {
+      padding: 15px;
+    }
 
-    <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" href="/User/assets/css/styles.css"> -->
+    .table-responsive {
+      font-size: 13px;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+    }
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<link rel="stylesheet" href="/User/assets/css/style.css">
+
+<!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
+<!-- <link rel="stylesheet" href="/User/assets/css/styles.css"> -->
 </head>
+
 <body>
-    
-    <div class="page-header text-center" style="background-image: url('/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg')">
-    		<div class="container">
-    			<h1 class="page-title">My Orders<span></span></h1>
-    		</div><!-- End .container -->
-    	</div><!-- End .page-header -->
-    
 
-    <!-- Breadcrumb Section -->
-    <div class="breadcrumb-section">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Account</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">My Orders</li>
-                </ol>
-            </nav>
-        </div>
+  <div class="page-header text-center" style="background-image: url('/User/assets/images/2024-Formula1-Mercedes-AMG-W15-F1-E-Performance-005-1080.jpg')">
+    <div class="container">
+      <h1 class="page-title">My Orders<span></span></h1>
+    </div><!-- End .container -->
+  </div><!-- End .page-header -->
+
+
+  <!-- Breadcrumb Section -->
+  <div class="breadcrumb-section">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Account</a></li>
+          <li class="breadcrumb-item active" aria-current="page">My Orders</li>
+        </ol>
+      </nav>
     </div>
+  </div>
 
-    <!-- Main Container -->
-    <div class="main-container">
-        <div class="row">
-            <div class="w-100 d-flex justify-content-center py-4">
-                <div class="search-box">
-                  <input type="text" id="searchInput" placeholder="Search products...." value="">
-                  <button type="submit" class="search-btn">
-                    <i class="fas fa-search"></i>
-                  </button>
-                </div>
+  <!-- Main Container -->
+  <div class="main-container">
+    <div class="row">
+      <div class="w-100 d-flex justify-content-center py-4">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search products...." value="">
+          <button type="submit" class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
 
-                <div class="sort-section">
-                            <!-- <label for="sortSelect" class="form-label">Sort by:</label> -->
-                            <select id="sortSelect" class="form-select w-100">
-                                <option value="date-desc">Date (Newest First)</option>
-                                <option value="date-asc">Date (Oldest First)</option>
-                                <option value="price-desc">Price (High to Low)</option>
-                                <option value="price-asc">Price (Low to High)</option>
-                            </select>
-                        </div>
-            </div>
+        <div class="sort-section">
+          <!-- <label for="sortSelect" class="form-label">Sort by:</label> -->
+          <select id="sortSelect" class="form-select w-100">
+            <option value="date-desc">Date (Newest First)</option>
+            <option value="date-asc">Date (Oldest First)</option>
+            <option value="price-desc">Price (High to Low)</option>
+            <option value="price-asc">Price (Low to High)</option>
+          </select>
         </div>
-        <div class="d-flex">
-    
-            <!-- Orders Table -->
-            <div class="table-responsive w-100 px-3">
-                <table class="table orders-table">
-                    <thead class="table-header">
-                        <tr>
-                            <th><b>Sl NO:</b></th>
-                            <th><b>Imag</b></th>
-                            <th><b>Name</b></th>
-                            <th></th>
-                            <th><b>Date of Purchase</b></th>
-                            <th><b>Total-Qnty</b></th>
-                            <th><b>Price</b></th>
-                            <th><b>Status</b></th>
-                            <th><b>Action</b></th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTableBody">
-                        <!-- Orders will be populated by JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- Controls Section -->
-
-        <!-- No Orders Message -->
-        <div id="noOrdersMessage" class="no-orders" style="display: none;">
-            <i class="fas fa-shopping-cart"></i>
-            <h4>No orders found</h4>
-            <p>Try adjusting your search or filter criteria</p>
-        </div>
-        <div class="pagination">
-            <button id="prev-page" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
-                <div id="page-numbers" class="page-numbers">
-                    <button class="page-number active">1</button>
-                    <button class="page-number">2</button>
-                    <button class="page-number">3</button>
-                </div>
-            <button id="next-page" class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
-        </div>
+      </div>
     </div>
+    <div class="d-flex">
 
+      <!-- Orders Table -->
+      <div class="table-responsive w-100 px-3">
+        <table class="table orders-table">
+          <thead class="table-header">
+            <tr>
+              <th><b>Sl NO:</b></th>
+              <th><b>Imag</b></th>
+              <th><b>Name</b></th>
+              <th><b>Date of Purchase</b></th>
+              <th><b>Total-Qnty</b></th>
+              <th><b>Price</b></th>
+              <th><b>Status</b></th>
+              <th><b>Action</b></th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody">
+            <!-- Orders will be populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Controls Section -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- No Orders Message -->
+    <div id="noOrdersMessage" class="no-orders" style="display: none;">
+      <i class="fas fa-shopping-cart"></i>
+      <h4>No orders found</h4>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+    <div class="pagination">
+      <button id="prev-page" class="pagination-btn" disabled><i class="fas fa-chevron-left"></i> Previous</button>
+      <div id="page-numbers" class="page-numbers">
+        <button class="page-number active">1</button>
+        <button class="page-number">2</button>
+        <button class="page-number">3</button>
+      </div>
+      <button id="next-page" class="pagination-btn">Next <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
 
+  <!--Order Return Modal -->
+  <div class="modal fade" id="returnModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title">Return Products</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="returnForm">
+            <div id="returnItemsContainer"></div>
+            <div class="mb-3">
+              <label class="form-label">Reason for Return</label>
+              <textarea id="returnReason" class="form-control" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger w-100">Submit Return</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const userOrders = <%- JSON.stringify(userOrders) %>;
+  <script>
+    
+    const userOrders= <%- JSON.stringify(userOrders) %>;
 
-    // Pagination variables
-    let currentPage = 1;
-    const ordersPerPage = 5;
-    let filteredOrders = [...userOrders];
+    document.addEventListener("DOMContentLoaded", function() {
+      // Pagination variables
+      let currentPage = 1;
+      const ordersPerPage = 2;
+      let filteredOrders = [...userOrders];
 
-    // Format Date
-    function formatDate(dateString) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('en-US', options);
-    }
-
-    // Status badge
-    function getStatusBadge(status) {
-        const statusMap = {
-            'Pending': { class: 'status-pending', text: 'Pending' },
-            'Shipped': { class: 'status-shipped', text: 'Shipped' },
-            'Delivered': { class: 'status-delivered', text: 'Delivered' },
-            'Cancelled': { class: 'status-cancelled', text: 'Cancelled' },
-            'Returned': { class: 'status-returned', text: 'Returned' },
+      // Format Date
+      function formatDate(dateString) {
+        const options = {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
         };
-        const s = statusMap[status] || { class: 'status-unknown', text: 'Unknown' };
-        return `<span class="status-badge ${s.class}">${s.text}</span>`;
-    }
+        return new Date(dateString).toLocaleDateString('en-US', options);
+      }
 
-    // Action buttons
-    function getActionButtons(status, orderId) {
-       const viewBtn = `<a href="/orderdetails/${orderId}" class="btn-view">View</a>`;
+      // Status badge
+      function getStatusBadge(status) {
+        const statusMap = {
+          'Pending': {
+            class: 'status-pending',
+            text: 'Pending'
+          },
+          'Shipped': {
+            class: 'status-shipped',
+            text: 'Shipped'
+          },
+          'Delivered': {
+            class: 'status-delivered',
+            text: 'Delivered'
+          },
+          'Cancelled': {
+            class: 'status-cancelled',
+            text: 'Cancelled'
+          },
+          'Returned': {
+            class: 'status-returned',
+            text: 'Returned'
+          },
+          'Return-accepted': {
+            class: 'status-return-accepted',
+            text:'Return Accepted'
+          },
+          'Return-rejected': {
+            class: 'status-return-rejected',
+            text:'Return Rejected'
+          },
+        };
+        const s = statusMap[status] || {
+          class: 'status-unknown',
+          text: 'Unknown'
+        };
+        return `<span class="status-badge ${s.class}">${s.text}</span>`;
+      }
+
+      // Action buttons
+      function getActionButtons(status, orderId) {
+        const viewBtn = `<a href="/orderdetails/${orderId}" class="btn-view">View</a>`;
 
         if (status === "Pending" || status === "Shipped") {
-            return `<div class="action-buttons">${viewBtn}<button class="btn-cancel" onclick="cancelOrder('${orderId}')">Cancel</button></div>`;
+          return `<div class="action-buttons">${viewBtn}<button class="btn-cancel" onclick="cancelOrder('${orderId}')">Cancel</button></div>`;
         } else if (status === "Delivered") {
-            return `<div class="action-buttons">${viewBtn}<button class="btn-return" onclick="returnOrder('${orderId}')">Return</button></div>`;
-        } else if (status === "Cancelled"){
-            return `<div class="action-buttons"> ${viewBtn} <span class="status-label cancelled">  </span></div>`;
-        } 
-        else {
-            return `<div class="action-buttons">${viewBtn}<button class="btn-disabled" disabled>No Action</button></div>`;
+          return `<div class="action-buttons">${viewBtn}<button class="btn-return" onclick="returnOrder('${orderId}')">Return</button></div>`;
+        } else if (status === "Cancelled") {
+          return `<div class="action-buttons"> ${viewBtn} <span class="status-label cancelled">  </span></div>`;
+        } else {
+          return `<div class="action-buttons">${viewBtn}</div>`;
         }
-    }
+      }
 
+function renderOrders() {
+  const tbody = document.getElementById('ordersTableBody');
+  const noOrders = document.getElementById('noOrdersMessage');
 
-    // Render orders with pagination
-    function renderOrders() {
-        const tbody = document.getElementById('ordersTableBody');
-        const noOrders = document.getElementById('noOrdersMessage');
+  if (!filteredOrders.length) {
+    tbody.innerHTML = '';
+    noOrders.style.display = 'block';
+    return;
+  }
 
-        if (!filteredOrders.length) {
-            tbody.innerHTML = '';
-            noOrders.style.display = 'block';
-            return;
-        }
+  const startIndex = (currentPage - 1) * ordersPerPage;
+  const endIndex = startIndex + ordersPerPage;
+  const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
 
-        const startIndex = (currentPage - 1) * ordersPerPage;
-        const endIndex = startIndex + ordersPerPage;
-        const paginatedOrders = filteredOrders.slice(startIndex, endIndex);
+  noOrders.style.display = 'none';
 
-        noOrders.style.display = 'none';
-        tbody.innerHTML = paginatedOrders.map((order, index) => {
-            const firstItem = order.items[0];
-            const product = firstItem?.productId;
-            const image = product?.productImage?.[0] || "/images/no-image.png";
-            const name = product?.productName || "Unknown Product";
-            const quantity = order.items.reduce((qty, item) => qty + (item.quantity || 0), 0);
-            const slNo = startIndex + index + 1;
+  // render each order and its items
+  tbody.innerHTML = paginatedOrders
+    .map((order, orderIndex) => {
+      const slNo = startIndex + orderIndex + 1;
 
-            return `
-                <tr>
-                    <td>${slNo}</td>
-                    <td><img src="${image}" class="product-image" alt="${name}"></td>
-                    <td style="max-width:200px;" class="col-2 text-truncate">${name}</td>
-                    <td></td>
-                    <td>${formatDate(order.createdAt)}</td>
-                    <td>${quantity}</td>
-                    <td>₹${order.grandTotalprice.toFixed(2)}</td>
-                    <td>${getStatusBadge(order.orderStatus)}</td>
-                    <td>${getActionButtons(order.orderStatus, order._id)}</td>
-                </tr>
-            `;
-        }).join('');
+      // render all items of this order
+      const itemRows = order.items
+        .map((item, itemIndex) => {
+          const product = item?.productId;
+          const image = product?.productImage?.[0] || "/images/no-image.png";
+          const name = product?.productName || "Unknown Product";
 
-        updatePagination();
-    }
+          return `
+            <tr>
+              <td>${itemIndex === 0 ? slNo : ""}</td>
+              <td><img src="${image}" class="product-image" alt="${name}"></td> 
+              <td>${ item.variantName.slice(0, 20)} - ${item.scale}</td>
+              <td>${formatDate(order.createdAt)}</td>
+              <td>${item.quantity}</td>
+              <td>₹${item.totalProductprice.toFixed(2)}</td>
+              <td>${getStatusBadge(item.itemStatus)}</td>
+              <td>
+                ${itemIndex === 0 
+                  ? getActionButtons(order.orderStatus, order._id) 
+                  : ""
+                }
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
 
-    // Update pagination controls
-    function updatePagination() {
+      return itemRows;
+    })
+    .join("");
+
+  updatePagination();
+}
+
+      // Update pagination controls
+      function updatePagination() {
         const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
         const pageNumbers = document.getElementById("page-numbers");
         const prevBtn = document.getElementById("prev-page");
@@ -549,72 +656,72 @@ document.addEventListener("DOMContentLoaded", function () {
         let endPage = Math.min(totalPages, startPage + 4);
 
         if (endPage - startPage < 4) {
-            startPage = Math.max(1, endPage - 4);
+          startPage = Math.max(1, endPage - 4);
         }
 
         for (let i = startPage; i <= endPage; i++) {
-            const btn = document.createElement("button");
-            btn.className = `page-number ${i === currentPage ? "active" : ""}`;
-            btn.textContent = i;
-            btn.addEventListener("click", () => {
-                currentPage = i;
-                renderOrders();
-            });
-            pageNumbers.appendChild(btn);
-        }
-    }
-
-    // Prev / Next
-    document.getElementById("prev-page").addEventListener("click", function () {
-        if (currentPage > 1) {
-            currentPage--;
+          const btn = document.createElement("button");
+          btn.className = `page-number ${i === currentPage ? "active" : ""}`;
+          btn.textContent = i;
+          btn.addEventListener("click", () => {
+            currentPage = i;
             renderOrders();
+          });
+          pageNumbers.appendChild(btn);
         }
-    });
-    document.getElementById("next-page").addEventListener("click", function () {
+      }
+
+      // Prev / Next
+      document.getElementById("prev-page").addEventListener("click", function() {
+        if (currentPage > 1) {
+          currentPage--;
+          renderOrders();
+        }
+      });
+      document.getElementById("next-page").addEventListener("click", function() {
         const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
         if (currentPage < totalPages) {
-            currentPage++;
-            renderOrders();
+          currentPage++;
+          renderOrders();
         }
-    });
+      });
 
-    /* SEARCH */
-    function handleSearch() {
+      /* SEARCH */
+      function handleSearch() {
         const query = document.getElementById("searchInput").value.toLowerCase();
         filteredOrders = userOrders.filter(order => {
-            const productName = order.items[0]?.productId?.productName?.toLowerCase() || "";
-            return productName.includes(query);
-        });
-        currentPage = 1;
-        renderOrders(); 
-    }
-
-    /* SORT */
-    function handleSort() {
-        const sortValue = document.getElementById("sortSelect").value;
-        filteredOrders.sort((a, b) => {
-            if (sortValue === "date-desc") return new Date(b.createdAt) - new Date(a.createdAt);
-            if (sortValue === "date-asc") return new Date(a.createdAt) - new Date(b.createdAt);
-            if (sortValue === "price-desc") return b.grandTotalprice - a.grandTotalprice;
-            if (sortValue === "price-asc") return a.grandTotalprice - b.grandTotalprice;
+          const productName = order.items[0]?.productId?.productName?.toLowerCase() || "";
+          return productName.includes(query);
         });
         currentPage = 1;
         renderOrders();
-    }
+      }
 
-    // Event Listeners
-    document.getElementById("searchInput").addEventListener("input", handleSearch);
-    document.getElementById("sortSelect").addEventListener("change", handleSort);
+      /* SORT */
+      function handleSort() {
+        const sortValue = document.getElementById("sortSelect").value;
+        filteredOrders.sort((a, b) => {
+          if (sortValue === "date-desc") return new Date(b.createdAt) - new Date(a.createdAt);
+          if (sortValue === "date-asc") return new Date(a.createdAt) - new Date(b.createdAt);
+          if (sortValue === "price-desc") return b.grandTotalprice - a.grandTotalprice;
+          if (sortValue === "price-asc") return a.grandTotalprice - b.grandTotalprice;
+        });
+        currentPage = 1;
+        renderOrders();
+      }
 
-    // Init render
-    renderOrders();
-});
+      // Event Listeners
+      document.getElementById("searchInput").addEventListener("input", handleSearch);
+      document.getElementById("sortSelect").addEventListener("change", handleSort);
 
-// ---------------- ORDER ACTIONS ----------------
+      // Init render
+      renderOrders();
+    });
 
-async function cancelOrder(orderId) {
-    Swal.fire({
+    // ---------------- ORDER ACTIONS ----------------
+
+    async function cancelOrder(orderId) {
+      Swal.fire({
         title: `Are you sure want to Cancel order?`,
         text: "This action cannot be undone.",
         icon: "warning",
@@ -622,91 +729,148 @@ async function cancelOrder(orderId) {
         confirmButtonText: "Yes, cancel it",
         cancelButtonText: "No, keep it",
         reverseButtons: true
-    }).then(async (result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-            // Show loading
+          // Show loading
+          Swal.fire({
+            title: "Processing...",
+            text: "Cancelling your order",
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+          });
+
+          try {
+            const res = await fetch(`/orders/cancel/${orderId}`, {
+              method: "PUT"
+            });
+            const data = await res.json();
+
+            Swal.close(); // close loading
+
+            Toastify({
+              text: "Order cancelled successfully ✅",
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#f56565",
+              stopOnFocus: true
+            }).showToast();
+
+            setTimeout(() => location.reload(), 1000);
+
+          } catch (err) {
+            Swal.close();
+            console.error(err);
+            Swal.fire("Error", "Something went wrong!", "error");
+          }
+        }
+      });
+    }
+
+    async function returnOrder(orderId) {
+      const order = userOrders.find(o => o._id === orderId);
+      if (!order) return;
+
+      // Populate modal with order items
+      const container = document.getElementById("returnItemsContainer");
+      container.innerHTML = order.items.map(item => `
+    <div class="form-check mb-2">
+      <input class="form-check-input return-item" type="checkbox"
+        data-product-id="${item.productId._id}"
+        data-variant="${item.variantName}"
+        data-scale="${item.scale}"
+        data-saleprice="${item.salePrice}"
+        data-qty="${item.quantity}">
+      <label class="form-check-label">
+        ${item.productId.productName} (${item.variantName}, Scale: ${item.scale}) - Qty: ${item.quantity}
+      </label>
+    </div>
+  `).join("");
+
+      // Show modal
+      const modal = new bootstrap.Modal(document.getElementById("returnModal"));
+      modal.show();
+
+      // Handle submit
+      document.getElementById("returnForm").onsubmit = async (e) => {
+        e.preventDefault();
+
+        const reason = document.getElementById("returnReason").value.trim();
+        const selectedItems = [...document.querySelectorAll(".return-item:checked")].map(el => ({
+          productId: el.dataset.productId,
+          variantName: el.dataset.variant,
+          scale: el.dataset.scale,
+          quantity: Number(el.dataset.qty),
+          salePrice: Number(el.dataset.saleprice),
+          totalProductprice: Number(el.dataset.saleprice) * Number(el.dataset.qty)
+        }));
+
+        if (!selectedItems.length) {
+          Swal.fire("Error", "Please select at least one item to return!", "error");
+          return;
+        }
+        // showLoader(); 
+
+        // Confirmation
+        Swal.fire({
+          title: `Do you really want to return these items?`,
+          text: "Make sure the items are eligible for return.",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes, return",
+          cancelButtonText: "No, cancel",
+          reverseButtons: true
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            // Simple loader
             Swal.fire({
-                title: "Processing...",
-                text: "Cancelling your order",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
+              title: "Processing...",
+              text: "Submitting your return request",
+              allowOutsideClick: false,
+              didOpen: () => Swal.showLoading()
             });
 
             try {
-                const res = await fetch(`/orders/cancel/${orderId}`, { method: "PUT" });
-                const data = await res.json();
+            //   showLoader();
+              const res = await fetch(`/orders/return/${orderId}`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  returnItems: selectedItems,
+                  productReturnReason: reason
+                })
+              });
 
-                Swal.close(); // close loading
+              const data = await res.json();
+              Swal.close();
+            //   hideLoader();
 
+              if (res.ok) {
                 Toastify({
-                    text: "Order cancelled successfully ✅",
-                    duration: 3000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#f56565",
-                    stopOnFocus: true
+                  text: "Return request submitted ✅",
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "#48bb78"
                 }).showToast();
-
+                modal.hide();
                 setTimeout(() => location.reload(), 1000);
-
+              } else {
+                Swal.fire("Error", data.message || "Something went wrong!", "error");
+              }
             } catch (err) {
-                Swal.close();
-                console.error(err);
-                Swal.fire("Error", "Something went wrong!", "error");
+            //   hideLoader();
+              Swal.close();
+              console.error(err);
+              Swal.fire("Error", "Server error!", "error");
             }
-        }
-    });
-}
-
-async function returnOrder(orderId) {
-    Swal.fire({
-        title: `Do you really want to Return order ${orderId}?`,
-        text: "Make sure the item is eligible for return.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes, return it",
-        cancelButtonText: "No, keep it",
-        reverseButtons: true
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            // Show loading
-            Swal.fire({
-                title: "Processing...",
-                text: "Returning your order",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-
-            try {
-                const res = await fetch(`/orders/return/${orderId}`, { method: "PUT" });
-                const data = await res.json();
-
-                Swal.close(); // close loading
-
-                Toastify({
-                    text: "Order returned successfully 🔄",
-                    duration: 3000,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#48bb78",
-                    stopOnFocus: true
-                }).showToast();
-
-                setTimeout(() => location.reload(), 1000);
-
-            } catch (err) {
-                Swal.close();
-                console.error(err);
-                Swal.fire("Error", "Something went wrong!", "error");
-            }
-        }
-    });
-}
-</script>
-
-
-</script>
-
+          }
+        });
+      };
+    }
+  </script>
 </body>
 
 <%- include("../../Views/Partials/User/footerLand") %>

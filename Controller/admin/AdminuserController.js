@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import userschema from "../../Models/userModel.js";
+import { MESSAGES } from "../../utils/messagesConfig.js";
+import { STATUS } from "../../utils/statusCodes.js";
 
 export const getuserData = async (req, res, next) => {
   try {
@@ -8,7 +10,7 @@ export const getuserData = async (req, res, next) => {
       ? req.query.search.trim().toLowerCase()
       : "";
 
-    //Pagination
+    // Pagination
     const page = req.query.page * 1 || 1;
     const limit = req.query.limit * 1 || 0;
     const skip = (page - 1) * limit;
@@ -33,6 +35,7 @@ export const getuserData = async (req, res, next) => {
         .limit(limit)
         .exec();
     }
+
     // render
     res.render("userManagement.ejs", {
       userdata,
@@ -42,29 +45,36 @@ export const getuserData = async (req, res, next) => {
       searchQuery,
     });
   } catch (error) {
-    console.error("failed to fetch userdata", error);
-    res.status(500).send("internal server Error..!");
+    console.error(MESSAGES.Users.USER_FETCH_FAILED, error);
+    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+    next(error);
   }
 };
 
-//  -------------------block and unblock users-----------------
+// ------------------- block and unblock users -----------------
 
-export const blockUser = async (req, res) => {
+export const blockUser = async (req, res, next) => {
   try {
     await userschema.findByIdAndUpdate(req.params.id, { isBlocked: true });
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    res.json({ success: true, message: MESSAGES.Users.USER_BLOCKED });
+  } catch (error) {
+    console.error( MESSAGES.Users.USER_BLOCK_FAILED,error);
+    // res
+      // .status(STATUS.INTERNAL_SERVER_ERROR)
+      // .json({ success: false, message: MESSAGES.Users.USER_BLOCK_FAILED });
+      next(error);
   }
 };
 
-export const unblockUser = async (req, res) => {
+export const unblockUser = async (req, res, next) => {
   try {
     await userschema.findByIdAndUpdate(req.params.id, { isBlocked: false });
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
+    res.json({ success: true, message: MESSAGES.Users.USER_UNBLOCKED });
+  } catch (error) {
+    console.error(MESSAGES.Users.USER_UNBLOCK_FAILED ,error);
+  //   res
+  //     .status(STATUS.INTERNAL_SERVER_ERROR)
+  //     .json({ success: false, message: MESSAGES.Users.USER_UNBLOCK_FAILED });
+     next(error);
   }
 };
