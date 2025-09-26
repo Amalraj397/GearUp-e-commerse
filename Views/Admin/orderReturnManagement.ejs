@@ -251,6 +251,21 @@
     font-size: 0.85rem;
   }
 
+  .btn-orange {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+.returned-item img.product-image {
+  margin: 0.1rem;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
   @media (max-width: 768px) {
     .controls-section {
       flex-direction: column;
@@ -327,6 +342,28 @@
     </nav>
   </div>
 
+  <!-- Return Reason Modal -->
+<div class="modal fade" id="reasonModal" tabindex="-1" aria-labelledby="reasonModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reasonModalLabel" style="color:#e55a2b">Return Reason</h5>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+      </div>
+      <div class="modal-body" id="reasonModalBody" style="color: rgb(17, 17, 16); font-size: larger;">
+        <!-- Full reason will be here -->
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" 
+             style="border: 1px solid black; background-color: red; padding: 5px;">
+        Close
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -393,14 +430,32 @@
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${startIndex + index + 1}</td>
-          <td>
-            ${ret.returnItems?.length > 0 && ret.returnItems[0].productId?.productImage?.length > 0 
-              ? `<img src="${ret.returnItems[0].productId.productImage[0]}" class="product-image" alt="Product">`
-              : "No Image"}
+          <td>${ret.returnItems?.length > 0
+                ? ret.returnItems.map(item => `
+                    <div class="returned-item">
+                      ${item.productId?.productImage?.length > 0 
+                        ? `<img src="${item.productId.productImage[0]}" class="product-image" alt="Product">`
+                        : "No Image"}
+                      <span>${item.productId?.productName.slice(0,25)+"..." || "Unnamed Product"} (Qty: ${item.quantity || 1})</span>
+                    </div>
+                  `).join("")
+                : "No Items"}
           </td>
-          <td><strong>${ret.orderId?._id || "N/A"}</strong></td>
-          <td>${formatDate(ret.createdAt)}</td>
-          <td>${ret.productReturnReason || "N/A"}</td>
+          <td><strong>${ret.orderId?._id.slice(0,10)+"..." || "N/A"}</strong></td>
+          <td>${ ret.productReturnReason 
+                ? (ret.productReturnReason.length > 20
+                    ? `
+                      <span class="reason-text">
+                        ${ret.productReturnReason.slice(0, 20)}...
+                      </span>
+                      <button class="btn btn-sm btn-link text-info p-0" 
+                           onclick="showFullReason('${ret._id}')"> More
+                      </button>
+                    `
+                    : ret.productReturnReason)
+                : "N/A"
+            }
+          </td>
           <td><span class="status-label">${ret.returnStatus}</span></td>
           <td>
             <select class="status-select" onchange="updateReturnStatus('${ret._id}', this.value)">
@@ -445,6 +500,16 @@
         currentPage = page;
         displayReturns();
       }
+    }
+
+    function showFullReason(returnId) {
+      const ret = returnOrders.find(r => r._id === returnId);
+      if (!ret || !ret.productReturnReason) return;
+    
+      document.getElementById("reasonModalBody").textContent = ret.productReturnReason;
+    
+      const reasonModal = new bootstrap.Modal(document.getElementById('reasonModal'));
+      reasonModal.show();
     }
 
     async function updateReturnStatus(returnId, newStatus) {

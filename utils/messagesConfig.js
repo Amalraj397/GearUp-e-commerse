@@ -76,6 +76,9 @@ export const MESSAGES = {
     INVALID_STATUS: "Invalid order status.",
     UPDATED: "Order updated successfully.",
     UPDATE_FAILED: "Failed to update order status",
+    ITEM_RETRN_ERR: "An error occured while cancelling the OrderItem",
+    ORDR_ID_REQED:"Order ID is required",
+    ORDR_ITM_ID_REQED:"ORDER-ITEM_ID is required",
     
   },
 

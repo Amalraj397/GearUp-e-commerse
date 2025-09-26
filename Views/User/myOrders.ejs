@@ -413,8 +413,8 @@
     <div class="container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Account</a></li>
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><a href="/userDashboard">Account</a></li>
           <li class="breadcrumb-item active" aria-current="page">My Orders</li>
         </ol>
       </nav>
@@ -741,7 +741,9 @@ function renderOrders() {
 
           try {
             const res = await fetch(`/orders/cancel/${orderId}`, {
-              method: "PUT"
+              method: "PUT",
+              body: JSON.stringify({ orderId }),
+              headers: { 'Content-Type': 'application/json' }
             });
             const data = await res.json();
 

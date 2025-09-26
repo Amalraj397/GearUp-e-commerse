@@ -42,6 +42,9 @@ export const getCheckoutpage = async (req, res, next) => {
     const defaultAddress =
       addressData.find((addr) => addr.isDefault) || addressData[0];
 
+      console.log("addressData:: from checkOut Page,",addressData);
+      console.log("deafaultaddress:: from checkOut Page",defaultAddress);
+      
     const validCart = [];
 
     for (const item of cart.items) {
@@ -106,6 +109,8 @@ export const getCheckoutpage = async (req, res, next) => {
       cart,
       grandTotal,
     });
+
+     console.log("addressData:: from checkOut Page,",addressData)
   } catch (error) {
     console.error(MESSAGES.Orders.CHECKOUT_PAGE_EROR, error);
     // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
@@ -280,18 +285,27 @@ export const getmyOrders = async (req, res,next ) => {
 // ------------------------------------------------------------------------------------
 
 export const cancelOrder = async (req, res, next) => {
+   console.log("ordercancel controller called")
   try {
     const userId = req.session.user?.id;
 
-    const userData = await userSchema.findById(userId);
+        const orderId = req.params.orderId || req.body.orderId;
 
+    if (!orderId) {
+      return res.status(400).json({ message: MESSAGES.Orders.ORDR_ID_REQED });
+    }
+
+    const userData = await userSchema.findById(userId);
+    console.log("userdata in cancel::",userData)
+     
     if (!userData) {
       return res  
       .status(STATUS.NOT_FOUND)
       .json({ message: MESSAGES.Users.NO_USER });
     }
 
-    const orderData = await orderSchema.findOne({ userDetails: userId });
+    const orderData = await orderSchema.findOne({ _id: orderId, userDetails: userId });
+    console.log("orderData in cancel", orderData);
     
     if (!orderData){
       return res  
@@ -317,12 +331,65 @@ export const cancelOrder = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.System.PAGE_ERROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.System.SERVER_ERROR });
     next(error);
   }
 };
+
+export const cancelOrderItem = async (req, res, next) => {
+
+  console.log("cancelOrderItem controller calling.....");
+  try {
+    const userId = req.session.user?.id;
+    const { itemId } =  req.params;
+
+    if (!itemId) {
+      return res.status(400).json({ success: false, message: MESSAGES.Orders.ORDR_ITM_ID_REQED });
+    }
+
+    const userData = await userSchema.findById(userId);
+    if (!userData) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const orderData = await orderSchema.findOne({
+      userDetails: userId,
+      "items._id": itemId,
+    });
+
+    if (!orderData) {
+      return res.status(404).json({ success: false, message: "Order item not found" });
+    }
+
+    const item = orderData.items.id(itemId);
+    if (!item) {
+      return res.status(404).json({ success: false, message: "Item not found" });
+    }
+
+    if (item.itemStatus === "Cancelled") {
+      return res.json({ success: false, message: "This item is already cancelled" });
+    }
+
+    if (["Shipped", "Delivered"].includes(item.itemStatus)) {
+      return res.json({ success: false, message: "This item cannot be cancelled after shipping/delivery" });
+    }
+
+    item.itemStatus = "Cancelled";
+
+    const allCancelled = orderData.items.every(it => it.itemStatus === "Cancelled");
+    if (allCancelled) {
+      orderData.orderStatus = "Cancelled";
+    }
+
+    await orderData.save();
+
+    return res.json({ success: true, message: "Item cancelled successfully" });
+
+  } catch (error) {
+    console.error(MESSAGES.Orders.ITEM_RETRN_ERR, error);
+    next(error);
+  }
+};
+
 
 export const returnOrder = async (req, res,next) => {
   const userId = req.session.user?.id;
@@ -629,7 +696,13 @@ export const viewDetails = async (req, res, next ) => {
     const order = await orderSchema
       .findOne({ _id: orderId, userDetails: userId })
       .populate("userDetails")
-      .populate("items.productId");
+      .populate({
+    path: "items.productId",
+    populate: [
+      { path: "brand", select: "brandName" },
+      { path: "category", select: "name" }
+    ]
+  });
 
     if (!order) {
       return res

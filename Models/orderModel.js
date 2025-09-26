@@ -119,6 +119,7 @@ const orderSchema = new mongoose.Schema(
       enum: ["Processing", "Completed", "Failed"],
       default: "Processing",
     },
+    
   },
   { timestamps: true },
 );

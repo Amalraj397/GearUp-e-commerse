@@ -1,0 +1,80 @@
+
+/* Modal body padding */
+#addAddressModal .modal-body {
+    padding: 2rem;
+}
+
+/* .btn-close{
+    color: #fff;
+    background-color: #dc3545;
+} */
+
+#addAddressModal .btn-close {
+    background-color: #f8f9fa;
+    border-radius: 10%;
+    opacity: 1; /* make sure it's visible */
+    transition: all 0.2s ease;
+    padding: 2px;
+}
+#addAddressModal .btn-close:hover {
+    background-color: #ff6f00; 
+    opacity: 1;
+    filter: invert(1); /* makes the X white on orange */
+}
+
+/* Form row layout */
+#addAddressModal .form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Form columns */
+#addAddressModal .form-col {
+    flex: 1 1 48%;
+}
+
+/* Labels styling */
+#addAddressModal label {
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+}
+
+/* Inputs and select styling */
+#addAddressModal input.form-control,
+#addAddressModal select.form-control {
+    border-radius: 0.3rem;
+    border: 1px solid #ced4da;
+    padding: 0.5rem;
+}
+
+/* Modal title */
+#addAddressModal .modal-title {
+    font-weight: 600;
+    font-size: 2.25rem;
+}
+
+/* Buttons */
+#addAddressModal .btn-primary {
+    background-color: #ff6f00; /* Orange shade */
+    border: none;
+}
+#addAddressModal .btn-primary:hover {
+    background-color: #e65c00;
+}
+
+#addAddressModal .btn-secondary {
+    background-color: #6c757d;
+    border: none;
+}
+#addAddressModal .btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    #addAddressModal .form-col {
+        flex: 1 1 100%;
+    }
+}

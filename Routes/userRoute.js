@@ -62,6 +62,7 @@ import {
   addToCartpage,
   removeFromCartpage,
   increaseCartQuantity,
+  updateQuantity,
 } from "../Controller/user/userCartController.js";
 
 import {
@@ -80,6 +81,7 @@ import {
   downloadInvoice,
   viewDetails,
   returnOrder,
+  cancelOrderItem,
 } from "../Controller/user/userOrderController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
@@ -150,6 +152,7 @@ userRoute.patch("/set-default-address/:id", makedefault);
 userRoute.get("/userCart", getCartPage);
 userRoute.post("/addToCart", addToCartpage);
 userRoute.delete("/removeFromCart/:id", removeFromCartpage);
+userRoute.post("/updateCartQuantity",updateQuantity);
 
 //-----------wishlist management----------
 userRoute.get("/Wishlist", getUserWishlist);
@@ -167,6 +170,8 @@ userRoute.get("/orderSuccess", getOrderSuccesspage);
 userRoute.get("/myOrders", getmyOrders);
 userRoute.put("/orders/cancel/:id", cancelOrder);
 userRoute.post("/orders/return/:id", returnOrder);
+
+userRoute.post("/orders/item/cancel/:itemId", cancelOrderItem);
 
 userRoute.get("/orders/:id/invoice", downloadInvoice);
 

@@ -170,6 +170,7 @@ export const addToCartpage = async (req, res, next) => {
     }
 
     const wishlist  = await wishlistSchema.findOne({ userId });
+    
     let removedFromWishlist = false;
 
     console.log( wishlist);
@@ -187,6 +188,7 @@ export const addToCartpage = async (req, res, next) => {
 
       if (wishlist.products.length < initialLength) {
         removedFromWishlist = true;
+    
         await wishlist.save();
       }
     }
@@ -325,6 +327,34 @@ export const increaseCartQuantity = async (req, res, next) => {
     //   success: false,
     //   message: MESSAGES.System.SERVER_ERROR,
     // });
+    next(error);
+  }
+};
+
+
+export const updateQuantity = async (req, res, next) => {
+  try {
+    const { productId, quantity } = req.body;
+
+     const qty = parseInt(quantity);
+    console.log("req.Body in update Quantity::", req.body);
+
+    const userId = req.session.user._id;
+
+    // if (!productId || !quantity) {
+    //   return res.status(400).json({ success: false, message: "Invalid data" });
+    // }
+
+    // update quantity in DB
+    await cartSchema.updateOne(
+      { userId, "items.productId": productId },
+      { $set: { "items.$.quantity": qty } } 
+    );
+
+    res.json({ success: true, message: "Quantity updated" });
+  } catch (error) {
+    console.error(error);
+    // res.status(500).json({ success: false, message: "Server error" });
     next(error);
   }
 };

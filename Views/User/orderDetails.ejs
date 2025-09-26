@@ -140,10 +140,22 @@
             color: #212529;
             font-weight: 500;
         }
+.tracking-step.cancelled .tracking-icon {
+  background-color: #fa011a; /* red */
+  color: white;
+}
+
+.tracking-step.returned .tracking-icon {
+  background-color: #fa780d; /* orange */
+  color: white;
+}
+
+
     </style>
     <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
     <!-- <link rel="stylesheet" href="/User/assets/css/style.css"> -->
     <link rel="stylesheet" href="/User/assets/css/styles.css">
+    
 </head>
 
 <body>
@@ -337,6 +349,7 @@
     // Inject order data from backend
     const orderData = <%- JSON.stringify(order) %>;
 
+
     function populateOrderDetails() {
         document.getElementById('orderId').textContent = orderData.orderNumber;
         document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
@@ -363,14 +376,15 @@
             const product = item.productId;
             const itemHtml = `
                 <div class="d-flex align-items-center p-3 border rounded mb-3">
-                    <img src="${product.productImage[0] || '/placeholder.svg'}" alt="${product.productName}" class="product-image me-3">
+                    <img src="${product.productImage[0] || '/placeholder.svg'}" 
+                    alt="${product.productName.slice(0, 25)}" class="product-image me-3">
                     <div class="flex-grow-1">
-                        <h6 class="mb-1">${product.productName}</h6>
+                        <h6 class="mb-1">${product.productName.slice(0, 25) + "..." }</h6>
                         <div class="row">
                             <div class="col-md-6">
                                 <small class="text-muted">Variant: ${item.variantName}</small><br>
                                 <small class="text-muted">Scale: ${item.scale}</small><br>
-                                <small class="text-muted">Brand: ${product.brand?.name || ''}</small><br>
+                                <small class="text-muted">Brand: ${product.brand?.brandName || ''}</small><br>
                                 <small class="text-muted">Category: ${product.category?.name || ''}</small>
                             </div>
                             <div class="col-md-6">
@@ -382,9 +396,11 @@
                         </div>
                     </div>
                     <div class="ms-3">
-                        <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('${item._id}')">
-                            <i class="fas fa-times me-1"></i>Cancel Order
-                        </button>
+                        ${item.itemStatus === "Shipped" || item.itemStatus === "Pending" ? `
+                              <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('${item._id}')">
+                                <i class="fas fa-times me-1"></i> Cancel Order
+                              </button>
+                            ` : ""}  
                     </div>
                 </div>
             `;
@@ -401,16 +417,163 @@
     }
 
     function cancelOrder(itemId) {
-        if (confirm('Are you sure you want to cancel this order?')) {
-            fetch(`/orders/cancel/${itemId}`, { method: 'POST' })
-                .then(res => res.json())
-                .then(data => {
-                    alert(data.message);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to cancel this item?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, cancel it!',
+        cancelButtonText: 'No, keep it'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/orders/item/cancel/${itemId}`, {
+                method: "POST",
+                body: JSON.stringify({ itemId }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                Swal.fire({
+                    icon: data.success ? 'success' : 'error',
+                    title: data.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
                     location.reload();
-                })
-                .catch(err => console.error(err));
+                });
+            })
+            .catch(err => {
+                Swal.fire('Error', 'Something went wrong!', 'error');
+                console.error(err);
+            });
         }
+    });
+}
+
+//     function updateTrackingUI(orderStatus) {
+//     const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+//     const currentStepIndex = steps.indexOf(orderStatus);
+
+//     const trackingSteps = document.querySelectorAll("#trackingSteps .tracking-step");
+
+//     trackingSteps.forEach((step, index) => {
+//       step.classList.remove("completed", "active", "pending");
+
+//       if (index < currentStepIndex) {
+//         step.classList.add("completed"); // already finished
+//       } else if (index === currentStepIndex) {
+//         step.classList.add("active"); // current step
+//       } else {
+//         step.classList.add("pending"); // not yet reached
+//       }
+//     });
+//   }
+//    const orderStatus = "<%= order.orderStatus %>"; 
+   
+//    console.log("Order Status from backend:", orderStatus);
+
+//   updateTrackingUI(orderStatus);
+
+//   function updateTrackingUI(orderStatus) {
+//     const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+//     const trackingSteps = document.querySelectorAll("#trackingSteps .tracking-step");
+
+//     // Reset classes
+//     trackingSteps.forEach(step => step.classList.remove("completed", "active", "pending", "cancelled", "returned"));
+
+//     if (orderStatus === "Cancelled") {
+//       // Mark first step as active and cancelled
+//       trackingSteps[0].classList.add("cancelled");
+//       return;
+//     }
+
+//     if (orderStatus === "Returned") {
+//       // Mark all steps up to Delivered as completed, last step as returned
+//       trackingSteps.forEach((step, index) => {
+//         if (index < steps.length - 1) {
+//           step.classList.add("completed");
+//         } else {
+//           step.classList.add("returned");
+//         }
+//       });
+//       return;
+//     }
+
+//     // Normal flow
+//     const currentStepIndex = steps.indexOf(orderStatus);
+//     trackingSteps.forEach((step, index) => {
+//       if (index < currentStepIndex) {
+//         step.classList.add("completed");
+//       } else if (index === currentStepIndex) {
+//         step.classList.add("active");
+//       } else {
+//         step.classList.add("pending");
+//       }
+//     });
+//   }
+
+//   // Example usage (simulate testing)
+//   // const orderStatus = "Cancelled"; 
+//   // const orderStatus = "Returned";
+//   // const orderStatus = "Shipped";
+//   const orderStatus = "<%= order.orderStatus %>";  
+//   updateTrackingUI(orderStatus);
+
+  function updateTrackingUI(orderStatus) {
+    const steps = ["Pending", "Processing", "Shipped", "Delivered"];
+    const trackingSteps = document.querySelectorAll("#trackingSteps .tracking-step");
+
+    // Reset all classes
+    trackingSteps.forEach(step => 
+      step.classList.remove("completed", "active", "pending", "cancelled", "returned")
+    );
+
+    // --- Cancelled Case ---
+    if (orderStatus === "Cancelled") {
+      const lastStep = trackingSteps[trackingSteps.length - 1];
+      const label = lastStep.querySelector(".fw-bold");
+      const desc = lastStep.querySelector(".text-muted");
+
+      if (label) label.textContent = "Cancelled";
+      if (desc) desc.textContent = "This order was cancelled";
+
+      lastStep.classList.add("cancelled");
+      return;
     }
+
+    // --- Returned Case ---
+    if (orderStatus === "Returned") {
+      const lastStep = trackingSteps[trackingSteps.length - 1];
+      const label = lastStep.querySelector(".fw-bold");
+      const desc = lastStep.querySelector(".text-muted");
+
+      if (label) label.textContent = "Returned";
+      if (desc) desc.textContent = "This order was returned";
+
+      lastStep.classList.add("returned");
+      return;
+    }
+
+    // --- Normal Flow ---
+    const currentStepIndex = steps.indexOf(orderStatus);
+
+    trackingSteps.forEach((step, index) => {
+      if (index < currentStepIndex) {
+        step.classList.add("completed");
+      } else if (index === currentStepIndex) {
+        step.classList.add("active");
+      } else {
+        step.classList.add("pending");
+      }
+    });
+  }
+
+  const orderStatus = "<%= order.orderStatus %>";  
+  updateTrackingUI(orderStatus);
+
+    console.log("Order Status from backend:", orderStatus);
 
     document.addEventListener('DOMContentLoaded', populateOrderDetails);
 </script>
