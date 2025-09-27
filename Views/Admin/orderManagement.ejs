@@ -491,17 +491,17 @@
 
        async function updateOrderStatus(orderId, newStatus) {
   // Confirm with SweetAlert
-  const result = await Swal.fire({
-    title: 'Are you sure?',
-    text: `Do you want to change the status to "${newStatus}"?`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#3085d6',
-    confirmButtonText: 'Yes, update it!',
-    background: '#1e1e1e',
-    color: '#fff'
-  });
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: `Do you want to change the status to "${newStatus}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, update it!',
+      background: '#1e1e1e',
+      color: '#fff'
+    });
 
   if (!result.isConfirmed) {
     // Reset dropdown back to old value if cancelled
@@ -544,24 +544,25 @@
         position: "right",
         backgroundColor: "#28a745",
       }).showToast();
+      
     } else {
       throw new Error(data.message || "Failed to update status");
     }
   } catch (error) {
     Swal.close();
-    Toastify({
-      text: `Error: ${error.message}`,
-      duration: 3000,
-      gravity: "top",
-      position: "right",
-      backgroundColor: "#dc3545",
-    }).showToast();
+       Toastify({
+         text: `Error: ${error.message}`,
+         duration: 3000,
+         gravity: "top",
+         position: "right",
+         backgroundColor: "#dc3545",
+       }).showToast();
   }
 }
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'});
-        }
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'});
+    }
     </script>
 </body>
 </html>

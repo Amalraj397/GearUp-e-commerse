@@ -291,7 +291,6 @@
     <div class="header-section">
       <h1 class="page-title">Order Return Management</h1>
     </div>
-
     <!-- Controls Section -->
     <div class="controls-section">
       <input type="text" class="search-box" id="searchInput" placeholder="Search returns...">
@@ -516,13 +515,14 @@
       if (newStatus === "Rejected") {
         const {
           value: reason
-        } = await Swal.fire({
+        } =  await Swal.fire({
           title: "Reject Return",
           input: "text",
           inputLabel: "Enter reason for rejection",
           inputPlaceholder: "Type your reason here...",
           showCancelButton: true,
-          inputValidator: (value) => {
+          inputValidator: (value) => 
+          {  
             if (!value) return "Reason is required!";
           }
         });

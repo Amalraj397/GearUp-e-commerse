@@ -30,7 +30,7 @@ export const getCartPage = async (req, res, next) => {
     const cartCount = cart ? cart.items.length : 0;
 
     if (!cart || cart.items.length === 0) {
-      // return res.status(404).json({ message: MESSAGES.Cart.NO_CART });
+
       return res.render("userCart.ejs", {
         userData,
         cart: null,
@@ -52,9 +52,8 @@ export const getCartPage = async (req, res, next) => {
     const discountTotal = TotalAmount - festivalOFF; // calulating  festical discount price
 
     console.log("festivalOFF", festivalOFF);
-    // let shippingCharge = 0;
+  
     console.log("discountTotal", discountTotal);
-    // const grandTotal = discountTotal + shippingCharge;
 
     res.render("userCart.ejs", {
       userData,
@@ -66,8 +65,7 @@ export const getCartPage = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Cart.CartLogger.CART_PAGE_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
-     next(error);
+         next(error);
   }
 };
 
@@ -173,7 +171,7 @@ export const addToCartpage = async (req, res, next) => {
     
     let removedFromWishlist = false;
 
-    console.log( wishlist);
+    // console.log( wishlist);
 
     if (wishlist) {
       const initialLength = wishlist.products.length;
@@ -222,10 +220,6 @@ export const addToCartpage = async (req, res, next) => {
     });
   } catch (error){
     console.error(MESSAGES.Cart.CartLogger.CART_ADD_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-    //   success: false,
-    //   message: MESSAGES.System.SERVER_ERROR,
-    // });
     next(error);
   }
 };
@@ -269,7 +263,6 @@ export const removeFromCartpage = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Cart.CartLogger.CART_REM_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -323,10 +316,6 @@ export const increaseCartQuantity = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Cart.CartLogger.CART_QTY_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-    //   success: false,
-    //   message: MESSAGES.System.SERVER_ERROR,
-    // });
     next(error);
   }
 };
@@ -337,15 +326,9 @@ export const updateQuantity = async (req, res, next) => {
     const { productId, quantity } = req.body;
 
      const qty = parseInt(quantity);
-    console.log("req.Body in update Quantity::", req.body);
+    // console.log("req.Body in update Quantity::", req.body);
 
-    const userId = req.session.user._id;
-
-    // if (!productId || !quantity) {
-    //   return res.status(400).json({ success: false, message: "Invalid data" });
-    // }
-
-    // update quantity in DB
+    // update quantity 
     await cartSchema.updateOne(
       { userId, "items.productId": productId },
       { $set: { "items.$.quantity": qty } } 
@@ -353,8 +336,8 @@ export const updateQuantity = async (req, res, next) => {
 
     res.json({ success: true, message: "Quantity updated" });
   } catch (error) {
-    console.error(error);
-    // res.status(500).json({ success: false, message: "Server error" });
+    console.error(MESSAGES.Cart.CartLogger.CART_QTY_EROR.error);
+
     next(error);
   }
 };

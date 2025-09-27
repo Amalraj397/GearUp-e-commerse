@@ -24,16 +24,15 @@ export const adminAuth = async (req, res, next) => {
 // For user
 export const userAuth = async (req, res, next) => {
   try {
-    // check if user authenticated..!
+    // check  user..
     if (!req.session.user) {
-      return res.redirect("/login"); // Redirect if not authenticated..!
+      return res.redirect("/login"); // Redirect
     }
-    //Find user by ID...!
+    //Find user by ID.
     const user = await userSchema.findById(req.session.user._id);
 
-    // Check if user exists and not blocked..!
     if (!user && user.isBlocked) {
-      res.redirect("/login"); // Redirect if user is blocked or not found..!
+      res.redirect("/login"); // Redirect 
     }
     next();
   } catch (error) {
@@ -41,27 +40,6 @@ export const userAuth = async (req, res, next) => {
     res.status(500).send("Internal server error");
   }
 };
-
-// Middleware for checking authentication
-// export const userAuthenticated = (req, res,next) => {
-//   console.log("middle call vannea")
-//   if (req.session.user) {
-//     console.log("usr retyju::::::", req.session.user);
-//       return res.redirect("/")
-//   }
-//   //  return res.redirect("/login")
-//   next();
-
-// };
-
-// export const adminAuthenticated = (req, res) => {
-//   if (req.session.admin) {
-//     return res.redirect("/admin/dashboard")
-//   }
-//   else{
-//    return res.redirect("/admin/login")
-//   }
-// };
 
 export const nocache = (req, res, next) => {
   res.setHeader(

@@ -7,7 +7,6 @@
 	  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
-
 <body>
     <div class="page-wrapper">
         <main class="main">
@@ -71,7 +70,7 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
 										<input type="hidden" name="pincode" id="pincode" value="<%= defaultAddress ? defaultAddress.pincode : '' %>">
 										<input type="hidden" name="phone" id="phone" value="<%= defaultAddress ? defaultAddress.phone : '' %>">
 										<input type="hidden" name="email" id="email" value="<%= defaultAddress ? defaultAddress.email : '' %>">
-		                				<div class="row"></div>	                					
+		                <div class="row"></div>	                					
 										
                                         <!-- <button type="button" class="btn btn-outline-primary-2 btn-order" data-bs-toggle="modal" data-bs-target="#addressModal">Change Address</button> -->
 										<button type="button" class="btn btn-outline-primary-2 btn-order" data-bs-toggle="modal" data-bs-target="#changeAddressModal">
@@ -81,8 +80,6 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
                      <button type="button" class="btn btn-outline-primary-2 btn-order" data-bs-toggle="modal" data-bs-target="#addAddressModal">
                        ADD NEW ADDRESS
                      </button>
-                     
-										<!-- <button   href="/addUserAddress" class="btn btn-outline-primary-2 btn-order "> ADD NEW ADDRESS</button> -->
 
 		                		</div><!-- End .col-lg-9 -->
 		                		<aside class="col-lg-3">
@@ -281,7 +278,6 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Main JS File -->
     <script src="/User/assets/js/main.js"></script>
 
 <script>
@@ -318,8 +314,7 @@ document.getElementById('confirmAddressChange').addEventListener('click', functi
         })
         .catch(err => console.error(err));
 });
-</script>
-<script>
+
 document.getElementById('saveNewAddress').addEventListener('click', async () => {
   const form = document.getElementById('newAddressForm');
   const formData = new FormData(form);
@@ -378,8 +373,7 @@ Type: ${data.addressType}`;
     Swal.fire("Error", "Failed to submit address", "error");
   }
 });
-</script>
-<script>
+
 document.getElementById("placeOrderBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
@@ -443,7 +437,6 @@ document.getElementById("placeOrderBtn").addEventListener("click", async (e) => 
   }
 });
 </script>
-
 
 </body>
 

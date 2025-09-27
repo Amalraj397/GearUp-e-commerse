@@ -37,7 +37,7 @@ export const getCategory = async (req, res, next) => {
     });
   } catch (error) {
     console.log(MESSAGES.Category.CAT_LISTING_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+ 
      next(error);
   }
 };
@@ -49,7 +49,7 @@ export const getAddCategory = async (req, res, next) => {
     return res.status(STATUS.OK).render("addCategory.ejs");
   } catch (error) {
     console.log(MESSAGES.Category.CAT_ADD_PAGE_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+ 
     next(error);
   }
 };
@@ -85,9 +85,7 @@ export const addNewCategory = async (req, res, next) => {
       .json({ message: MESSAGES.Category.ADDED_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Category.ADD_FAILED, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Error.SERVER_ERROR });
+ 
     next(error);
   }
 };
@@ -111,10 +109,7 @@ export const unlistCategory = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Category.UNLIST_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Category.UNLIST_FAILED, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-    //   success: false,
-    //   message: MESSAGES.Error.SERVER_ERROR,
-    // });
+   
      next(error);
   }
 };
@@ -138,10 +133,7 @@ export const listCategory = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Category.LIST_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Category.LIST_FAILED, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-    //   success: false,
-    //   message: MESSAGES.Error.SERVER_ERROR,
-    // });
+ 
     next(error);
   }
 };
@@ -166,10 +158,7 @@ export const getLiveCategorySearch = async (req, res, next) => {
     res.json({ success: true, categories });
   } catch (error) {
     console.error(MESSAGES.System.SERCH_FAIL, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).json({
-    //   success: false,
-    //   message: MESSAGES.Error.SERVER_ERROR,
-    // });
+   
     next(error);
   }
 };
@@ -184,7 +173,7 @@ export const getCategoryEditPage = async (req, res, next) => {
     });
   } catch (error) {
     console.log(MESSAGES.Category.CAT_EDITPAGE_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+ 
     next(error);
   }
 };
@@ -228,9 +217,7 @@ export const updateCategory = async (req, res, next) => {
     res.status(STATUS.OK).json({ message: MESSAGES.Category.UPDATE_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Category.UPDATE_FAILED, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Error.SERVER_ERROR });
+
     next(error);
   }
 };

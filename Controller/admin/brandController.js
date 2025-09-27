@@ -25,7 +25,7 @@ export const getBrands = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Brand.BRAND_LISTING_ERR, error);
-   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+  
    next(error);
   }
 };
@@ -36,7 +36,7 @@ export const getAddBrandPage = async (req, res, next) => {
     return res.status(STATUS.OK).render("addBrand.ejs");
   } catch (error) {
     console.error(MESSAGES.Brand.BRAND_ADD_PAGE_ERR, error);
-   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+  
    next(error);
   }
 };
@@ -75,7 +75,7 @@ export const addNewBrand = async (req, res, next) => {
     res.status(STATUS.CREATED).json({ message: MESSAGES.Brand.ADDED_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Brand.BRAND_ADD_PAGE_ERR, error);
-   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+  
     next(error);
   }
 };
@@ -87,9 +87,7 @@ export const unlistBrand = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Brand.UNLIST_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Brand.UNLIST_FAILED,error)
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ success: false, message: MESSAGES.Brand.UNLIST_FAILED });
+
     next(error);
   }
 };
@@ -101,9 +99,7 @@ export const listBrand = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Brand.LIST_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Brand.LIST_FAILED,error)
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ success: false, message: MESSAGES.Brand.LIST_FAILED });
+  
     next(error);
   }
 };
@@ -115,7 +111,7 @@ export const getBrandEditPage = async (req, res, next) => {
     res.status(STATUS.OK).render("editBrand.ejs", { brand });
   } catch (error) {
     console.error(MESSAGES.Brand.BRAND_EDIT_PAGE_ERR, error);
-   // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+  
     next(error);
   }
 };
@@ -155,9 +151,7 @@ export const updateBrand = async (req, res, next) => {
     res.status(STATUS.OK).json({ message: MESSAGES.Brand.UPDATE_SUCCESS });
   } catch (error) {
     console.error(MESSAGES.Brand.UPDATE_FAILED, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Brand.UPDATE_FAILED });
+
      next(error);
   }
 };

@@ -12,7 +12,6 @@ export const showLanding = (req, res, next) => {
     res.render("Landing.ejs");
   } catch (error) {
     console.error(MESSAGES.System.LANDING_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error)
   }
 };
@@ -24,7 +23,6 @@ export const showSignup = (req, res, next) => {
     res.render("signupLanding.ejs");
   } catch (error) {
     console.error(MESSAGES.System.SIGNUP_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error)
   }
 };
@@ -36,7 +34,6 @@ export const showLogin = (req, res, next) => {
     res.render("loginLanding.ejs");
   } catch (error) {
     console.error(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error)
   }
 };
@@ -92,7 +89,6 @@ export const userSignup = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Users.SIGNUP_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -108,8 +104,6 @@ export const getOtpPage = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR)
-    // .send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -122,7 +116,7 @@ export const verifyOtp = async (req, res, next) => {
     const storedOtp = req.session.otp?.toString();
     const otpExpiration = req.session.otpExpiration; //time for otp
 
-    //-------check if the OTP has expired-----
+    //-------check if the OTP  expired-----
     if (Date.now() > otpExpiration) {
       delete req.session.otp;
       delete req.session.otpExpiration;
@@ -164,7 +158,7 @@ export const verifyOtp = async (req, res, next) => {
     }
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_VERIFY_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+
      next(error);
   }
 };
@@ -175,7 +169,6 @@ export const resendOTP = async (req, res, next) => {
       return res
         .status(STATUS.BAD_REQUEST)
         .json({ message: MESSAGES.Users.NO_USER });
-      
     }
 
     const { email } = req.session.userData;
@@ -206,9 +199,6 @@ export const resendOTP = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_EROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.System.SERVER_ERROR });
      next(error);
   }
 };
@@ -270,9 +260,6 @@ export const userLogin = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.System.SERVER_ERROR });
      next(error);
   }
 };
@@ -293,7 +280,6 @@ export const userLogout = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Auth.LOGOUT_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -339,9 +325,6 @@ export const handleGoogleSignup = async (req, res, next) => {
     res.status(STATUS.CREATED).json({ success: true, user });
   } catch (error) {
     console.error(MESSAGES.Auth.GOOGLE_SIGNUP_EROR, error);
-    // res
-      // .status(STATUS.INTERNAL_SERVER_ERROR)
-      // .json({ success: false, message: MESSAGES.Auth.GOOGLE_SIGNUP_SVR_ERR });
       next(error);
   }
 };
@@ -353,7 +336,6 @@ export const getproductBox = (req, res, next) => {
     res.render("product-category.ejs");
   } catch (error) {
     console.log(MESSAGES.System.PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -372,7 +354,6 @@ export const getAboutPage = (req, res, next ) => {
     res.render("aboutUs.ejs");
   } catch (error) {
     console.log(MESSAGES.Error.ABOUT_PGE_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
      next(error);
   }
 };

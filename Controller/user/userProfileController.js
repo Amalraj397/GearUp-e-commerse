@@ -22,7 +22,6 @@ export const getUserDashboard = async (req, res, next) => {
     const userData = await userschema.findById(userId);
     const addresses = await addressSchema
       .find({ userId: userId })
-      // .populate("address")
       .lean();
     // console.log("userdata in userdashboard:::::", userData);
 
@@ -31,8 +30,7 @@ export const getUserDashboard = async (req, res, next) => {
       addresses,
     });
   } catch (error) {
-    console.log(MESSAGES.Users.UserProfileLogger.DASHBOARD_LOAD_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+    console.log(MESSAGES.Users.UserProfileLogger.DASHBOARD_LOAD_ERROR, error);    
     next(error)
   }
 };
@@ -49,10 +47,6 @@ export const geteditUserprofile = async (req, res, next) => {
   try {
     const userData = await userschema.findById(userId);
 
-    // if (!userData) {
-    //   return res.status(STATUS.NOT_FOUND).send(MESSAGES.Users.NOT_FOUND);
-    // }
-
     if (!userData) {
       return res  
       .status(STATUS.NOT_FOUND)
@@ -65,8 +59,7 @@ export const geteditUserprofile = async (req, res, next) => {
       userData,
     });
   } catch (error) {
-    console.log(MESSAGES.Users.UserProfileLogger.EDITPAGE_LOAD_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+    console.log(MESSAGES.Users.UserProfileLogger.EDITPAGE_LOAD_ERROR, error);  
     next(error)
   }
 };
@@ -148,8 +141,7 @@ export const updateUserprofile = async (req, res, next) => {
       .json({ message: MESSAGES.Users.PROFILE_UPDATED });
     
   } catch (error) {
-    console.log(MESSAGES.Users.UserProfileLogger.UPDATE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.Error.SERVER_ERROR);
+    console.log(MESSAGES.Users.UserProfileLogger.UPDATE_ERROR, error);   
     next(error)
   }
 };

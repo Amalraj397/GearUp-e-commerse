@@ -7,7 +7,6 @@ export const loadAdminlogin = async (req, res, next) => {
     res.render("LoginLanding.ejs");
   } catch (error) {
     console.log(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
      next(error)
   }
 };
@@ -17,7 +16,6 @@ export const loadAdminDash = async (req, res, next) => {
     res.render("adminDash.ejs");
   } catch (error) {
     console.log(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error)
   }
 };
@@ -39,7 +37,6 @@ export const adminLogout = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Auth.LOGOUT_FAILED, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error)
   }
 };

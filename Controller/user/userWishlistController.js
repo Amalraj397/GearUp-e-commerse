@@ -70,17 +70,15 @@ export const addToWishlist = async (req, res,next) => {
   const { productId } = req.body;
 
   try {
-    // Check if userId or productId is missing
+
     if (!userId || !productId) {
       return res
       .status(STATUS.BAD_REQUEST)
       .json({ message: MESSAGES.Wishlist.USER_OR_PRODUCT_NOT_FOUND });
     }
-
-    // Find user's wishlist
+ 
     let userWishlist = await wishlistSchema.findOne({ userId });
 
-    // If no wishlist, create a new one
     if (!userWishlist) {
       userWishlist = new wishlistSchema({
         userId,
@@ -88,12 +86,10 @@ export const addToWishlist = async (req, res,next) => {
       });
     }
 
-    // Ensure products array exists
     if (!Array.isArray(userWishlist.products)) {
       userWishlist.products = [];
     }
 
-    // Check if product already exists in wishlist
     const existingProduct = userWishlist.products.find(
       (item) => item.productId.toString() === productId.toString(),
     );
@@ -115,7 +111,6 @@ export const addToWishlist = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Wishlist.ADD_ERROR, error);
-
     next(error)
   }
 };
@@ -128,7 +123,6 @@ export const removefromwishlist = async (req, res,next) => {
     const productId = req.params.id;
 
     // console.log("productId  in  removefrom wishlist::", productId);
-    // console.log("userId  in  removefrom wishlist::", userId);
 
     if (!userId || !productId) {
       return res
@@ -157,7 +151,6 @@ export const removefromwishlist = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Wishlist.REMOVE_ERROR,error);
-  
       next(error);
   }
 };

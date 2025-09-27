@@ -58,6 +58,7 @@ export const MESSAGES = {
     INVALID_CATEGORY: "Invalid category name",
     INVALID_BRAND: "Invalid brand name",
     NO_IMAGE_ID: "No image-ID provided",
+    
   },
 
   Orders: {
@@ -79,7 +80,11 @@ export const MESSAGES = {
     ITEM_RETRN_ERR: "An error occured while cancelling the OrderItem",
     ORDR_ID_REQED:"Order ID is required",
     ORDR_ITM_ID_REQED:"ORDER-ITEM_ID is required",
-    
+
+    CANCEL_SUCCESS:"Product cancelled successfully" ,
+    CANCEL_FAIL: "This product is already cancelled",
+    CANNOT_CANCEL:"This cannot be cancelled after shipping/delivery",
+ 
   },
 
   OrderReturn: {

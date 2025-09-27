@@ -1,7 +1,4 @@
-import userSchema from "../../Models/userModel.js";
-import productSchema from "../../Models/productModel.js";
-import cartSchema from "../../Models/cartModel.js";
-import addressSchema from "../../Models/userAddressModel.js";
+
 import orderSchema from "../../Models/orderModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
@@ -57,7 +54,7 @@ export const getuserOrders = async (req, res, next) => {
     });
   } catch (error) {
     console.log(MESSAGES.System.ORDER_ADMINPAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+   
     next(error);
   }
 };
@@ -104,9 +101,7 @@ export const updateOrderStatus = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.System.ORDER_UPDATE_ERROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ success: false, message: MESSAGES.System.SERVER_ERROR });
+
     next(error);
 
   }
@@ -128,7 +123,7 @@ export const adminviewDetails = async (req, res, next) => {
     res.render("orderdetailsAdmin.ejs", { order });
   } catch (error) {
     console.log(MESSAGES.Orders.ORDER_DETAIL_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+   
     next(error);
   }
 };

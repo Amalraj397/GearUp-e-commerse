@@ -94,8 +94,6 @@ export const getproductDetailpage = async (req, res, next) => {
     
   } catch (error) {
     console.log(MESSAGES.Store.ERROR_LOADING_PRODUCT_DETAIL, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR)
-    // .send(MESSAGES.Store.SERVER_ERROR);
     next(error)
   }
 };

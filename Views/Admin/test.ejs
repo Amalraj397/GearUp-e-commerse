@@ -84,9 +84,6 @@
                             <input type="number" id="productOffer" name="productOffer" value="<%= product.productOffer %>">
                             <div id="productOffer-error" class="error-message"></div>
                         </div>
-                        
-                        
-
 
                         <div class="form-group">
                             <label>Tags</label>
@@ -101,10 +98,6 @@
                                 <% }); %>
                             </div>
                         </div>
-                        
-                       
-    
-    
                     </div>
                     
                     <div id="color-stock-container">
@@ -173,8 +166,6 @@
                             </div>
                             <%}%>
                    
-
-
                         <div class="image-upload-container">
                             <div class="image-upload">
                                 <label for="image1">Image 1:</label>
@@ -271,27 +262,16 @@
                 
                 colorStockContainer.appendChild(newColorStock);
                 colorStockCount++;
-               
-    
                  
                 const quantityInput = newColorStock.querySelector(`#quantity-${colorStockCount - 1}`);
                 quantityInput.addEventListener('input', function() {
                 validateQuantity(quantityInput,`productQuantity-error-${colorStockCount}`);
             });
     
-            
-    
-               
                 newColorStock.querySelector('.remove-color-stock-button').addEventListener('click', function() {
                     colorStockContainer.removeChild(newColorStock);
                 });
             });
-
-
-            
-
-
-
     
             // Image cropping and preview functionality
             let cropper;

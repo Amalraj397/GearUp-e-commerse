@@ -46,7 +46,6 @@ export const getuserData = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Users.USER_FETCH_FAILED, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -59,9 +58,7 @@ export const blockUser = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Users.USER_BLOCKED });
   } catch (error) {
     console.error( MESSAGES.Users.USER_BLOCK_FAILED,error);
-    // res
-      // .status(STATUS.INTERNAL_SERVER_ERROR)
-      // .json({ success: false, message: MESSAGES.Users.USER_BLOCK_FAILED });
+
       next(error);
   }
 };
@@ -72,9 +69,7 @@ export const unblockUser = async (req, res, next) => {
     res.json({ success: true, message: MESSAGES.Users.USER_UNBLOCKED });
   } catch (error) {
     console.error(MESSAGES.Users.USER_UNBLOCK_FAILED ,error);
-  //   res
-  //     .status(STATUS.INTERNAL_SERVER_ERROR)
-  //     .json({ success: false, message: MESSAGES.Users.USER_UNBLOCK_FAILED });
+
      next(error);
   }
 };

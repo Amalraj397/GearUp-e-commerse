@@ -1,4 +1,4 @@
-// const errorHandler = (error, req, res, next)=>{
+<!-- // const errorHandler = (error, req, res, next)=>{
 //     console.error (error.stack)  // error stack for debugging
 
 //     // set response status code based on the error default 500
@@ -9,7 +9,35 @@
 
 // };
 
+
+import { MESSAGES } from "../utils/messagesConfig.js";
 import { STATUS } from "../utils/statusCodes.js"
+
+
+// export const errorHandler =(err, req, res, next)=>{
+//      console.error("Error:", err.message);
+
+//       res.status(err.statusCode || STATUS.INTERNAL_SERVER_ERROR)
+//       .render("500")
+      
+// };
+
+
+// --------------------------------------------------------------------------------
+
+// export const errorHandler =(err, req, res, next)=>{
+//   console.log("err::", err)
+
+//    if(err.statusCode==STATUS.INTERNAL_SERVER_ERROR){
+//     res.status(err.statusCode || STATUS.INTERNAL_SERVER_ERROR)
+//       .render("500")
+//    }else{
+//       res.status(err.statusCode)
+//       .json({message: err.message})
+    
+//    }
+//      console.error("Error:", err.message);
+// };
 
 export const errorHandler = (err, req, res, next) => {
   console.error("Error:", err.message);
@@ -54,4 +82,4 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   res.status(statusCode).render("errors", errorInfo);
-};
+}; -->

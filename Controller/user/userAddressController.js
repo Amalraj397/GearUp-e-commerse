@@ -8,7 +8,6 @@ export const getAdd_UseraddressPage = (req, res,next) => {
     res.render("userAddressPage.ejs");
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_LOAD_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.PAGE_ERROR);
     next(error);
   }
 };
@@ -59,9 +58,6 @@ export const add_UserAddress = async (req, res, next) => {
     res.status(STATUS.CREATED).json({ message: MESSAGES.Address.ADDED });
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_SAVE_EROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Address.ADD_FAILED });
     next(error);
   }
 };
@@ -75,8 +71,7 @@ export const getEdit_userAddressPage = async (req, res ,next) => {
     .render("editUserAddressPage.ejs", { address });
     
   } catch (error) {
-    console.error(MESSAGES.Address.AddressLogger.ADD_LOAD_EDIT_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.PAGE_ERROR);
+    console.error(MESSAGES.Address.AddressLogger.ADD_LOAD_EDIT_EROR, error); 
      next(error);
   }
 };
@@ -136,9 +131,6 @@ export const edit_userAddress = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_UPD_EROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Address.UPDATE_FAILED });
     next(error);
   }
 };
@@ -173,9 +165,6 @@ export const makedefault = async (req, res, next) => {
     res.status(STATUS.OK).json({ message: MESSAGES.Address.DEFAULT_UPDATED });
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_DEF_EROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Address.DEFAULT_FAILED });
     next(error);
   }
 };
@@ -194,9 +183,6 @@ export const delete_userAddress = async (req, res, next) => {
     return res.status(STATUS.OK).json({ message: MESSAGES.Address.DELETED });
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_DEL_EROR, error);
-    // return res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.Address.DELETE_FAILED });
      next(error);
   }
 };

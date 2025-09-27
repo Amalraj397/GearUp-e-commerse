@@ -2,9 +2,7 @@
 <head>
   
     <title>AutoMinima - precesion in every scale</title>
-    <meta name="keywords" content="HTML5 Template">
-    <meta name="description" content="Molla - Bootstrap eCommerce Template">
-    <meta name="author" content="p-themes">
+  
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
@@ -257,7 +255,6 @@
   });
 
   updatePriceAndStock(); 
-
   
 // -------------- addtoCart with increment----------
 function addToCart(productId) {
@@ -343,13 +340,11 @@ function addToCart(productId) {
   })
   .catch(err => {
     console.error("Caught error in addToCart:", err);
-    // Swal.fire("Error", "Something went wrong......", "error");
   });
 }
 
 
-
- function addToWishlist(productId) {
+function addToWishlist(productId) {
     fetch("/addToWishlist", {
         method: "POST",
         headers: {

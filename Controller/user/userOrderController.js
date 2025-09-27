@@ -42,8 +42,8 @@ export const getCheckoutpage = async (req, res, next) => {
     const defaultAddress =
       addressData.find((addr) => addr.isDefault) || addressData[0];
 
-      console.log("addressData:: from checkOut Page,",addressData);
-      console.log("deafaultaddress:: from checkOut Page",defaultAddress);
+      // console.log("addressData:: from checkOut Page,",addressData);
+      // console.log("deafaultaddress:: from checkOut Page",defaultAddress);
       
     const validCart = [];
 
@@ -110,10 +110,9 @@ export const getCheckoutpage = async (req, res, next) => {
       grandTotal,
     });
 
-     console.log("addressData:: from checkOut Page,",addressData)
+    //  console.log("addressData:: from checkOut Page,",addressData)
   } catch (error) {
     console.error(MESSAGES.Orders.CHECKOUT_PAGE_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -131,7 +130,6 @@ export const getAddressById = async (req, res, next) => {
     res.status(STATUS.OK).json(address);
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_GET_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -229,9 +227,7 @@ export const placeOrder = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Orders.ORDER_EROR, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ success: false, message: MESSAGES.System.SERVER_ERROR, error: error.message});
+
     next(error);
   }
 };
@@ -252,8 +248,7 @@ export const getOrderSuccesspage = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.Orders.ORDER_SUCCESS_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
-    next(error);
+      next(error);
   }
 };
 
@@ -278,7 +273,6 @@ export const getmyOrders = async (req, res,next ) => {
     res.render("myOrders.ejs", { userOrders });
   } catch (error) {
     console.error(MESSAGES.Users.MY_ODR_ERR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
     next(error);
   }
 };
@@ -336,8 +330,7 @@ export const cancelOrder = async (req, res, next) => {
 };
 
 export const cancelOrderItem = async (req, res, next) => {
-
-  console.log("cancelOrderItem controller calling.....");
+  console.log("cancelorderitem controller calling....");
   try {
     const userId = req.session.user?.id;
     const { itemId } =  req.params;
@@ -348,29 +341,26 @@ export const cancelOrderItem = async (req, res, next) => {
 
     const userData = await userSchema.findById(userId);
     if (!userData) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: MESSAGES.Users.NO_USER});
     }
 
-    const orderData = await orderSchema.findOne({
-      userDetails: userId,
-      "items._id": itemId,
-    });
+    const orderData = await orderSchema.findOne({ userDetails: userId, "items._id": itemId,});
 
     if (!orderData) {
-      return res.status(404).json({ success: false, message: "Order item not found" });
+      return res.status(404).json({ success: false, message:MESSAGES.Orders.NO_ORDER});
     }
 
     const item = orderData.items.id(itemId);
     if (!item) {
-      return res.status(404).json({ success: false, message: "Item not found" });
+      return res.status(404).json({ success: false, message: MESSAGES.System.NOT_FOUND});
     }
 
     if (item.itemStatus === "Cancelled") {
-      return res.json({ success: false, message: "This item is already cancelled" });
+      return res.json({ success: false, message: MESSAGES.Orders.CANCEL_FAIL});
     }
 
     if (["Shipped", "Delivered"].includes(item.itemStatus)) {
-      return res.json({ success: false, message: "This item cannot be cancelled after shipping/delivery" });
+      return res.json({ success: false, message: MESSAGES.Orders.CANNOT_CANCEL});
     }
 
     item.itemStatus = "Cancelled";
@@ -382,7 +372,7 @@ export const cancelOrderItem = async (req, res, next) => {
 
     await orderData.save();
 
-    return res.json({ success: true, message: "Item cancelled successfully" });
+    return res.json({ success: true, message: MESSAGES.Orders.CANCEL_SUCCESS});
 
   } catch (error) {
     console.error(MESSAGES.Orders.ITEM_RETRN_ERR, error);
@@ -468,9 +458,6 @@ export const returnOrder = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Orders.ORDER_RETURN_FAIL, error);
-    // res
-    //   .status(STATUS.INTERNAL_SERVER_ERROR)
-    //   .json({ message: MESSAGES.System.SERVER_ERROR });
     next(error);
   }
 };
@@ -680,7 +667,6 @@ if (!order){
     doc.end();
   } catch (error) {
     console.log(MESSAGES.System.INVOICE_EROR,err);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.INVOICE_EROR);
      next(error)
   }
 };
@@ -713,7 +699,6 @@ export const viewDetails = async (req, res, next ) => {
     res.render("orderDetails.ejs", { order });
   } catch (error) {
     console.log(MESSAGES.System.ORDER_DETAIL_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.SERVER_ERROR);
      next(error);
   }
 };

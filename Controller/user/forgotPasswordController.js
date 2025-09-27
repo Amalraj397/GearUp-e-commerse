@@ -7,7 +7,7 @@ export const forgotverifyEmail = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    // Check if the email address already exists
+    //  if the email sddress already exisits
     const userExist = await userschema.findOne({ email: email });
 
     if (!userExist) {
@@ -21,7 +21,7 @@ export const forgotverifyEmail = async (req, res, next) => {
     const expiryTime = Date.now() + 60 * 3000;
     console.log(" Forgot Password - OTP :", otp);
 
-    // Send OTP to corresponding email
+    // Send OTP to email
     await sendEmail({ to: email, otp });
 
     req.session.otp = otp;
@@ -35,7 +35,6 @@ export const forgotverifyEmail = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Auth.EMAIL_VERIFY_FAIL, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
      next(error);
   }
 };
@@ -46,7 +45,6 @@ export const forgotGetOtp = (req, res, next) => {
     res.render("forgotOTP.ejs");
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_PAGE_ERROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
      next(error);
   }
 };
@@ -58,7 +56,7 @@ export const forgotverifyOtp = async (req, res, next) => {
     const storedOtp = req.session.otp?.toString();
     const otpExpiration = req.session.otpExpiration;
 
-    // Check if OTP expired
+    // Check  OTP expired
     if (Date.now() > otpExpiration) {
       delete req.session.otp;
       delete req.session.otpExpiration;
@@ -89,7 +87,6 @@ export const forgotverifyOtp = async (req, res, next) => {
     }
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_VERIFY_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
      next(error);
   }
 };
@@ -125,7 +122,7 @@ export const forgotresendOTP = async (req, res, next) => {
     });
   } catch (error) {
     console.error(MESSAGES.Auth.RESENT_OTP_EROR, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+
     next(error);
   }
 };
@@ -136,7 +133,7 @@ export const getSetnewPassword = (req, res, next) => {
     res.render("updatePassword.ejs");
   } catch (error) {
     console.error(MESSAGES.Auth.ERR_RESET_PASS_PAGE, error);
-    // res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.SERVER_ERROR);
+
      next(error);
   }
 };
