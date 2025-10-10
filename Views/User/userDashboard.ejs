@@ -66,9 +66,12 @@
 	                		<div class="col-md-8 col-lg-9">
 	                			<div class="tab-content">
 								    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-								    	<p class="dashp">Hello <span class="font-weight-normal text-dark"><%= userData.firstName+" "+userData.lastName %></span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+								    	<p class="dashp">Hello,   <span class="font-weight-normal text-dark"><%= userData.firstName+" "+userData.lastName %></span> (<a href="/logout" style="color: rgb(255, 0, 0); font-style: italic;">Log out</a>) 
 								    	<br>
-								    	From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+								    	From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link" style="
+    color: #ff6503; font-size: 1.9rem;">RECENT ORDERS</a>, manage your <a href="#tab-address" class="tab-trigger-link" style="
+    color: #ff6503; font-size: 1.9rem;"> SHIPPING AND BILLIING ADDRESS</a>, and <a href="#tab-account" class="tab-trigger-link" style="
+    color: #ff6503; font-size: 1.9rem;"> EDIT YOUR PASSWORD AND ACCOUNT DETAILS </a>.</p>
 								    </div><!-- .End .tab-pane -->
 
 								    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
@@ -134,20 +137,20 @@
 			                				<div class="row">
 			                					<div class="col-sm-6">
 			                						<label>First Name </label>
-			                						<input type="text" class="form-control" id="firstname" value="<%= userData.firstName %>">
+			                						<input type="text" class="form-control" id="firstname" value="<%= userData.firstName %>" readonly>
 			                					</div><!-- End .col-sm-6 -->
 
 			                					<div class="col-sm-6">
 			                						<label>Last Name </label>
-			                						<input type="text" class="form-control"value="<%= userData.lastName %>" required>
+			                						<input type="text" class="form-control"value="<%= userData.lastName %>" readonly>
 			                					</div><!-- End .col-sm-6 -->
 			                				</div><!-- End .row -->
 
 		                					<label>Email address </label>
-		        							<input type="email"  id="userEmail" class="form-control" value="<%= userData.email %>"required>
+		        							<input type="email"  id="userEmail" class="form-control" value="<%= userData.email %>" readonly>
 
 		            						<label>Phone Number</label>
-		            						<input type="text" id="userPhone" class="form-control" value="<%= userData.phone %>">
+		            						<input type="number" id="userPhone" class="form-control" value="<%= userData.phone %>" readonly>
 
 											<div class="address">
                                                 <label>Address</label>
@@ -156,7 +159,7 @@
                                                         value="<%= typeof userData.address === 'string' && userData.address.trim() ? userData.address : 'No address, update now' %>"> -->
 														                            <% if (addresses.length > 0) { %>
                                                           <% const addr = addresses[0]; %>
-                                                          <input type="text" class="form-control" value="<%= `${addr.houseName}, ${addr.city}, ${addr.state} - ${addr.pincode}` %>">
+                                                          <input type="text" class="form-control" value="<%= `${addr.houseName}, ${addr.city}, ${addr.state} - ${addr.pincode}` %>" readonly>
                                                         <% } else { %>
                                                           <input type="text" class="form-control" value="No address, update now">
                                                         <% } %>

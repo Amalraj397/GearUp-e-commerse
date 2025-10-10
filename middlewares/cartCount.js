@@ -21,6 +21,7 @@ export const cartCountMiddleware = async (req, res, next) => {
   }
 };
 
+
 export const wishlistCountmiddleware = async (req, res, next) => {
   const user = req.session.user;
   const userId = user?.id;
@@ -31,11 +32,25 @@ export const wishlistCountmiddleware = async (req, res, next) => {
       return next();
     }
 
-    const wishlist = await wishlistSchema.findOne({ userId });
-    res.locals.wishlistCount = wishlist ? wishlist.products.length : 0;
+    const wishlist = await wishlistSchema.findOne({ userId }).populate("products.productId");
+
+    if (!wishlist) {
+      res.locals.wishlistCount = 0;
+      return next();
+    }
+
+    // Filter only valid products (not blocked or unlisted)
+    const validProducts = wishlist.products.filter(
+      (item) =>
+        item.productId &&
+        !item.productId.isBlocked &&
+        item.productId.status === "In-stock"
+    );
+
+    res.locals.wishlistCount = validProducts.length;
     next();
   } catch (error) {
-    console.log("error in fetching wishlistcount:", error);
+    console.log("Error in fetching wishlist count:", error);
     res.locals.wishlistCount = 0;
     next();
   }

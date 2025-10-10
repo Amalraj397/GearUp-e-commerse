@@ -322,12 +322,13 @@
           <thead>
             <tr>
               <th>SL No.</th>
-              <th>Product Image</th>
-              <th>Order ID</th>
-              <th>Return Date</th>
-              <th>Return Reason</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>PRODUCT-IMG</th>
+              <th>ORDER-ID</th>
+              <th>USER</th>
+              <th>DATE</th>
+              <th>REASON</th>
+              <th>STATUS</th>
+              <th>ACTION</th>
             </tr>
           </thead>
           <tbody id="returnsTableBody"></tbody>
@@ -440,22 +441,20 @@
                   `).join("")
                 : "No Items"}
           </td>
-          <td><strong>${ret.orderId?._id.slice(0,10)+"..." || "N/A"}</strong></td>
-          <td>${ ret.productReturnReason 
-                ? (ret.productReturnReason.length > 20
-                    ? `
-                      <span class="reason-text">
-                        ${ret.productReturnReason.slice(0, 20)}...
-                      </span>
-                      <button class="btn btn-sm btn-link text-info p-0" 
-                           onclick="showFullReason('${ret._id}')"> More
-                      </button>
-                    `
-                    : ret.productReturnReason)
-                : "N/A"
-            }
+          <td>${ret.orderId?._id.slice(0,10)+"..." || "N/A"}</td>
+          <td>${ret.orderId?.userDetails?.firstName || "Unknown User"}</td>
+          <td>${ret.productReturnDate ? new Date(ret.productReturnDate).toLocaleDateString() : "N/A" }</td>  
+          <td>${ret.productReturnReason ? (ret.productReturnReason.length > 20? ` 
+                 <span class="reason-text">
+                        ${ret.productReturnReason.slice(0, 15)}...
+                 </span>
+                 
+                 <button class="btn btn-sm btn-link text-info p-0" 
+                      onclick="showFullReason('${ret._id}')"> More
+                 </button>
+                `: ret.productReturnReason): "N/A"}
           </td>
-          <td><span class="status-label">${ret.returnStatus}</span></td>
+          <td><strong><span class="status-label">${ret.returnStatus}</span></strong></td>
           <td>
             <select class="status-select" onchange="updateReturnStatus('${ret._id}', this.value)">
               <option value="Pending" ${ret.returnStatus === 'Pending' ? 'selected' : ''}>Pending</option>

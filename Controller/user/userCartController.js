@@ -6,68 +6,143 @@ import wishlistSchema from "../../Models/wishlistModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js"
 import { STATUS } from "../../utils/statusCodes.js";
 
+// export const getCartPage = async (req, res, next) => {
+//   const user = req.session.user;
+//   const userId = user?.id;
+
+//   try {
+//     if (!userId) {
+//       return res.redirect("/login");
+//     }
+//     const userData = await userschema.findById(userId);
+
+//     if (!userData) {
+//       return res  
+//       .status(STATUS.NOT_FOUND)
+//       .json({ message: MESSAGES.Users.NO_USER });
+//     }
+
+//     const cart = await cartSchema
+//       .findOne({ userDetails: userId })
+//       .populate("items.productId");
+
+//     const cartCount = cart ? cart.items.length : 0;
+
+//     if (!cart || cart.items.length === 0) {
+
+//       return res.render("userCart.ejs", {
+//         userData,
+//         cart: null,
+//         cartCount: 0,
+//         festivalOFF: 0,
+//         shippingCharge: 0,
+//         grandTotal: 0,
+//         TotalAmount: 0,
+//         emptyMessage: MESSAGES.Cart.CART_EMPTY,
+//       });
+//     }
+//     // Calculate grand total
+//     const TotalAmount = cart.items.reduce((acc, item) => {
+//       return acc + item.salePrice * item.quantity;
+//     }, 0);
+
+//     const festivalOFF = (TotalAmount * 10) / 100; // calcaulating te festival discount
+//     const discountTotal = TotalAmount - festivalOFF; // calulating  festical discount price
+
+//     res.render("userCart.ejs", {
+//       userData,
+//       cart,
+//       cartCount,
+//       TotalAmount,
+//       discountTotal,
+//       festivalOFF,
+//     });
+//   } catch (error) {
+//     console.error(MESSAGES.Cart.CartLogger.CART_PAGE_EROR, error);
+//          next(error);
+//   }
+// };
+
 export const getCartPage = async (req, res, next) => {
   const user = req.session.user;
   const userId = user?.id;
 
-  // console.log("userId  and user in cart page::", userId, req.session.user);
   try {
-    if (!userId) {
-      return res.redirect("/login");
-    }
+    if (!userId) return res.redirect("/login");
+
     const userData = await userschema.findById(userId);
-
-    if (!userData) {
-      return res  
-      .status(STATUS.NOT_FOUND)
-      .json({ message: MESSAGES.Users.NO_USER });
-    }
-
     const cart = await cartSchema
       .findOne({ userDetails: userId })
       .populate("items.productId");
 
-    const cartCount = cart ? cart.items.length : 0;
-
     if (!cart || cart.items.length === 0) {
-
       return res.render("userCart.ejs", {
         userData,
         cart: null,
         cartCount: 0,
         festivalOFF: 0,
-        shippingCharge: 0,
         grandTotal: 0,
         TotalAmount: 0,
-        emptyMessage: MESSAGES.Cart.CART_EMPTY,
+        emptyMessage: "Your cart is empty",
       });
     }
 
-    // Calculate grand total
-    const TotalAmount = cart.items.reduce((acc, item) => {
-      return acc + item.salePrice * item.quantity;
-    }, 0);
+    //  Safely handle blocked & out-of-stock items
+      const updatedItems = cart.items.map(item => {
+      const product = item.productId;
+      const unavailable =
+        product.isBlocked || product.status === "Out-of-stock";
 
-    const festivalOFF = (TotalAmount * 10) / 100; // calcaulating te festival discount
-    const discountTotal = TotalAmount - festivalOFF; // calulating  festical discount price
+      // return {
+      //   ...item._doc,
+      //   isBlocked: product.isBlocked,
+      //   status: product.status,
+      //   unavailable,
+      // };
 
-    console.log("festivalOFF", festivalOFF);
-  
-    console.log("discountTotal", discountTotal);
+      const salePrice = unavailable ? 0 : (item.salePrice || 0);
+      const totalProductprice = salePrice * (item.quantity || 0);
+
+  return {
+    ...item._doc,
+    isBlocked: product.isBlocked,
+    status: product.status,
+    unavailable,
+    salePrice,
+    totalProductprice
+  };
+    });
+
+    //  Calculate total only for available products
+
+    // const TotalAmount = updatedItems.reduce((acc, item) => {
+    //   if (item.unavailable) return acc; // skip unavailable
+    //   return acc + (item.salePrice || 0) * (item.quantity || 0);
+    // }, 0);
+
+    const TotalAmount = updatedItems.reduce(
+  (acc, item) => acc + (item.totalProductprice || 0),
+  0
+);
+
+    const festivalOFF = (TotalAmount * 10) / 100;
+    const discountTotal = TotalAmount - festivalOFF;
 
     res.render("userCart.ejs", {
       userData,
-      cart,
-      cartCount,
+      cart: { ...cart._doc, items: updatedItems },
+      cartCount: updatedItems.length,
       TotalAmount,
       discountTotal,
       festivalOFF,
     });
   } catch (error) {
-    console.error(MESSAGES.Cart.CartLogger.CART_PAGE_EROR, error);
-         next(error);
+    console.error("Cart Page Error:", error);
+    next(error);
   }
 };
+
+
 
 export const addToCartpage = async (req, res, next) => {
   try {
@@ -324,10 +399,11 @@ export const increaseCartQuantity = async (req, res, next) => {
 export const updateQuantity = async (req, res, next) => {
   try {
     const { productId, quantity } = req.body;
+    const userId = req.session.user._id;
 
      const qty = parseInt(quantity);
-    // console.log("req.Body in update Quantity::", req.body);
-
+    console.log("req.Body in update Quantity::", req.body);
+    
     // update quantity 
     await cartSchema.updateOne(
       { userId, "items.productId": productId },
@@ -336,7 +412,7 @@ export const updateQuantity = async (req, res, next) => {
 
     res.json({ success: true, message: "Quantity updated" });
   } catch (error) {
-    console.error(MESSAGES.Cart.CartLogger.CART_QTY_EROR.error);
+    console.error(MESSAGES.Cart.CartLogger.CART_QTY_EROR,error);
 
     next(error);
   }

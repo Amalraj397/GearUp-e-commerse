@@ -73,7 +73,7 @@
                       <!-- quantity -->
                       <td class="quantity-col">
                         <div class="cart-product-quantity">
-                          <input type="number" class="form-control cartQuantity" value="<%= item.quantity %>" min="1" max="5" step="1" required oninput="validateQuantity(this)">
+                          <input type="number" class="form-control cartQuantity" value ="<%= item.quantity %>" min="1" max="5" step="1" required oninput="validateQuantity(this)">
                         </div>
                       </td>
 
@@ -189,203 +189,202 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-  <!-- <script>
-  function updateRowTotal(row) {
-      const priceElement = row.querySelector(".itemSaleprice");
-      const quantityInput = row.querySelector(".cartQuantity");
-      const totalElement = row.querySelector(".totalPrice");
+  <script>
+  // function updateRowTotal(row) {
+  //     const priceElement = row.querySelector(".itemSaleprice");
+  //     const quantityInput = row.querySelector(".cartQuantity");
+  //     const totalElement = row.querySelector(".totalPrice");
 
-      const price = parseFloat(priceElement.textContent.replace("₹", "").trim());
-      const quantity = parseInt(quantityInput.value) || 1;
-      const total = price * quantity;
+  //     const price = parseFloat(priceElement.textContent.replace("₹", "").trim());
+  //     const quantity = parseInt(quantityInput.value) || 1;
+  //     const total = price * quantity;
 
-      totalElement.textContent = "₹" + total.toFixed(2);
-  }
+  //     totalElement.textContent = "₹" + total.toFixed(2);
+  // }
 
-  function updateGrandTotal() {
-    let grandTotal = 0;
-    document.querySelectorAll(".cart-item").forEach(row => {
-      const totalElement = row.querySelector(".totalPrice");
-      const total = parseFloat(totalElement.textContent.replace("₹", "").trim());
-      grandTotal += total;
-    });
+  // function updateGrandTotal() {
+  //   let grandTotal = 0;
+  //   document.querySelectorAll(".cart-item").forEach(row => {
+  //     const totalElement = row.querySelector(".totalPrice");
+  //     const total = parseFloat(totalElement.textContent.replace("₹", "").trim());
+  //     grandTotal += total;
+  //   });
   
-    // Update subtotal and total in summary
-    document.querySelector(".summary-subtotal td:last-child").textContent = "₹" + grandTotal.toFixed(2);
-    document.querySelector(".summary-total td:last-child").textContent =  grandTotal.toFixed(2);
-  }
+  //   // Update subtotal and total in summary
+  //   document.querySelector(".summary-subtotal td:last-child").textContent = "₹" + grandTotal.toFixed(2);
+  //   document.querySelector(".summary-total td:last-child").textContent =  grandTotal.toFixed(2);
+  // }
 
-  function attachQuantityListeners() {
-    document.querySelectorAll(".cart-item").forEach(row => {
-      const quantityInput = row.querySelector(".cartQuantity");
+  // function attachQuantityListeners() {
+  //   document.querySelectorAll(".cart-item").forEach(row => {
+  //     const quantityInput = row.querySelector(".cartQuantity");
 
-      quantityInput.addEventListener("input", () => {
-        updateRowTotal(row);
-        updateGrandTotal();
-      });
-    });
-  }
+  //     quantityInput.addEventListener("input", () => {
+  //       updateRowTotal(row);
+  //       updateGrandTotal();
+  //     });
+  //   });
+  // }
 
 // Initial calculation on page load
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".cart-item").forEach(row => updateRowTotal(row));
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   document.querySelectorAll(".cart-item").forEach(row => updateRowTotal(row));
 
-    const savedQuantity = localStorage.getItem('cartQuantity');
+  //   const savedQuantity = localStorage.getItem('cartQuantity');
 
-  if (savedQuantity) {
-    savedQuantity= parseInt(savedQuantity);
+  // if (savedQuantity) {
+  //   savedQuantity= parseInt(savedQuantity);
 
-    if (isNaN(savedQuantity) || 
-      savedQuantity < parseInt(input.min) ||
-      savedQuantity > parseInt(input.max)) 
-     {
-      input.value = input.min; // reset to min if invalid
-    } else {
-      input.value = savedQuantity;
-    }
-  }
-    updateGrandTotal();
-    attachQuantityListeners();
-  });
+  //   if (isNaN(savedQuantity) || 
+  //     savedQuantity < parseInt(input.min) ||
+  //     savedQuantity > parseInt(input.max)) 
+  //    {
+  //     input.value = input.min; // reset to min if invalid
+  //   } else {
+  //     input.value = savedQuantity;
+  //   }
+  // }
+  //   updateGrandTotal();
+  //   attachQuantityListeners();
+  // });
 
+    // document.querySelectorAll(".removeCart").forEach(button => {
+    //   button.addEventListener("click", async () => {
+    //     const productId = button.getAttribute("data-product-id");
 
-    document.querySelectorAll(".removeCart").forEach(button => {
-      button.addEventListener("click", async () => {
-        const productId = button.getAttribute("data-product-id");
+    //     // SweetAlert confirmation
+    //     Swal.fire({
+    //       title: "Are you sure?",
+    //       text: "This item will be removed from your cart.",
+    //       icon: "warning",
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#d33",
+    //       cancelButtonColor: "#3085d6",
+    //       confirmButtonText: "Yes, remove it!"
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           const response = await fetch(`/removeFromCart/${productId}`, {
+    //             method: "DELETE",
+    //             headers: {
+    //               "Content-Type": "application/json"
+    //             }
+    //           });
 
-        // SweetAlert confirmation
-        Swal.fire({
-          title: "Are you sure?",
-          text: "This item will be removed from your cart.",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#d33",
-          cancelButtonColor: "#3085d6",
-          confirmButtonText: "Yes, remove it!"
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              const response = await fetch(`/removeFromCart/${productId}`, {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json"
-                }
-              });
+    //           const data = await response.json();
 
-              const data = await response.json();
+    //           if (response.ok) {
+    //             button.closest("tr").remove();
+    //             // Update the cart badge
+    //             document.querySelector(".cart-badge").textContent = data.cartCount;
 
-              if (response.ok) {
-                button.closest("tr").remove();
-                // Update the cart badge
-                document.querySelector(".cart-badge").textContent = data.cartCount;
-
-                // Success alert
-                Swal.fire("Removed!", data.message, "success");
-              } else {
-                Swal.fire("Error!", data.message, "error");
-              }
-            } catch (error) {
-              Swal.fire("Error!", "Something went wrong.", "error");
-            }
-          }
-        });
-      });
-    });
+    //             // Success alert
+    //             Swal.fire("Removed!", data.message, "success");
+    //           } else {
+    //             Swal.fire("Error!", data.message, "error");
+    //           }
+    //         } catch (error) {
+    //           Swal.fire("Error!", "Something went wrong.", "error");
+    //         }
+    //       }
+    //     });
+    //   });
+    // });
     
-  function validateQuantity(input) {
-    const min = parseInt(input.min);
-    const max = parseInt(input.max);
-    let value = parseInt(input.value);
+  // function validateQuantity(input) {
+  //   const min = parseInt(input.min);
+  //   const max = parseInt(input.max);
+  //   let value = parseInt(input.value);
   
-    // If input is not a number, reset to min
-    if (isNaN(value)) {
-      input.value = min;
-      return;
-    }
+  //   // If input is not a number, reset to min
+  //   if (isNaN(value)) {
+  //     input.value = min;
+  //     return;
+  //   }
   
-    // Clamp value between min and max
-    if (value < min) {
-      input.value = min;
-    } else if (value > max-1) {
-      input.value = max;
+  //   // Clamp value between min and max
+  //   if (value < min) {
+  //     input.value = min;
+  //   } else if (value > max-1) {
+  //     input.value = max;
   
-      // Show Toast only when value exceeds max
-      Toastify({
-        text: `Maximum quantity is ${max}`,
-        duration: 1500,
-        gravity: "top",
-        position: "right",
-        backgroundColor: "#FF0000",
-        stopOnFocus: true
-      }).showToast();
-    }
-    localStorage.setItem('cartQuantity', input.value);
-  }
-  </script> -->
-<!-- <script>
-function updateRowTotal(row) {
-  const priceElement = row.querySelector(".itemSaleprice");
-  const quantityInput = row.querySelector(".cartQuantity");
-  const totalElement = row.querySelector(".totalPrice");
+  //     // Show Toast only when value exceeds max
+  //     Toastify({
+  //       text: `Maximum quantity is ${max}`,
+  //       duration: 1500,
+  //       gravity: "top",
+  //       position: "right",
+  //       backgroundColor: "#FF0000",
+  //       stopOnFocus: true
+  //     }).showToast();
+  //   }
+  //   localStorage.setItem('cartQuantity', input.value);
+  // }
+  </script>
+<script>
+// function updateRowTotal(row) {
+//   const priceElement = row.querySelector(".itemSaleprice");
+//   const quantityInput = row.querySelector(".cartQuantity");
+//   const totalElement = row.querySelector(".totalPrice");
 
-  const price = parseFloat(priceElement.textContent.replace("₹", "").trim());
-  const quantity = parseInt(quantityInput.value) || 1;
-  const total = price * quantity;
+//   const price = parseFloat(priceElement.textContent.replace("₹", "").trim());
+//   const quantity = parseInt(quantityInput.value) || 1;
+//   const total = price * quantity;
 
-  totalElement.textContent = "₹" + total.toFixed(2);
-}
+//   totalElement.textContent = "₹" + total.toFixed(2);
+// }
 
-function updateGrandTotal() {
-  let grandTotal = 0;
-  document.querySelectorAll(".cart-item").forEach(row => {
-    const totalElement = row.querySelector(".totalPrice");
-    const total = parseFloat(totalElement.textContent.replace("₹", "").trim());
-    grandTotal += total;
-  });
+// function updateGrandTotal() {
+//   let grandTotal = 0;
+//   document.querySelectorAll(".cart-item").forEach(row => {
+//     const totalElement = row.querySelector(".totalPrice");
+//     const total = parseFloat(totalElement.textContent.replace("₹", "").trim());
+//     grandTotal += total;
+//   });
 
-  // Update subtotal and total in summary
-  document.querySelector(".summary-subtotal td:last-child").textContent = "₹" + grandTotal.toFixed(2);
-  document.querySelector(".summary-total td:last-child").textContent = "₹" + grandTotal.toFixed(2);
-}
+//   // Update subtotal and total in summary
+//   document.querySelector(".summary-subtotal td:last-child").textContent = "₹" + grandTotal.toFixed(2);
+//   document.querySelector(".summary-total td:last-child").textContent = "₹" + grandTotal.toFixed(2);
+// }
 
-function attachQuantityListeners() {
-  document.querySelectorAll(".cart-item").forEach(row => {
-    const quantityInput = row.querySelector(".cartQuantity");
+// function attachQuantityListeners() {
+//   document.querySelectorAll(".cart-item").forEach(row => {
+//     const quantityInput = row.querySelector(".cartQuantity");
 
-    quantityInput.addEventListener("input", () => {
-      validateQuantity(quantityInput);
-      updateRowTotal(row);
-      updateGrandTotal();
-    });
-  });
-}
+//     quantityInput.addEventListener("input", () => {
+//       validateQuantity(quantityInput);
+//       updateRowTotal(row);
+//       updateGrandTotal();
+//     });
+//   });
+// }
 
 // Initial calculation on page load
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".cart-item").forEach(row => {
-    const quantityInput = row.querySelector(".cartQuantity");
-    let savedQuantity = localStorage.getItem("cartQuantity");
+// document.addEventListener("DOMContentLoaded", () => {
+//   document.querySelectorAll(".cart-item").forEach(row => {
+//     const quantityInput = row.querySelector(".cartQuantity");
+//     let savedQuantity = localStorage.getItem("cartQuantity");
 
-    if (savedQuantity) {
-      savedQuantity = parseInt(savedQuantity);
+//     if (savedQuantity) {
+//       savedQuantity = parseInt(savedQuantity);
 
-      if (
-        isNaN(savedQuantity) ||
-        savedQuantity < parseInt(quantityInput.min) ||
-        savedQuantity > parseInt(quantityInput.max)
-      ) {
-        quantityInput.value = quantityInput.min; // reset to min if invalid
-      } else {
-        quantityInput.value = savedQuantity;
-      }
-    }
+//       if (
+//         isNaN(savedQuantity) ||
+//         savedQuantity < parseInt(quantityInput.min) ||
+//         savedQuantity > parseInt(quantityInput.max)
+//       ) {
+//         quantityInput.value = quantityInput.min; // reset to min if invalid
+//       } else {
+//         quantityInput.value = savedQuantity;
+//       }
+//     }
 
-    updateRowTotal(row);
-  });
+//     updateRowTotal(row);
+//   });
 
-  updateGrandTotal();
-  attachQuantityListeners();
-});
+//   updateGrandTotal();
+//   attachQuantityListeners();
+// });
 
 document.querySelectorAll(".removeCart").forEach(button => {
   button.addEventListener("click", async () => {
@@ -430,40 +429,71 @@ document.querySelectorAll(".removeCart").forEach(button => {
   });
 });
 
-function validateQuantity(inputElement) {
-  const min = parseInt(inputElement.min);
-  const max = parseInt(inputElement.max);
-  let value = parseInt(inputElement.value);
+// function validateQuantity(inputElement) {
+//   const min = parseInt(inputElement.min);
+//   const max = parseInt(inputElement.max);
+//   let value = parseInt(inputElement.value);
 
-  // If input is not a number, reset to min
-  if (isNaN(value)) {
-    inputElement.value = min;
-    return;
-  }
+//   // If input is not a number, reset to min
+//   if (isNaN(value)) {
+//     inputElement.value = min;
+//     return;
+//   }
 
-  // Clamp value between min and max
-  if (value < min) {
-    inputElement.value = min;
-  } else if (value > max-1) {
-    inputElement.value = max;
+//   // Clamp value between min and max
+//   if (value < min) {
+//     inputElement.value = min;
+//   } else if (value > max-1) {
+//     inputElement.value = max;
 
-    // Show Toast only when value exceeds max
-    Toastify({
-      text: `Maximum quantity is ${max}`,
-      duration: 1500,
-      gravity: "top",
-      position: "right",
-      backgroundColor: "#FF0000",
-      stopOnFocus: true
-    }).showToast();
-  }
+//     // Show Toast only when value exceeds max
+//     Toastify({
+//       text: `Maximum quantity is ${max}`,
+//       duration: 1500,
+//       gravity: "top",
+//       position: "right",
+//       backgroundColor: "#FF0000",
+//       stopOnFocus: true
+//     }).showToast();
+//   }
 
-  // Save to localStorage
-  // localStorage.setItem("cartQuantity", inputElement.value);
-}
-</script> -->
+//   // Save to localStorage
+//   // localStorage.setItem("cartQuantity", inputElement.value);
+// }
+//</script>
 
 <script>
+  function updateQuantityOnBackend(productId, quantity) {
+  fetch("/updateCartQuantity", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ productId, quantity })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Optionally show success toast
+        Toastify({ text: "Quantity updated", duration: 500 }).showToast();
+      } else {
+        Toastify({
+          text: data.message || "Failed to update quantity",
+          duration: 1500,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#FF0000"
+        }).showToast();
+      }
+    })
+    .catch(() => {
+      Toastify({
+        text: "Error updating cart",
+        duration: 1500,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#FF0000"
+      }).showToast();
+    });
+}
   function updateRowTotal(row) {
   const priceElement = row.querySelector(".itemSaleprice");
   const quantityInput = row.querySelector(".cartQuantity");
@@ -521,37 +551,6 @@ function validateQuantity(inputElement, productId) {
   updateQuantityOnBackend(productId, inputElement.value);
 }
 
-function updateQuantityOnBackend(productId, quantity) {
-  fetch("/updateCartQuantity", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId, quantity })
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        // Optionally show success toast
-        Toastify({ text: "Quantity updated", duration: 500 }).showToast();
-      } else {
-        Toastify({
-          text: data.message || "Failed to update quantity",
-          duration: 1500,
-          gravity: "top",
-          position: "right",
-          backgroundColor: "#FF0000"
-        }).showToast();
-      }
-    })
-    .catch(() => {
-      Toastify({
-        text: "Error updating cart",
-        duration: 1500,
-        gravity: "top",
-        position: "right",
-        backgroundColor: "#FF0000"
-      }).showToast();
-    });
-}
 
 function attachQuantityListeners() {
   document.querySelectorAll(".cart-item").forEach(row => {

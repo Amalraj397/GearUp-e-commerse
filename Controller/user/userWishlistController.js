@@ -1,27 +1,85 @@
 
 import userschema from "../../Models/userModel.js";
+import productSchema from "../../Models/productModel.js"
 import wishlistSchema from "../../Models/wishlistModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
-export const getUserWishlist = async (req, res,next) => {
+// export const getUserWishlist = async (req, res,next) => {
+//   const user = req.session.user;
+//   const userId = user?.id;
+
+//   try {
+//     if (!userId) {
+//       return res.redirect("/login");
+//     }
+
+//     const UserData = await userschema.findById(userId);
+
+//     if (!UserData) {
+//       return res  
+//       .status(STATUS.NOT_FOUND)
+//       .json({ message: MESSAGES.Users.NO_USER });
+//     }
+
+//     //check if the current user has wishlist
+//     const wishlistData = await wishlistSchema.findOne({ userId }).populate({
+//       path: "products.productId",
+//       populate: [
+//         { path: "brand", select: "isBlocked" },
+//         { path: "category", select: "isListed" },
+//       ],
+//     });
+
+//     // console.log("wishlistdata::",wishlistData);
+
+//     const wishlistCount = wishlistData ? wishlistData.products.length : 0;
+
+//     const filteredWishlist = wishlistData
+//       ? wishlistData.products.filter((item) => {
+//           const product = item.productId;
+//           return (
+//             product &&
+//             !product.isBlocked &&
+//             product.brand &&
+//             !product.brand.isBlocked &&
+//             product.category &&
+//             !product.category.isListed
+//           );
+//         })
+//       : [];
+//     const sortedWishlist = filteredWishlist.sort(
+//       (a, b) => b.createdOn - a.createdOn,
+//     );
+
+//      res.render("userWishlist.ejs", {  
+//       UserData,
+//       wishlist: sortedWishlist,
+//       wishlistCount,
+//     });
+
+//   } catch (error) {
+//     console.log(MESSAGES.Wishlist.PAGE_ERROR, error);
+//     next(error);
+//   }
+// };
+
+
+export const getUserWishlist = async (req, res, next) => {
+  console.log("wishlist controller started.....")
   const user = req.session.user;
   const userId = user?.id;
 
   try {
-    if (!userId) {
-      return res.redirect("/login");
-    }
+    if (!userId) return res.redirect("/login");
 
     const UserData = await userschema.findById(userId);
-
     if (!UserData) {
-      return res  
-      .status(STATUS.NOT_FOUND)
-      .json({ message: MESSAGES.Users.NO_USER });
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Users.NO_USER });
     }
 
-    //check if the current user has wishlist
     const wishlistData = await wishlistSchema.findOne({ userId }).populate({
       path: "products.productId",
       populate: [
@@ -29,41 +87,45 @@ export const getUserWishlist = async (req, res,next) => {
         { path: "category", select: "isListed" },
       ],
     });
+     console.log("wishlist data fetched::", wishlistData)
 
-    // console.log("wishlistdata::",wishlistData);
+    if (!wishlistData) {
+      return res.render("userWishlist.ejs", {
+        UserData,
+        wishlist: [],
+        wishlistCount: 0,
+      });
+    }
 
-    const wishlistCount = wishlistData ? wishlistData.products.length : 0;
+    const filteredWishlist = wishlistData.products.filter((item) => {
+      const product = item.productId;
+      if (!product) return false; // if no product 
 
-    const filteredWishlist = wishlistData
-      ? wishlistData.products.filter((item) => {
-          const product = item.productId;
-          return (
-            product &&
-            !product.isBlocked &&
-            product.brand &&
-            !product.brand.isBlocked &&
-            product.category &&
-            !product.category.isListed
-          );
-        })
-      : [];
+      const brandOk = !product.brand?.isBlocked ?? true;
+      const categoryOk = product.category?.isBlocked ?? true;
+      const productOk = !product.isBlocked && product.status === "In-stock";
+
+      return brandOk && categoryOk && productOk;
+    });
+
     const sortedWishlist = filteredWishlist.sort(
-      (a, b) => b.createdOn - a.createdOn,
+      (a, b) => b.createdOn - a.createdOn
     );
 
-     res.render("userWishlist.ejs", {  
+    const wishlistCount = sortedWishlist.length;
+
+    res.render("userWishlist.ejs", {
       UserData,
       wishlist: sortedWishlist,
       wishlistCount,
     });
-
   } catch (error) {
     console.log(MESSAGES.Wishlist.PAGE_ERROR, error);
     next(error);
   }
 };
 
-// --------------------------------------
+// ------------------------------------------------------------
 
 export const addToWishlist = async (req, res,next) => {
   const userId = req.session?.user?.id;
@@ -75,6 +137,14 @@ export const addToWishlist = async (req, res,next) => {
       return res
       .status(STATUS.BAD_REQUEST)
       .json({ message: MESSAGES.Wishlist.USER_OR_PRODUCT_NOT_FOUND });
+    }
+     
+    let productData = await productSchema.findById(productId);
+    //  console.log("product::", productData);
+    if(productData.isBlocked){
+      return res
+      .status(STATUS.BAD_REQUEST)
+      .json({message: MESSAGES.Products.PRODUCT_BLOCKED})
     }
  
     let userWishlist = await wishlistSchema.findOne({ userId });

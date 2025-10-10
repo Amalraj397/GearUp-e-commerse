@@ -100,7 +100,7 @@ export const getOtpPage = async (req, res, next) => {
     const otpExpiration = req.session.otpExpiration || null;
     return res
     .status(STATUS.OK)
-    .render("enterOtp", { otpExpiration });
+    .render("enterOtp.ejs", { otpExpiration });
 
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_PAGE_ERROR, error);
@@ -264,6 +264,31 @@ export const userLogin = async (req, res, next) => {
   }
 };
 
+ export const  checkUserStatus = async(req,res,next)=>{
+  try{
+    const userId = req.session.user?.id;
+
+    if (!userId) {
+       return res
+       .status(STATUS.UNAUTHORIZED)
+       .json({message: MESSAGES.Users.UNAUTHORIZED});
+    }
+
+    const userData = await userschema.findById(userId);
+    
+    if (!userData) {
+       return res  
+       .status(STATUS.NOT_FOUND)
+       .json({ message: MESSAGES.Users.NO_USER });
+    }
+
+    res.json({ isBlocked: userData.isBlocked });
+  }catch(error){
+    console.error(error);
+    next(error);
+  }
+ }
+
 // ----------------user logout-----------------
 
 export const userLogout = async (req, res, next) => {
@@ -283,6 +308,7 @@ export const userLogout = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // -----------------------google authentication-----------------
 

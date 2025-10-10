@@ -252,23 +252,69 @@ export const getOrderSuccesspage = async (req, res, next) => {
   }
 };
 
-export const getmyOrders = async (req, res,next ) => {
+// export const getmyOrders = async (req, res,next ) => {
+//   const userId = req.session.user?.id;
+//   try {
+//     const userdata = await userSchema.findById(userId);
+
+//     if (!userdata) return res.redirect("/login");
+
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 10;
+//     const skip = (page - 1) * limit;
+
+//     const userOrders = await orderSchema
+//       .find({ userDetails: userId })
+//       .populate("items.productId")
+//       .sort({ createdAt: -1 })
+//       .skip(skip)
+//       .limit(limit);
+
+//     res.render("myOrders.ejs", { userOrders });
+//   } catch (error) {
+//     console.error(MESSAGES.Users.MY_ODR_ERR, error);
+//     next(error);
+//   }
+// };
+
+export const getmyOrders = async (req, res, next) => {
   const userId = req.session.user?.id;
+
   try {
     const userdata = await userSchema.findById(userId);
-
     if (!userdata) return res.redirect("/login");
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
+    // Use lean() so we can safely add custom fields
     const userOrders = await orderSchema
       .find({ userDetails: userId })
       .populate("items.productId")
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
+
+    // Attach rejectReason for rejected items
+    for (let order of userOrders) {
+      for (let item of order.items) {
+        if (item.itemStatus === "Return-rejected") {
+          const returnData = await orderReturnSchema.findOne({
+            orderId: order._id,
+            "returnItems.productId": item.productId._id,
+            "returnItems.variantName": item.variantName,
+          }).lean();
+
+          if (returnData) {
+            item.rejectReason = returnData.rejectReason || "No reason provided";
+          } else {
+            item.rejectReason = "No reason provided";
+          }
+        }
+      }
+    }
 
     res.render("myOrders.ejs", { userOrders });
   } catch (error) {
@@ -689,6 +735,8 @@ export const viewDetails = async (req, res, next ) => {
       { path: "category", select: "name" }
     ]
   });
+
+   console.log("order details in orderaDetail Page::",order);
 
     if (!order) {
       return res

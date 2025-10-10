@@ -16,6 +16,7 @@ import {
   resendOTP,
   handleGoogleSignup,
   getAboutPage,
+  checkUserStatus,
 } from "../Controller/user/UserController.js";
 
 // ----------forgot password controller-----------
@@ -84,6 +85,11 @@ import {
   cancelOrderItem,
 } from "../Controller/user/userOrderController.js";
 
+import { 
+  requestEmailUpdate, 
+  verifyEmailUpdate, 
+} from "../Controller/user/emailUpdateController.js"
+
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
 const userRoute = express.Router();
@@ -96,6 +102,7 @@ userRoute.get("/aboutUs", getAboutPage);
 userRoute.get("/login", nocache, showLogin);
 userRoute.post("/login", userLogin);
 userRoute.get("/logout", userLogout);
+userRoute.get('/checkUserStatus', checkUserStatus);
 
 //forgotpassword section
 userRoute.post("/forgotPassword", forgotverifyEmail);
@@ -131,11 +138,11 @@ userRoute.get("/productDetail/:id", getproductDetailpage);
 // --------------userprofile managament section---------------
 userRoute.get("/userDashboard", getUserDashboard);
 userRoute.get("/getEditProfile", geteditUserprofile);
-userRoute.put(
-  "/EditUserprofile",
-  uploadMiddleware("Users").single("userProfileImage"),
-  updateUserprofile,
-);
+userRoute.put("/EditUserprofile",uploadMiddleware("Users").single("userProfileImage"),updateUserprofile);
+
+// ---------- email verify-----------
+userRoute.post("/request-email-update", requestEmailUpdate);
+userRoute.post("/verify-email-otp", verifyEmailUpdate);
 
 // ---------------useraddress managemamet------------------
 userRoute.get("/addUserAddress", getAdd_UseraddressPage);
@@ -153,12 +160,12 @@ userRoute.get("/userCart", getCartPage);
 userRoute.post("/addToCart", addToCartpage);
 userRoute.delete("/removeFromCart/:id", removeFromCartpage);
 userRoute.post("/updateCartQuantity",updateQuantity);
-
+                 
 //-----------wishlist management----------
 userRoute.get("/Wishlist", getUserWishlist);
 userRoute.post("/addToWishlist", addToWishlist);
 userRoute.delete("/removeFromWishlist/:id", removefromwishlist);
-userRoute.post("/increaseCartQuantity", increaseCartQuantity);
+userRoute.post("/increaseCartQuantity", increaseCartQuantity);  
 
 //--------------checkout---------------
 userRoute.get("/checkout", getCheckoutpage);

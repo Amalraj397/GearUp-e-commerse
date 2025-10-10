@@ -1,4 +1,4 @@
-import categorySchema from "../../Models/categoryModel.js";
+ import categorySchema from "../../Models/categoryModel.js";
 import productSchema from "../../Models/productModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";

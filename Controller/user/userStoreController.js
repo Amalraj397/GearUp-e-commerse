@@ -72,10 +72,13 @@ export const getproductDetailpage = async (req, res, next) => {
       .populate("category")
       .populate("brand");
 
-    // console.log("Product Details:", product);
+    console.log("Product Details:", product);
 
     if (!product || product.isBlocked) {
-      return res.redirect("/user/store");
+      return res
+      .status(STATUS.NOT_FOUND)
+      .json({message: MESSAGES.Products.PRODUCT_NOT_FOUND});
+      // return res.redirect("/user/store");
     }
 
     const relatedProducts = await productSchema

@@ -177,6 +177,7 @@ export const listProduct = async (req, res, next) => {
     const updatedProduct = await productSchema.findByIdAndUpdate(productId, {
       isBlocked: false,
     });
+    
     // console.log("Listing product ID:", productId);   ///d
     if (!updatedProduct) {
       return res.status(STATUS.NOT_FOUND).json({

@@ -45,6 +45,7 @@ export const MESSAGES = {
     PRODUCT_UPDATED: "Product updated successfully",
     PRODUCT_DELETED: "Product deleted successfully",
     PRODUCT_LISTED: "Product listed successfully",
+    PRODUCT_BLOCKED:"This product may be DELETED or BLOCKED by the admin",
     PRODUCT_LIST_FAILED: "Failed to List the product",
     PRODUCT_UNLISTED: "Product un-listed successfully",
     PRODUCT_UNLIST_FAILED: "Failed to un-list the Product",

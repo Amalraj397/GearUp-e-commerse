@@ -227,6 +227,50 @@
     color: #ff0019;
 }
 
+.reject-reason-modal {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+}
+
+.reject-reason-modal .modal-header {
+  background-color: #ffeaea;
+  color: #b30000;
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.reject-reason-modal .modal-title {
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+}
+
+.reject-reason-text {
+  /* font-family: 'Poppins', sans-serif; */
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 18px;
+  color: #333;
+  background-color: #fff5f5;
+  border-left: 4px solid #ff4b4b;
+  padding: 12px 15px;
+  border-radius: 8px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  margin: 8px 0;
+  word-break: break-word;
+}
+
+.reject-reason-modal .btn-secondary {
+  background-color: #ff4b4b;
+  border: none;
+  font-weight: 500;
+}
+
+.reject-reason-modal .btn-secondary:hover {
+  background-color: #037786;
+}
 
   
 
@@ -368,6 +412,25 @@
   border-bottom: 2px solid #000; /* strong separator between orders */
 }
 
+.btn-more-reason {
+  background: none;
+  border: none;
+  color: #0d6efd; /* Bootstrap primary blue */
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 6px;
+  /* padding: 2px 6px; */
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-more-reason:hover {
+  background-color: rgba(29, 97, 200, 0.1); /* light blue hover */
+  text-decoration: underline;
+}
+
+
   @media (max-width: 768px) {
     .header-section h1 {
       font-size: 2rem;
@@ -468,6 +531,44 @@
     </div>
     <!-- Controls Section -->
 
+    <!-- return rejection modal -->
+
+  <!-- <div class="modal fade" id="rejectReasonModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Rejection Reason</h5>
+      </div>
+      <div class="modal-body" id="rejectReasonText"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="modal fade" id="rejectReasonModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content reject-reason-modal">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-circle text-danger me-2"></i>
+         Why your Return request rejected? 
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <p id="rejectReasonText" class="reject-reason-text"></p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- No Orders Message -->
     <div id="noOrdersMessage" class="no-orders" style="display: none;">
       <i class="fas fa-shopping-cart"></i>
@@ -531,45 +632,57 @@
         return new Date(dateString).toLocaleDateString('en-US', options);
       }
 
-      // Status badge
-      function getStatusBadge(status) {
-        const statusMap = {
-          'Pending': {
-            class: 'status-pending',
-            text: 'Pending'
-          },
-          'Shipped': {
-            class: 'status-shipped',
-            text: 'Shipped'
-          },
-          'Delivered': {
-            class: 'status-delivered',
-            text: 'Delivered'
-          },
-          'Cancelled': {
-            class: 'status-cancelled',
-            text: 'Cancelled'
-          },
-          'Returned': {
-            class: 'status-returned',
-            text: 'Returned'
-          },
-          'Return-accepted': {
-            class: 'status-return-accepted',
-            text:'Return Accepted'
-          },
-          'Return-rejected': {
-            class: 'status-return-rejected',
-            text:'Return Rejected'
-          },
-        };
-        const s = statusMap[status] || {
-          class: 'status-unknown',
-          text: 'Unknown'
-        };
-        return `<span class="status-badge ${s.class}">${s.text}</span>`;
-      }
+  function getStatusBadge(status, rejectReason = "", orderId = "", itemId = "") {
+  const statusMap = {
+    'Pending': {
+      class: 'status-pending',
+      text: 'Pending'
+    },
+    'Shipped': {
+      class: 'status-shipped',
+      text: 'Shipped'
+    },
+    'Delivered': {
+      class: 'status-delivered',
+      text: 'Delivered'
+    },
+    'Cancelled': {
+      class: 'status-cancelled',
+      text: 'Cancelled'
+    },
+    'Returned': {
+      class: 'status-returned',
+      text: 'Returned'
+    },
+    'Return-accepted': {
+      class: 'status-return-accepted',
+      text: 'Return Accepted'
+    },
+    'Return-rejected': {
+      class: 'status-return-rejected',
+      text: 'Return Rejected'
+    },
+  };
 
+  const s = statusMap[status] || {
+    class: 'status-unknown',
+    text: 'Unknown'
+  };
+
+  // special handling for rejected
+  if (status === 'Return-rejected') {
+  return `
+    <span class="status-badge ${s.class}">${s.text}</span>
+    <button 
+      class="btn-more-reason"
+      onclick="showRejectReason('${rejectReason || "No reason provided"}')"> why?
+    </button>
+  `;
+}
+
+  return `<span class="status-badge ${s.class}">${s.text}</span>`;
+}
+   
       // Action buttons
       function getActionButtons(status, orderId) {
         const viewBtn = `<a href="/orderdetails/${orderId}" class="btn-view">View</a>`;
@@ -621,15 +734,13 @@ function renderOrders() {
               <td>${formatDate(order.createdAt)}</td>
               <td>${item.quantity}</td>
               <td>₹${item.totalProductprice.toFixed(2)}</td>
-              <td>${getStatusBadge(item.itemStatus)}</td>
+              <td>${getStatusBadge(item.itemStatus, item.rejectReason, order._id, item._id)}</td>
               <td>
                 ${itemIndex === 0 
                   ? getActionButtons(order.orderStatus, order._id) 
-                  : ""
-                }
+                  : "" }
               </td>
-            </tr>
-          `;
+              </tr> `;
         })
         .join("");
 
@@ -639,7 +750,7 @@ function renderOrders() {
 
   updatePagination();
 }
-
+ 
       // Update pagination controls
       function updatePagination() {
         const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
@@ -717,6 +828,12 @@ function renderOrders() {
       // Init render
       renderOrders();
     });
+
+    function showRejectReason(reason) {
+  document.getElementById("rejectReasonText").textContent = reason;
+  const modal = new bootstrap.Modal(document.getElementById("rejectReasonModal"));
+  modal.show();
+  }
 
     // ---------------- ORDER ACTIONS ----------------
 

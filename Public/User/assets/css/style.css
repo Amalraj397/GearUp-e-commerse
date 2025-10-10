@@ -201,7 +201,7 @@ a:focus {
   color: #a6c76c !important;
 }
 .text-dark {
-  color: #ff8c00 !important;
+  color: #ff4700  !important;
   font-size: large;
   font-weight: 700;
 }
@@ -8618,10 +8618,10 @@ p {
 .form-control {
   height: 40px;
   padding: 0.85rem 2rem;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   line-height: 1.5;
   font-weight: 300;
-  color: #777;
+  color:#1c1a1a;
   background-color: #fafafa;
   border: 1px solid #ebebeb;
   border-radius: 0;

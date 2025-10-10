@@ -5,36 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Page Not Found | Autominima</title>
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* body {
-            font-family: 'Arial', sans-serif;
-            /* background: linear-gradient(135deg, #f4a261 0%, #e76f51 100%); */
-            /* background: url("your-image.jpg") no-repeat center center fixed;  */
-            /* background-size: cover; makes the image cover the whole screen */
-            /* min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow: hidden; */
-        /* } */ 
-
-            body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      overflow: hidden;
-      position: relative;
-    }
+        body {
+          margin: 0;
+          font-family: 'Arial', sans-serif;
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+          overflow: hidden;
+          position: relative;
+        }
 
         /* Background video */
         video.background-video {
@@ -44,7 +32,7 @@
           width: 100%;
           height: 100%;
           object-fit: cover;
-          z-index: -1; /* stays behind content */
+          z-index: -1;
         }
 
         .container {
@@ -341,7 +329,7 @@
         </div>
 
         <h1 class="main-text">Oops... Looks like you got lost</h1>
-        <p class="sub-text">Get back home by clicking the car</p>
+        <p class="sub-text">Get back home by clicking  below</p>
 
         <button class="home-button" onclick="goHome()">
              Return to Garage
@@ -350,7 +338,7 @@
 
     <script>
         function goHome() {
-            window.location.href = '/'; // Change this to your actual home page URL
+            window.location.href = '/shopPage'; // Change this to your actual home page URL
         }
 
         function toggleMenu() {

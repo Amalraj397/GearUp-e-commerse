@@ -47,6 +47,7 @@
                     <a href="/myOrders"><i class="fas fa-shopping-bag"></i>My Orders</a>
                     <a href="#"><i class="fas fa-headset"></i> Contact Us</a>
                     <a href="/logout" class="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    
                   </div>
                 </div>
 
@@ -76,15 +77,6 @@
             <% } %>
             </ul>
           </div>
-
-          <!-- new for google auth and normal auth -->
-          <!-- <ul class="auth-buttons">
-            <li class="nav-link" id="user-name" style="display: none;">Hi, welcome 👋</li>
-            <li><a href="/login" class="nav-link" id="login-link">Login</a></li>
-            <li><a href="/signup" class="nav-link" id="signup-link">Sign-up</a></li>
-            <li><a href="/logout" class="nav-link" id="logout-link" style="display: none;">Logout</a></li>
-          </ul> -->
-          
         </nav>
       </header>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -110,6 +102,30 @@
       });
     });
   });
+
+
+setInterval(async () => {
+  try {
+    const response = await fetch('/checkUserStatus');
+    if (!response.ok) return; // user not logged in, etc.
+
+    const data = await response.json();
+    if (data.isBlocked) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Account Blocked',
+        text: 'Your account has been temporarily blocked. Please contact the admin team.',
+        confirmButtonText: 'OK',
+        allowOutsideClick: false
+      }).then(() => {
+        window.location.href = '/logout'; // or custom logout handler
+      });
+    }
+  } catch (err) {
+    console.error('Error checking user status:', err);
+  }
+}, 10000); // 5 seconds
+
 </script>
 
       

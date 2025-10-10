@@ -203,7 +203,7 @@
   Your browser does not support the video tag.
 </video>
     <div class="signup-container">
-      <h1>SIGN UP</h1>
+      <h1 id="signID">SIGN UP</h1>
       <form id="signupForm" action="/signup" method="post">
         <input
           type="text"
@@ -238,33 +238,25 @@
         <div id="phoneError" class="errorMessage"></div>
 
         <div class="input-group">
-          <input
-            type="password"
-            id="register-password"
-            name="registerPassword"
-            placeholder="Enter Your Password"
-            
-          />
-          <div id="passwordError" class="errorMessage"></div>
-          <!-- <span class="toggle-password" onclick="togglePassword('password')">🔒</span> -->
-          <span
-            class="toggle-password"
-            onclick="togglePassword('register-password')"
-            >🔒</span
-          >
-        </div>
+  <input
+    type="password"
+    id="register-password"
+    placeholder="Enter Your Password"
+  />
+  <span class="toggle-password" data-target="register-password">🔒</span>
+  <div id="passwordError" class="errorMessage"></div>
+</div>
 
-        <div class="input-group">
-          <input
-            type="password"
-            id="register-confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            
-          />
-          <!-- <span class="toggle-password"onclick="togglePassword('confirmPassword')">🔒</span> -->
-          <div id="confpasswordError" class="errorMessage"></div>
-        </div>
+<div class="input-group">
+  <input
+    type="password"
+    id="register-confirmPassword"
+    placeholder="Confirm Password"
+  />
+  <span class="toggle-password" data-target="register-confirmPassword">🔒</span>
+  <div id="confpasswordError" class="errorMessage"></div>
+</div>
+
         <button class="btn" type="submit">CREATE ACCOUNT</button>
       </form>
 
@@ -299,21 +291,28 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      function togglePassword(id) {
-        const input = document.getElementById(id);
-        if (input.type === "password") {
-          input.type = "text";
-        } else {
-          input.type = "password";
-        }
-      }
+      // const user = ${userData};
 
+      document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("toggle-password")) {
+    const targetId = e.target.getAttribute("data-target");
+    const input = document.getElementById(targetId);
+    if (!input) return;
+
+    if (input.type === "password") {
+      input.type = "text";
+      e.target.textContent = "🔓"; // change icon
+    } else {
+      input.type = "password";
+      e.target.textContent = "🔒";
+    }
+  }
+});
       document
         .getElementById("signupForm")
         .addEventListener("submit", function (e) {
           e.preventDefault();
           clearErrors();
-
           // Get input values
           const firstName = document
             .getElementById("register-firstName")

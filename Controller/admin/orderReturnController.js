@@ -36,11 +36,17 @@ export const getOrderReturnPage = async (req, res, next) => {
 
     const returnOrders = await orderReturnSchema
       .find(query)
-      .populate("orderId")
-      .populate("returnItems.productId")
-      .sort(sortQuery)
-      .skip(skip)
-      .limit(limit);
+        .populate({
+          path: "orderId",
+          populate: {
+            path: "userDetails",   
+            select: "firstName",    
+          },
+        })
+        .populate("returnItems.productId")
+        .sort(sortQuery)
+        .skip(skip)
+        .limit(limit);
 
     const totalOrders = await orderReturnSchema.countDocuments(query);
     const totalPages = Math.ceil(totalOrders / limit);
@@ -90,7 +96,7 @@ export const approveReturn = async (req, res, next) => {
             item.itemStatus = "Return-accepted";
           }
         });
-      });
+      }); 
       await orderUpdate.save();
     }
 
