@@ -208,8 +208,8 @@ export const getProductEditpage = async (req, res, next) => {
       .populate("brand")
       .populate("category");
 
-    const brand = await brandSchema.find(); // To show all  brands
-    const category = await categorySchema.find(); // To show all  categories
+    const brand = await brandSchema.find(); // show all  brands
+    const category = await categorySchema.find(); // show all categories
 
     if (!product)
       return res
@@ -263,10 +263,9 @@ export const updateProduct = async (req, res, next) => {
 
     // finding brand and category
     const [brandDoc, categoryDoc] = await Promise.all([
-      brandSchema.findOne({ brandName: brand }),
-      categorySchema.findOne({ name: category }),
+      brandSchema.findById(brand),
+      categorySchema.findById(category),
     ]);
-
     const product = await productSchema.findById(productId);
     // console.log("product data ivde und:", product);    //debugging
 

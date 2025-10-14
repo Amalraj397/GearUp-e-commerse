@@ -536,7 +536,6 @@ function validateQuantity(inputElement, productId) {
   } else if (value > max-1) {
     inputElement.value = max;
 
-    // Show Toast only when value exceeds max
     Toastify({
       text: `Maximum quantity is ${max}`,
       duration: 1500,
@@ -547,7 +546,7 @@ function validateQuantity(inputElement, productId) {
     }).showToast();
   }
 
-  // ✅ Update backend cart
+  //Update backend cart
   updateQuantityOnBackend(productId, inputElement.value);
 }
 

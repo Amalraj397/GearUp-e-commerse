@@ -1,6 +1,9 @@
 import userschema from "../../Models/userModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js"
 import { STATUS } from "../../utils/statusCodes.js";
+import generateOTP from "../../utils/generate-OTP.js";
+import sendEmail from "../../utils/nodemailer.js";
+import securePassword from "../../utils/hashPass.js";
 
 // Verify email and send OTP
 export const forgotverifyEmail = async (req, res, next) => {
@@ -103,7 +106,7 @@ export const forgotresendOTP = async (req, res, next) => {
     ) {
       return res.status(STATUS.TOO_MANY_REQUESTS).json({
         success: false,
-        message: MESSAGES.Auth.OTP_RESEND_WAIT,
+        message: MESSAGES.Auth.RESEND_WAIT,
       });
     }
 

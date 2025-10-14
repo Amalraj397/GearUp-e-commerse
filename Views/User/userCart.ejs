@@ -5,17 +5,65 @@
   <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
   <link rel="stylesheet" href="/User/assets/css/style.css">
   <style>
-    .blocked-label {
-      color: red;
-      font-weight: 700;
-      font-size: 1.5rem;
-      /* margin-top: 5px; */
-    }
+  .blocked-label {
+    color: red;
+    font-weight: 700;
+    font-size: 1.5rem;
+    /* margin-top: 5px; */
+  }
+  .blocked-text {
+    color: red;
+    font-weight: 600;
+  }
+  /* Remove default number arrows */
+  .cartQuantity::-webkit-inner-spin-button,
+  .cartQuantity::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  /* Main wrapper for [- 1 +] */
+  .quantity-group {
+    display: inline-flex;         
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #cdcbca;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fff;
+    height: 35px;               
+  }
+  
+  /* Remove Bootstrap block behavior */
+  .cartQuantity {
+    display: inline-block;      
+    width: 45px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    color: #333;
+    height: 100%;
+  }
+  
+  /* Buttons */
+  .qty-btn {
+    background-color: #fff;
+    color: #ff6600;
+    border: none;
+    font-size: 18px;
+    width: 32px;
+    height: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+  }
+  
+  .qty-btn:hover {
+    background-color: #ff6600;
+    color: #fff;
+  }
 
-    .blocked-text {
-      color: red;
-      font-weight: 600;
-    }
   </style>
 </head>
 
@@ -98,9 +146,27 @@
 
                       <!-- Quantity -->
                       <td class="quantity-col">
-                        <div class="cart-product-quantity">
-                          <input type="number" class="form-control cartQuantity" value="<%= item.quantity %>" min="1" max="5" step="1" required oninput="validateQuantity(this)" <%= item.unavailable ? 'disabled' : '' %>>
-                        </div>
+                        <!-- <div class="cart-product-quantity">
+                          <input type="number" id="qty" class="form-control cartQuantity" value="<%= item.quantity %>" min="1" max="5" step="1" required oninput="validateQuantity(this)" <%= item.unavailable ? 'disabled' : '' %>>
+                        </div> -->
+                          <div class="cart-product-quantity">
+                            <div class="quantity-group">
+                              <button type="button" class="qty-btn minus" onclick="updateQuantity(this, -1)">−</button>
+                              <input 
+                                type="number" 
+                                id="qty"
+                                class="cartQuantity" 
+                                value="<%= item.quantity %>" 
+                                min="1" 
+                                max="5" 
+                                step="1" 
+                                required 
+                                oninput="validateQuantity(this)" 
+                                <%= item.unavailable ? 'disabled' : '' %>
+                              >
+                              <button type="button" class="qty-btn plus" onclick="updateQuantity(this, 1)">+</button>
+                            </div>
+                          </div>
                       </td>
 
                       <!-- Total -->
@@ -175,7 +241,7 @@
                       <tr class="summary-total">
                         <td>Grand Total:</td>
                         <td>
-                        <td></td>
+                        <td style="color: rgb(211, 13, 13); font-weight: 500;"></td>
                         </td>
                       </tr><!-- End .summary-total -->
                     </tbody>
@@ -268,6 +334,25 @@
   </script>
 
   <script>
+    function updateQuantity(button, change) {
+  const input = button.parentElement.querySelector('.cartQuantity');
+  if (input.disabled) return;
+
+  const min = parseInt(input.min);
+  const max = parseInt(input.max);
+  let value = parseInt(input.value) || 1;
+
+  const newValue = value + change;
+
+  if (newValue >= min && newValue <= max) {
+    input.value = newValue;
+
+    //  Trigger same event as manual input
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+}
+
     function updateQuantityOnBackend(productId, quantity) {
       fetch("/updateCartQuantity", {
           method: "POST",

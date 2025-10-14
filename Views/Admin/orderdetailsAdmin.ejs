@@ -142,6 +142,37 @@
             font-weight: 500;
         }
 
+        .status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+/*  Green for completed */
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #518d5f;
+}
+
+/*  Yellow/Orange for processing */
+.status-processing {
+  background-color: #fff3cd;
+  color: #f2ca06;
+  border: 1px solid #9a9994;
+}
+
+/*  Red for failed */
+.status-failed {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #bd7a81;
+}
+
+
     </style>
     <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
     <!-- <link rel="stylesheet" href="/User/assets/css/style.css"> -->
@@ -187,7 +218,7 @@
                         <h5 class="mb-0">Ordered Items</h5>
                     </div>
                     <div class="card-body" id="orderItems">
-                        <!-- Items will be populated by JavaScript -->
+                        <!-- order items will be here  -->
                     </div>
                 </div>
             </div>
@@ -206,6 +237,11 @@
                  <span id="totalPrice">₹0</span>
                </div>
 
+               <div class="d-flex justify-content-between mb-2 text-danger" id="cancelledRow" style="display:none;">
+                  <span>Cancelled Items:</span>
+                  <span id="cancelledAmount">-₹0</span>
+                </div>
+
                <div class="d-flex justify-content-between mb-2">
                  <span>Festival Offer (10% OFF):</span>
                  <span id="festivalOffer">₹0</span>
@@ -218,6 +254,11 @@
 
                <div class="d-flex justify-content-between mb-2">
                  <span>Tax:</span>
+                 <span id="tax">₹0</span>
+               </div>
+
+               <div class="d-flex justify-content-between mb-2">
+                 <span>GST:</span>
                  <span id="tax">₹0</span>
                </div>
 
@@ -238,11 +279,18 @@
                </div>
 
                <div class="mt-2">
-                 <div class="info-label">Payment Status:</div>
-                 <span class="status-badge" id="paymentStatus">Processing</span>
-               </div>
+                  <div class="info-label">Payment Status:</div>
+                  <span 
+                    class="status-badge 
+                      <%= order.paymentStatus === 'Completed' ? 'status-completed' : 
+                          order.paymentStatus === 'Processing' ? 'status-processing' : 
+                          order.paymentStatus === 'Failed' ? 'status-failed' : '' %>"
+                    id="paymentStatus">
+                    <%= order.paymentStatus %>
+                  </span>
+                </div>
 
-             </div>
+           </div>
            </div>
                 <!-- Customer Information -->
                 <div class="card">
@@ -277,7 +325,6 @@
     <script>
   
          const orderData = <%- JSON.stringify(order) %>;
-
         function populateOrderDetails() {
           // Basic detsil
           document.getElementById('orderId').textContent = orderData.orderNumber;

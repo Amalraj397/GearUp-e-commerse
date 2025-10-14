@@ -120,7 +120,39 @@ export const adminviewDetails = async (req, res, next) => {
       return res.status(STATUS.NOT_FOUND).send(MESSAGES.Orders.NO_ORDER);
     }
 
-    res.render("orderdetailsAdmin.ejs", { order });
+     let saveflag = false;
+
+     if (order.orderStatus === "Delivered" && order.paymentStatus !== "Completed") {
+      order.paymentStatus = "Completed";
+      saveflag = true;
+    }else if (order.orderStatus === "Cancelled" && order.paymentStatus !== "Cancelled") {
+      order.paymentStatus = "Cancelled";
+      saveflag = true;
+    }
+
+    if(saveflag){
+      await order.save();
+    }
+
+  // -----------------
+  const activeItems = order.items.filter((item) => item.itemStatus !== "Cancelled");
+
+    const cancelledItems = order.items.filter(it => it.itemStatus === "Cancelled");
+    const newGrandTotal = activeItems.reduce((total, it) => total + it.totalProductprice,0);
+
+    // console.log("cancelledItems::",cancelledItems);
+    // console.log("newGrandTotal::",newGrandTotal);
+
+    const cancelledTotal = cancelledItems.reduce((acc, it) => acc + it.totalProductprice, 0);
+
+    // console.log("cancelledtotal:",cancelledTotal);
+
+    order.grandTotalprice = newGrandTotal + order.shippingCharge;
+
+    // console.log("order.grandTotalprice ",order.grandTotalprice )
+  // ---------------
+
+    res.render("orderdetailsAdmin.ejs", { order,cancelledTotal });
   } catch (error) {
     console.log(MESSAGES.Orders.ORDER_DETAIL_ERROR, error);
    

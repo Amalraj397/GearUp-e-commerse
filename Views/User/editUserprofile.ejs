@@ -127,28 +127,7 @@
         </main>
     </div>
 
-  <!-- --------------------update email modal-------------------
-<!-- Update Email Modal --
-<div class="modal fade" id="updateEmailModal" tabindex="-1" aria-labelledby="updateEmailModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" style="background-color: #323131; color: #fff; border: 1px solid #ed8208;">
-      <div class="modal-header" style="border-bottom: 1px solid #ed8208;">
-        <h5 class="modal-title" id="updateEmailModalLabel">Update Email Address</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <label for="newEmail" class="form-label">Enter New Email</label>
-        <input type="email" id="newEmail" class="form-control" placeholder ="-- new email here --">
-        <div id="newEmailError" class="errorMessage mt-2 text-danger"></div>
-
-        <button type="button" id="sendOtpBtn" class="btn mt-3 w-100" style="background-color: #ed6708; color: #fff;">
-          Send OTP
-        </button>
-      </div>
-    </div>
-  </div>
-</div> -->
+ <!-- --------------------update email modal------------------- -->
 
 <div class="modal fade" id="updateEmailModal" tabindex="-1" aria-labelledby="updateEmailModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -159,7 +138,7 @@
       </div>
 
       <div class="modal-body">
-        <!-- Step 1: Enter new email -->
+        <!-- new email -->
         <div id="emailStep">
           <label for="newEmail" class="form-label">Enter New Email</label>
           <input type="email" id="newEmail" class="form-control" placeholder="-- new email here --">
@@ -170,7 +149,7 @@
           </button>
         </div>
 
-        <!-- Step 2: Enter OTP -->
+        <!-- OTP -->
         <div id="otpStep" style="display: none;">
           <label for="otpInput" class="form-label">Enter OTP</label>
           <input type="text" id="otpInput" class="form-control" maxlength="6" placeholder="6-digit code">
@@ -185,288 +164,16 @@
   </div>
 </div>
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- <script>
-        const passwordToggleBtn = document.getElementById('changePasswordToggle');
-        const passwordSection = document.getElementById('passwordSection');
-        const otpSection = document.getElementById('otpSection');
-
-        passwordToggleBtn.addEventListener('click', () => {
-            const isHidden = passwordSection.style.display === 'none';
-            passwordSection.style.display = isHidden ? 'block' : 'none';
-            passwordToggleBtn.textContent = isHidden ? 'Cancel Change Password' : 'Change Password';
-        });
-
-        // Profile Image Preview
-        document.getElementById('profileImageInput').addEventListener('change', function () {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('profilePreview').src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
-    <script>
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordField = document.getElementById("oldPassword");
-    const eyeIcon = document.getElementById("eyeIcon");
-
-    togglePassword.addEventListener("click", function () {
-      const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-      passwordField.setAttribute("type", type);
-      // Toggle eye icon
-      eyeIcon.classList.toggle("fa-eye");
-      eyeIcon.classList.toggle("fa-eye-slash");
-    });
-
-    document.getElementById("editProfileForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        clearErrorMessages();
-
-        let isValid = true;
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const phone = document.getElementById('userPhone').value.trim();
-        const email =  document.getElementById('userEmail').value.trim();
-        const userProfileImage = document.getElementById('profileImageInput').files[0];
-
-        const oldPassword = document.getElementById('oldPassword').value.trim();
-        const newPassword = document.getElementById('newPassword').value.trim();
-        const confirmNewPassword = document.getElementById('confirmNewPassword').value.trim();
-
-        // FirstName Validation
-        const namePattern = /^[a-zA-Z][a-zA-Z\s]*$/;
-        if (!firstName) {
-            showError('Fname-error', 'First name is required!');
-            isValid = false;
-        } else if (firstName.length < 3) {
-            showError('Fname-error', 'First name must be at least 3 characters long!');
-            isValid = false;
-        } else if (!namePattern.test(firstName)) {
-            showError('Fname-error', 'First name must contain only letters and spaces.');
-            isValid = false;
-        }
-
-        // LastName Validation
-        if (!lastName) {
-            showError('Lname-error', 'Last name is required!');
-            isValid = false;
-        } else if (lastName.length < 1) {
-            showError('Lname-error', 'Last name must be at least 1 character long!');
-            isValid = false;
-        } else if (!namePattern.test(lastName)) {
-            showError('Lname-error', 'Last name must contain only letters and spaces.');
-            isValid = false;
-        }
-
-        // email validation
-         if(!email){
-            showError('email-error', 'Email is required!');
-            isValid = false;
-         }else if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)){
-            showError('email-error', 'Invalid email format!');
-            isValid = false;
-         }
-
-        // Phone Validation
-        const phonePattern = /^[0-9]{10}$/;
-        const zeroCount = (phone.match(/0/g) || []).length;
-        if (!phonePattern.test(phone)) {
-            showError('phone-error', 'Phone number must be exactly 10 digits.');
-            isValid = false;
-        } else if (phone.startsWith("0")) {
-            showError('phone-error', 'Phone number cannot start with zero.');
-            isValid = false;
-        } else if (zeroCount > 5) {
-            showError('phone-error', 'Phone number cannot contain more than 5 zeros.');
-            isValid = false;
-        }
-
-        // Password Validation (only if user tries to change it)
-        if (oldPassword || newPassword || confirmNewPassword) {
-            if (!oldPassword) {
-                showError('oldPassword-error', 'Old password is required!');
-                isValid = false;
-            } else if (oldPassword.length < 6) {
-                showError('oldPassword-error', 'Old password must be at least 6 characters long!');
-                isValid = false;
-            }
-
-            if (!newPassword) {
-                showError('newPassword-error', 'New password is required!');
-                isValid = false;
-            } else if (newPassword.length < 6) {
-                showError('newPassword-error', 'New password must be at least 6 characters long!');
-                isValid = false;
-            }
-
-            if (!confirmNewPassword) {
-                showError('confirmPassword-error', 'Please confirm your new password!');
-                isValid = false;
-            } else if (newPassword !== confirmNewPassword) {
-                showError('confirmPassword-error', 'New passwords do not match!');
-                isValid = false;
-            }
-        }
-
-
-        if (!isValid) return;
-        // const formData = new FormData();
-        // formData.append("firstName", firstName);
-        // formData.append("lastName", lastName);
-        // formData.append("phone", phone);
-        // formData.append("email", email);
-        // formData.append("oldPassword", oldPassword);
-        // formData.append("newPassword", newPassword);
-        // formData.append("confirmNewPassword", confirmNewPassword);
-            
-        // if (userProfileImage) {
-        //   formData.append("profilePicture", userProfileImage);
-        // }
-
-    if (firstName) formData.append("firstName", firstName);
-    if (lastName) formData.append("lastName", lastName);
-    if (phone) formData.append("phone", phone);
-    if (email) formData.append("email", email);
-    if (userProfileImage) formData.append("userProfileImage", userProfileImage);
-
-    // Include password fields only if user is changing password
-    if (oldPassword || newPassword || confirmNewPassword) {
-      formData.append("oldPassword", oldPassword);
-      formData.append("newPassword", newPassword);
-      formData.append("confirmNewPassword", confirmNewPassword);
-    }
-
-    // If no changes, stop user
-    if ([...formData.keys()].length === 0) {
-      Swal.fire({
-        icon: "info",
-        title: "No changes detected",
-        text: "Update at least one field before updating your profile..",
-      });
-      return;
-    }
-
-        Swal.fire({
-            title: "Are you sure you want to update your profile?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, update it!",
-            cancelButtonText: "Cancel",
-        }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            const response = await fetch('/EditUserprofile', {
-              method: "PUT",
-            //   headers: {
-            //     "Content-Type": "application/json",
-            //   },
-              body: formData
-            });
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              throw new Error(
-                errorData.message || "An unexpected error occured..!"
-              );
-            }
-
-            const successData = await response.json();
-            Swal.fire({
-              title: successData.message,
-              icon: "success",
-            }).then(() => {
-              location.reload();
-            });
-          } catch (error) {
-            console.log(error);
-            Swal.fire({
-              title: "Error!",
-              text: error.message,
-              icon: "error",
-            });
-          }
-        }
-        });
-    });
-
-    function showError(id, message) {
-        document.getElementById(id).innerText = message;
-    }
-
-    function clearErrorMessages() {
-        document.getElementById("Fname-error").innerText = "";
-        document.getElementById("Lname-error").innerText = "";
-        document.getElementById("email-error").innertext="";
-        document.getElementById("phone-error").innerText = "";
-        // document.getElementById("profileImage-error").innerText = "";
-        document.getElementById("oldPassword-error").innerText = "";
-        document.getElementById("newPassword-error").innerText = "";
-        document.getElementById("confirmPassword-error").innerText = "";
-    }
-</script> -->
-<script>
-
-
-// document.getElementById('changeEmailBtn').addEventListener('click', () => {
-//   const modal = new bootstrap.Modal(document.getElementById('updateEmailModal'));
-//   modal.show();
-// });
-
-//   document.getElementById('sendOtpBtn').addEventListener('click', async () => {
-//     const newEmail = document.getElementById('newEmail').value.trim();
-//     const errorDiv = document.getElementById('newEmailError');
-//     errorDiv.textContent = '';
-  
-//     if (!newEmail) {
-//       errorDiv.textContent = 'Please enter a valid email address.';
-//       return;
-//     }
-  
-//     try {
-//       const res = await fetch('/request-email-update', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ newEmail }),
-//       });
-//       const data = await res.json();
     
-//       if (data.exists) {
-//         errorDiv.textContent = 'This email is already registered.';
-//       } else if (data.success) {
-//         Swal.fire({
-//           icon: 'success',
-//           title: 'OTP Sent!',
-//           text: 'Please check your email for the verification code.',
-//           confirmButtonColor: '#ed8208',
-//         }).then(() => {
-//           window.location.href = '/verify-email-update';
-//         });
-//       } else {
-//         Swal.fire({
-//           icon: 'error',
-//           title: 'Error',
-//           text: data.message || 'Something went wrong. Try again later.',
-//         });
-//       }
-//     } catch (err) {
-//       console.error(err);
-//       Swal.fire('Error', 'Unable to process request.', 'error');
-//     }
-//   });
+<script>
 
 document.getElementById('changeEmailBtn').addEventListener('click', () => {
   const modal = new bootstrap.Modal(document.getElementById('updateEmailModal'));
   modal.show();
 });
 
-// STEP 1 → Send OTP
+//OTP
 document.getElementById('sendOtpBtn').addEventListener('click', async () => {
   const newEmail = document.getElementById('newEmail').value.trim();
   const errorDiv = document.getElementById('newEmailError');
@@ -494,10 +201,10 @@ document.getElementById('sendOtpBtn').addEventListener('click', async () => {
         text: 'Please check your email for the verification code.',
         confirmButtonColor: '#ed8208',
       }).then(() => {
-        // Switch modal to OTP step
         document.getElementById('emailStep').style.display = 'none';
         document.getElementById('otpStep').style.display = 'block';
       });
+
     } else {
       Swal.fire({
         icon: 'error',
@@ -511,7 +218,7 @@ document.getElementById('sendOtpBtn').addEventListener('click', async () => {
   }
 });
 
-// STEP 2 → Verify OTP and update email
+// Verify OTP and update email
 document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
   const otp = document.getElementById('otpInput').value.trim();
   const newEmail = document.getElementById('newEmail').value.trim();
@@ -545,11 +252,10 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
     }
   } catch (err) {
     console.error(err);
-    Swal.fire('Error', 'Unable to verify OTP..............', 'error');
+    Swal.fire('Error', 'Unable to verify OTP..!', 'error');
   }
 });
 
-  
   const passwordToggleBtn = document.getElementById("changePasswordToggle");
   const passwordSection = document.getElementById("passwordSection");
 
@@ -564,14 +270,13 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
   isChangingPassword = isHidden;
 
   if (!isHidden) {
-    // Reset password fields when hiding the section
     document.getElementById("oldPassword").value = "";
     document.getElementById("newPassword").value = "";
     document.getElementById("confirmNewPassword").value = "";
   }
 });
 
-  // Profile Image Preview
+  // Profile Image
   document.getElementById("profileImageInput").addEventListener("change", function () {
     const file = this.files[0];
     if (file) {
@@ -583,7 +288,6 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
     }
   });
 
-  // Toggle Password Visibility
   const togglePassword = document.getElementById("togglePassword");
   const passwordField = document.getElementById("oldPassword");
   const eyeIcon = document.getElementById("eyeIcon");
@@ -597,9 +301,7 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
   });
 
   // Form Submit
-  document
-    .getElementById("editProfileForm")
-    .addEventListener("submit", async function (e) {
+  document.getElementById("editProfileForm").addEventListener("submit", async(e)=> {
       e.preventDefault();
       clearErrorMessages();
 
@@ -613,10 +315,6 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
       const oldPassword = document.getElementById("oldPassword").value.trim();
       const newPassword = document.getElementById("newPassword").value.trim();
       const confirmNewPassword = document.getElementById("confirmNewPassword").value.trim();
-
-
-
-
 
       // VALIDATIONS
     
@@ -710,17 +408,6 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
         formData.append("newPassword", newPassword);
         formData.append("confirmNewPassword", confirmNewPassword);
       }
-
-      // If no changes, stop user
-      // if ([...formData.keys()].length === 0) {
-      //   Swal.fire({
-      //     icon: "info",
-      //     title: "No changes detected",
-      //     text: "Please modify at least one field before updating your profile.",
-      //   });
-      //   return;
-      // }
-
     
       // CONFIRM & SUBMIT
     
@@ -759,8 +446,7 @@ document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
       });
     });
 
-  function showError(id, message) {
-    const el = document.getElementById(id);
+  function showError(id, message) { const el = document.getElementById(id);
     if (el) el.innerText = message;
   }
 

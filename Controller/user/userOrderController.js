@@ -121,12 +121,6 @@ export const getAddressById = async (req, res, next) => {
   try {
     const address = await addressSchema.findById(req.params.id);
 
-  //   // if (!address){
-  //   //   return res
-  //   //     .status(STATUS.NOT_FOUND)
-  //   //     .json({ message: MESSAGES.Address.NOT_FOUND });
-  // }
-
     res.status(STATUS.OK).json(address);
   } catch (error) {
     console.error(MESSAGES.Address.AddressLogger.ADD_GET_EROR, error);
@@ -252,31 +246,6 @@ export const getOrderSuccesspage = async (req, res, next) => {
   }
 };
 
-// export const getmyOrders = async (req, res,next ) => {
-//   const userId = req.session.user?.id;
-//   try {
-//     const userdata = await userSchema.findById(userId);
-
-//     if (!userdata) return res.redirect("/login");
-
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = parseInt(req.query.limit) || 10;
-//     const skip = (page - 1) * limit;
-
-//     const userOrders = await orderSchema
-//       .find({ userDetails: userId })
-//       .populate("items.productId")
-//       .sort({ createdAt: -1 })
-//       .skip(skip)
-//       .limit(limit);
-
-//     res.render("myOrders.ejs", { userOrders });
-//   } catch (error) {
-//     console.error(MESSAGES.Users.MY_ODR_ERR, error);
-//     next(error);
-//   }
-// };
-
 export const getmyOrders = async (req, res, next) => {
   const userId = req.session.user?.id;
 
@@ -288,7 +257,6 @@ export const getmyOrders = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Use lean() so we can safely add custom fields
     const userOrders = await orderSchema
       .find({ userDetails: userId })
       .populate("items.productId")
@@ -297,7 +265,6 @@ export const getmyOrders = async (req, res, next) => {
       .limit(limit)
       .lean();
 
-    // Attach rejectReason for rejected items
     for (let order of userOrders) {
       for (let item of order.items) {
         if (item.itemStatus === "Return-rejected") {
@@ -322,7 +289,7 @@ export const getmyOrders = async (req, res, next) => {
     next(error);
   }
 };
-// ------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 export const cancelOrder = async (req, res, next) => {
    console.log("ordercancel controller called")
@@ -345,7 +312,7 @@ export const cancelOrder = async (req, res, next) => {
     }
 
     const orderData = await orderSchema.findOne({ _id: orderId, userDetails: userId });
-    console.log("orderData in cancel", orderData);
+    // console.log("orderData in cancel", orderData);
     
     if (!orderData){
       return res  
@@ -354,6 +321,7 @@ export const cancelOrder = async (req, res, next) => {
     }
 
     if (["Pending", "Shipped"].includes(orderData.orderStatus)) {
+      
       orderData.orderStatus = "Cancelled";
 
       orderData.items.forEach((item) => (item.itemStatus = "Cancelled"));
@@ -376,7 +344,7 @@ export const cancelOrder = async (req, res, next) => {
 };
 
 export const cancelOrderItem = async (req, res, next) => {
-  console.log("cancelorderitem controller calling....");
+  // console.log("cancelorderitem controller calling....");
   try {
     const userId = req.session.user?.id;
     const { itemId } =  req.params;
@@ -411,9 +379,17 @@ export const cancelOrderItem = async (req, res, next) => {
 
     item.itemStatus = "Cancelled";
 
+     //  Recalculate grand total (excluding cancelled items)
+    const activeItems = orderData.items.filter((item) => item.itemStatus !== "Cancelled");
+
+    const cancelledItems = orderData.items.filter(it => it.itemStatus === "Cancelled");
+    const newGrandTotal = activeItems.reduce((total, it) => total + it.totalProductprice,0);
+
+    orderData.grandTotalprice = newGrandTotal + orderData.shippingCharge;
+
     const allCancelled = orderData.items.every(it => it.itemStatus === "Cancelled");
     if (allCancelled) {
-      orderData.orderStatus = "Cancelled";
+      orderData.orderStatus = "Cancelled";  //when only one item
     }
 
     await orderData.save();
@@ -718,7 +694,7 @@ if (!order){
 };
 
 export const viewDetails = async (req, res, next ) => {
-  console.log("order_detail controller called");
+  // console.log("order_detail controller called");
 
   try {
     const user = req.session.user;
@@ -744,7 +720,40 @@ export const viewDetails = async (req, res, next ) => {
       .send(MESSAGES.Orders.NO_ORDER);
     }
 
-    res.render("orderDetails.ejs", { order });
+     let saveflag = false;
+
+     if (order.orderStatus === "Delivered" && order.paymentStatus !== "Completed") {
+      order.paymentStatus = "Completed";
+      saveflag = true;
+    }else if (order.orderStatus === "Cancelled" && order.paymentStatus !== "Cancelled") {
+      order.paymentStatus = "Cancelled";
+      saveflag = true;
+    }
+
+    if(saveflag){
+      await order.save();
+    }
+
+  // -----------------
+  const activeItems = order.items.filter((item) => item.itemStatus !== "Cancelled");
+
+    const cancelledItems = order.items.filter(it => it.itemStatus === "Cancelled");
+    const newGrandTotal = activeItems.reduce((total, it) => total + it.totalProductprice,0);
+
+    // console.log("cancelledItems::",cancelledItems);
+    console.log("newGrandTotal::",newGrandTotal);
+
+    const cancelledTotal = cancelledItems.reduce((acc, it) => acc + it.totalProductprice, 0);
+
+    // console.log("cancelledtotal:",cancelledTotal);
+
+    order.grandTotalprice = newGrandTotal + order.shippingCharge;
+
+    // console.log("order.grandTotalprice ",order.grandTotalprice )
+  // ---------------
+
+    res.render("orderDetails.ejs", { order,cancelledTotal});
+
   } catch (error) {
     console.log(MESSAGES.System.ORDER_DETAIL_ERROR, error);
      next(error);

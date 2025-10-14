@@ -275,7 +275,7 @@
 <script>
   document.querySelectorAll(".logoutBtn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
-      e.preventDefault(); // stop immediate logout
+      e.preventDefault(); 
 
       Swal.fire({
         title: "Are you sure?",
@@ -289,7 +289,6 @@
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = btn.getAttribute("href"); 
-          // uses the original href="/logout"
         }
       });
     });

@@ -78,7 +78,6 @@ export const getproductDetailpage = async (req, res, next) => {
       return res
       .status(STATUS.NOT_FOUND)
       .json({message: MESSAGES.Products.PRODUCT_NOT_FOUND});
-      // return res.redirect("/user/store");
     }
 
     const relatedProducts = await productSchema
@@ -101,7 +100,7 @@ export const getproductDetailpage = async (req, res, next) => {
   }
 };
 
-//   -------getting categroy page---------
+// Categroy page
 export const getcategoryPage = (req, res, next) => {
   try {
     res.render("categoryPage.ejs");
@@ -111,7 +110,7 @@ export const getcategoryPage = (req, res, next) => {
   }
 };
 
-//   -------getting Brand page---------
+//  Brand page
 export const getBrandPage = (req, res, next) => {
   try {
     res.render("brandPage.ejs");
@@ -123,7 +122,7 @@ export const getBrandPage = (req, res, next) => {
 
 export const filterProducts = async (req, res, next) => {
   try {
-    const { categories, brands, editions, scales, page = 1 } = req.query;
+    const { categories, brands, editions, scales, page = 1, sort = "default" } = req.query;
     const searchQuery = req.query.search?.trim() || "";
 
     const filter = { isBlocked: false };
@@ -142,14 +141,22 @@ export const filterProducts = async (req, res, next) => {
       if (!isNaN(maxPrice)) filter.salePrice.$lte = maxPrice;
     }
 
+    //Sort
+    let sortOption = {};
+    if (sort === "asc") sortOption = { salePrice: 1 };         // L-H
+    else if (sort === "desc") sortOption = { salePrice: -1 };  // H-L
+    else sortOption = { _id: -1 }; 
+
     const limit = 8;
     const skip = (page - 1) * limit;
 
     const products = await productSchema
       .find(filter)
+      .sort(sortOption)
       .skip(skip)
       .limit(limit)
       .populate("category");
+
     const totalProducts = await productSchema.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
@@ -159,14 +166,19 @@ export const filterProducts = async (req, res, next) => {
       totalPages,
       filter,
       searchQuery,
-
+      sort,
+      selectedCategories: categories ? categories.split(",") : [],
+      selectedBrands: brands ? brands.split(",") : [],
+      selectedEditions: editions ? editions.split(",") : [],
+      selectedScales: scales ? scales.split(",") : [],
       categories: await categorySchema.find(),
       brands: await brandSchema.find(),
       editions: [...new Set(await productSchema.distinct("edition"))],
       scales: [...new Set(await productSchema.distinct("scale"))],
     });
+
   } catch (error) {
-    console.error(MESSAGES.Store.ERROR_FILTERING_PRODUCTS, error);
-    next(error)
+    console.error("Error filtering products:", error);
+    next(error);
   }
 };

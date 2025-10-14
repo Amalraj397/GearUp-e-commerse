@@ -20,7 +20,38 @@
   <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Orbitron&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    .clear-btn {
+      padding: 7px 4px;
+      background-color: #ffffff;
+      border-radius: 0 4px 4px 0;
+      color: black;
+      cursor: pointer;
+      position: absolute;
+      right: 41%;
+      top: 27px;
+      transform: translateY(-50%);
+      /* color: #fffbfb; */
+      font-size: 16px;
+      transition: color 0.2s ease;
+    }
 
+    .search-btn:hover {
+      color: rgb(0, 145, 255);
+    }
+    .clear-btn:hover {
+      color: #ff0000;
+    }
+    .reloadShop_btn{
+      /* margin-top: 50px; */
+      margin-right: 30px;
+      display: block;
+      border: 1px solid;
+      padding: 8px;
+      border-radius:3px;
+    }
+
+  </style>
 
   <%-include("../../Views/Partials/User/headerLand")%>
 </head>
@@ -41,10 +72,13 @@
             <div class="row">
               <div class="col-lg-9 product-list">
                 <div class="search-box">
-                  <input type="text" id="product-search" placeholder="Search products...." value="<%= searchQuery || '' %>" />
+                  <input type="text" id="product-search" placeholder="Search productshere...." value="<%= searchQuery || '' %>" />
                   <button class="search-btn">
                     <i class="fas fa-search"></i>
                   </button>
+                  <button class="clear-btn" id="clear-search" title="Clear search">
+                    <i class="fas fa-times"></i> clear
+                  </button>    
                 </div>
                 <div class="toolbox">
                   <div class="toolbox-left">
@@ -56,7 +90,10 @@
                 <div class="products mb-3">
                   <div class="row g-4 justify-content-center" id="product-list">
                     <% if (products.length === 0) { %>
-                    <p>No products found for "<%= searchQuery %>"</p>
+                    <p style="font-size:x-large;">No products found.    -></p>
+                    <a href="/shopPage" class="reloadShop_btn "><span>Reload Shop</span></a>
+
+
                     <% } else { %>
                     <% products.forEach(product => { %>
                     <div class="col-md-6 col-lg-4 col-xl-3">
@@ -138,7 +175,7 @@
                 <div class="sidebar sidebar-shop">
                   <div class="widget widget-clean">
                     <label>Filters:</label>
-                    <a href="#" class="sidebar-filter-clear" onclick="clearAllFilters()">Clear All</a>
+                    <a href="/shopPage" class="btn btn-outline-primary-2">Clear All</a>
                   </div><!-- End .widget widget-clean -->
                   <!-- Filter by Category -->
                   <div class="widget widget-categories">
@@ -199,24 +236,38 @@
                     Price
                   </a>
                 </h3><!-- End .widget-title -->
+
                 <div class="widget-body">
                   <div class="filter-price">
                     <div class="filter-price-text">
-                      Price Range : <span id="filter-price-range">₹199 - ₹9999</span>
+                      Price Range : <span id="filter-price-range">₹199 - ₹99999</span>
                     </div><!-- End .filter-price-text -->
                     <div id="price-slider"></div><!-- End #price-slider -->
                   </div><!-- End .filter-price -->
+
+                  <!--  Sort by price dropdown -->
+              <div class="filter-sort mt-3">
+                <label for="sort-order" class="filter-sort-label">Sort by:</label>
+                <select id="sort-order" class="filter-sort-select">
+                  <option value="default">Default</option>
+                  <option value="asc">Price: Low to High</option>
+                  <option value="desc">Price: High to Low</option>
+                </select>
+              </div>
+
                 </div><!-- End .widget-body -->
+
                 <button id="apply-filters" class="btn btn-primary mt-3">Apply Filters</button>
 
             </div><!-- End .collapse -->
           </div><!-- End .widget -->
         </div><!-- End .sidebar sidebar-shop -->
-        </aside><!-- End .col-lg-3 -->
+    </aside><!-- End .col-lg-3 -->
   </div><!-- End .row -->
   </div><!-- End .container -->
   </div><!-- End .page-content -->
   </main><!-- End .main -->
+
   <!-- ---------------main footer here--------------- -->
   </div><!-- End .page-wrapper -->
   <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
@@ -241,8 +292,6 @@
 
   <!-- noUiSlider JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js"></script>
-
-
   <script>
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const applyBtn = document.getElementById('apply-filters');
@@ -252,11 +301,11 @@
     const priceRangeText = document.getElementById('filter-price-range');
 
     noUiSlider.create(priceSlider, {
-      start: [199, 9999],
+      start: [199, 19999],
       connect: true,
       range: {
         min: 199,
-        max: 9999
+        max: 19999
       },
       tooltips: [true, true],
       format: {
@@ -269,29 +318,32 @@
       priceRangeText.textContent = `₹${values[0]} - ₹${values[1]}`;
     });
 
-    // Apply filters only when button is clicked
     applyBtn.addEventListener('click', applyFilters);
 
-    function applyFilters() {
-      const selectedCategories = getSelectedValues('.category-checkbox');
-      const selectedBrands = getSelectedValues('.brand-checkbox');
-      const selectedEditions = getSelectedValues('.edition-checkbox');
-      const selectedScales = getSelectedValues('.scale-checkbox');
-      const [minPrice, maxPrice] = priceSlider.noUiSlider.get();
-
-      const query = new URLSearchParams();
-
-      if (selectedCategories.length) query.append('categories', selectedCategories.join(','));
-      if (selectedBrands.length) query.append('brands', selectedBrands.join(','));
-      if (selectedEditions.length) query.append('editions', selectedEditions.join(','));
-      if (selectedScales.length) query.append('scales', selectedScales.join(','));
-      if (minPrice && maxPrice) {
-        query.append('minPrice', Math.round(minPrice));
-        query.append('maxPrice', Math.round(maxPrice));
+      function applyFilters() {
+        const selectedCategories = getSelectedValues('.category-checkbox');
+        const selectedBrands = getSelectedValues('.brand-checkbox');
+        const selectedEditions = getSelectedValues('.edition-checkbox');
+        const selectedScales = getSelectedValues('.scale-checkbox');
+        const [minPrice, maxPrice] = priceSlider.noUiSlider.get();
+        const sortOrder = document.getElementById('sort-order').value;
+        
+        const query = new URLSearchParams();
+          
+        if (selectedCategories.length) query.append('categories', selectedCategories.join(','));
+        if (selectedBrands.length) query.append('brands', selectedBrands.join(','));
+        if (selectedEditions.length) query.append('editions', selectedEditions.join(','));
+        if (selectedScales.length) query.append('scales', selectedScales.join(','));
+        if (minPrice && maxPrice) 
+        {
+          query.append('minPrice', Math.round(minPrice));
+          query.append('maxPrice', Math.round(maxPrice));
+        }
+        if (sortOrder && sortOrder !== "default") query.append('sort', sortOrder); 
+      
+          window.location.href = `/filterProducts?${query.toString()}`;
       }
-
-      window.location.href = `/filterProducts?${query.toString()}`;
-    }
+  
 
     function getSelectedValues(selector) {
       return Array.from(document.querySelectorAll(selector))
@@ -299,18 +351,12 @@
         .map(cb => cb.value);
     }
 
-    // Clear filters
-    document.querySelector('.sidebar-filter-clear').addEventListener('click', (e) => {
-      e.preventDefault();
-      checkboxes.forEach(cb => cb.checked = false);
-      priceSlider.noUiSlider.set([199, 9999]);
-      applyFilters();
-    });
-
-    // Search functionality (unchanged)
+    // Search and clear
     const searchInput = document.getElementById('product-search');
     const searchBtn = document.querySelector('.search-btn');
+    const clearBtn = document.getElementById('clear-search');
 
+    // Search 
     searchBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const query = searchInput.value.trim();
@@ -321,10 +367,57 @@
     });
 
     searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        searchBtn.click();
+      if (e.key === 'Enter') searchBtn.click();
+    });
+
+    // Clear 
+    clearBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      searchInput.value = '';
+      clearBtn.style.display = 'none';
+      const url = new URL(window.location.href);
+      url.searchParams.delete('search');
+      url.searchParams.set('page', 1);
+      window.location.href = url.toString();
+    });
+
+    if (searchInput.value.trim()) {
+      clearBtn.style.display = 'block';
+    }
+
+    //stay Sort + Checkbox Selections After Reload
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+    
+      //stay sort dropdown selection
+      const sortSelect = document.getElementById('sort-order');
+      const currentSort = urlParams.get('sort');
+      if (currentSort) {
+        sortSelect.value = currentSort;
+      }
+    
+      //stay checkbox selections
+      const setChecked = (selector, values) => {
+        if (!values) return;
+        const selectedValues = values.split(",");
+        document.querySelectorAll(selector).forEach(cb => {
+          if (selectedValues.includes(cb.value)) cb.checked = true;
+        });
+      };
+    
+      setChecked('.category-checkbox', urlParams.get('categories'));
+      setChecked('.brand-checkbox', urlParams.get('brands'));
+      setChecked('.edition-checkbox', urlParams.get('editions'));
+      setChecked('.scale-checkbox', urlParams.get('scales'));
+    
+      //stay price slider range
+      const minPrice = urlParams.get('minPrice');
+      const maxPrice = urlParams.get('maxPrice');
+      if (minPrice && maxPrice) {
+        priceSlider.noUiSlider.set([+minPrice, +maxPrice]);
       }
     });
+
   </script>
 
   <%-include("../../Views/Partials/User/footerLand")%>

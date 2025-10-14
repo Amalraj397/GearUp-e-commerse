@@ -32,7 +32,8 @@ export const MESSAGES = {
 
     THANKS_NOTE: "Thank you for shopping. Keep shopping with AutoMinima.",
     INVOICE_EROR: "Error In generating invoice",
-    SERCH_FAIL: "Failed to search.."
+    SERCH_FAIL: "Failed to search..",
+    INVALID_SSN_DATA: "Invalid session or missing data",
   },
 
   Products: {
@@ -45,11 +46,11 @@ export const MESSAGES = {
     PRODUCT_UPDATED: "Product updated successfully",
     PRODUCT_DELETED: "Product deleted successfully",
     PRODUCT_LISTED: "Product listed successfully",
-    PRODUCT_BLOCKED:"This product may be DELETED or BLOCKED by the admin",
+    PRODUCT_BLOCKED: "This product may be DELETED or BLOCKED by the admin",
     PRODUCT_LIST_FAILED: "Failed to List the product",
     PRODUCT_UNLISTED: "Product un-listed successfully",
     PRODUCT_UNLIST_FAILED: "Failed to un-list the Product",
-    ADD_PRODUCT_PAGE_FAILED: "Failed to  load the add-PRoduct Page",
+    ADD_PRODUCT_PAGE_FAILED: "Failed to load the add-PRoduct Page",
     PRODUCT_LISTING_FAIL: "Failed to Show Product listing page",
     
     PRODUCT_EXSIST: "This product already exists",
@@ -192,7 +193,7 @@ export const MESSAGES = {
       ADD_UPD_EROR: "Error in updating user address:",
       ADD_DEF_EROR: "Error in setting default address:",
       ADD_DEL_EROR: "Error in deleting user address:",
-      ADD_GET_EROR :"Error in getting address:",
+      ADD_GET_EROR: "Error in getting address:",
     },
   },
 
@@ -200,10 +201,8 @@ export const MESSAGES = {
     NO_CART: "Cart not found",
     CART_EMPTY: "Your cart is empty.!",
     ITEM_ADDED: "Product added to cart successfully.",
-    ITEM_ADDED_FROM_WISHLIST:
-      "Product added to cart and removed from wishlist.",
-    ITEM_ALREADY_IN_CART:
-      "This variant is already in your cart. Do you want to increase quantity?",
+    ITEM_ADDED_FROM_WISHLIST: "Product added to cart and removed from wishlist.",
+    ITEM_ALREADY_IN_CART: "This variant is already in your cart. Do you want to increase quantity?",
     ITEM_REMOVED: "Item removed from cart successfully",
     ITEM_NOT_FOUND: "Item not found in cart.",
     MAX_QUANTITY: "Maximum quantity limit reached.",
@@ -250,10 +249,14 @@ export const MESSAGES = {
     EMAIL_NOT_REGISTERED: "User email not registered..! Please sign up",
     EMAIL_VERIFIED: "Email verification successful! Please enter the OTP.",
     EMAIL_VERIFY_FAIL : "Error in while verifying the E-mail",
+    EMAIL_UPD_ERR: "An error occured in updating email:",
+    EMAIL_VERIFY_ERR: "An error occured in verifying email:",
+    EMAIL_UPD_SUCCESS: "Email address updated successfully",
 
-    OTP_SENT: "A new OTP has been sent to your email.",
+    OTP_SENT: "An OTP has been sent to your email.",
+    OTP_RESENT: "A New OTP has been sent to your email.",
     OTP_EXPIRED: "OTP expired. Please request a new OTP.",
-    OTP_INVALID: "Invalid OTP. Please try again..!",
+    OTP_INVALID: "Invalid OTP. Please tr again..!",
     OTP_SUCCESS: "OTP verification successful..!",
     RESENT_OTP_EROR: "Error resending OTP:",
     OTP_VERIFY_EROR: "Error during OTP verification",
@@ -262,10 +265,9 @@ export const MESSAGES = {
     GOOGLE_SIGNUP_EROR: "Google Signup Error:",
     RESEND_WAIT: "Please wait before requesting a new OTP.",
     PASSWORD_MATCH_EROR: "Password does not match!, try again.",
-    ERR_RESET_PASS_PAGE:" Error in loading the  resent OTP Page",
+    ERR_RESET_PASS_PAGE: "Error in loading the  resent OTP Page",
 
-    PASSWORD_UPDATE_SUCCESS:
-      "Password updated successfully..! You can login now.",
+    PASSWORD_UPDATE_SUCCESS: "Password updated successfully..! You can login now.",
     PASSWORD_UPDATE_FAILED: "Failed to update password. Please try again.",
   },
 };
