@@ -112,44 +112,26 @@
   </div>
 
   <div class="form-container">
-    <form
-      id="add-brand-form"
-      class="add-brand-form"
-      enctype="multipart/form-data"
-    >
+    <form id="add-brand-form" class="add-brand-form" enctype="multipart/form-data">
       <div class="form-group">
         <label for="brand-name">Brand Name</label>
-        <input
-          type="text"
-          id="brand-name"
-          name="name"
-          placeholder="Enter brand name"
-        />
+        <input type="text" id="brand-name"name="name" placeholder="Enter brand name"/>
       </div>
+
       <div class="form-group">
         <label for="brand-description">Description</label>
-        <input
-          type="text"
-          id="brand-description"
-          name="description"
-          placeholder="Enter brand description"
-        />
+        <input type="text" id="brand-description" name="description" placeholder="Enter brand description"/>
       </div>
+
       <div class="form-group">
         <label for="brand-image">Image</label>
-        <!-- <div class="file-input-wrapper"> -->
         <input type="file" id="brand-image" name="brand-Image" accept="image/*" />
-        <!-- <label for="brand-image" class="file-input-label"> -->
-        <!-- <span class="material-icons">file_upload</span> -->
-        <!-- Choose File -->
-        <!-- </label> -->
-        <!-- <input type="file" id="brand-image" name="brand-image" accept="image/*" style="display: none;"> -->
-        <!-- </div> -->
       </div>
+
       <button type="submit" class="submit-button">Add Brand</button>
     </form>
+
     <div id="errorMessages" style="color: red"></div>
-    <!--error message container-->
   </div>
 </div>
 
@@ -163,7 +145,7 @@
       const brandName = document.getElementById("brand-name").value;
       const brandDescription = document.getElementById("brand-description").value;
       const brandImage = document.getElementById("brand-image").value;
-       const brandForm = document.getElementById("add-brand-form");
+      const brandForm = document.getElementById("add-brand-form");
 
       const errorMessage = [];
 

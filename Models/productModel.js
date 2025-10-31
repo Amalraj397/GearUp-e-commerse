@@ -46,11 +46,16 @@ const productSchema = new mongoose.Schema(
           required: true,
           default: "",
         },
-        salePrice: {
+        salePrice: { 
           type: Number,
           required: true,
           default: 0,
           min: [0, "Sale price must be positive"],
+        },
+        offerPrice: { 
+          type: Number,
+          default: 0,
+          min: [0, "Offer price must be positive"],
         },
         stock: {
           type: Number,

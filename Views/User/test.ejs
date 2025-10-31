@@ -576,3 +576,160 @@ document.addEventListener("DOMContentLoaded", () => {
 </body>
 
 <%- include("../../Views/Partials/User/footerLand") %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ------------------------------------------prduct detail page----------------------------------
+
+
+<div class="product-details-top">
+  <div class="row">
+    <!-- Product Gallery -->
+    <div class="col-md-6 position-relative" id="product-gallery-container">
+      <div class="product-gallery product-gallery-vertical">
+        <div class="row">
+          <!-- Offer Badge -->
+          <% if (product.productOffer > 0) { %>
+            <div class="offer-badge position-absolute bg-danger text-white fw-bold rounded px-2 py-1" 
+                 style="top: 10px; left: 10px; font-size: 16px;">
+              <%= product.productOffer %>% OFF
+            </div>
+          <% } %>
+
+      <figure class="product-main-image">
+        <img id="product-zoom" src="<%= product.productImage[0] %>" data-zoom-image="<%= product.productImage[0] %>" alt="product image">
+        <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+          <i class="icon-arrows"></i>
+        </a>
+      </figure>
+
+      <div id="product-zoom-gallery" class="product-image-gallery">
+        <% product.productImage.forEach((image, index) => { %>
+          <a class="product-gallery-item <%= index === 0 ? 'active' : '' %>" href="#" data-image="<%= image %>" data-zoom-image="<%= image %>">
+            <img src="<%= image %>" alt="product side">
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Details -->
+<div class="col-md-6" id="product-galler-details">
+  <div class="product-details">
+    <label for="scale">Edition:</label><h3><%= product.edition %></h3>
+    <h2 class="product-title" style="font-size: 3.7rem; font-weight: 700; font-family: 'Montserrat';">
+      <%= product.productName %>
+    </h2>
+
+    <div class="details-filter-row details-row-size">
+      <label>Brand:</label><h4><%= product.brand.brandName %></h4>
+    </div>
+
+    <div class="ratings-container">
+      <div class="ratings">
+        <div class="ratings-val" style="width: 80%;"></div>
+      </div>
+      <a class="ratings-text" href="#product-review-link">( 2 Reviews )</a>
+    </div>
+
+    <!-- Price Section -->
+    <div class="product-price mt-2">
+      <% const selectedVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null; %>
+      <% if (product.productOffer > 0 && selectedVariant?.offerPrice > 0) { %>
+        <span class="text-muted" style="text-decoration: line-through; font-size: 18px;">
+          ₹<%= selectedVariant.salePrice %>
+        </span>
+        <span class="text-success fw-bold fs-4 ms-2">
+          ₹<%= selectedVariant.offerPrice %>
+        </span>
+      <% } else { %>
+        <span class="fs-4 fw-bold text-dark">
+          ₹<%= selectedVariant ? selectedVariant.salePrice : 'N/A' %>
+        </span>
+      <% } %>
+    </div>
+
+    <div class="product-content">
+      <p class="short-desc"><%= product.description.split(" ").slice(0, 22).join(" ") %>...</p>
+      <p class="full-desc" style="display:none;"><%= product.description %></p>
+      <button class="toggle-desc-btn">See More..</button>
+    </div>
+
+    <!-- Scale Buttons -->
+    <div class="details-filter-row details-row-size">
+      <label>Scale:</label>
+      <div id="scale-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <% product.variants.forEach((variant, index) => { %>
+          <button type="button"
+            class="btn btn-outline-primary scale-btn <%= index === 0 ? 'active' : '' %>"
+            data-variant='<%- JSON.stringify(variant) %>'>
+            <%= variant.scale %>
+          </button>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Stock Badge -->
+    <div class="details-filter-row">
+      <span id="stock-badge" style="font-weight: bold;font-size: larger;"></span>
+    </div>
+
+    <!-- Quantity -->
+    <div class="details-filter-row details-row-size">
+      <label for="qty">Quantity </label>
+      <div class="product-details-quantity">
+        <input type="number" id="qty" class="form-control" value="1" min="1" max="5" step="1" required>
+      </div>
+    </div>
+
+    <!-- Category -->
+    <div class="product-cat">
+      <span>Category:</span>
+      <a href="#"><%= product.category ? product.category.name : '' %></a>,
+      <a href="#"><%= product.productName %></a>
+    </div>
+
+    <!-- Actions -->
+    <div class="product-details-action">
+      <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')">
+        <span>Add to Cart</span>
+      </a>
+      <a href="#" class="btn-product btn-wishlist" onclick="addToWishlist('<%= product._id %>')">
+        <span>Add to Wishlist</span>
+      </a>
+    </div>
+
+    <!-- Social Links -->
+    <div class="social-icons social-icons-sm">
+      <span class="social-label">Share:</span>
+      <a href="#" class="social-icon" title="Facebook"><i class="icon-facebook-f"></i></a>
+      <a href="#" class="social-icon" title="Twitter"><i class="icon-twitter"></i></a>
+      <a href="#" class="social-icon" title="Instagram"><i class="icon-instagram"></i></a>
+      <a href="#" class="social-icon" title="Pinterest"><i class="icon-pinterest"></i></a>
+    </div>
+
+    <p>Experience premium craftsmanship with AutoMinima’s diecast models. Built for collectors and enthusiasts. Perfect for display or gifting — Precision in Every Scale.</p>
+  </div>
+</div>
+
+  </div>
+</div>

@@ -111,7 +111,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["Cash-On-Delivery", "Online"],
+      enum: ["Cash-On-Delivery","Online-razorpay","wallet"],
       default: "Cash-On-Delivery",
     },
     paymentStatus: {

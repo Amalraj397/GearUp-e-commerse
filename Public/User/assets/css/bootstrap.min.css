@@ -7330,8 +7330,8 @@ button.bg-dark:hover {
 }
 
 .rounded-bottom {
-  border-bottom-right-radius: 0.25rem !important;
-  border-bottom-left-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.7rem !important;
+  border-bottom-left-radius: 0.7rem !important;
 }
 
 .rounded-left {

@@ -6,7 +6,7 @@ import { STATUS } from "../../utils/statusCodes.js";
 export const getuserOrders = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+    const limit = parseInt(req.query.limit);
     const skip = (page - 1) * limit;
 
     const search = req.query.search ? req.query.search.trim() : "";

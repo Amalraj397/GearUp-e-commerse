@@ -1,6 +1,7 @@
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-    <style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    
+<style>
         /* Products Page Specific Styles */
 .products-container,
 .add-product-container {
@@ -754,6 +755,7 @@
                                                 <option value="Batman" <%= product.edition === 'Batman' ? "selected" : "" %>>Batman</option>
                                                 <option value="Gran Turismo" <%= product.edition === 'Gran Turismo' ? "selected" : "" %>>Gran Turismo</option>
                                                 <option value="Official" <%= product.edition === 'Official' ? "selected" : "" %>>Official</option>
+                                                <option value="special-limited" <%= product.edition === 'special-limited' ? "selected" : "" %>>special-limited</option>
                                                 <option value="racing" <%= product.edition === 'racing' ? "selected" : "" %>>Racing sports</option>
                                                 <option value="collective" <%= product.edition === 'collective' ? "selected" : "" %>>Collective</option>
                                                 <option value="Forza Motorsports" <%= product.edition === 'Forza Motorsports' ? "selected" : "" %>>Forza Motorsports</option>
@@ -770,7 +772,7 @@
 
                                     <div class="form-group">
                                         <label for="product-offer">Product Offer (%)</label>
-                                        <input type="number" id="product-offer" name="offer" value="<%= product.productOffer %>">
+                                        <input type="number" id="product-offer" name="offer" value="<%= product.productOffer %>" readonly>
                                         <span class="error-message"></span>
                                     </div>
 
@@ -883,7 +885,6 @@
 <!-- --------------------script------------------- -->
 
 <script>
-//   const existingImages = product.images || [] ;
  const productData = <%- JSON.stringify(product) %>;
   // console.log("Product:", productData._id);        //debugging
   const existingImages = productData.productImage || [] ;

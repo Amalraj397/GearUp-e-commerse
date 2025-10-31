@@ -1121,20 +1121,667 @@
 //   }
 // };
 
-// ------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
+
+
+
+// ------------- razorpay order-------------
+
+// document.getElementById("placeOrderBtn").addEventListener("click", async (e) => {
+//   e.preventDefault();
+
+//   // collect billing details
+//   const billingDetails = {
+//     name: document.getElementById("name").value,
+//     address: document.getElementById("addressField").value,
+//     city: document.getElementById("city").value,
+//     state: document.getElementById("state").value,
+//     country: document.getElementById("country").value,
+//     landMark: document.getElementById("landMark").value,
+//     pincode: document.getElementById("pincode").value,
+//     phone: document.getElementById("phone").value,
+//     email: document.getElementById("email").value
+//   };
+
+//   const totalAmount = parseFloat("<%= grandTotal %>"); // get from your EJS variable
+  
+//   if (!totalAmount || totalAmount <= 0) {
+//     return Swal.fire("Error", "Invalid total amount", "error");
+//   }
+
+//   // create Razorpay order
+//   const orderRes = await fetch("/payment/create-order", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ amount: totalAmount })
+//   });
+
+//   const orderData = await orderRes.json();
+//   if (!orderData.success) {
+//     return Swal.fire("Error", "Failed to create Razorpay order", "error");
+//   }
+
+//   const options = {
+//     key: process.env.RAZORPAY_KEY_ID,
+//     amount: orderData.amount,
+//     currency: orderData.currency,
+//     name: "AutoMinima",
+//     description: "Order_Payment",
+//     order_id: orderData.orderId,
+//     theme: { color: "#ff6600" },
+//     handler: async function (response) {
+//       try {
+//         // verify payment on backend
+//         const verifyRes = await fetch("/payment/verify-payment", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({
+//             razorpay_payment_id: response.razorpay_payment_id,
+//             razorpay_order_id: response.razorpay_order_id,
+//             razorpay_signature: response.razorpay_signature,
+//             billingDetails,
+//             amount: parseFloat(totalAmount),
+            
+//           })
+//         });
+
+//         const verifyData = await verifyRes.json();
+
+//         if (verifyData.success) {
+//           Swal.fire({
+//             icon: "success",
+//             title: "Payment Successful!",
+//             text: "Your order has been placed successfully.",
+//           }).then(() => {
+//             window.location.href = `/orderSuccess?orderId=${verifyData.orderId}`;
+//           });
+//         } else {
+//           Swal.fire("Error", "Payment verification failed", "error");
+//         }
+//       } catch (err) {
+//         console.error(err);
+//         Swal.fire("Error", "Something went wrong after payment", "error");
+//       }
+//     },
+//   };
+
+//   const rzp = new Razorpay(options);
+//   rzp.open();
+// });
+
+// --------------------------------------- razorpay old controllers-----------------------------------------
+
+// import Razorpay from "razorpay";
+// import crypto from "crypto";
+// import orderSchema from "../../Models/orderModel.js";
+// import generateReceiptId from "../../utils/generateReceiptId.js"
+
+
+// export const paymentRazorpay = async (req, res) => {
+//   const { amount, currency } = req.body;
+
+//   if (!amount || !currency) {
+//     return res.status(400).json({ error: "Invalid request. Amount and currency are required." });
+//   }
+
+//   try {
+//     const razorpay = new Razorpay({
+//       key_id: process.env.RAZORPAY_KEY_ID,
+//       key_secret: process.env.RAZORPAY_KEY_SECRET,
+//     });
+
+//     const amount = Math.round(req.body.amount * 100); 
+//     const options = {
+//       amount,
+//       currency,
+//       receipt: generateReceiptId(),
+//       payment_capture: 1,
+//     };
+
+//     const response = await razorpay.orders.create(options);
+
+//     res.json({
+//       success: true,
+//       orderId: response.id,
+//       currency: response.currency,
+//       amount: response.amount,
+//       key: process.env.RAZORPAY_KEY_ID,
+//     });
+//   } catch (err) {
+//     console.error("Error creating Razorpay order:", err);
+//     res.status(500).json({ success: false });
+//   }
+// };
+
+// export const veritypayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_order_id,
+//       razorpay_payment_id,
+//       razorpay_signature,
+//     } = req.body;
+
+//     const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+//     const expectedSignature = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(body.toString())
+//       .digest("hex");
+
+//     if (expectedSignature === razorpay_signature) {
+//       //  Payment verified
+//       return res.json({ success: true, orderId: razorpay_order_id });
+//     } else {
+//       return res.json({ success: false, message: "Invalid signature" });
+//     }
+//   } catch (err) {
+//     console.error("Payment verification error:", err);
+//     res.status(500).json({ success: false });
+//   }
+// };
+
+// // ============================================================
+// export const retrypayment = async  (req,res) =>{
+
+//        const {pendingOrderId} = req.body;
+     
+//        try {
+//               const pendingOrder = await Order.findById(pendingOrderId).populate('orderItems');
+              
+//               if (!pendingOrder || pendingOrder.orderStatus !== 'Failed') {
+//                      return res.status(400).json({ error: 'Order not found or not eligible for retry.' });
+//                  }
+//                   // Recreate Razorpay order
+//                   const razorpay = new Razorpay({
+//                      key_id: process.env.RAZOR_PAY_ID,
+//                      key_secret: process.env.RAZOR_PAY_SECRET_KEY,
+//                  });
+
+//           const options = {
+//               amount: pendingOrder.totalAmount * 100, // Amount in paise
+//               currency: 'INR',
+//               receipt: pendingOrder._id.toString()
+//           };
+
+//           const razorpayOrder = await razorpay.orders.create(options);
+         
+//           // Update the order with new Razorpay order ID
+//           pendingOrder.razorpayOrderId = razorpayOrder.id;
+//           await pendingOrder.save();
+
+//           return res.status(200).json({
+//               status: 'ok',
+//               razorpayOrderId: razorpayOrder.id,
+//               key: process.env.RAZORPAY_KEY_ID,
+//               amount: options.amount,
+//               currency: options.currency,
+//               orderId: pendingOrder._id
+//           });
+
+//        } catch (error) {
+//               res.status(400).send('Not able to create order. Please try again!');
+              
+//        }
+//     }
 
 
 
 
+// razorpay frond 
+
+// else if(paymentMethod ==="Online-razorpay"){
+  
+//   // collect billing details
+//   const billingDetails = {
+//     name: document.getElementById("name").value,
+//     address: document.getElementById("addressField").value,
+//     city: document.getElementById("city").value,
+//     state: document.getElementById("state").value,
+//     country: document.getElementById("country").value,
+//     landMark: document.getElementById("landMark").value,
+//     pincode: document.getElementById("pincode").value,
+//     phone: document.getElementById("phone").value,
+//     email: document.getElementById("email").value
+//   };
+
+//   const totalAmount = parseFloat("<%= grandTotal %>"); 
+  
+//   if (!totalAmount || totalAmount <= 0) {
+//     return Swal.fire("Error", "Invalid total amount", "error");
+//   }
+
+//   // create Razorpay order
+//   const orderRes = await fetch("/payment/create-order", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+
+    // body: JSON.stringify({amount: totalAmount,
+    //   currency: "INR",
+    //  })
+//   });
+
+//   const orderData = await orderRes.json();
+
+//   if (!orderData.success) {
+//     return Swal.fire("Error", "Failed to create Razorpay order", "error");
+//   }
+
+//   const options = {
+//     key: orderData.key,
+//     amount: orderData.amount,
+//     currency: orderData.currency,
+//     name: "AutoMinima",
+//     description: "Order_Payment",
+//     order_id: orderData.orderId,
+//     theme: { color: "#ff6600" },
+//     handler: async function (response) {
+//       try {
+//         // verify payment on backend
+//         const verifyRes = await fetch("/payment/verify-payment", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json"  
+//            },
+//           body: JSON.stringify({
+//             razorpay_payment_id: response.razorpay_payment_id,
+//             razorpay_order_id: response.razorpay_order_id,
+//             razorpay_signature: response.razorpay_signature,
+//             billingDetails,
+//             amount: parseFloat(totalAmount),
+            
+//           })
+//         });
+
+//         const verifyData = await verifyRes.json();
+
+//         if (verifyData.success) {
+//           Swal.fire({
+//             icon: "success",
+//             title: "Payment Successful!",
+//             text: "Your order has been placed successfully.",
+//           })
+//           .then(() => {
+//             window.location.href = `/orderSuccess?orderId=${verifyData.orderId}`;
+//           });
+          
+//         } 
+//         else {
+//           Swal.fire("Error", "Payment verification failed", "error"); 
+//         }
+//       } catch (err) {
+//         console.error("An error occured while making payment",err);
+//             Swal.fire({
+//                     icon: 'error',
+//                     title: 'Verification Error',
+//                     text: error.message || 'Something went wrong while verifying payment'
+//                   });
+//             }
+//     },
+//   };
+//   const rzp = new Razorpay(options);
+//   rzp.open();
+// }
 
 
 
+// ---lastesty exsisting razorpayment controller--- 21-10-25
+// ==============================================
+
+// // 1) Create local order + Razorpay order
+
+// export const paymentRazorpay = async (req, res) => {
+//   try {
+//     const { amount: rupeeAmount, currency, billingDetails, cartItems } = req.body;
+
+//     if (!rupeeAmount || !currency) {
+//       return res.status(400).json({ success: false, message: "Amount and currency required" });
+//     }
+
+//     // convert to paise integer
+//     const amountInPaise = Math.round(Number(rupeeAmount) * 100);
+
+//     // 1a) create local order with status Pending
+
+//     const localOrder = await orderSchema.create({
+//       orderNumber: generateReceiptId(), // or any order number logic you use
+//       userDetails: req.session.user?.id,
+//       billingDetails,
+//       cartItems: cartItems || [],
+//       grandTotalprice: Number(rupeeAmount), // your schema name says grandTotalprice
+//       amountInPaise,
+//       currency,
+//       paymentMethod: "Online-razorpay",
+//       status: "Pending",
+//       receipt: generateReceiptId,
+//       createdAt: new Date(),
+//     });
+
+
+//     // 1b) create razorpay order
+//     const razorpay = razorpayInstance;
+//     const options = {
+//       amount: amountInPaise,
+//       currency,
+//       receipt: localOrder.receipt,
+//       payment_capture: 1,
+//     };
+
+//     const razorpayOrder = await razorpay.orders.create(options);
+
+//     return res.json({
+//       success: true,
+//       razorpayOrderId: razorpayOrder.id,   // razorpay order id
+//       amount: razorpayOrder.amount,
+//       currency: razorpayOrder.currency,
+//       key: process.env.RAZORPAY_KEY_ID,
+//       localOrderId: localOrder._id.toString(),
+//     });
+//   } catch (err) {
+//     console.error("Error creating Razorpay order:", err);
+//     res.status(500).json({ success: false, message: "Error creating order" });
+//   }
+// };
+
+// // 2) Verify signature after success & mark local order Paid
+// export const veritypayment = async (req, res) => {
+//   try {
+//     const {
+//       razorpay_order_id,
+//       razorpay_payment_id,
+//       razorpay_signature,
+//       localOrderId,
+//     } = req.body;
+
+//     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !localOrderId) {
+//       return res.status(400).json({ success: false, message: "Missing fields for verification" });
+//     }
+
+//     const body = razorpay_order_id + "|" + razorpay_payment_id;
+//     const expectedSignature = crypto
+//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+//       .update(body.toString())
+//       .digest("hex");
+
+//     if (expectedSignature === razorpay_signature) {
+//       // update local order status to Paid
+//       await orderSchema.findByIdAndUpdate(localOrderId, {
+//         status: "Paid",
+//         paymentDetails: {
+//           razorpay_order_id,
+//           razorpay_payment_id,
+//           razorpay_signature,
+//         },
+//         updatedAt: new Date()
+//       });
+
+//       return res.json({ success: true, orderId: localOrderId });
+//     } else {
+//       return res.status(400).json({ success: false, message: "Invalid signature" });
+//     }
+//   } catch (err) {
+//     console.error("Payment verification error:", err);
+//     res.status(500).json({ success: false, message: "Verification failed" });
+//   }
+// };
+
+// // 3) Mark payment failed
+// export const paymentFailed = async (req, res) => {
+//   try {
+//     const { razorpay_order_id, razorpay_payment_id, razorpay_error, localOrderId } = req.body;
+
+//     if (!localOrderId)
+//       return res.status(400).json({ success: false, message: "Missing localOrderId" });
+
+//     const updatedOrder = await orderSchema.findByIdAndUpdate(
+//       localOrderId,
+//       {
+//         status: "Failed",
+//         paymentFailure: {
+//           razorpay_order_id: razorpay_order_id || null,
+//           razorpay_payment_id: razorpay_payment_id || null,
+//           razorpay_error: razorpay_error || "Unknown error",
+//         },
+//         updatedAt: new Date(),
+//       },
+//       { new: true }
+//     );
+
+//     if (!updatedOrder)
+//       return res.status(404).json({ success: false, message: "Order not found" });
+
+//     return res.json({ success: true, orderId: localOrderId });
+//   } catch (err) {
+//     console.error("Error marking payment failed:", err);
+//     res.status(500).json({ success: false, message: "Unable to update order" });
+//   }
+// };
+
+
+// // 4) Retry: create a new Razorpay order for existing local order
+// export const retryPayment = async (req, res) => {
+//   try {
+//     const { amount, currency } = req.body;
+
+//     const razorpay = new Razorpay({
+//       key_id: process.env.RAZORPAY_KEY_ID,
+//       key_secret: process.env.RAZORPAY_KEY_SECRET,
+//     });
+
+//     const options = {
+//       amount: Math.round(amount * 100),
+//       currency,
+//       receipt: generateReceiptId(),
+//       payment_capture: 1,
+//     };
+
+//     const response = await razorpay.orders.create(options);
+
+//     res.json({
+//       success: true,
+//       orderId: response.id,
+//       amount: response.amount,
+//       currency: response.currency,
+//       key: process.env.RAZORPAY_KEY_ID,
+//     });
+//   } catch (error) {
+//     console.error("Error creating Razorpay retry order:", error);
+//     res.status(500).json({ success: false, message: "Failed to retry payment" });
+//   }
+// };
+
+// ---------------------------------------------------
+
+
+// frond end controller latest 21-10-25
+
+// else if (paymentMethod === "Online-razorpay") {
+//   const billingDetails = {
+//     name: document.getElementById("name").value,
+//     address: document.getElementById("addressField").value,
+//     city: document.getElementById("city").value,
+//     state: document.getElementById("state").value,
+//     country: document.getElementById("country").value,
+//     landMark: document.getElementById("landMark").value,
+//     pincode: document.getElementById("pincode").value,
+//     phone: document.getElementById("phone").value,
+//     email: document.getElementById("email").value
+//   };
+
+//   const totalAmount = parseFloat("<%= grandTotal %>");
+
+//   if (!totalAmount || totalAmount <= 0) {
+//     return Swal.fire("Error", "Invalid total amount", "error");
+//   }
+
+//   // Step 1: Create Razorpay order on backend
+
+//   const orderRes = await fetch("/payment/create-order", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       amount: totalAmount,
+//       currency: "INR",
+//       billingDetails
+//     })
+//   });
+
+//   const orderData = await orderRes.json();
+
+//   if (!orderData.success) {
+//     return Swal.fire("Error", "Failed to create Razorpay order", "error");
+//   }
+
+//   // Step 2: Start Razorpay payment flow
+//   startRazorpayFlow(orderData.orderId, orderData.amount, orderData.currency, orderData.key, billingDetails);
+// }
+
+// // Step 3: Define payment + retry logic
+// async function startRazorpayFlow(orderId, amount, currency, key, billingDetails) {
+//   const options = {
+//     key,
+//     amount,
+//     currency,
+//     name: "AutoMinima",
+//     description: "Order Payment",
+//     order_id: orderId,
+//     prefill: {
+//       name: billingDetails.name,
+//       email: billingDetails.email,
+//       contact: billingDetails.phone
+//     },
+//     theme: { color: "#ff6600" },
+//     handler: async function (response) {
+//       try {
+//         const verifyRes = await fetch("/payment/verify-payment", {
+//           method: "POST",
+//           headers: { "Content-Type": "application/json" },
+//           body: JSON.stringify({
+//             razorpay_payment_id: response.razorpay_payment_id,
+//             razorpay_order_id: response.razorpay_order_id,
+//             razorpay_signature: response.razorpay_signature,
+//             billingDetails,
+//             amount: amount / 100
+//           })
+//         });
+
+//         const verifyData = await verifyRes.json();
+
+//         if (verifyData.success) {
+//           Swal.fire({
+//             icon: "success",
+//             title: "Payment Successful!",
+//             text: "Your order has been placed successfully."
+//           }).then(() => {
+//             // window.location.href = `/orderSuccess?orderId=${verifyData.orderId}`;
+//             window.location.href = `/orderFailure`;
+//           });
+//         } else {
+//           // window.location.href = `/orderFailure?orderId=${orderId}`;
+//           window.location.href=`/orderSuccess`;
+//         }
+//       } catch (err) {
+//         console.error("Payment verification error:", err);
+//         window.location.href = `/orderFailure?orderId=${orderId}`;
+//       }
+//     }
+//   };
+
+//   const rzp = new Razorpay(options);
+
+//   // Step 4: Handle payment failure & retry
+// rzp.on("payment.failed", async function (response) {
+//   console.error("Payment failed:", response.error);
+
+//   // 🔹 Inform backend that payment failed
+//   await fetch("/payment/payment-failed", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({
+//       localOrderId: orderId, // from your created Razorpay order
+//       razorpay_order_id: response.error.metadata?.order_id || null,
+//       razorpay_payment_id: response.error.metadata?.payment_id || null,
+//       razorpay_error: response.error.description || "Unknown error"
+//     })
+//   });
+
+//   // 🔹 Now show retry dialog
+//   const retry = await Swal.fire({
+//     icon: "error",
+//     title: "Payment Failed",
+//     text: response.error.description || "Something went wrong.",
+//     showCancelButton: true,
+//     confirmButtonText: "Retry Payment",
+//     cancelButtonText: "View Order Details"
+//   });
+
+//   if (retry.isConfirmed) {
+//     // Retry: create new Razorpay order
+//     const retryRes = await fetch("/payment/retry-payment", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ amount: amount / 100, currency: currency })
+//     });
+
+//     const retryData = await retryRes.json();
+
+//     if (retryData.success) {
+//       startRazorpayFlow(
+//         retryData.orderId,
+//         retryData.amount,
+//         retryData.currency,
+//         retryData.key,
+//         billingDetails
+//       );
+//     } else {
+//       Swal.fire("Error", "Retry failed. Please try again later.", "error");
+//     }
+//   } else {
+//     window.location.href = `/orderFailure?orderId=${orderId}`;
+//   }
+// });
+//   rzp.open();
+// }
 
 
 
+// ---------------------------------------------
+// front end latest 
 
+//  else if (paymentMethod == "Online-razorpay"){
+//   try{
+//     const response =  await fetch("/payment/create-order", {
+//       method:'POST',
+//       headers:{"Content-Type":"application/json" },
+//       body: JSON.stringify({amount: totalAmount,
+//       currency: "INR",})
+//     });
 
+//     const responsePayment =  await response.json();
+    
+//     const {orderPaymentdata} = responsePayment;
 
+//      const razorpayOptions={
+//        key:orderPaymentdata.key,
+//        amount:orderPaymentdata.amount,
+//        currency:'INR',
+//        name: 'Autominima-payment',
+//        description:'Order_payment_online',
+//        order_id: orderPaymentdata.orderId,
+//        handler: async (response)=>{
+//                 const razorpayPaymentId = response['razorpay_payment_id'];
+//                 const razorpayOrderId = response['razorpay_order_id'];
+//                 const razorpaySignature = response['razorpay_signature'];
+                
+//                 console.log('Payment successfull');
+//        },
+//      };
+
+//     const rzp = new Razorpay(razorPayOptions);
+//     rzp.open();
+
+//   }catch(error){
+//     console.error("An error occured in payment", error);
+//   }
+//  }
 
 
 

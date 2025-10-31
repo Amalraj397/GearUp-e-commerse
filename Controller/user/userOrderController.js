@@ -6,6 +6,7 @@ import cartSchema from "../../Models/cartModel.js";
 import addressSchema from "../../Models/userAddressModel.js";
 import orderSchema from "../../Models/orderModel.js";
 import orderReturnSchema from "../../Models/orderReturnModel.js";
+
 import PDFDocument from "pdfkit";
 import path from "path";
 
@@ -128,100 +129,55 @@ export const getAddressById = async (req, res, next) => {
   }
 };
 
-export const placeOrder = async (req, res,next) => {
+export const placeCODOrder = async (req, res, next) => {
   try {
-    const { 
-        billingDetails, 
-        paymentMethod,
-        discountAmount = 0 
-    } = req.body;
-
+    const { billingDetails, paymentMethod } = req.body;
     const userId = req.session.user?.id;
 
-    const cart = await cartSchema
-      .findOne({ userDetails: userId })
-      .populate("items.productId");
-      
-    if (!cart || cart.items.length === 0){
-      return res
-        .status(STATUS.BAD_REQUEST)
-        .json({ success: false, message: MESSAGES.Cart.NO_CART });
+    const cart = await cartSchema.findOne({ userDetails: userId }).populate("items.productId");
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ success: false, message: "Cart is empty" });
     }
-       
-    const processedItems = cart.items.map((item) => {
-      const totalProductprice = item.salePrice * item.quantity;
-      return {
-        productId: item.productId._id,
-        productName: item.productId.productName,
-        variantName: item.variantName,
-        scale: item.scale,
-        quantity: item.quantity,
-        salePrice: item.salePrice,
-        totalProductprice,
-      };
-    });
 
-    const itemsTotal = processedItems.reduce(
-      (acc, item) => acc + item.totalProductprice,
-      0,
-    );
+    const processedItems = cart.items.map((item) => ({
+      productId: item.productId._id,
+      productName: item.productId.productName,
+      variantName: item.variantName,
+      scale: item.scale,
+      quantity: item.quantity,
+      salePrice: item.salePrice,
+      totalProductprice: item.salePrice * item.quantity,
+    }));
+
+    const itemsTotal = processedItems.reduce((acc, item) => acc + item.totalProductprice, 0);
     const festivalOFF = (itemsTotal * 10) / 100;
     const afterfestOFF = itemsTotal - festivalOFF;
     const shippingCharge = afterfestOFF < 1999 ? 120 : 0;
     const grandTotalprice = afterfestOFF + shippingCharge;
-
-       console.log(
-      " Totals → itemsTotal:",
-      itemsTotal,
-      " grandTotal:",
-      grandTotalprice,
-      "shippingcharge: ",
-      shippingCharge,
-    );
-    let paymentStatus = "Processing";
-
-    if (paymentMethod === "Online") {
-      paymentStatus = paymentId ? "Completed" : "Failed";
-    }
-    if (paymentMethod === "Cash-On-Delivery") {
-      paymentStatus = "Processing";
-    }
-
 
     const newOrder = new orderSchema({
       userDetails: userId,
       items: processedItems,
       grandTotalprice,
       shippingCharge,
-      discountAmount,
       totalSavings: festivalOFF,
       orderStatus: "Pending",
       billingDetails,
       paymentMethod,
-      paymentStatus,
+      paymentStatus: "Processing",
     });
-
-    // console.log(" Order object before save:", newOrder);
 
     const year = new Date().getFullYear();
     newOrder.orderNumber = `#AM-${year}-${newOrder._id.toString().slice(-7).toUpperCase()}`;
 
     const savedOrder = await newOrder.save();
 
-    await cartSchema.findOneAndUpdate(
-      { userDetails: userId },
-      { $set: { items: [], grandTotalprice: 0 } },
-    );
+    // Clear cart
+    await cartSchema.findOneAndUpdate({ userDetails: userId }, { $set: { items: [], grandTotalprice: 0 } });
 
-    return res.status(STATUS.CREATED).json({
-      success: true,
-      message: MESSAGES.Orders.ORDER_SUCCESS,
-      order: savedOrder,
-      orderId: savedOrder._id,
-    });
+    res.json({ success: true, message: "COD order placed", orderId: savedOrder._id });
   } catch (error) {
-    console.error(MESSAGES.Orders.ORDER_EROR, error);
-
+    console.error("Place COD Order Error:", error);
     next(error);
   }
 };
@@ -242,6 +198,32 @@ export const getOrderSuccesspage = async (req, res, next) => {
 
   } catch (error) {
     console.error(MESSAGES.Orders.ORDER_SUCCESS_EROR, error);
+      next(error);
+  }
+};
+
+export const getOrderfailurePage = async (req, res, next) => {
+  const userId = req.session.user?.id;
+  try {
+
+    const userData = await userSchema.findById(userId);
+
+    if (!userData) {
+      return res  
+      .status(STATUS.NOT_FOUND)
+      .json({ message: MESSAGES.Users.NO_USER });
+    }
+
+    const failedOrderId = req.session.failedOrderId || null;
+    
+    res.render("paymentFailure.ejs", {
+       key: process.env.RAZORPAY_KEY_ID,
+       amount: 0,  // default 0 since it failed
+       currency: "INR"
+     });
+
+  } catch (error) {
+    console.error(MESSAGES.Orders.ORDER_FAIL_ERROR, error);
       next(error);
   }
 };
@@ -528,7 +510,7 @@ if (!order){
     doc
       .fontSize(11)
       .fillColor("black")
-      .text(`Invoice #: ${order.orderNumber}`, 58, 130);
+      .text(`Invoice : ${order.orderNumber}`, 58, 130);
     doc.text(
       `Date: ${new Date(order.createdAt).toLocaleDateString()}`,
       58,

@@ -30,21 +30,26 @@ export const getCartPage = async (req, res, next) => {
       });
     }
 
-    //  Safely handle blocked & out-of-stock items
+    // blocked & out-of-stock items
       const updatedItems = cart.items.map(item => {
       const product = item.productId;
       const unavailable =
       product.isBlocked || product.status === "Out-of-stock";
 
-      const salePrice = unavailable ? 0 : (item.salePrice || 0);
-      const totalProductprice = salePrice * (item.quantity || 0);
+      const variant = product.variants.find(v => v.scale === item.scale && v.variantName === item.variantName);
+
+      const activePrice = unavailable
+        ? 0
+        : (variant && variant.offerPrice > 0 ? variant.offerPrice : variant.salePrice);
+
+      const totalProductprice = activePrice * (item.quantity || 0);
 
   return {
     ...item._doc,
     isBlocked: product.isBlocked,
     status: product.status,
     unavailable,
-    salePrice,
+    activePrice,
     totalProductprice
   };
     });
@@ -66,6 +71,7 @@ export const getCartPage = async (req, res, next) => {
       discountTotal,
       festivalOFF,
     });
+    // console.log("cart data::::", cart);  
   } catch (error) {
     console.error("Cart Page Error:", error);
     next(error);
@@ -160,41 +166,26 @@ export const addToCartpage = async (req, res, next) => {
             : `Out of stock! You already have ${existingItem.quantity} in your cart.`,
       });
     }
-    
-
     if (existingItem) {
       existingItem.quantity = newTotalQuantity;
       existingItem.totalProductprice =
         existingItem.salePrice * existingItem.quantity;
     } else {
-      const wishlist = await wishlistSchema.findOne({ userId });
-      let removedFromWishlist = false;
-
-      if (wishlist) {
-        const initialLength = wishlist.products.length;
-        wishlist.products = wishlist.products.filter(
-          (item) =>
-            !(
-              item.productId.toString() === productId &&
-              item.variantName === variantName &&
-              item.scale === scale
-            )
-        );
-        if (wishlist.products.length < initialLength) {
-          removedFromWishlist = true;
-          await wishlist.save();
-        }
-      }
-
-      const salePrice = selectedVariant.salePrice;
-      const totalPrice = salePrice * quantity;
+      // remov
+      await wishlistSchema.updateOne(
+        { userId },
+        { $pull: { products: { productId } } }
+      );
+    
+      const priceToUse = selectedVariant.offerPrice > 0 ? selectedVariant.offerPrice : selectedVariant.salePrice;
+      const totalPrice = priceToUse * quantity;
 
       cart.items.push({
         productId,
         variantName,
         scale,
         quantity,
-        salePrice,
+        salePrice: priceToUse,
         totalProductprice: totalPrice,
       });
     }
@@ -313,7 +304,6 @@ export const increaseCartQuantity = async (req, res, next) => {
     next(error);
   }
 };
-
 
 export const updateQuantity = async (req, res, next) => {
   try {

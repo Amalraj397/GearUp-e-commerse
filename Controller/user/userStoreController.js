@@ -2,25 +2,24 @@
 import productSchema from "../../Models/productModel.js";
 import categorySchema from "../../Models/categoryModel.js";
 import brandSchema from "../../Models/brandModel.js";
+import wishlistSchema from "../../Models/wishlistModel.js"
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
 export const getshopPage = async (req, res, next) => {
   try {
+    const userId = req.session?.user?.id;
     const searchQuery = req.query.search?.trim() || "";
-    console.log("searchQuery : ", searchQuery);
     const page = parseInt(req.query.page) || 1;
     const limit = 8;
     const skip = (page - 1) * limit;
     const filter = { isBlocked: false };
 
     if (searchQuery) {
-      const regex = new RegExp(searchQuery, "i"); // case-insensitive'i';
+      const regex = new RegExp(searchQuery, "i");
       filter.productName = { $regex: regex };
     }
-    console.log("filter : ", filter);
 
-    // Fetch filtered and paginated products
     const products = await productSchema
       .find(filter)
       .populate("brand", "brandName")
@@ -30,23 +29,29 @@ export const getshopPage = async (req, res, next) => {
       .limit(limit)
       .lean();
 
-    // console.log("products : ",products);   // debugging
-
-    // Count total filtered products
     const totalProducts = await productSchema.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    // Get distinct editions and scales
-    const editions = await productSchema.distinct("edition", {
-      isBlocked: false,
-    });
-    const scales = await productSchema.distinct("scale", { isBlocked: false });
+    const editions = await productSchema.distinct("edition", { isBlocked: false });
 
-    // Brands & categories for filtering
+    const scalesResult = await productSchema.aggregate([
+      { $unwind: "$variants" },
+      { $group: { _id: "$variants.scale" } },
+      { $project: { _id: 0, scale: "$_id" } }
+    ]);
+
+    const scales = scalesResult.map(s => s.scale).filter(Boolean); 
     const brands = await brandSchema.find({ isBlocked: false });
     const categories = await categorySchema.find({ isBlocked: false });
 
-    // Render to shop page
+    let userWishlist = [];
+    if (userId) {
+      const wishlist = await wishlistSchema.findOne({ userId });
+      if (wishlist && Array.isArray(wishlist.products)) {
+        userWishlist = wishlist.products.map(item => item.productId.toString());
+      }
+    }
+
     res.render("shopPage.ejs", {
       products,
       editions,
@@ -56,12 +61,14 @@ export const getshopPage = async (req, res, next) => {
       currentPage: page,
       totalPages,
       searchQuery,
+      userWishlist,
     });
   } catch (error) {
-    console.error(MESSAGES.Store.ERROR_LOADING_PRODUCTS, error);
-    next(error)
+    console.error("Error loading shop page:", error);
+    next(error);
   }
 };
+
 
 export const getproductDetailpage = async (req, res, next) => {
   const { id } = req.params;
@@ -72,7 +79,7 @@ export const getproductDetailpage = async (req, res, next) => {
       .populate("category")
       .populate("brand");
 
-    console.log("Product Details:", product);
+    // console.log("Product Details:", product);
 
     if (!product || product.isBlocked) {
       return res
@@ -120,32 +127,32 @@ export const getBrandPage = (req, res, next) => {
   }
 };
 
+
 export const filterProducts = async (req, res, next) => {
   try {
     const { categories, brands, editions, scales, page = 1, sort = "default" } = req.query;
     const searchQuery = req.query.search?.trim() || "";
-
     const filter = { isBlocked: false };
 
+    // Category / Brand / Edition
     if (categories) filter.category = { $in: categories.split(",") };
     if (brands) filter.brand = { $in: brands.split(",") };
     if (editions) filter.edition = { $in: editions.split(",") };
-    if (scales) filter.scale = { $in: scales.split(",") };
+
+    if (scales) filter["variants.scale"] = { $in: scales.split(",") };
 
     const minPrice = parseInt(req.query.minPrice);
     const maxPrice = parseInt(req.query.maxPrice);
-
     if (!isNaN(minPrice) || !isNaN(maxPrice)) {
-      filter.salePrice = {};
-      if (!isNaN(minPrice)) filter.salePrice.$gte = minPrice;
-      if (!isNaN(maxPrice)) filter.salePrice.$lte = maxPrice;
+      filter["variants.salePrice"] = {};
+      if (!isNaN(minPrice)) filter["variants.salePrice"].$gte = minPrice;
+      if (!isNaN(maxPrice)) filter["variants.salePrice"].$lte = maxPrice;
     }
 
-    //Sort
     let sortOption = {};
-    if (sort === "asc") sortOption = { salePrice: 1 };         // L-H
-    else if (sort === "desc") sortOption = { salePrice: -1 };  // H-L
-    else sortOption = { _id: -1 }; 
+    if (sort === "asc") sortOption = { "variants.salePrice": 1 };
+    else if (sort === "desc") sortOption = { "variants.salePrice": -1 };
+    else sortOption = { _id: -1 };
 
     const limit = 8;
     const skip = (page - 1) * limit;
@@ -155,12 +162,34 @@ export const filterProducts = async (req, res, next) => {
       .sort(sortOption)
       .skip(skip)
       .limit(limit)
-      .populate("category");
+      .populate("category")
+      .populate("brand")
+      .lean();
 
     const totalProducts = await productSchema.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    return res.render("shopPage.ejs", {
+    const editionsList = await productSchema.distinct("edition", { isBlocked: false });
+    const scalesResult = await productSchema.aggregate([
+      { $unwind: "$variants" },
+      { $group: { _id: "$variants.scale" } },
+      { $project: { _id: 0, scale: "$_id" } }
+    ]);
+
+    const scalesList = scalesResult.map(s => s.scale).filter(Boolean);
+    const categoriesList = await categorySchema.find({ isBlocked: false });
+    const brandsList = await brandSchema.find({ isBlocked: false });
+
+    let userWishlist = [];
+    if (req.session?.user?.id) {
+      const userId = req.session.user.id;
+      const wishlist = await wishlistSchema.findOne({ userId });
+      if (wishlist && Array.isArray(wishlist.products)) {
+        userWishlist = wishlist.products.map(item => item.productId.toString());
+      }
+    }
+
+    res.render("shopPage.ejs", {
       products,
       currentPage: +page,
       totalPages,
@@ -171,12 +200,12 @@ export const filterProducts = async (req, res, next) => {
       selectedBrands: brands ? brands.split(",") : [],
       selectedEditions: editions ? editions.split(",") : [],
       selectedScales: scales ? scales.split(",") : [],
-      categories: await categorySchema.find(),
-      brands: await brandSchema.find(),
-      editions: [...new Set(await productSchema.distinct("edition"))],
-      scales: [...new Set(await productSchema.distinct("scale"))],
+      categories: categoriesList,
+      brands: brandsList,
+      editions: editionsList,
+      scales: scalesList, 
+      userWishlist,
     });
-
   } catch (error) {
     console.error("Error filtering products:", error);
     next(error);

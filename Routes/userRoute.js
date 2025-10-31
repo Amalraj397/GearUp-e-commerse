@@ -47,6 +47,7 @@ import {
   getUserDashboard,
   geteditUserprofile,
   updateUserprofile,
+  
 } from "../Controller/user/userProfileController.js";
 
 import {
@@ -56,6 +57,7 @@ import {
   edit_userAddress,
   delete_userAddress,
   makedefault,
+
 } from "../Controller/user/userAddressController.js";
 
 import {
@@ -64,31 +66,48 @@ import {
   removeFromCartpage,
   increaseCartQuantity,
   updateQuantity,
+
 } from "../Controller/user/userCartController.js";
 
 import {
   getUserWishlist,
   addToWishlist,
   removefromwishlist,
+
 } from "../Controller/user/userWishlistController.js";
 
 import {
   getCheckoutpage,
   getAddressById,
-  placeOrder,
+  // placeOrder,
   getOrderSuccesspage,
+  getOrderfailurePage,
   getmyOrders,
   cancelOrder,
   downloadInvoice,
   viewDetails,
   returnOrder,
   cancelOrderItem,
+  placeCODOrder 
+  // paymentRazorpay,
+  // veritypayment,
+
 } from "../Controller/user/userOrderController.js";
 
 import { 
   requestEmailUpdate, 
   verifyEmailUpdate, 
-} from "../Controller/user/emailUpdateController.js"
+
+} from "../Controller/user/emailUpdateController.js";
+ 
+import {
+  paymentRazorpay,
+  verifyPayment,
+  paymentFailurePage,
+  retryPaymentPage,
+//   retryPayment,
+
+} from "../Controller/user/paymentController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
@@ -99,9 +118,10 @@ userRoute.get("/pageNotFound", pageNotFound);
 userRoute.get("/aboutUs", getAboutPage);
 
 // user-login/logout get-post route
-userRoute.get("/login", nocache, showLogin);
-userRoute.post("/login", userLogin);
-userRoute.get("/logout", userLogout);
+userRoute.route("/login")
+          .get( nocache, showLogin)
+          .post(userLogin);
+userRoute.get("/logout",userLogout);
 userRoute.get('/checkUserStatus', checkUserStatus);
 
 //forgotpassword section
@@ -117,8 +137,9 @@ userRoute.get("/updatePassword", getSetnewPassword);
 userRoute.post("/updateNewPassword", confirmResetPassword);
 
 //userSignUp get-post route
-userRoute.get("/signup", showSignup);
-userRoute.post("/signup", userSignup);
+userRoute.route("/signup")
+         .get( showSignup)
+         .post( userSignup);
 
 //googleAuthentication
 userRoute.post("/auth/google/signup", handleGoogleSignup);
@@ -169,16 +190,26 @@ userRoute.post("/increaseCartQuantity", increaseCartQuantity);
 
 //--------------checkout---------------
 userRoute.get("/checkout", getCheckoutpage);
+
+//  ---------razorpay-------
+userRoute.post("/payment/create-order", paymentRazorpay);
+userRoute.post("/payment/verify-payment", verifyPayment);
+userRoute.get("/payment/failure", paymentFailurePage);
+userRoute.post("/payment/retry-payment", retryPaymentPage);
+
+
+
 userRoute.get("/getAddressById/:id", getAddressById);
-userRoute.post("/placeOrder", placeOrder);
-userRoute.get("/orderSuccess", getOrderSuccesspage);
+userRoute.post("/placeOrder", placeCODOrder );
+userRoute.get("/orderSuccess", getOrderSuccesspage);  // order success
+// userRoute.get("/orderFailure",getOrderfailurePage);  // order failure
 
 //-------------order management-----------
 userRoute.get("/myOrders", getmyOrders);
 userRoute.put("/orders/cancel/:id", cancelOrder);
 userRoute.post("/orders/return/:id", returnOrder);
 userRoute.post("/orders/item/cancel/:itemId", cancelOrderItem);
-
+``
 userRoute.get("/orders/:id/invoice", downloadInvoice);
 
 userRoute.get("/orderdetails/:id", viewDetails);

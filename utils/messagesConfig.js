@@ -74,6 +74,7 @@ export const MESSAGES = {
     ORDER_CANCEL_FAIL: "Failed to cancel the order..!",
     CHECKOUT_PAGE_EROR:" Error in loading the CHECKOUT page",
     ORDER_SUCCESS_EROR :"Error loading order success page:",
+    ORDER_FAIL_ERROR:"Error loading order success page:",
 
     NO_ORDER: "Could not find any Orders",
     INVALID_STATUS: "Invalid order status.",
@@ -270,4 +271,9 @@ export const MESSAGES = {
     PASSWORD_UPDATE_SUCCESS: "Password updated successfully..! You can login now.",
     PASSWORD_UPDATE_FAILED: "Failed to update password. Please try again.",
   },
+
+  Offers:{
+    OFFR_PAGE_ERR: "Error occured while loading Offer Page!",
+    
+   }
 };

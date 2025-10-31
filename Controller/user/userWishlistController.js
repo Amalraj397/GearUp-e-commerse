@@ -5,65 +5,6 @@ import wishlistSchema from "../../Models/wishlistModel.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
-// export const getUserWishlist = async (req, res,next) => {
-//   const user = req.session.user;
-//   const userId = user?.id;
-
-//   try {
-//     if (!userId) {
-//       return res.redirect("/login");
-//     }
-
-//     const UserData = await userschema.findById(userId);
-
-//     if (!UserData) {
-//       return res  
-//       .status(STATUS.NOT_FOUND)
-//       .json({ message: MESSAGES.Users.NO_USER });
-//     }
-
-//     //check if the current user has wishlist
-//     const wishlistData = await wishlistSchema.findOne({ userId }).populate({
-//       path: "products.productId",
-//       populate: [
-//         { path: "brand", select: "isBlocked" },
-//         { path: "category", select: "isListed" },
-//       ],
-//     });
-
-//     // console.log("wishlistdata::",wishlistData);
-
-//     const wishlistCount = wishlistData ? wishlistData.products.length : 0;
-
-//     const filteredWishlist = wishlistData
-//       ? wishlistData.products.filter((item) => {
-//           const product = item.productId;
-//           return (
-//             product &&
-//             !product.isBlocked &&
-//             product.brand &&
-//             !product.brand.isBlocked &&
-//             product.category &&
-//             !product.category.isListed
-//           );
-//         })
-//       : [];
-//     const sortedWishlist = filteredWishlist.sort(
-//       (a, b) => b.createdOn - a.createdOn,
-//     );
-
-//      res.render("userWishlist.ejs", {  
-//       UserData,
-//       wishlist: sortedWishlist,
-//       wishlistCount,
-//     });
-
-//   } catch (error) {
-//     console.log(MESSAGES.Wishlist.PAGE_ERROR, error);
-//     next(error);
-//   }
-// };
-
 
 export const getUserWishlist = async (req, res, next) => {
   console.log("wishlist controller started.....")
@@ -170,7 +111,7 @@ export const addToWishlist = async (req, res,next) => {
         .json({ message: MESSAGES.Wishlist.ITEM_ALREADY_EXISTS });
     }
 
-    // Add product to wishlist
+    // Add to wishlist
     userWishlist.products.push({ productId });
     await userWishlist.save();
 
@@ -185,7 +126,7 @@ export const addToWishlist = async (req, res,next) => {
   }
 };
 
-// ----------------------------------next()---------------------------------
+// --------------------------------------------------------------
 
 export const removefromwishlist = async (req, res,next) => {
   try {

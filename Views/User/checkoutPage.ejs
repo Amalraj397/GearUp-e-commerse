@@ -5,6 +5,45 @@
     <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/User/assets/css/style.css">
 	  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        .payment-options {
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .payment-option {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 15px;
+          padding: 8px 12px;
+          border: 1px solid #d1d1d1;
+          border-radius: 8px;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          cursor: pointer;
+        }
+
+        .payment-option input[type="radio"] {
+          accent-color: #f67802;
+          width: 18px;
+          height: 18px;
+          transition: transform 0.2s ease;
+        }
+
+        /* Hover enlarge effect */
+        .payment-option:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* When selected */
+        .payment-option input[type="radio"]:checked + span {
+          font-weight: 600;
+          color: #f65702;
+        }
+    </style>
 </head>
 
 <body>
@@ -139,6 +178,26 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
                                                             <span>₹<%= grandTotal.toFixed(2) %></span>
                                                         </div>
 
+                                                        <div class="total-row total-final">
+                                                          <span>Payment Options:</span>
+                                                        </div>
+
+                                                        <div class="payment-options">
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="Cash-On-Delivery" checked>
+                                                            <span>Cash on Delivery</span>
+                                                          </label>
+                                                        
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="wallet">
+                                                            <span>Wallet</span>
+                                                          </label>
+                                                        
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="Online-razorpay">
+                                                            <span>Razorpay</span>
+                                                          </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -276,13 +335,13 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
     <script src="/User/assets/js/jquery.waypoints.min.js"></script>
     <script src="/User/assets/js/superfish.min.js"></script>
     <script src="/User/assets/js/owl.carousel.min.js"></script>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script src="/User/assets/js/main.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
 
 <script>
-
 	document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("changeAddressBtn").addEventListener("click", () => {
         const modal = new bootstrap.Modal(document.getElementById("changeAddressModal"));
@@ -375,10 +434,167 @@ Type: ${data.addressType}`;
   }
 });
 
+// -------- normal order--------
+
+// document.getElementById("placeOrderBtn").addEventListener("click", async (e) => {
+//   e.preventDefault();
+//   const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash-On-Delivery";
+
+//   // collect billing details from inputs by ID
+//   const billingDetails = {
+//     name: document.getElementById("name").value,
+//     address: document.getElementById("addressField").value,
+//     city: document.getElementById("city").value,
+//     state: document.getElementById("state").value,
+//     country: document.getElementById("country").value,
+//     landMark: document.getElementById("landMark").value,
+//     pincode: document.getElementById("pincode").value,
+//     phone: document.getElementById("phone").value,
+//     email: document.getElementById("email").value
+//   };
+//   console.log("paymentMethod::",paymentMethod);
+//     // const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+//   const orderData = {
+//     billingDetails,
+//     paymentMethod
+//   };
+//                           //"Cash-On-Delivery","Online-razorpay","wallet"
+//   if(paymentMethod === "Cash-On-Delivery"){
+//   try {
+//     const res = await fetch("/placeOrder", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(orderData)
+//     });
+
+//     const data = await res.json();
+
+
+//     if (data.success) {
+//       Swal.fire({
+//         icon: "success",
+//         title: "Order Confirmed!",
+//         text: data.message || "Your order has been placed successfully",
+//         confirmButtonColor: "#3085d6"
+//       }).then(() => {
+//         window.location.href = `/orderSuccess?orderId=${data.orderId}`;
+//       });
+//     } else {
+//       Toastify({
+//         text: data.message || "Failed to place order ",
+//         duration: 2000,
+//         gravity: "top",
+//         position: "right",
+//         backgroundColor: "#ff4d4d"
+//       }).showToast();
+//     }
+//   } catch (error) {
+//     console.error("Error submitting order!", error);
+//     Toastify({
+//       text: "Something went wrong. Please try again.",
+//       duration: 2000,
+//       gravity: "top",
+//       position: "right",
+//       backgroundColor: "#ff4d4d"
+//     }).showToast();
+//   }
+// }
+//   // console.log("razorpay")
+// else if (paymentMethod === "Online-razorpay") {
+//   try {
+    
+//     console.log("razorpay kerittund")
+//     const totalAmount = parseFloat("<%= grandTotal %>");
+
+//     const response = await fetch("/payment/create-order", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({
+//          amount: totalAmount, 
+//          currency: "INR",
+//         }),
+//     });
+
+
+//     console.log("response of paymnet",response)
+//     const responsePayment = await response.json();
+//     const { orderPaymentdata, orderId } = responsePayment;
+//     console.log("response payment ithaanu",responsePayment)
+
+//     const razorpayOptions = {
+//       key: orderPaymentdata.key,
+//       amount: orderPaymentdata.amount,
+//       currency: "INR",
+//       name: "AutoMinima",
+//       description: "Order Payment",
+//       // order_id: orderPaymentdata.orderId,
+//        order_id: orderId,
+//       handler: async (response) => {
+//         console.log("Payment successful please wait for verifying::::", response);
+//         // send payment success to backend to verify signature here
+//         try {
+//             const verifyResponse = await fetch("/payment/verify-payment",{
+//                 method: "POST",
+//                 headers: {'Content-Type': 'application/json'},
+//                 body: JSON.stringify({
+//                     razorpay_order_id: response.razorpay_order_id,
+//                     razorpay_payment_id: response.razorpay_payment_id,
+//                     razorpay_signature: response.razorpay_signature,
+//                     paymentMethod: paymentMethod,
+//                     amount: totalAmount
+//                 })
+//             });                  
+//         const verifyData = await verifyResponse.json();
+
+
+//         console.log("---------------------")
+//          console.log("verifyData::",verifyData);
+//         console.log("---------------------")
+
+//         if (!verifyData.success) {
+//             alert('failer payment')
+//             throw new Error(verifyData.message || 'Payment verification failed');
+//         } 
+//         await Swal.fire({
+//             icon: 'success',
+//             title: 'Payment Successful',
+//             text: 'Your payment has been verified successfully',
+//             timer: 3000,
+//             showConfirmButton: false
+//         });
+//         window.location.href = "/orderSuccess";
+//     } catch (error) {
+//                 Swal.fire({
+//                     icon: 'error',
+//                     title: 'Verification Error',
+//                     text: error.message || 'Something went wrong while verifying payment'
+//                 });
+//             }
+//       },
+//       // prefill: {
+//       //     name: data.customerName,    // Add customer details from backend
+//       //     email: data.customerEmail,
+//       //     contact: data.customerPhone
+//       // },
+//       theme: {
+//           color: "#3399cc"
+//       }
+//     };
+//     const rzp = new Razorpay(razorpayOptions);
+//     rzp.open();
+    
+//   } catch (error) {
+//     console.error("Error in Razorpay payment:", error);
+//   }
+// }
+
+// });
+
 document.getElementById("placeOrderBtn").addEventListener("click", async (e) => {
   e.preventDefault();
 
-  // collect billing details from inputs by ID
+  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash-On-Delivery";
+
   const billingDetails = {
     name: document.getElementById("name").value,
     address: document.getElementById("addressField").value,
@@ -388,57 +604,100 @@ document.getElementById("placeOrderBtn").addEventListener("click", async (e) => 
     landMark: document.getElementById("landMark").value,
     pincode: document.getElementById("pincode").value,
     phone: document.getElementById("phone").value,
-    email: document.getElementById("email").value
+    email: document.getElementById("email").value,
   };
 
-  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash-On-Delivery";
+  if (paymentMethod === "Cash-On-Delivery") {
+    try {
+      const res = await fetch("/placeOrder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ billingDetails, paymentMethod }),
+      });
 
-    // const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-  const orderData = {
-    billingDetails,
-    paymentMethod
-  };
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire({ icon: "success", title: "Order Confirmed!", timer: 2000, showConfirmButton: false })
+          .then(() => window.location.href = `/orderSuccess?orderId=${data.orderId}`);
+      } else {
+        Toastify({ text: data.message, duration: 2000, gravity: "top", position: "right", backgroundColor: "#ff4d4d" }).showToast();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return;
+  }
 
+  // Razorpay Online Payment
+  
   try {
-    const res = await fetch("/placeOrder", {
+    const totalAmount = parseFloat("<%= grandTotal %>");
+    const orderResponse = await fetch("/payment/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderData)
+      body: JSON.stringify({ amount: totalAmount }),
     });
 
-    const data = await res.json();
+    const { orderPaymentdata, orderId } = await orderResponse.json();
 
-    if (data.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Order Confirmed!",
-        text: data.message || "Your order has been placed successfully",
-        confirmButtonColor: "#3085d6"
-      }).then(() => {
-        window.location.href = `/orderSuccess?orderId=${data.orderId}`;
+      sessionStorage.setItem("failedOrderId", orderId);
+      
+    const options = {
+      key: orderPaymentdata.key,
+      amount: orderPaymentdata.amount,
+      currency: "INR",
+      name: "AutoMinima",
+      description: "Diecast-Order Payment",
+      order_id: orderPaymentdata.id,
+      handler: async function (response) {
+        try {
+          const verifyResponse = await fetch("/payment/verify-payment", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              billingDetails,
+              paymentMethod,
+              amount: totalAmount,
+            }),
+          });
+
+          const verifyData = await verifyResponse.json();
+          if (!verifyData.success) throw new Error(verifyData.message || "Verification failed");
+
+          Swal.fire({ icon: "success", title: "Payment Successful", timer: 2000, showConfirmButton: false })
+            .then(() => window.location.href = `/orderSuccess?orderId=${verifyData.orderId}`);
+        } catch (error) {
+          Swal.fire({ icon: "error", title: "Verification Error", text: error.message });
+        }
+      },
+      theme: { color: "#3399cc" },
+    };
+
+    const rzp = new Razorpay(options);
+          // Handle Razorpay failure
+      rzp.on('payment.failed', async function (response) {
+        console.error("Payment Failed:", response.error);
+        
+        Swal.fire({
+          icon: 'error',
+          title: 'Payment Failed',
+          text: 'Your payment was not completed. Redirecting...',
+          timer: 2000,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.href = `/payment/failure?orderId=${orderPaymentdata.id}`;
+        });
       });
-    } else {
-      Toastify({
-        text: data.message || "Failed to place order ",
-        duration: 4000,
-        gravity: "top",
-        position: "right",
-        backgroundColor: "#ff4d4d"
-      }).showToast();
-    }
-  } catch (error) {
-    console.log("Error submitting order!", error);
-    Toastify({
-      text: "Something went wrong. Please try again.",
-      duration: 4000,
-      gravity: "top",
-      position: "right",
-      backgroundColor: "#ff4d4d"
-    }).showToast();
+          
+    rzp.open();
+  } catch (err) {
+    console.error("Razorpay Error:", err);
   }
 });
 </script>
-
 </body>
 
 <%- include("../../Views/Partials/User/footerLand") %>            
