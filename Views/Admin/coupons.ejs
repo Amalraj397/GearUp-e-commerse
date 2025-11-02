@@ -1,0 +1,483 @@
+<style>
+/* Offer Management  Styles */
+.main-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.add-btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #ff9933;
+}
+
+/* Search and Sort Bar */
+.search-sort-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-sort-bar input {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 8px 12px;
+  border-radius: 5px;
+  width: 280px;
+  outline: none;
+}
+
+.search-sort-bar select {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 8px 12px;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Table Styling */
+.table-container {
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table th {
+  background-color: rgba(255, 140, 0, 0.1);
+  color: var(--primary-color);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-table tbody tr:hover {
+  background-color: rgba(255, 140, 0, 0.05);
+}
+
+.admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Badges */
+.user-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: rgba(72, 187, 120, 0.2);
+  color: var(--success-color);
+}
+
+.status-blocked {
+  background-color: rgba(245, 101, 101, 0.2);
+  color: var(--danger-color);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-status-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.3s ease;
+  background-color: rgba(245, 101, 101, 0.2);
+  color: var(--danger-color);
+}
+
+.toggle-status-btn:hover {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#page-numbers {
+  display: flex;
+  gap: 5px;
+}
+
+.page-number {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-number:hover {
+  background-color: rgba(255, 140, 0, 0.1);
+  color: var(--primary-color);
+}
+
+.page-number.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Edit Offer Button */
+.edit-offer-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-offer-btn i {
+  font-size: 13px;
+}
+
+.edit-offer-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .search-sort-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-sort-bar input,
+  .search-sort-bar select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <%-include("../../Views/Partials/Admin/header")%>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<div class="main-content">
+  <div class="page-header">
+    <h1>Coupon Management</h1>
+    <a href="/admin/addCoupons" class="btn add-btn">
+      <i class="fas fa-plus"></i> Add New Coupon
+    </a>
+  </div>
+
+  <div class="search-sort-bar">
+    <input type="text" id="coupon-search" placeholder="Search coupons..." />
+    <select id="sort-select">
+      <option value="newest">Newest First</option>
+      <option value="oldest">Oldest First</option>
+      <option value="code-asc">Code A-Z</option>
+      <option value="code-desc">Code Z-A</option>
+    </select>
+  </div>
+
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>SL</th>
+          <th>Coupon Code</th>
+          <th>Description</th>
+          <th>Discount (₹)</th>
+          <th>Min Purchase (₹)</th>
+          <th>Condition</th>
+          <th>Usage Limit</th>
+          <th>User Limit</th>
+          <th>Expiry Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="coupon-table-body"></tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button id="prev-page" class="pagination-btn">Prev</button>
+    <div id="page-numbers"></div>
+    <button id="next-page" class="pagination-btn">Next</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let coupons = <%- JSON.stringify(couponData) %>;
+    coupons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    let currentPage = 1;
+    const couponsPerPage = 5;
+    let filteredCoupons = [...coupons];
+
+    function formatDate(dateString) {
+      if (!dateString) return "-";
+      const options = { year: "numeric", month: "short", day: "numeric" };
+      return new Date(dateString).toLocaleDateString("en-US", options);
+    }
+
+    function renderCoupons() {
+      const tableBody = document.getElementById("coupon-table-body");
+      tableBody.innerHTML = "";
+
+      const startIndex = (currentPage - 1) * couponsPerPage;
+      const endIndex = startIndex + couponsPerPage;
+      const paginatedCoupons = filteredCoupons.slice(startIndex, endIndex);
+
+      paginatedCoupons.forEach((coupon, index) => {
+        const row = document.createElement("tr");
+        const slNo = startIndex + index + 1;
+
+        const now = new Date();
+        const expiry = new Date(coupon.expiryDate);
+        const isExpired = expiry < now;
+        const isActive = coupon.isActive;
+
+        const statusClass = isExpired ? "status-blocked" : "status-active";
+        const statusText = isExpired ? "Expired" : isActive ? "Active" : "Inactive";
+
+        const actionBtn = isExpired
+          ? `<span class="user-status status-blocked">Expired</span>`
+          : isActive
+            ? `<button class="toggle-status-btn" data-id="${coupon._id}" data-status="true">
+                 <i class="fas fa-trash"></i> Deactivate
+               </button>`
+            : `<span class="user-status status-blocked">Inactive</span>`;
+
+        row.innerHTML = `
+          <td>${slNo}</td>
+          <td>${coupon.couponCode}</td>
+          <td>${coupon.description?.substring(0, 100) || ''}...</td>
+          <td>${coupon.discountAmount}</td>
+          <td>${coupon.minPurchaseAmount || "-"}</td>
+          <td>${coupon.conditions}</td>
+          <td>${coupon.usageLimit}</td>
+          <td>${coupon.userLimit}</td>
+          <td>${formatDate(coupon.expiryDate)}</td>
+          <td><span class="user-status ${statusClass}">${statusText}</span></td>
+          <td class="action-buttons">${actionBtn}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+      document.querySelectorAll(".toggle-status-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const couponId = btn.getAttribute("data-id");
+          await deleteCoupon(couponId);
+        });
+      });
+
+      updatePagination();
+    }
+
+    async function deleteCoupon(couponId) {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "This will deactivate the coupon (soft delete).",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: "Yes, delete it!"
+      });
+
+      if (!result.isConfirmed) return;
+
+      try {
+        const res = await fetch(`/admin/deactivateCoupon/${couponId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          Swal.fire("Deleted!", data.message, "success").then(() => location.reload());
+        } else {
+          Swal.fire("Error", data.message, "error");
+        }
+      } catch {
+        Swal.fire("Error", "Something went wrong.", "error");
+      }
+    }
+
+    function updatePagination() {
+      const totalPages = Math.ceil(filteredCoupons.length / couponsPerPage);
+      const pageNumbers = document.getElementById("page-numbers");
+      const prevBtn = document.getElementById("prev-page");
+      const nextBtn = document.getElementById("next-page");
+
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages;
+
+      pageNumbers.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.className = `page-number ${i === currentPage ? "active" : ""}`;
+        btn.textContent = i;
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderCoupons();
+        });
+        pageNumbers.appendChild(btn);
+      }
+    }
+
+    // Search
+    document.getElementById("coupon-search").addEventListener("input", function () {
+      const term = this.value.toLowerCase().trim();
+      filteredCoupons = coupons.filter(c =>
+        c.couponCode.toLowerCase().includes(term) ||
+        c.description.toLowerCase().includes(term)
+      );
+      currentPage = 1;
+      renderCoupons();
+    });
+
+    // Sort
+    document.getElementById("sort-select").addEventListener("change", function () {
+      const value = this.value;
+      switch (value) {
+        case "newest":
+          filteredCoupons.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          break;
+        case "oldest":
+          filteredCoupons.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+          break;
+        case "code-asc":
+          filteredCoupons.sort((a, b) => a.couponCode.localeCompare(b.couponCode));
+          break;
+        case "code-desc":
+          filteredCoupons.sort((a, b) => b.couponCode.localeCompare(a.couponCode));
+          break;
+      }
+      renderCoupons();
+    });
+
+    document.getElementById("prev-page").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderCoupons();
+      }
+    });
+
+    document.getElementById("next-page").addEventListener("click", () => {
+      const totalPages = Math.ceil(filteredCoupons.length / couponsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderCoupons();
+      }
+    });
+
+    renderCoupons();
+  });
+</script>
+
+</html>

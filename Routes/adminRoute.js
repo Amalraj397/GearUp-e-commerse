@@ -69,12 +69,19 @@ import {
 import {
   getOfferPage,
   getaddOffer,
-  toogleOffer,
   addOffer,
   getEditOffer,
   updateOffer,
 
-} from "../Controller/admin/offerController.js"
+} from "../Controller/admin/offerController.js";
+
+import {
+  getCouponsPage,
+  getaddCoupon,
+  addCoupon,
+  deactivateCoupon,
+  
+} from "../Controller/admin/couponController.js";
 
 const adminRoute = express.Router();
 
@@ -146,6 +153,11 @@ adminRoute.get("/addoffer",adminAuth,getaddOffer);
 adminRoute.get("/editOffer/:id",adminAuth,getEditOffer);
 adminRoute.put("/editOffer/:id", adminAuth,updateOffer )
 
-adminRoute.patch("/toggleOfferStatus/:id", adminAuth,toogleOffer);
+// ---------------------- coupon management---------------------
+
+adminRoute.get("/getCoupons", adminAuth, getCouponsPage)
+adminRoute.get("/addCoupons", adminAuth, getaddCoupon);
+adminRoute.post("/addCoupons", adminAuth, addCoupon);
+adminRoute.patch("/deactivateCoupon/:id", adminAuth, deactivateCoupon);
 
 export default adminRoute;

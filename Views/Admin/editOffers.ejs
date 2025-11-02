@@ -388,8 +388,8 @@
         document.getElementById("applicable-to").classList.add("error-border");
         isValid = false;
       }
-      if (!discountPercentage || discountPercentage <= 0 || discountPercentage > 100) {
-        document.getElementById("discountError").textContent = "Discount must be between 1 and 100%.";
+      if (!discountPercentage || discountPercentage < 0 || discountPercentage > 100) {
+        document.getElementById("discountError").textContent = "Discount must be between 0 and 100%.";
         document.getElementById("discount").classList.add("error-border");
         isValid = false;
       }

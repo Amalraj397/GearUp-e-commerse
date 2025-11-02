@@ -88,9 +88,8 @@ import {
   viewDetails,
   returnOrder,
   cancelOrderItem,
-  placeCODOrder 
-  // paymentRazorpay,
-  // veritypayment,
+  placeCODOrder,
+  getAvailableCoupons,
 
 } from "../Controller/user/userOrderController.js";
 
@@ -213,5 +212,7 @@ userRoute.post("/orders/item/cancel/:itemId", cancelOrderItem);
 userRoute.get("/orders/:id/invoice", downloadInvoice);
 
 userRoute.get("/orderdetails/:id", viewDetails);
+
+userRoute.get("/available-coupons",getAvailableCoupons);
 
 export default userRoute;

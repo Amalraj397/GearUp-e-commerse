@@ -548,3 +548,33 @@
 //     </script>
 //   </body>
 // </html>
+
+
+// ----offer toogle controller  >-------
+
+// export const toogleOffer = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+
+//     const offer = await offerSchema.findById(id);
+//     if (!offer) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Offer not found",
+//       });
+//     }
+
+//     // toggle the status
+//     offer.isActive = !offer.isActive;
+//     await offer.save();
+
+//     res.status(200).json({
+//       success: true,
+//       message: `Offer has been ${offer.isActive ? "activated" : "deactivated"} successfully.`,
+//       isActive: offer.isActive,
+//     });
+//   } catch (error) {
+//     console.error("Error toggling offer status:", error);
+//     next(error);
+//   }
+// };

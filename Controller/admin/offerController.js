@@ -6,7 +6,6 @@ import { STATUS } from "../../utils/statusCodes.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 
 
-
 export const getOfferPage = async (req, res, next) => {
   try {
     const searchQuery = req.query.search ? req.query.search.trim().toLowerCase() : "";
@@ -38,10 +37,11 @@ export const getOfferPage = async (req, res, next) => {
       searchQuery,
     });
   } catch (error) {
-    console.error(MESSAGES.Offers.OFFER_FETCH_FAILED || "Offer fetch failed", error);
+    console.error(MESSAGES.Offers.OFFR_PAGE_ERR || "Offer fetch failed", error);
     next(error);
   }
 };
+
 
 export const getaddOffer = async (req, res, next) => {
   try {
@@ -58,7 +58,7 @@ export const getaddOffer = async (req, res, next) => {
       brandData,
     });
   } catch (error) {
-    console.error(MESSAGES.Offers.OFFR_PAGE_ERR, error);
+    console.error(MESSAGES.Offers.OFFER_ADD_PAGE_ERR, error);
     next(error);
   }
 };
@@ -176,17 +176,17 @@ for (const product of productsToUpdate) {
     }));
   }
   await product.save();
-  console.log(`✅ Updated product: ${product.productName} with best offer ${bestOffer}%`);
+  console.log(` Updated product: ${product.productName} with best offer ${bestOffer}%`);
 }
 
     return res.status(STATUS.CREATED).json({
       success: true,
-      message: MESSAGES?.Offers?.ADD_SUCCESS || "Offer added successfully",
+      message: MESSAGES.Offers.ADD_SUCCESS,
       offer: newOffer,
       updatedProducts: productsToUpdate.length,
     });
   } catch (error) {
-    console.error("❌ Error in addOffer controller:", error);
+    console.error(MESSAGES.Offers.OFFER_ADD_ERR, error);
     next(error);
   }
 };
@@ -221,15 +221,13 @@ export const getEditOffer = async (req, res, next) => {
   }
 };
 
-                   
+
 export const updateOffer = async (req, res, next) => {
-  console.log( " Offer update controiller called........!!");
-  
+  console.log(" Offer update controller called........!!");
+
   try {
     const { id } = req.params;
     const updates = req.body;
-
-     console.log("updates::", updates);
 
     if (Object.keys(updates).length === 0) {
       return res.status(STATUS.BAD_REQUEST).json({
@@ -238,9 +236,10 @@ export const updateOffer = async (req, res, next) => {
       });
     }
 
+    // Validate offer type if present
     if (updates.offerType) {
-      const validTypes = ["product", "category", "brand"];
-      if (!validTypes.includes(updates.offerType.toLowerCase())) {
+      const validTypes = ["Product", "Category", "Brand"];
+      if (!validTypes.includes(updates.offerType)) {
         return res.status(STATUS.BAD_REQUEST).json({
           success: false,
           message: "Invalid offer type",
@@ -248,10 +247,11 @@ export const updateOffer = async (req, res, next) => {
       }
     }
 
+    // Update the offer in DB
     const updatedOffer = await offerSchema.findByIdAndUpdate(id, updates, {
       new: true,
     });
- console.log("update Offer", updateOffer);
+
     if (!updatedOffer) {
       return res.status(STATUS.NOT_FOUND).json({
         success: false,
@@ -259,10 +259,86 @@ export const updateOffer = async (req, res, next) => {
       });
     }
 
+    console.log(" Offer updated:", updatedOffer._id);
+
+    if (updatedOffer.offerType === "Category") {
+      await categorySchema.updateMany(
+        { _id: { $in: updatedOffer.ApplicableTo } },
+        { $set: { categoryOffer: updatedOffer.discountPercentage } }
+      );
+      console.log("Category offers updated successfully");
+    }
+
+    if (updatedOffer.offerType === "Brand") {
+      await brandSchema.updateMany(
+        { _id: { $in: updatedOffer.ApplicableTo } },
+        { $set: { brandOffer: updatedOffer.discountPercentage } }
+      );
+      console.log(" Brand offers updated successfully");
+    }
+
+    let productsToUpdate = [];
+
+    if (updatedOffer.offerType === "Product") {
+      productsToUpdate = await productSchema.find({
+        _id: { $in: updatedOffer.ApplicableTo },
+      });
+    } else if (updatedOffer.offerType === "Brand") {
+      productsToUpdate = await productSchema.find({
+        brand: { $in: updatedOffer.ApplicableTo },
+      });
+    } else if (updatedOffer.offerType === "Category") {
+      productsToUpdate = await productSchema.find({
+        category: { $in: updatedOffer.ApplicableTo },
+      });
+    }
+
+    console.log(` ${productsToUpdate.length} products found for re-evaluation`);
+
+    for (const product of productsToUpdate) {
+      const productId = product._id;
+
+      // Get all related offers for that product
+      const relatedOffers = await offerSchema.find({
+        $or: [
+          { offerType: "Product", ApplicableTo: productId },
+          { offerType: "Brand", ApplicableTo: product.brand },
+          { offerType: "Category", ApplicableTo: product.category },
+        ],
+        status: true,
+      });
+
+      const bestOffer =
+        relatedOffers.length > 0
+          ? Math.max(...relatedOffers.map((o) => o.discountPercentage))
+          : 0;
+
+      // Apply the best offer to product & variants
+      if (bestOffer > 0) {
+        product.productOffer = bestOffer;
+        product.variants = product.variants.map((variant) => {
+          const calculatedOfferPrice = Math.round(
+            variant.salePrice - (variant.salePrice * bestOffer) / 100
+          );
+          return { ...variant, offerPrice: calculatedOfferPrice };
+        });
+      } else {
+        product.productOffer = 0;
+        product.variants = product.variants.map((variant) => ({
+          ...variant,
+          offerPrice: 0,
+        }));
+      }
+
+      await product.save();
+      console.log(` Updated product: ${product.productName} with best offer ${bestOffer}%`);
+    }
+
     return res.status(STATUS.OK).json({
       success: true,
-      message: "Offer updated successfully",
+      message: "Offer updated successfully and recalculated on products",
       offer: updatedOffer,
+      updatedProducts: productsToUpdate.length,
     });
   } catch (error) {
     console.error("Offer update failed:", error);
@@ -271,19 +347,3 @@ export const updateOffer = async (req, res, next) => {
 };
 
 
-export const toogleOffer = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    await offerSchema.findByIdAndUpdate(id, { status }, { new: true });
-
-    res.json({
-      success: true,
-      message: `Offer ${status ? "activated" : "deactivated"} successfully.`,
-    });
-  } catch (error) {
-    console.error("Toggle Offer Status Error:", error);
-    next(error);
-  }
-};

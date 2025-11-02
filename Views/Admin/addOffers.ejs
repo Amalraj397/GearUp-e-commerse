@@ -325,8 +325,8 @@
       isValid = false;
     }
 
-    if (!discount.value.trim() || discount.value <= 0 || discount.value > 100) {
-      document.getElementById("discountError").textContent = "Discount must be between 1 and 100%.";
+    if (!discount.value.trim() || discount.value < 0 || discount.value > 100) {
+      document.getElementById("discountError").textContent = "Discount must be between 0 and 100%.";
       discount.classList.add("error-border");
       isValid = false;
     }
@@ -358,15 +358,6 @@
       endDate: endDate.value
     };
 
-    //  const formData = {
-    //     offerName,
-    //     offerType,
-    //     ApplicableTo: applicableTo,
-    //     discountPercentage: discount,
-    //     startDate,
-    //     endDate
-    //   };
-
     console.log("Sending formData:", formData);
 
     const res = await fetch("/admin/addOffer", {
@@ -380,6 +371,7 @@
       Swal.fire("Success", data.message, "success");
       form.reset();
       applicableSelect.innerHTML = '<option value="">Select applicable items</option>';
+      window.location.href = "/admin/offers";
 
     } else {
       Swal.fire("Error", data.message, "error");

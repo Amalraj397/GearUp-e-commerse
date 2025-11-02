@@ -91,14 +91,29 @@ export const MESSAGES = {
   },
 
   OrderReturn: {
-    PAGE_ERROR: "Error in loading order return page",
-    NOT_FOUND: "Order Return request not found",
-    APPROVED: "Order Return request approved",
-    APPROVE_FAILED: "Error approving Order return",
-    REJECTED: "Order Return request rejected",
-    REJECT_FAILED: "Error rejecting Order return",
-    REASON_REQUIRED: "Reason is required",
+    PAGE_ERROR: "Error in loading order return page.",
+    NOT_FOUND: "Order Return request not found.",
+    APPROVED: "Order Return request approved.",
+    APPROVE_FAILED: "Error approving Order return.",
+    REJECTED: "Order Return request rejected.",
+    REJECT_FAILED: "Error rejecting Order return.",
+    REASON_REQUIRED: "Reason is required.",
     DELIVERED_ONLY: "Only delivered orders can be returned.",
+  },
+  
+  Offers:{
+    OFFR_PAGE_ERR: "An Error occured while loading Offer Listing Page.! please try again.",
+    OFFER_ADD_PAGE_ERR: "An Error occured while loading Offer Adding Page.! please try again.",
+     OFFER_ADD_ERR:"An error Occured  while adding Coupon..! please try again."
+
+   },
+
+  Coupons:{
+    COUPON_PAGE_ERR:"An error Occured while Loading the Coupon listing page.! please try again.",
+    COUPON_ADD_PAGE_ERR:"An error Occured while Loading the Coupon Adding page.! please try again.",
+    COUPON_ADD_ERR:"An error Occured  while adding Coupon..! please try again.",
+    ADD_SUCCESS:"offer added successfully."
+    
   },
 
   Cart: {
@@ -272,8 +287,4 @@ export const MESSAGES = {
     PASSWORD_UPDATE_FAILED: "Failed to update password. Please try again.",
   },
 
-  Offers:{
-    OFFR_PAGE_ERR: "Error occured while loading Offer Page!",
-    
-   }
 };

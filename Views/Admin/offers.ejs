@@ -1,4 +1,3 @@
-
 <style>
 /* Offer Management  Styles */
 .main-content {
@@ -365,11 +364,6 @@
               </span>
             </td>
             <td class="action-buttons">
-              <button class="toggle-status-btn" data-id="${offer._id}" data-status="${offer.status}">
-                ${offer.status
-                  ? '<i class="fas fa-ban"></i> Deactivate'
-                  : '<i class="fas fa-check-circle"></i> Activate'}
-              </button>
           
               <button class="edit-offer-btn" data-id="${offer._id}">
                 <i class="fas fa-edit"></i> Edit
@@ -494,8 +488,61 @@
       });
 
       renderOffers();
-      
+          
     });
+    
+  document.querySelectorAll(".toggle-status-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const offerId = btn.getAttribute("data-id");
+      const isActive = btn.getAttribute("data-status") === "true";
+  
+      const result = await Swal.fire({
+        title: isActive
+          ? "Deactivate this offer?"
+          : "Activate this offer?",
+        text: isActive
+          ? "This offer will be deactivated and will no longer be applied."
+          : "This offer will be activated and applied again.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: isActive ? "#d33" : "#3085d6",
+        cancelButtonColor: "#aaa",
+        confirmButtonText: isActive ? "Yes, deactivate it!" : "Yes, activate it!",
+      });
+  
+      if (!result.isConfirmed) return;
+  
+      try {
+        const res = await fetch(`/admin/toggleOfferStatus/${offerId}`, {
+          method: "PUT",
+        });
+        const data = await res.json();
+  
+        if (data.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: data.message,
+            confirmButtonColor: "#3085d6",
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.message,
+          });
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "Server Error",
+          text: "Something went wrong while updating offer status.",
+        });
+      }
+    });
+  });
   </script>
 </body>
 </html>

@@ -1,0 +1,296 @@
+<%-include("../../Views/Partials/Admin/header")%>
+<style>
+  .add-coupon-container {
+    padding: 20px;
+    color: #ffffff;
+    background-color: #1a202c;
+  }
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .page-title {
+    font-size: 24px;
+    margin: 0;
+  }
+  .back-button {
+    background: #1c1c1c;
+    color: #ff6b00;
+    border: 2px solid #ff6b00;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
+  }
+  .back-button:hover {
+    background: #ff6b00;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+    transform: scale(1.05);
+  }
+
+  .form-container {
+    background-color: #2d3748;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: #1a202c;
+    border: 1px solid #4a5568;
+    border-radius: 4px;
+    color: #ffffff;
+  }
+
+  input.error-border, select.error-border, textarea.error-border {
+    border: 1px solid red;
+  }
+
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* Grid layout for two-column rows */
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  .btn {
+    background: linear-gradient(135deg, #ff2600, #ff8c1a);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+  }
+  .btn:hover {
+    background: linear-gradient(135deg, #ff8c1a, #ff714d);
+    box-shadow: 0 6px 18px rgba(255, 107, 0, 0.4);
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+</style>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="add-coupon-container">
+  <div class="page-header">
+    <h1 class="page-title">ADD COUPON</h1>
+    <button class="back-button" onclick="window.history.back();">
+      <span class="material-icons">arrow_back</span>
+    </button>
+  </div>
+
+  <div class="form-container">
+    <form id="add-coupon" class="coupon-form">
+
+      <!-- Full-width rows -->
+      <div class="form-group">
+        <label for="coupon-code"><b>Coupon Code</b></label>
+        <input type="text" id="coupon-code" placeholder="Enter Coupon Code" />
+        <span class="error" id="couponCodeError"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="description"><b>Description</b></label>
+        <textarea id="description" rows="4" placeholder="Enter description..."></textarea>
+        <span class="error" id="descriptionError"></span>
+      </div>
+
+      <!-- Two-column grid rows -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="discount-amount"><b>Discount amount(₹)</b></label>
+          <input type="number" id="discount-amount" placeholder="Enter discount amount" />
+          <span class="error" id="discountAmountError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="conditions"><b>Condition</b></label>
+          <select id="conditions">
+            <option value="">- Select Condition -</option>
+            <option value="no_condition">No Condition</option>
+            <option value="minimum_purchase">Minimum Purchase</option>
+            <option value="first_purchase">First Purchase</option>
+          </select>
+          <span class="error" id="conditionsError"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="min-purchase"><b>Minimum Purchase Amount</b></label>
+          <input type="number" id="min-purchase" placeholder="Enter minimum amount (optional)" />
+          <span class="error" id="minPurchaseError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="usage-limit"><b>Usage Limit (Total)</b></label>
+          <input type="number" id="usage-limit" placeholder="Enter total usage limit" />
+          <span class="error" id="usageLimitError"></span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="user-limit"><b>User Limit (Per User)</b></label>
+          <input type="number" id="user-limit" placeholder="Enter per user limit" />
+          <span class="error" id="userLimitError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="expiry-date"><b>Expiry Date</b></label>
+          <input type="date" id="expiry-date" />
+          <span class="error" id="expiryDateError"></span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Add Coupon</button>
+    </form>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  const form = document.getElementById("add-coupon");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // Reset errors
+    document.querySelectorAll(".error").forEach(el => el.textContent = "");
+    document.querySelectorAll("input, select, textarea").forEach(el => el.classList.remove("error-border"));
+
+    const couponCode = document.getElementById("coupon-code");
+    const description = document.getElementById("description");
+    const discountAmount = document.getElementById("discount-amount");
+    const minPurchase = document.getElementById("min-purchase");
+    const expiryDate = document.getElementById("expiry-date");
+    const usageLimit = document.getElementById("usage-limit");
+    const userLimit = document.getElementById("user-limit");
+    const conditions = document.getElementById("conditions");
+
+    let isValid = true;
+
+    // Validation
+    if (!couponCode.value.trim()) {
+      document.getElementById("couponCodeError").textContent = "Coupon code is required.";
+      couponCode.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!description.value.trim()) {
+      document.getElementById("descriptionError").textContent = "Description is required.";
+      description.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!discountAmount.value.trim() || discountAmount.value <= 0) {
+      document.getElementById("discountAmountError").textContent = "Discount must be greater than 0.";
+      discountAmount.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!conditions.value) {
+      document.getElementById("conditionsError").textContent = "Select a condition.";
+      conditions.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!minPurchase.value||conditions.value === "minimum_purchase" && (!minPurchase.value || minPurchase.value <= 0)) {
+      document.getElementById("minPurchaseError").textContent = "Enter minimum purchase amount.";
+      minPurchase.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!usageLimit.value || usageLimit.value <= 0) {
+      document.getElementById("usageLimitError").textContent = "Usage limit must be greater than 0.";
+      usageLimit.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!userLimit.value || userLimit.value <= 0) {
+      document.getElementById("userLimitError").textContent = "User limit must be greater than 0.";
+      userLimit.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!expiryDate.value) {
+      document.getElementById("expiryDateError").textContent = "Expiry date is required.";
+      expiryDate.classList.add("error-border");
+      isValid = false;
+    } else if (new Date(expiryDate.value) < new Date()) {
+      document.getElementById("expiryDateError").textContent = "Expiry date cannot be in the past.";
+      expiryDate.classList.add("error-border");
+      isValid = false;
+    }
+
+    if (!isValid) return;
+
+    const formData = {
+      couponCode: couponCode.value.trim(),
+      description: description.value.trim(),
+      discountAmount: parseFloat(discountAmount.value),
+      minPurchaseAmount: minPurchase.value ? parseFloat(minPurchase.value) : 0,
+      expiryDate: expiryDate.value,
+      usageLimit: parseInt(usageLimit.value),
+      userLimit: parseInt(userLimit.value),
+      conditions: conditions.value
+    };
+
+    try {
+      const res = await fetch("/admin/addCoupons", {
+        method: "POST",               
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        Swal.fire("Success", data.message, "success");
+        form.reset();
+        window.location.href="/admin/getCoupons";
+      } else {
+        Swal.fire("Error", data.message, "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Something went wrong.", "error");
+    }
+  });
+</script>
+
+<%-include("../../Views/Partials/Admin/footer")%>

@@ -2,6 +2,7 @@
   import session from "express-session";
   import cookieParser from "cookie-parser";
   import cors from "cors";
+  
 
   const app = express();
   import dotenv from "dotenv";
@@ -19,6 +20,7 @@
   } from "./middlewares/cartCount.js";
 
   import { errorHandler }from "./middlewares/errorHandler.js";
+  import  "./utils/offerScheduler.js";
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
@@ -28,7 +30,6 @@
     path.join(__dirname, "Views/Admin"),
     path.join(__dirname, "Views/User"),
   ]);
-
 
   // Serve static files
   app.use(express.static(path.join(__dirname, "Public")));

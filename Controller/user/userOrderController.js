@@ -6,6 +6,7 @@ import cartSchema from "../../Models/cartModel.js";
 import addressSchema from "../../Models/userAddressModel.js";
 import orderSchema from "../../Models/orderModel.js";
 import orderReturnSchema from "../../Models/orderReturnModel.js";
+import couponSchema from "../../Models/couponModel.js"
 
 import PDFDocument from "pdfkit";
 import path from "path";
@@ -117,6 +118,31 @@ export const getCheckoutpage = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
+export const getAvailableCoupons = async (req, res, next) => {
+  try {
+    const currentDate = new Date();
+
+    // Filter: not expired and still within usage limit
+    const coupons = await couponSchema.find({
+      expiryDate: { $gte: currentDate },
+      usageLimit: { $gt: 0 }
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.status(STATUS.OK).json({
+      success: true,
+      coupons
+    });
+  } catch (error) {
+    console.error(MESSAGES.Coupons.FETCH_ERR || "Error fetching available coupons", error);
+    next(error);
+  }
+};
+
 
 export const getAddressById = async (req, res, next) => {
   try {
