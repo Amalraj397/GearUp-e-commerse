@@ -7,7 +7,7 @@ const couponSchema =  new mongoose.Schema(
         required: true,
         unique: true,
         trim: true,
-    },    
+    },      
     description:{
         type:String,
         required: true,
@@ -24,15 +24,15 @@ const couponSchema =  new mongoose.Schema(
         type: Date,
         required: true
     },
-    usageLimit: {    // total how many time can be used;
+    usageLimit: {    // total
         type: Number,
         default: 1  
     },
-    usedCount: {     // count of how many time it is used;
+    usedCount: {   
         type: Number,
         default: 0 
     },
-    userLimit:{    // how many time a single user can be used;
+    userLimit:{    
         type:Number,
         default:1,
     },

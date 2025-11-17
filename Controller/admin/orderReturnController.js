@@ -1,5 +1,9 @@
 import orderSchema from "../../Models/orderModel.js";
 import orderReturnSchema from "../../Models/orderReturnModel.js";
+import productSchema from "../../Models/productModel.js";
+
+import { refundToWallet } from "../../utils/walletRefund.js";
+import { calculateRefund } from "../../utils/calculateRefund.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
@@ -66,53 +70,110 @@ export const getOrderReturnPage = async (req, res, next) => {
   }
 };
 
-// ---------------- Approve Return ----------------
 export const approveReturn = async (req, res, next) => {
   try {
     const { returnId } = req.params;
 
-    const returnUpdate = await orderReturnSchema.findByIdAndUpdate(
-      returnId,
-      { returnStatus: "Approved" },
-      { new: true },
-    );
-
-    if (!returnUpdate) {
+    const returnData = await orderReturnSchema.findById(returnId);
+    if (!returnData) {
       return res
         .status(STATUS.NOT_FOUND)
         .json({ success: false, message: MESSAGES.OrderReturn.NOT_FOUND });
     }
 
-    const orderUpdate = await orderSchema.findById(returnUpdate.orderId);
-
-    if (orderUpdate) {
-      orderUpdate.items.forEach((item) => {
-        returnUpdate.returnItems.forEach((rItem) => {
-          if (
-            item.productId.toString() === rItem.productId.toString() &&
-            item.variantName === rItem.variantName &&
-            item.scale === rItem.scale
-          ) {
-            item.itemStatus = "Return-accepted";
-          }
-        });
-      }); 
-      await orderUpdate.save();
+    if (returnData.returnStatus === "Approved") {
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: "Return already approved and processed.",
+      });
     }
 
-    res.json({
+    const orderData = await orderSchema.findById(returnData.orderId);
+    if (!orderData) {
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
+    }
+    const itemsToRefund = [];
+
+    orderData.items.forEach((item) => {
+      const match = returnData.returnItems.find(
+        (rItem) =>
+          item.productId.toString() === rItem.productId.toString() &&
+          item.variantName === rItem.variantName &&
+          item.scale === rItem.scale &&
+          !["Cancelled", "Return-accepted"].includes(item.itemStatus)
+      );
+      if (match) itemsToRefund.push(item);
+    });
+
+    if (itemsToRefund.length === 0) {
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: "No valid items found to refund for this return request.",
+      });
+    }
+    const { refundAmount, newGrandTotal } = await calculateRefund(
+      orderData,
+      itemsToRefund
+    );
+
+    orderData.items.forEach((item) => {
+      const match = itemsToRefund.find(
+        (it) => it._id.toString() === item._id.toString()
+      );
+      if (match) item.itemStatus = "Return-accepted";
+    });
+
+    orderData.grandTotalprice = Number(newGrandTotal.toFixed(2));
+
+    const allReturnedOrCancelled = orderData.items.every((it) =>
+      ["Return-accepted", "Cancelled"].includes(it.itemStatus)
+    );
+
+    orderData.orderStatus = allReturnedOrCancelled
+      ? "Returned"
+      : "Partial-Return";
+
+    await orderData.save();
+
+
+    returnData.returnStatus = "Approved";
+    returnData.productRefundAmount = Number(refundAmount.toFixed(2));
+    await returnData.save();
+
+
+    for (const item of itemsToRefund) {
+      await productSchema.findByIdAndUpdate(
+        item.productId,
+        { $inc: { stock: item.quantity } },
+        { new: true }
+      );
+    }
+
+    try {
+      await refundToWallet(
+        orderData.userDetails,
+        refundAmount,
+        orderData._id.toString(),
+        "Returned Order Refund"
+      );
+    
+    } catch (refundErr) {
+      console.error(MESSAGES.Wallet.WALLET_REFUND_ERR, refundErr);
+    }
+
+    return res.json({
       success: true,
       message: MESSAGES.OrderReturn.APPROVED,
-      returnUpdate,
+      returnUpdate: returnData,
     });
   } catch (error) {
     console.error(MESSAGES.OrderReturn.APPROVE_FAILED, error);
-
     next(error);
   }
 };
 
-// ---------------- Reject Return ----------------
 export const rejectReturn = async (req, res, next) => {
   try {
     const { returnId } = req.params;
@@ -127,42 +188,66 @@ export const rejectReturn = async (req, res, next) => {
         });
     }
 
-    const returnUpdate = await orderReturnSchema.findByIdAndUpdate(
+    const returnData = await orderReturnSchema.findByIdAndUpdate(
       returnId,
       { returnStatus: "Rejected", rejectReason: reason },
-      { new: true },
+      { new: true }
     );
 
-    if (!returnUpdate) {
+    if (!returnData) {
       return res
         .status(STATUS.NOT_FOUND)
         .json({ success: false, message: MESSAGES.OrderReturn.NOT_FOUND });
     }
 
-    const orderUpdate = await orderSchema.findById(returnUpdate.orderId);
-    if (orderUpdate) {
-      orderUpdate.items.forEach((item) => {
-        returnUpdate.returnItems.forEach((rItem) => {
-          if (
-            item.productId.toString() === rItem.productId.toString() &&
-            item.variantName === rItem.variantName &&
-            item.scale === rItem.scale
-          ) {
-            item.itemStatus = "Return-rejected";
-          }
-        });
-      });
-      await orderUpdate.save();
+    const orderData = await orderSchema.findById(returnData.orderId);
+    if (!orderData) {
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
     }
 
-    res.json({
+    orderData.items.forEach((item) => {
+      returnData.returnItems.forEach((rItem) => {
+        if (
+          item.productId.toString() === rItem.productId.toString() &&
+          item.variantName === rItem.variantName &&
+          item.scale === rItem.scale
+        ) {
+          item.itemStatus = "Return-rejected";
+        }
+      });
+    });
+
+    const statuses = orderData.items.map((it) => it.itemStatus);
+
+    const hasAccepted = statuses.includes("Return-accepted");
+
+    const hasCancelled = statuses.includes("Cancelled");
+    const allReturned = statuses.every(
+      (s) => s === "Return-accepted" || s === "Cancelled"
+    );
+
+    if (allReturned) {
+      orderData.orderStatus = "Returned";
+    } else if (hasAccepted) {
+      orderData.orderStatus = "Partial-Return";
+    } else if (hasCancelled) {
+      orderData.orderStatus = "Partial-Return";
+    } else {
+
+      orderData.orderStatus = "Delivered";
+    }
+
+    await orderData.save();
+
+    return res.json({
       success: true,
       message: MESSAGES.OrderReturn.REJECTED,
-      returnUpdate,
+      returnData,
     });
   } catch (error) {
     console.error(MESSAGES.OrderReturn.REJECT_FAILED, error);
-  
     next(error);
   }
 };

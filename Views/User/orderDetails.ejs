@@ -161,44 +161,41 @@
        color: white;
      }
    </style>
-   <!-- <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css"> -->
-   <!-- <link rel="stylesheet" href="/User/assets/css/style.css"> -->
+
    <link rel="stylesheet" href="/User/assets/css/styles.css">
    <style>
-    .status-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: capitalize;
-}
+     .status-badge {
+       display: inline-block;
+       padding: 4px 10px;
+       border-radius: 12px;
+       font-weight: 600;
+       font-size: 14px;
+       text-transform: capitalize;
+     }
 
-/* Green for completed */
-.status-completed {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #518d5f;
-}
+     /* Green for completed */
+     .status-completed {
+       background-color: #d4edda;
+       color: #155724;
+       border: 1px solid #518d5f;
+     }
 
-/*  Yellow/Orange for processing */
-.status-processing {
-  background-color: #fff3cd;
-  color: #f2ca06;
-  border: 1px solid #9a9994;
-}
+     /*  Yellow/Orange for processing */
+     .status-processing {
+       background-color: #fff3cd;
+       color: #f2ca06;
+       border: 1px solid #9a9994;
+     }
 
-/*  Red for failed */
-.status-failed {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #bd7a81;
-}
-
-    
+     /*  Red for failed */
+     .status-failed {
+       background-color: #f8d7da;
+       color: #721c24;
+       border: 1px solid #bd7a81;
+     }
    </style>
-
    </head>
+
    <body>
      <div class="breadcrumb-section">
        <div class="container">
@@ -323,47 +320,57 @@
          <!-- Order Summary & Customer Info -->
          <div class="col-lg-4">
            <!-- Order Summary -->
-           <div class="card mb-4" >
+           <div class="card mb-4">
              <div class="card-header">
                <h5 class="mb-0">Price Summary</h5>
              </div>
              <div class="card-body">
 
                <div class="d-flex justify-content-between mb-2">
-                  <span>Total Price:</span>
-                  <span id="totalPrice">₹0</span>
-                </div>
+                 <span>Total Price:</span>
+                 <span id="totalPrice">₹0</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2 text-danger" id="cancelledRow" style="display:none;">
-                  <span>Cancelled Items:</span>
-                  <span id="cancelledAmount">-₹0</span>
-                </div>
+               <div class="d-flex justify-content-between mb-2 text-danger" id="cancelledRow" style="display:none;">
+                 <span>Cancelled Items:</span>
+                 <span id="cancelledAmount">-₹0</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2">
-                  <span>Festival Offer (10% OFF):</span>
-                  <span id="festivalOffer">₹0</span>
-                </div>
+               <div class="d-flex justify-content-between mb-2 text-warning" id="returnRow" style="display:none;">
+                 <span>Returned Items:</span>
+                 <span id="returnAmount">-₹0</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2">
-                  <span>Shipping Charges:</span>
-                  <span id="shipping" class="text-success">Free</span>
-                </div>
+               <div class="d-flex justify-content-between mb-2">
+                 <span>Festival Offer (10% OFF):</span>
+                 <span id="festivalOffer">₹0</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2">
-                  <span>Tax:</span>
-                  <span id="tax">₹0</span>
-                </div>
+               <div class="d-flex justify-content-between mb-2" id="couponRow" style="display:none;">
+                 <span>Coupon (<span id="couponCode"></span>):</span>
+                 <span id="couponDiscount">-₹0</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2">
-                  <span>GST:</span>
-                  <span id="gst">₹0</span>
-                </div>
+               <div class="d-flex justify-content-between mb-2">
+                 <span>Shipping Charges:</span>
+                 <span id="shipping" class="text-success">Free</span>
+               </div>
 
-                <div class="d-flex justify-content-between mb-2">
-                  <span>Final Total:</span>
-                  <span id="final">₹0</span>
-                </div>
-          
+               <div class="d-flex justify-content-between mb-2">
+                 <span>Tax:</span>
+                 <span id="tax">₹0</span>
+               </div>
+
+               <div class="d-flex justify-content-between mb-2">
+                 <span>GST:</span>
+                 <span id="gst">₹0</span>
+               </div>
+
+               <div class="d-flex justify-content-between mb-2">
+                 <span>Final Total:</span>
+                 <span id="final">₹0</span>
+               </div>
+
                <hr>
                <div class="d-flex justify-content-between fw-bold">
                  <span>Grand Total:</span>
@@ -374,17 +381,15 @@
                  <div class="info-label">Payment Method:</div>
                  <div class="info-value" id="paymentMethod">Cash on Delivery</div>
                </div>
-                <div class="mt-2">
-                  <div class="info-label">Payment Status:</div>
-                  <span 
-                    class="status-badge 
+               <div class="mt-2">
+                 <div class="info-label">Payment Status:</div>
+                 <span class="status-badge 
                       <%= order.paymentStatus === 'Completed' ? 'status-completed' : 
                           order.paymentStatus === 'Processing' ? 'status-processing' : 
-                          order.paymentStatus === 'Failed' ? 'status-failed' : '' %>"
-                    id="paymentStatus">
-                    <%= order.paymentStatus %>
-                  </span>
-                </div>
+                          order.paymentStatus === 'Failed' ? 'status-failed' : '' %>" id="paymentStatus">
+                   <%= order.paymentStatus %>
+                 </span>
+               </div>
              </div>
            </div>
 
@@ -419,70 +424,116 @@
 
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
      <script>
-        const orderData = <%- JSON.stringify(order) %>;
-        const cancelledTotal = <%- cancelledTotal %>;
+       const orderData = <%- JSON.stringify(order) %>;
+       const cancelledTotal = <%- cancelledTotal %>;
+       const returnTotal = <%- returnTotal %>;
 
-        function populateOrderDetails() {
-          // Basic
-          document.getElementById('orderId').textContent = orderData.orderNumber;
-          document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
-          document.getElementById('itemCount').textContent = orderData.items.length;
-          document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
-          document.getElementById('paymentStatus').textContent = orderData.paymentStatus;
-          document.getElementById('customerName').textContent = orderData.billingDetails.name;
-          document.getElementById('customerEmail').textContent = orderData.billingDetails.email;
-          document.getElementById('customerPhone').textContent = orderData.billingDetails.phone;
-          document.getElementById('deliveryAddress').innerHTML = `
+       function populateOrderDetails() {
+         // Basic
+         document.getElementById('orderId').textContent = orderData.orderNumber;
+         document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
+         document.getElementById('itemCount').textContent = orderData.items.length;
+         document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
+         document.getElementById('paymentStatus').textContent = orderData.paymentStatus;
+         document.getElementById('customerName').textContent = orderData.billingDetails.name;
+         document.getElementById('customerEmail').textContent = orderData.billingDetails.email;
+         document.getElementById('customerPhone').textContent = orderData.billingDetails.phone;
+         document.getElementById('deliveryAddress').innerHTML = `
             ${orderData.billingDetails.address}, ${orderData.billingDetails.city}, 
             ${orderData.billingDetails.state}, ${orderData.billingDetails.country}, 
             ${orderData.billingDetails.pincode}<br>
             Landmark: ${orderData.billingDetails.landMark}
           `;
-        
-          // Price Breakdown
-          const subTotal = orderData.items.reduce((acc, item) => acc + item.totalProductprice, 0);
 
-          console.log("subtotal",subTotal);
+         // Price Breakdown
+         const subTotal = orderData.items.reduce((acc, item) => acc + item.totalProductprice, 0);
 
-          const festivalOffer = subTotal * 0.10; // 10% off
-          const shippingCharge = orderData.shippingCharge || 0;
-          const totalItems = orderData.items.length;
-          const cancelledCount = orderData.items.filter(it => it.itemStatus === "Cancelled").length;
-                  
-            //If all items cancelled → show original total
-            if (cancelledCount === totalItems) {
-              const finalTotal = subTotal + shippingCharge;
-            
-              document.getElementById('festivalOffer').textContent = `-₹0`;
-              document.getElementById('cancelledRow').style.display = 'flex';
-              document.getElementById('cancelledAmount').textContent = `-₹${cancelledTotal.toLocaleString()}`;
-              document.getElementById('grandTotal').textContent = `₹${finalTotal.toLocaleString()}`;
-              document.getElementById('final').textContent = `₹${finalTotal.toLocaleString()}`;
-              document.getElementById('tax').textContent = `₹0`;
-              document.getElementById('gst').textContent = `₹0`;
-              document.getElementById('shipping').textContent = shippingCharge === 0 ? 'Free' : `₹${shippingCharge}`;
-              document.getElementById('totalPrice').textContent = `₹${subTotal.toLocaleString()}`;
-            } 
-            else {
-              //  Partial cancellation
-              const activeTotal = subTotal - cancelledTotal; // total after removing cancelled items
-              const festivalOffer = activeTotal * 0.10;      // 10% off from the new total
-              const finalTotal = activeTotal - festivalOffer + shippingCharge;
-            
-              document.getElementById('cancelledRow').style.display = cancelledTotal > 0 ? 'flex' : 'none';
-              document.getElementById('cancelledAmount').textContent = `-₹${cancelledTotal.toLocaleString()}`;
-              document.getElementById('festivalOffer').textContent = `-₹${festivalOffer.toFixed(2)}`;
-              document.getElementById('shipping').textContent = shippingCharge === 0 ? 'Free' : `₹${shippingCharge}`;
-              document.getElementById('totalPrice').textContent = `₹${activeTotal.toLocaleString()}`;
-              document.getElementById('grandTotal').textContent = `₹${finalTotal.toLocaleString()}`;
-              document.getElementById('final').textContent = `₹${finalTotal.toLocaleString()}`;
-              document.getElementById('tax').textContent = `₹0`;
-              document.getElementById('gst').textContent = `₹0`;
-            }  
-          populateOrderItems();
-        }
+         console.log("subtotal", subTotal);
 
-        populateOrderDetails();
+         const festivalOffer = subTotal * 0.05; // 5% off
+         const shippingCharge = orderData.shippingCharge || 0;
+
+         const totalItems = orderData.items.length;
+         const cancelledCount = orderData.items.filter(it => it.itemStatus === "Cancelled").length;
+
+         //If all items cancelled → show original total
+         if (cancelledCount === totalItems) {
+           const finalTotal = subTotal + shippingCharge;
+
+           document.getElementById('festivalOffer').textContent = `-₹0`;
+           document.getElementById('cancelledRow').style.display = 'flex';
+           document.getElementById('cancelledAmount').textContent = `-₹${cancelledTotal.toLocaleString()}`;
+           document.getElementById('grandTotal').textContent = `₹${finalTotal.toLocaleString()}`;
+           document.getElementById('final').textContent = `₹${finalTotal.toLocaleString()}`;
+           document.getElementById('tax').textContent = `₹0`;
+           document.getElementById('gst').textContent = `₹0`;
+           document.getElementById('shipping').textContent = shippingCharge === 0 ? 'Free' : `₹${shippingCharge}`;
+           document.getElementById('totalPrice').textContent = `₹${subTotal.toLocaleString()}`;
+         } else {
+           //  Partial cancellation
+          //  const activeTotal = subTotal - cancelledTotal; // total after removing cancelled items
+           const activeTotal = subTotal - cancelledTotal - returnTotal;
+           const festivalOffer = activeTotal * 0.05; // 5% off from the new total
+           const finalTotal = activeTotal - festivalOffer + shippingCharge;
+
+           document.getElementById('cancelledRow').style.display = cancelledTotal > 0 ? 'flex' : 'none';
+           document.getElementById('cancelledAmount').textContent = `-₹${cancelledTotal.toLocaleString()}`;
+           
+           document.getElementById('returnRow').style.display = returnTotal > 0 ? 'flex' : 'none';
+           document.getElementById('returnAmount').textContent = `-₹${returnTotal.toLocaleString()}`;
+
+           document.getElementById('festivalOffer').textContent = `-₹${festivalOffer.toFixed(2)}`;
+           document.getElementById('shipping').textContent = shippingCharge === 0 ? 'Free' : `₹${shippingCharge}`;
+           document.getElementById('totalPrice').textContent = `₹${activeTotal.toLocaleString()}`;
+           document.getElementById('grandTotal').textContent = `₹${finalTotal.toLocaleString()}`;
+           document.getElementById('final').textContent = `₹${finalTotal.toLocaleString()}`;
+           document.getElementById('tax').textContent = `₹0`;
+           document.getElementById('gst').textContent = `₹0`;
+         }
+
+         showPriceSummary();
+         populateOrderItems();
+       }
+       // g Populate coupon and total info
+function showPriceSummary() {
+  const subTotal = orderData.items.reduce((acc, item) => acc + item.totalProductprice, 0);
+  const couponDiscount = orderData.couponApplied?.discountAmount || 0;
+  const shippingCharge = orderData.shippingCharge || 0;
+
+  const cancelledTotal = <%- cancelledTotal %>;
+  const returnTotal = <%- returnTotal %>;
+
+  const activeTotal = subTotal - cancelledTotal - returnTotal;
+  const festivalOffer = activeTotal * 0.05; 
+
+  const finalTotal = activeTotal - festivalOffer - couponDiscount + shippingCharge;
+
+  document.getElementById('totalPrice').textContent = `₹${subTotal.toLocaleString()}`;
+  document.getElementById('festivalOffer').textContent = `-₹${festivalOffer.toFixed(2)}`;
+  document.getElementById('shipping').textContent = shippingCharge === 0 ? "Free" : `₹${shippingCharge}`;
+  document.getElementById('grandTotal').textContent = `₹${finalTotal.toLocaleString()}`;
+  document.getElementById('final').textContent = `₹${finalTotal.toLocaleString()}`;
+
+  // Cancelled
+  document.getElementById('cancelledRow').style.display = cancelledTotal > 0 ? 'flex' : 'none';
+  document.getElementById('cancelledAmount').textContent = `-₹${cancelledTotal.toLocaleString()}`;
+
+  // Returned
+  document.getElementById('returnRow').style.display = returnTotal > 0 ? 'flex' : 'none';
+  document.getElementById('returnAmount').textContent = `-₹${returnTotal.toLocaleString()}`;
+
+  // Coupon
+  if (orderData.couponApplied) {
+    document.getElementById('couponRow').style.display = 'flex';
+    document.getElementById('couponCode').textContent = orderData.couponApplied.couponCode;
+    document.getElementById('couponDiscount').textContent = `-₹${couponDiscount.toFixed(2)}`;
+  }
+}
+
+
+
+
+       populateOrderDetails();
 
        function populateOrderItems() {
 
@@ -512,13 +563,31 @@
                         </div>
                     </div>
                     <div class="ms-3">
-                        ${item.itemStatus === "Shipped" || item.itemStatus === "Pending" ? `
+                    ${(() => {
+                        if (item.itemStatus === "Shipped" || item.itemStatus === "Pending") {
+                          return `
                             <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('${item._id}')">
-                                <i class="fas fa-times me-1"></i> Cancel Order
+                              <i class="fas fa-times me-1"></i> Cancel Order
                             </button>
-                        ` : item.itemStatus === "Cancelled" ? `
-                            <span class="badge bg-danger">Cancelled</span>
-                        ` : ""} 
+                          `;
+                        } 
+                        
+                        else if (item.itemStatus === "Cancelled") {
+                          return `<span class="badge bg-danger">Cancelled</span>`;
+                        } 
+                        
+                        else if (item.itemStatus === "Return-requested") {
+                          return `<span class="badge bg-warning text-dark">Return Requested</span>`;
+                        } 
+                        
+                        else if (item.itemStatus === "Return-accepted") {
+                          return `<span class="badge bg-warning">Returned</span>`;
+                        }
+                        
+                        else {
+                          return "";
+                        }
+                    })()}                   
                     </div>
                 </div>
             `;
@@ -577,7 +646,7 @@
          });
        }
 
-      function updateTrackingUI(orderStatus) {
+       function updateTrackingUI(orderStatus) {
          const steps = ["Pending", "Processing", "Shipped", "Delivered"];
          const trackingSteps = document.querySelectorAll("#trackingSteps .tracking-step");
 
@@ -630,10 +699,10 @@
 
        updateTrackingUI(orderStatus);
 
-    //    console.log("Order Status from backend:", orderStatus);
+       //    console.log("Order Status from backend:", orderStatus);
 
-      document.addEventListener('DOMContentLoaded', populateOrderDetails);
-    </script>
+       document.addEventListener('DOMContentLoaded', populateOrderDetails);
+     </script>
 
      <%-include("../../Views/Partials/User/footerLand")%>
    </body>

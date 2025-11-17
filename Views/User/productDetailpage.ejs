@@ -21,6 +21,14 @@
     <link rel="stylesheet" href="/User/assets/css/styles.css">
     <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+    .scale-btn.active {
+  background-color: #ff6600; /* Highlight color */
+  color: white;
+  border-color: #ff6600;
+}
+
+    </style>
 
 </head>
 
@@ -74,7 +82,8 @@
       <a class="ratings-text" href="#product-review-link">( 2 Reviews )</a>
     </div>
 
-    <!-- Price Section -->
+   
+    
     <div class="product-price mt-2">
       <% const selectedVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null; %>
       <% if (product.productOffer > 0 && selectedVariant?.offerPrice > 0) { %>
@@ -94,7 +103,7 @@
 
     <% if (product.productOffer > 0) { %>
       <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1" 
-           style="top: 270px; left: 27%; font-size: 19px; font-weight: 600; background-color:#bd080e;">
+           style="top: 222px; left: 36%; font-size: 19px; font-weight: 600; background-color:#bd080e;">
         <%= product.productOffer %>% OFF
       </div>
     <% } %>
@@ -111,7 +120,7 @@
       <div id="scale-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
         <% product.variants.forEach((variant, index) => { %>
           <button type="button"
-            class="btn btn-outline-primary scale-btn <%= index === 0 ? 'active' : '' %>"
+            class="btn btn-outline scale-btn <%= index === 0 ? 'active' : '' %>"
             data-variant='<%- JSON.stringify(variant) %>'>
             <%= variant.scale %>
           </button>
@@ -162,17 +171,14 @@
   </div>
 </div>
 
-
   </div>
 </div>
-
 
       <div class="product-details-tab">
         <ul class="nav nav-pills justify-content-center" role="tablist" style=" border: 2px solid; width: 100%;">
           <li class="nav-item"><a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab">Description</a></li>
           <li class="nav-item"><a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab">Additional information</a></li>
           <li class="nav-item"><a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab">Reviews (2)</a></li>
-
         </ul>
       </div>
 
@@ -279,42 +285,54 @@
 <script>
   let selectedVariant = <%- JSON.stringify(product.variants[0]) %>;
 
-  const priceTag = document.querySelector(".new-price");
+  const priceContainer = document.querySelector(".product-price");
   const stockBadge = document.getElementById("stock-badge");
-  const usermaxQuantity = 5;
+  const userMaxQuantity = 5;
 
+  // Function to update price and stock dynamically
   const updatePriceAndStock = () => {
-    priceTag.textContent = `₹ ${selectedVariant.salePrice}`;
-    
+    priceContainer.innerHTML = "";
+
+    if (selectedVariant.offerPrice && selectedVariant.offerPrice > 0) {
+      priceContainer.innerHTML = `
+        <span class="text-muted" style="text-decoration: line-through; font-size: 18px; margin-right: 12px;">
+          ₹${selectedVariant.salePrice}
+        </span>
+        <span class="fw-bold fs-4 ms-2" style="color:#0af011;">
+          ₹${selectedVariant.offerPrice}
+        </span>
+      `;
+    } else {
+      priceContainer.innerHTML = `
+        <span class="fs-4 fw-bold text-dark">₹${selectedVariant.salePrice}</span>
+      `;
+    }
     if (selectedVariant.stock === 0) {
       stockBadge.textContent = "Out of Stock";
       stockBadge.style.color = "red";
-
-    } else if (selectedVariant.stock == usermaxQuantity) {
-      stockBadge.textContent = "Limited Stock";
-      stockBadge.style.color = "orange";
-
-    }else if(selectedVariant.stock < usermaxQuantity){
+    } else if (selectedVariant.stock < userMaxQuantity) {
       stockBadge.textContent = `Only (${selectedVariant.stock} left)`;
-      stockBadge.style.color = "red";
-
-    }else {
+      stockBadge.style.color = "orange";
+    } else {
       stockBadge.textContent = "In Stock";
       stockBadge.style.color = "green";
     }
   };
 
-  // Handle scale button click
   document.querySelectorAll(".scale-btn").forEach(button => {
     button.addEventListener("click", () => {
       document.querySelectorAll(".scale-btn").forEach(btn => btn.classList.remove("active"));
       button.classList.add("active");
+
+      // Get the new variant data
       selectedVariant = JSON.parse(button.getAttribute("data-variant"));
+
+      // Update UI
       updatePriceAndStock();
     });
   });
 
-  updatePriceAndStock(); 
+  updatePriceAndStock();
   
 // -------------- addtoCart with increment----------
 function addToCart(productId) {

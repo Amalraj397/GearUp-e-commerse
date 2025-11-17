@@ -1,5 +1,4 @@
 import express from "express";
-// const app = express();
 
 import {
   adminAuth,
@@ -11,13 +10,13 @@ import {
   loadAdminlogin,
   loadAdminDash,
   adminLogout,
-} from "../Controller/admin/adminController.js";
+  } from "../Controller/admin/adminController.js";
 
 import {
   getuserData,
   blockUser,
   unblockUser,
-} from "../Controller/admin/AdminuserController.js";
+  } from "../Controller/admin/AdminuserController.js";
 
 import {
   loadproductList,
@@ -29,7 +28,7 @@ import {
   listProduct,
   updateProduct,
   deleteProductImage,
-} from "../Controller/admin/productController.js";
+  } from "../Controller/admin/productController.js";
 
 import {
   getBrands,
@@ -39,7 +38,7 @@ import {
   listBrand,
   getBrandEditPage,
   updateBrand,
-} from "../Controller/admin/brandController.js";
+  } from "../Controller/admin/brandController.js";
 
 import {
   getCategory,
@@ -50,13 +49,13 @@ import {
   getLiveCategorySearch,
   getCategoryEditPage,
   updateCategory,
-} from "../Controller/admin/categoryController.js";
+  } from "../Controller/admin/categoryController.js";
 
 import {
   getuserOrders,
   updateOrderStatus,
   adminviewDetails,
-} from "../Controller/admin/orderController.js";
+  } from "../Controller/admin/orderController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
@@ -64,7 +63,7 @@ import {
   getOrderReturnPage,
   rejectReturn,
   approveReturn,
-} from "../Controller/admin/orderReturnController.js";
+  } from "../Controller/admin/orderReturnController.js";
 
 import {
   getOfferPage,
@@ -72,16 +71,23 @@ import {
   addOffer,
   getEditOffer,
   updateOffer,
-
-} from "../Controller/admin/offerController.js";
+  } from "../Controller/admin/offerController.js";
 
 import {
   getCouponsPage,
   getaddCoupon,
   addCoupon,
   deactivateCoupon,
-  
-} from "../Controller/admin/couponController.js";
+  geteditCoupon,
+  updateCoupon, 
+  } from "../Controller/admin/couponController.js";
+
+import {
+  salesReportpage,
+  fetchSalesReport,
+  downloadSalesReportExcel,
+  downloadSalesReportPdf,
+ } from "../Controller/admin/salesReportController.js";
 
 const adminRoute = express.Router();
 
@@ -149,15 +155,24 @@ adminRoute.put("/orderReturn/:returnId/reject", adminAuth, rejectReturn);
 //  ---------------------offer management--------------------
 adminRoute.get("/offers", adminAuth,getOfferPage);
 adminRoute.post("/addOffer", adminAuth, addOffer);
-adminRoute.get("/addoffer",adminAuth,getaddOffer);
+adminRoute.get("/addOffer",adminAuth,getaddOffer);
 adminRoute.get("/editOffer/:id",adminAuth,getEditOffer);
 adminRoute.put("/editOffer/:id", adminAuth,updateOffer )
 
 // ---------------------- coupon management---------------------
 
-adminRoute.get("/getCoupons", adminAuth, getCouponsPage)
+adminRoute.get("/coupons", adminAuth, getCouponsPage);
 adminRoute.get("/addCoupons", adminAuth, getaddCoupon);
 adminRoute.post("/addCoupons", adminAuth, addCoupon);
 adminRoute.patch("/deactivateCoupon/:id", adminAuth, deactivateCoupon);
+adminRoute.get("/editCoupons/:id",adminAuth, geteditCoupon);
+adminRoute.put("/editCoupons/:id", adminAuth, updateCoupon);
+
+//-------------------------Sales Report------------------------
+
+adminRoute.get("/salesReport", adminAuth, salesReportpage);
+adminRoute.get('/salesReport/fetch', fetchSalesReport);
+adminRoute.get('/salesReport/pdf', downloadSalesReportPdf);
+adminRoute.get('/salesReport/excel', downloadSalesReportExcel);
 
 export default adminRoute;

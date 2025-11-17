@@ -48,7 +48,7 @@ export const verifyPayment = async (req, res, next) => {
       razorpay_signature,
       billingDetails,
       paymentMethod,
-      // oldOrderId, 
+      oldOrderId, 
     } = req.body;
 
    
@@ -70,7 +70,7 @@ export const verifyPayment = async (req, res, next) => {
 
     if (oldOrderId) {
       const existingOrder = await orderSchema.findById(oldOrderId);
-
+  
       if (!existingOrder) {
         return res.status(404).json({ success: false, message: "Old order not found" });
       }
@@ -109,7 +109,7 @@ export const verifyPayment = async (req, res, next) => {
     }));
 
     const itemsTotal = processedItems.reduce((acc, item) => acc + item.totalProductprice, 0);
-    const festivalOFF = (itemsTotal * 10) / 100;
+    const festivalOFF = (itemsTotal * 5) / 100;
     const afterfestOFF = itemsTotal - festivalOFF;
     const shippingCharge = afterfestOFF < 1999 ? 120 : 0;
     const grandTotalprice = afterfestOFF + shippingCharge;
@@ -183,7 +183,7 @@ export const paymentFailurePage = async (req, res, next) => {
 };
 
 
-export const retryPaymentPage = async (req, res, next) => {
+export const retryPaymentPage = async (req, res, next) => { 
   try {
     const userId = req.session.user?.id;
     if (!userId) return res.redirect("/login");
@@ -284,7 +284,7 @@ export const verifyretryPayment = async (req, res, next) => {
     }));
 
     const itemsTotal = processedItems.reduce((acc, item) => acc + item.totalProductprice, 0);
-    const festivalOFF = (itemsTotal * 10) / 100;
+    const festivalOFF = (itemsTotal * 5) / 100;
     const afterfestOFF = itemsTotal - festivalOFF;
     const shippingCharge = afterfestOFF < 1999 ? 120 : 0;
     const grandTotalprice = afterfestOFF + shippingCharge;

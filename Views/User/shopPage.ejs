@@ -91,7 +91,7 @@
               <div class="row g-4 justify-content-center" id="product-list">
                 <% if (products.length === 0) { %>
                   <p style="font-size:x-large;">No products found. -></p>
-                  <a href="/shopPage" class="reloadShop_btn"><span>Reload Shop</span></a>
+                  <a href="/shopPage" class="reloadShop_btn"><s pan>Reload Shop</span></a>
                 <% } else { %>
                   <% products.forEach(product => { 
                        const variant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
@@ -112,7 +112,7 @@
             
                     <% if (hasOffer) { %>
                       <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1"
-                        style="bottom:196px;left:178px;font-size:12px;font-family:'Orbitron';font-weight:600;background-color:#ff0000;">
+                        style="bottom:225px;left:135px;font-size:10px;font-family:'Orbitron';font-weight:600;background-color:#ff0000;">
                         <%= product.productOffer %>%  OFF
                       </div>
                     <% } %>
@@ -325,11 +325,11 @@
     const priceRangeText = document.getElementById('filter-price-range');
 
     noUiSlider.create(priceSlider, {
-      start: [199, 19999],
+      start: [999, 99999],
       connect: true,
       range: {
-        min: 199,
-        max: 19999
+        min: 999,
+        max: 99999
       },
       tooltips: [true, true],
       format: {

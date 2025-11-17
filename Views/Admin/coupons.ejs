@@ -125,9 +125,11 @@
 }
 
 /* Action Buttons */
-.action-buttons {
+.coupon-actions {
   display: flex;
-  gap: 10px;
+  flex-direction: column; 
+  align-items: flex-start;
+  gap: 5px; 
 }
 
 .toggle-status-btn {
@@ -149,6 +151,24 @@
   color: white;
 }
 
+.edit-coupon-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 45px;
+  transition: all 0.3s ease;
+  background-color: rgba(50, 92, 209, 0.89);
+  color: white;
+}
+
+.edit-coupon-btn:hover {
+  background-color: blue;
+  color: white;
+}
 /* Pagination */
 .pagination {
   display: flex;
@@ -346,10 +366,18 @@
         const actionBtn = isExpired
           ? `<span class="user-status status-blocked">Expired</span>`
           : isActive
-            ? `<button class="toggle-status-btn" data-id="${coupon._id}" data-status="true">
-                 <i class="fas fa-trash"></i> Deactivate
-               </button>`
-            : `<span class="user-status status-blocked">Inactive</span>`;
+          ? `
+            <div class="coupon-actions">
+              <button class="toggle-status-btn" data-id="${coupon._id}" data-status="true">
+                <i class="fas fa-trash"></i> Deactivate
+              </button>
+              <button class="edit-coupon-btn" data-id="${coupon._id}">
+                <i class="fas fa-edit"></i> Edit 
+              </button>
+            </div>
+          `
+          : `<span class="user-status status-blocked">Inactive</span>`;
+
 
         row.innerHTML = `
           <td>${slNo}</td>
@@ -377,6 +405,14 @@
 
       updatePagination();
     }
+
+    document.addEventListener("click", function (e) {
+      if (e.target.closest(".edit-coupon-btn")) {
+        const couponId = e.target.closest(".edit-coupon-btn").dataset.id;
+        window.location.href = `/admin/editCoupons/${couponId}`;
+      }
+    });
+
 
     async function deleteCoupon(couponId) {
       const result = await Swal.fire({

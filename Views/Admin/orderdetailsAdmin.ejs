@@ -346,7 +346,7 @@
           const subTotal = orderData.items.reduce((acc, item) => acc + item.totalProductprice, 0);
 
           console.log("subtotal",subTotal);
-          const festivalOffer = subTotal * 0.10; // 10% off
+          const festivalOffer = subTotal * 0.05; // 10% off
           const shippingCharge = orderData.shippingCharge || 0;
           const finalTotal = subTotal - festivalOffer + shippingCharge;
         

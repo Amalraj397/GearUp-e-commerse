@@ -65,84 +65,6 @@ export const geteditUserprofile = async (req, res, next) => {
 };
 
 
-// export const updateUserprofile = async (req, res, next) => {
-//   try {
-
-//   const user = req.session.user;
-//   const userId = user?.id;
-
-//     if (!userId) {
-//       return res
-//         .status(STATUS.UNAUTHORIZED)
-//         .json({ message: MESSAGES.Users.UNAUTHORIZED });
-//     }
-
-//     const userData = await userschema.findById(userId);
-
-//     if (!userData) {
-//       return res
-//       .status(STATUS.NOT_FOUND)
-//       .json({ message: MESSAGES.Users.NOT_FOUND });
-//     }
-
-//     const {
-//       firstName,
-//       lastName,
-//       phone,
-//       email,
-//       userProfileImage,
-//       oldPassword,
-//       newPassword,
-//       confirmNewPassword,
-//     } = req.body;
-
-//     //------updating user datas------
-
-//     if (firstName) userData.firstName = firstName;
-//     if (lastName) userData.lastName = lastName;
-//     if (email) userData.email = email;
-//     if (phone) userData.phone = phone;
-//     if (userProfileImage) userData.profilePicture = userProfileImage;
-
-//     // console.log("userdata.password", userData.password);
-
-//     // ---profile picture----
-//     if (req.file && req.file.path) {
-//       userData.profilePicture = req.file.path;
-//     }
-
-//     const OldpasswordMatch = await bcrypt.compare(
-//       oldPassword,
-//       userData.password,
-//     );
-
-//     if (!OldpasswordMatch) {
-//       return res
-//         .status(STATUS.UNAUTHORIZED)
-//         .json({ message: MESSAGES.Users.OLD_PASSWORD_MISMATCH });
-//     }
-
-//     if (newPassword || confirmNewPassword) {
-//       if (newPassword !== confirmNewPassword) {
-//         return res
-//           .status(STATUS.BAD_REQUEST)
-//           .json({ message: MESSAGES.Users.PASSWORD_MISMATCH });
-//       }
-//       const sPassword = await securePassword(newPassword);
-//       userData.password = sPassword;
-//     }
-
-//     await userData.save();
-//     res
-//       .status(STATUS.OK)
-//       .json({ message: MESSAGES.Users.PROFILE_UPDATED });
-    
-//   } catch (error) {
-//     console.log(MESSAGES.Users.UserProfileLogger.UPDATE_ERROR, error);   
-//     next(error)
-//   }
-// }
-
 export const updateUserprofile = async (req, res, next) => {
   try {
     const userId = req.session?.user?.id;
@@ -159,7 +81,7 @@ export const updateUserprofile = async (req, res, next) => {
         .json({ message: MESSAGES.Users.NOT_FOUND });
     }
 
-    // Destructure fields from body
+    // from body
     const {
       firstName,
       lastName,

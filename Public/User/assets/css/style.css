@@ -5173,7 +5173,7 @@ p {
   background-position: center;
   background-repeat: no-repeat;
   background-color: #ebebeb;
-  margin-top: 45px;
+  margin-top: 79px;
   z-index: 1;
 }
 
@@ -8628,6 +8628,7 @@ p {
   margin-bottom: 2rem;
   transition: all 0.3s;
   box-shadow: none;
+  border: 1px solid #b9b1b1;
 }
 select.form-control:not([size]):not([multiple]) {
   height: 40px;
@@ -13494,6 +13495,7 @@ button:focus {
   border-radius: 0.3rem;
   margin-top: 2rem;
   margin-bottom: 2rem;
+  border: 2px dashed #b9b1b1;
 }
 .summary-title {
   font-weight: 500;

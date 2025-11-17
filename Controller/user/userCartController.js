@@ -30,11 +30,10 @@ export const getCartPage = async (req, res, next) => {
       });
     }
 
-    // blocked & out-of-stock items
+    // blocked , out-of-stock items
       const updatedItems = cart.items.map(item => {
       const product = item.productId;
-      const unavailable =
-      product.isBlocked || product.status === "Out-of-stock";
+      const unavailable = product.isBlocked || product.status === "Out-of-stock";
 
       const variant = product.variants.find(v => v.scale === item.scale && v.variantName === item.variantName);
 
@@ -54,14 +53,18 @@ export const getCartPage = async (req, res, next) => {
   };
     });
 
-    //  Calculate total only for available products
 
   const TotalAmount = updatedItems.reduce(
   (acc, item) => acc + (item.totalProductprice || 0),
   0);
 
-    const festivalOFF = (TotalAmount * 10) / 100;
+  console.log("total amount::>>>", TotalAmount);
+  
+
+    const festivalOFF = (TotalAmount * 5) / 100;
+    console.log("festival off:>>>>",festivalOFF)
     const discountTotal = TotalAmount - festivalOFF;
+     console.log("discountTotal amount:>>>>",discountTotal)
 
     res.render("userCart.ejs", {
       userData,
@@ -208,7 +211,6 @@ export const addToCartpage = async (req, res, next) => {
   }
 };
 
-
 export const removeFromCartpage = async (req, res, next) => {
   const user = req.session.user;
   const userId = user?.id;
@@ -251,8 +253,6 @@ export const removeFromCartpage = async (req, res, next) => {
     next(error);
   }
 };
-
-// ----increase quantity------
 
 export const increaseCartQuantity = async (req, res, next) => {
   try {
@@ -326,3 +326,5 @@ export const updateQuantity = async (req, res, next) => {
     next(error);
   }
 };
+
+

@@ -75,6 +75,7 @@ export const MESSAGES = {
     CHECKOUT_PAGE_EROR:" Error in loading the CHECKOUT page",
     ORDER_SUCCESS_EROR :"Error loading order success page:",
     ORDER_FAIL_ERROR:"Error loading order success page:",
+    ORDER_DETAIL_ERROR:"An Error occured while getting order detail page:",
 
     NO_ORDER: "Could not find any Orders",
     INVALID_STATUS: "Invalid order status.",
@@ -104,20 +105,38 @@ export const MESSAGES = {
   Offers:{
     OFFR_PAGE_ERR: "An Error occured while loading Offer Listing Page.! please try again.",
     OFFER_ADD_PAGE_ERR: "An Error occured while loading Offer Adding Page.! please try again.",
-     OFFER_ADD_ERR:"An error Occured  while adding Coupon..! please try again."
-
+    OFFER_ADD_ERR:"An error Occured  while addiing offer..! please try again.",
+    OFFER_UPD_FAILED:" Offer update failed.try again later..!",
+    
    },
 
   Coupons:{
     COUPON_PAGE_ERR:"An error Occured while Loading the Coupon listing page.! please try again.",
     COUPON_ADD_PAGE_ERR:"An error Occured while Loading the Coupon Adding page.! please try again.",
+    COUPON_EDIT_PAGE_ERR:"An error Occured while Loading the Coupon Edit page.! please try again.",
     COUPON_ADD_ERR:"An error Occured  while adding Coupon..! please try again.",
-    ADD_SUCCESS:"offer added successfully."
+    ADD_SUCCESS:"offer added successfully.",
+    FETCH_ERR:"error in fetchiung coupons",
+    COUPON_APPLY_ERR:"An error Occured  while Applying Coupon..! please try again.",
     
   },
 
   Cart: {
     NO_CART: "Cart not found! Try again..",
+  },
+
+  SalesReport:{
+      REPORT_ERR:"An error occured while loading the Sales Report page",
+      
+  },
+
+  Wallet:{
+    WALLET_NOT_FOUND:"Cannot find any Wallet for This particular User..!",
+    WALLET_CREATE_ERR:"An error occured  while creating wallet for new user..!",
+    WALLET_PAGE_ERR:"An error Occured while Loading the User Wallet page.! please try again.",
+    WALLET_HISTRY_PAGE_ERR:"An error Occured while Loading Wallet History..!please try again.",
+    WALLET_REFUND_ERR:"An error Occured while refunding orderAmount to user Wallet..! please try again.",
+
   },
 
   Users: {

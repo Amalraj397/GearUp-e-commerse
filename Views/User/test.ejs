@@ -733,3 +733,227 @@ document.addEventListener("DOMContentLoaded", () => {
 
   </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------------------------------------
+
+
+<body>
+    <div class="page-wrapper">
+        <main class="main">
+        	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        		<div class="container">
+        			<h1 class="page-title">Checkout<span></span></h1>
+        		</div><!-- End .container -->
+        	</div><!-- End .page-header -->
+            
+
+                     <!-- ====== Available Coupons Section ====== -->
+
+                    <div class="coupon-section mb-4">
+                      <h3 class="coupon-title" onclick="toggleCouponList()" style="cursor: pointer;">
+                        Available Coupons 
+                        <span id="toggleIcon" class="material-icons" style="font-size: 18px;">view</span>
+                      </h3>
+                    
+                      <div id="couponList" class="coupon-list" style="display: none; max-height: 250px; overflow-y: auto;">
+                        <p class="text-muted">Loading coupons...</p>
+                      </div>
+                    </div>
+                    <!-- ====== End Coupon Section ====== -->
+0
+		                </div><!-- End .col-lg-9 -->
+		                		<aside class="col-lg-3">
+		                			<div class="summary">
+		                				<h3 class="summary-title">Your Orders</h3><!-- End .summary-title -->
+
+                                        <div class="order-section">
+                                                <!-- <h2>Your Orders</h2> -->
+
+                                                <div class="order-summary">
+                                                    <div class="order-header">
+                                                        <span class="col-product">Product</span>
+                                                        <span class="col-qty">Qty</span>
+                                                        <!-- <span></span> -->
+                                                        <span class="col-total">. Total</span>
+                                                    </div>
+                                                
+                                                    <div class="order-items">
+                                                        <% cart.items.forEach(item => { %>
+                                                            <div class="order-item">
+                                                                <span class="product-name">
+                                                                    <%= item.productId.productName.split("").slice(0,25).join("") %> ,(<%= item.scale %>)
+                                                                </span>
+                                                                <span class="product-qty">
+                                                                    <%= item.quantity %>
+                                                                </span>
+                                                                <span class="product-price">
+                                                                    ₹ <%= (item.salePrice * item.quantity).toFixed(2) %>
+                                                                </span>
+                                                            </div>
+                                                        <% }) %>
+                                                    </div>
+                                                
+                                                    <div class="order-totals">
+
+                                                        <div class="total-row">
+                                                            <span>Festival Offer: 5% OFF</span>
+                                                            <span>- ₹ <%= festivalOFF.toFixed(2) %></span>
+                                                        </div>
+
+                                                        <div class="total-row">
+                                                        <span>Shipping:</span>
+                                                          <span class="<%= grandTotal >= 1999 ? 'text-success' : '' %>">
+                                                            <%= grandTotal >= 1999 ? "Free shipping" : "Shipping Charge: + ₹120.00" %>
+                                                          </span>
+                                                        </div>
+                                                        
+                                                        <div>
+                                                          <span class="<%= grandTotal >= 1999 ? 'text-success' : 'text-decoration-line-through text-muted' %>">
+                                                            <%= grandTotal >= 1999 ? "Cash-On-Delivery Available" : "COD not-Available" %>
+                                                          </span>
+                                                        </div>
+
+                                                        <div class="total-row total-final">
+                                                            <span>GrandTotal:</span>
+                                                            <span>₹<%= grandTotal.toFixed(2) %></span>
+                                                        </div>
+
+                                                        <div class="total-row total-final">
+                                                          <span>Payment Options:</span>
+                                                        </div>
+
+                                                        <div class="payment-options">
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="Cash-On-Delivery" checked>
+                                                            <span>Cash on Delivery</span>
+                                                          </label>
+                                                        
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="wallet">
+                                                            <span>Wallet</span>
+                                                          </label>
+                                                        
+                                                          <label class="payment-option">
+                                                            <input type="radio" name="paymentMethod" value="Online-razorpay">
+                                                            <span>Razorpay</span>
+                                                          </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+		                	    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block" id="placeOrderBtn">Place Order</button>
+										<button type="submit" class="btn btn-outline-primary-2 btn-cancel btn-block" id="cancelOrderBtn">Cancel Order</button>
+		                			</div><!-- End .summary -->
+		                		</aside><!-- End .col-lg-3 -->
+		                	</div><!-- End .row -->
+            			</form>
+	                </div><!-- End .container -->
+                </div><!-- End .checkout -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+    </div><!-- End .page-wrapper -->
+
+
+<script>
+
+
+<script>
+  // Toggle show/hide
+  function toggleCouponList() {
+    const list = document.getElementById("couponList");
+    const icon = document.getElementById("toggleIcon");
+    const isVisible = list.style.display === "block";
+    list.style.display = isVisible ? "none" : "block";
+    icon.textContent = isVisible ? "view" : "close";
+  }
+
+  // Fetch available coupons
+  async function loadAvailableCoupons() {
+    try {
+      const res = await fetch("/available-coupons");
+      const data = await res.json();
+
+      const list = document.getElementById("couponList");
+      list.innerHTML = "";
+
+      if (!data.success || data.coupons.length === 0) {
+        list.innerHTML = `<p class="text-muted">No coupons available right now.</p>`;
+        return;
+      }
+
+      data.coupons.forEach(coupon => {
+        const item = document.createElement("div");
+        item.classList.add("coupon-card");
+        item.innerHTML = `
+          <div class="coupon-box p-2 border rounded mb-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="mb-1 text-uppercase">${coupon.couponCode}</h6>
+                <p class="mb-1"><strong>₹${coupon.discountAmount}</strong> off</p>
+                <small class="text-secondary">Valid till: ${new Date(coupon.expiryDate).toLocaleDateString()}</small>
+              </div>
+              <button class="btn btn-sm btn-outline-primary apply-coupon-btn" 
+                data-code="${coupon.couponCode}" 
+                data-discount="${coupon.discountAmount}">
+                Apply
+              </button>
+            </div>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+
+      // Handle coupon apply
+      document.querySelectorAll(".apply-coupon-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+          const couponCode = e.target.dataset.code;
+          const discount = parseFloat(e.target.dataset.discount);
+
+          Swal.fire({
+            title: "Apply this coupon?",
+            text: `${couponCode} will give you ₹${discount} off.`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Apply",
+            cancelButtonText: "Cancel",
+          }).then(result => {
+            if (result.isConfirmed) {
+              applyCoupon(couponCode, discount);
+            }
+          });
+        });
+      });
+
+    } catch (error) {
+      console.error("Error loading coupons:", error);
+      document.getElementById("couponList").innerHTML = `<p class="text-danger">Failed to load coupons.</p>`;
+    }
+  }
+
+  // Apply coupon logic
+  function applyCoupon(code, discount) {
+    const totalElem = document.querySelector(".total-final span:last-child");
+    const grandTotalText = totalElem.textContent.replace("₹", "").trim();
+    let grandTotal = parseFloat(grandTotalText);
+
+    const newTotal = Math.max(0, grandTotal - discount);
+    totalElem.textContent = "₹" + newTotal.toFixed(2);
+
+    Swal.fire("Success!", `Coupon "${code}" applied successfully!`, "success");
+  }
+
+  // Load coupons on page load
+  window.addEventListener("DOMContentLoaded", loadAvailableCoupons);
+</script>

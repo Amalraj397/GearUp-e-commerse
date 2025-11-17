@@ -1,6 +1,7 @@
 import productSchema from "../../Models/productModel.js";
 import categorySchema from "../../Models/categoryModel.js";
 import brandSchema from "../../Models/brandModel.js";
+import offerSchema from "../../Models/offerModel.js";
 import cloudinary from "../../Config/cloudinary_Config.js";
 
 import { MESSAGES } from "../../utils/messagesConfig.js";
@@ -70,6 +71,7 @@ export const loadAddproduct = async (req, res, next) => {
 // addProduct controller
 export const addnewProduct = async (req, res, next) => {
   console.log("product controller starting");
+
   const {
     productName,
     brand,
@@ -81,69 +83,127 @@ export const addnewProduct = async (req, res, next) => {
     status,
   } = req.body;
 
-  const variant = JSON.parse(parsedVariants);
-
-  // Imsge handling
-  if (!req.files || req.files.length < 3) {
-    return res
-      .status(STATUS.BAD_REQUEST)
-      .json({ message: MESSAGES.Products.IMAGE_REQUIRED });
-  }
-  const imageUrls = req.files.map((file) => file.path);
-  // console.log("imageUrls::", imageUrls);      //dubugg
+  const variants = JSON.parse(parsedVariants);
 
   try {
-    // fetching category id
-    const categoryId = await categorySchema.findOne({ name: category });
-    // console.log("category fetched:::", categoryId);   //dubugg
-    if (!categoryId) {
+
+    if (!req.files || req.files.length < 3) {
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ message: MESSAGES.Products.IMAGE_REQUIRED });
+    }
+
+    const imageUrls = req.files.map((file) => file.path);
+
+    const categoryData = await categorySchema.findOne({ name: category });
+    if (!categoryData) {
       return res
         .status(STATUS.BAD_REQUEST)
         .json(MESSAGES.Products.INVALID_CATEGORY);
     }
 
-    // Fetch brand id
-    const brandId = await brandSchema.findOne({ brandName: brand });
-    // console.log("brand fetched:::", categoryId);     //dubugg
-    if (!brandId) {
+    const brandData = await brandSchema.findOne({ brandName: brand });
+    if (!brandData) {
       return res
         .status(STATUS.BAD_REQUEST)
         .json(MESSAGES.Products.INVALID_BRAND);
     }
-    const product = await productSchema.findOne({ productName });
-    // console.log("fetching product:::", product);     //dubugg
-    if (product) {
+
+    const existingProduct = await productSchema.findOne({ productName });
+    if (existingProduct) {
       return res.status(STATUS.BAD_REQUEST).json({
         success: false,
         message: MESSAGES.Products.PRODUCT_EXSIST,
       });
     }
 
+    const currentDate = new Date();
+
+    const [brandOffer, categoryOffer] = await Promise.all([
+      offerSchema.findOne({
+        offerType: "Brand",
+        ApplicableTo: brandData._id,
+        status: true,
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+      }),
+      offerSchema.findOne({
+        offerType: "Category",
+        ApplicableTo: categoryData._id,
+        status: true,
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+      }),
+    ]);
+
+    let selectedOffer = null;
+
+    if (brandOffer && categoryOffer) {
+      if (brandOffer.discountPercentage >= categoryOffer.discountPercentage) {
+        selectedOffer = brandOffer;
+      } else {
+        selectedOffer = categoryOffer;
+      }
+    } else if (brandOffer) {
+      selectedOffer = brandOffer;
+    } else if (categoryOffer) {
+      selectedOffer = categoryOffer;
+    }
+
+    let appliedOfferPercentage = 0;
+
+    if (selectedOffer) {
+      appliedOfferPercentage = selectedOffer.discountPercentage;
+    }
+
+    const updatedVariants = variants.map((variant) => {
+      const salePrice = Number(variant.salePrice);
+      let offerPrice = salePrice;
+
+      if (appliedOfferPercentage > 0) {
+        const discountAmount = (salePrice * appliedOfferPercentage) / 100;
+        offerPrice = Math.round(salePrice - discountAmount);
+      }
+
+      return {
+        ...variant,
+        salePrice,
+        offerPrice,
+      };
+    });
+
     const newProduct = new productSchema({
       productName,
-      brand: brandId._id,
-      category: categoryId._id,
+      brand: brandData._id,
+      category: categoryData._id,
       description,
       edition,
-      variants: variant,
-      productOffer: offer,
+      variants: updatedVariants,
+      productOffer: appliedOfferPercentage,
       status,
       productImage: imageUrls,
     });
 
     await newProduct.save();
-    // console.log("product savingggggggggg.....")     //
+
     res.status(STATUS.CREATED).json({
       success: true,
       message: MESSAGES.Products.PRODUCT_CREATED,
       data: newProduct,
+      appliedOffer: selectedOffer
+        ? {
+            name: selectedOffer.offerName,
+            type: selectedOffer.offerType,
+            discount: selectedOffer.discountPercentage,
+          }
+        : null,
     });
   } catch (error) {
-    console.log(MESSAGES.Products.PRODUCT_CRE_FAILED, error);
- 
+    console.error(MESSAGES.Products.PRODUCT_CRE_FAILED, error);
     next(error);
   }
 };
+
 
 //-------------------list and unlist product-----------------
 export const unlistProduct = async (req, res, next) => {
@@ -197,7 +257,6 @@ export const listProduct = async (req, res, next) => {
 };
 // ---------------------- List & Unlist  END-------------------
 
-// =====================GET EDIT PRODUCT PAGE=====================
 export const getProductEditpage = async (req, res, next) => {
   // getting edit product_page
   try {
@@ -244,9 +303,8 @@ export const updateProduct = async (req, res, next) => {
       offer,
     } = req.body;
 
-    const variant = JSON.parse(parsedVariants);
+    const variants = JSON.parse(parsedVariants);
 
-    // Validate mandatory fields
     if (
       !productName ||
       !brand ||
@@ -261,27 +319,20 @@ export const updateProduct = async (req, res, next) => {
         .json({ message: MESSAGES.System.ALL_REQUIRED });
     }
 
-    // finding brand and category
-    const [brandDoc, categoryDoc] = await Promise.all([
+    const [brandData, categoryData, product] = await Promise.all([
       brandSchema.findById(brand),
       categorySchema.findById(category),
+      productSchema.findById(productId),
     ]);
-    const product = await productSchema.findById(productId);
-    // console.log("product data ivde und:", product);    //debugging
 
-    if (!product)
+    if (!product) {
       return res
         .status(STATUS.NOT_FOUND)
         .json({ message: MESSAGES.Products.PRODUCT_NOT_FOUND });
+    }
 
-    // Remove deleted images
     let existingImages = product.productImage;
-
-    // Add new uploaded images
     const newImages = req.files?.map((file) => file.path) || [];
-
-    // console.log('controller- imagres', newImages);         // debugging
-
     const finalImages = [...existingImages, ...newImages];
 
     if (finalImages.length < 3) {
@@ -289,26 +340,91 @@ export const updateProduct = async (req, res, next) => {
         .status(STATUS.BAD_REQUEST)
         .json({ message: MESSAGES.Products.IMAGE_REQUIRED });
     }
-    // Update product
+
+    const currentDate = new Date();
+
+    const [brandOffer, categoryOffer] = await Promise.all([
+      offerSchema.findOne({
+        offerType: "Brand",
+        ApplicableTo: brandData._id,
+        status: true,
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+      }),
+      offerSchema.findOne({
+        offerType: "Category",
+        ApplicableTo: categoryData._id,
+        status: true,
+        startDate: { $lte: currentDate },
+        endDate: { $gte: currentDate },
+      }),
+    ]);
+
+    let selectedOffer = null;
+
+    if (brandOffer && categoryOffer) {
+      if (brandOffer.discountPercentage >= categoryOffer.discountPercentage) {
+        selectedOffer = brandOffer;
+      } else {
+        selectedOffer = categoryOffer;
+      }
+    } else if (brandOffer) {
+      selectedOffer = brandOffer;
+    } else if (categoryOffer) {
+      selectedOffer = categoryOffer;
+    }
+
+    let appliedOfferPercentage = 0;
+
+    if (selectedOffer) {
+      appliedOfferPercentage = selectedOffer.discountPercentage;
+    }
+
+    const updatedVariants = variants.map((variant) => {
+      const salePrice = Number(variant.salePrice);
+      let offerPrice = salePrice;
+
+      if (appliedOfferPercentage > 0) {
+        const discountAmount = (salePrice * appliedOfferPercentage) / 100;
+        offerPrice = Math.round(salePrice - discountAmount);
+      }
+
+      return {
+        ...variant,
+        salePrice,
+        offerPrice,
+      };
+    });
+
     await productSchema.findByIdAndUpdate(productId, {
       productName,
-      brand: brandDoc._id,
-      category: categoryDoc._id,
+      brand: brandData._id,
+      category: categoryData._id,
       description,
       edition,
-      variants: variant,
-      productOffer: offer,
+      variants: updatedVariants,
+      productOffer: appliedOfferPercentage,
       status,
       productImage: finalImages,
     });
 
-    res.status(STATUS.OK).json({ message: MESSAGES.Products.PRODUCT_UPDATED });
+    res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Products.PRODUCT_UPDATED,
+      appliedOffer: selectedOffer
+        ? {
+            name: selectedOffer.offerName,
+            type: selectedOffer.offerType,
+            discount: selectedOffer.discountPercentage,
+          }
+        : null,
+    });
   } catch (error) {
-    console.error(MESSAGES.Products.PRODUCT_UPLOAD_PAGE_FAIL ,error);
-   
+    console.error(MESSAGES.Products.PRODUCT_UPLOAD_PAGE_FAIL, error);
     next(error);
   }
 };
+
 
 export const deleteProductImage = async (req, res, next) => {
   const productId = req.params.id;

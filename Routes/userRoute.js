@@ -79,19 +79,17 @@ import {
 import {
   getCheckoutpage,
   getAddressById,
-  // placeOrder,
+  placeOrder,
   getOrderSuccesspage,
   getOrderfailurePage,
   getmyOrders,
   cancelOrder,
-  downloadInvoice,
   viewDetails,
   returnOrder,
   cancelOrderItem,
-  placeCODOrder,
-  getAvailableCoupons,
 
 } from "../Controller/user/userOrderController.js";
+
 
 import { 
   requestEmailUpdate, 
@@ -108,6 +106,14 @@ import {
 
 } from "../Controller/user/paymentController.js";
 
+import {
+  getAvailableCoupons,
+  applyCoupon,
+
+} from "../Controller/user/couponController.js";
+
+import { getWallet } from "../Controller/user/walletController.js";
+import{ downloadInvoice } from"../Controller/user/invoiceController.js";
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
 const userRoute = express.Router();
@@ -167,13 +173,10 @@ userRoute.post("/verify-email-otp", verifyEmailUpdate);
 // ---------------useraddress managemamet------------------
 userRoute.get("/addUserAddress", getAdd_UseraddressPage);
 userRoute.post("/addUserAddress", add_UserAddress);
-//edit address
 userRoute.get("/edit-address/:id", getEdit_userAddressPage);
 userRoute.put("/updateUserAddress/:id", edit_userAddress);
-// delete
 userRoute.delete("/remove-address/:id", delete_userAddress);
-//default
-userRoute.patch("/set-default-address/:id", makedefault);
+userRoute.patch("/set-default-address/:id", makedefault);  //default
 
 // ---------------cart managements------------
 userRoute.get("/userCart", getCartPage);
@@ -199,7 +202,7 @@ userRoute.post("/payment/retry-payment", retryPaymentPage);
 
 
 userRoute.get("/getAddressById/:id", getAddressById);
-userRoute.post("/placeOrder", placeCODOrder );
+userRoute.post("/placeOrder", placeOrder );
 userRoute.get("/orderSuccess", getOrderSuccesspage);  // order success
 // userRoute.get("/orderFailure",getOrderfailurePage);  // order failure
 
@@ -208,11 +211,13 @@ userRoute.get("/myOrders", getmyOrders);
 userRoute.put("/orders/cancel/:id", cancelOrder);
 userRoute.post("/orders/return/:id", returnOrder);
 userRoute.post("/orders/item/cancel/:itemId", cancelOrderItem);
-``
 userRoute.get("/orders/:id/invoice", downloadInvoice);
-
 userRoute.get("/orderdetails/:id", viewDetails);
 
+// -----------coupon management-------------
 userRoute.get("/available-coupons",getAvailableCoupons);
+userRoute.post("/apply-coupon" , applyCoupon);
+
+userRoute.get("/wallet",getWallet);
 
 export default userRoute;

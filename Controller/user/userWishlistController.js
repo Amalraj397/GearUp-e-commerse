@@ -7,7 +7,7 @@ import { STATUS } from "../../utils/statusCodes.js";
 
 
 export const getUserWishlist = async (req, res, next) => {
-  console.log("wishlist controller started.....")
+  // console.log("wishlist controller started.....")
   const user = req.session.user;
   const userId = user?.id;
 
@@ -150,9 +150,7 @@ export const removefromwishlist = async (req, res,next) => {
     }
 
     const wishlist = await wishlistSchema.findOneAndUpdate(
-      { userId },
-      { $pull: { products: { productId } } },
-      { new: true },
+      { userId },{ $pull: { products: { productId } } }, { new: true },
     );
 
     res.json({

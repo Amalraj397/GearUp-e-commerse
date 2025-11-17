@@ -4,6 +4,7 @@ import sendEmail from "../../utils/nodemailer.js";
 import securePassword from "../../utils/hashPass.js";
 import bcrypt from "bcrypt";
 
+import {createWalletForUser} from "../../utils/welcomeUser.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
@@ -141,6 +142,8 @@ export const verifyOtp = async (req, res, next) => {
       });
       // console.log("this is user", user);     //dubugging
       await user.save();
+
+      await createWalletForUser(user._id);
 
       delete req.session.otp;
       delete req.session.otpExpiration;

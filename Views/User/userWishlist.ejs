@@ -31,7 +31,6 @@
 							<tr>
 								<th><b>PRODUCT</b></th>
 								<th><b>SCALE: - PRICE</b></th>
-                                <th><b>QUANTITY</b></th>
                                 <th></th>
                                 <th></th>
 								<th><b>STOCK STATUS</b></th>
@@ -57,25 +56,17 @@
                                                 </div>
                                             </td>
                                             <td class="variant-col">
-                                                <select class="variant-select" data-product-id="<%= item.productId._id %>">
+                                                <select class="variant-select" data-product-id="<%= item.productId._id %>" style="padding: 5px 15px 5px 15px;font-size: medium;font-weight: 400;">
                                                     <% item.productId.variants.forEach(variant => { %>
                                                         <option value="<%= variant.variantName %>" data-price="<%= variant.salePrice %>">
-                                                            <%= variant.scale %> - ₹<%= variant.salePrice %>
+                                                            <%= variant.scale %> - ₹<%= variant.offerPrice %>
                                                         </option>
                                                     <% }) %>
                                                 </select>
                                             </td>
-                                                <td class="quantity-col">
-                                                <input 
-                                                    type="number" 
-                                                    class="quantity-input" 
-                                                    data-product-id="<%= item.productId._id %>" 
-                                                    value="1" 
-                                                    min="1" style = "width: 50px;">
-                                            </td>
                                             <td></td>
                                             <td></td>
-                                            <td class="stock-col"><span class="in-stock">In stock</span></td>
+                                            <td class="stock-col"><span class="in-stock"style="font-size: medium;font-weight: 500;">IN-STOCK</span></td>
                                             <td class="action-col">
                                                 <button class="btn btn-block btn-outline-primary-2 add-to-cart-btn" data-product-id="<%= item.productId._id %>">
                                                     <i class="icon-cart-plus"></i> Add to Cart

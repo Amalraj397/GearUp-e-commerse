@@ -62,15 +62,26 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      enum: ["Pending", "Shipped", "Delivered", "Cancelled", "Returned"],
-      default: "Pending",
+      enum: [
+           "Pending", 
+           "Shipped", 
+           "Delivered",
+           "Cancelled", 
+           "Returned",
+           "Partial-Return",
+           "Partial-Cancel",
+          ],
+        default: "Pending",
     },
     orderNumber: {
       type: String,
       unique: true,
       required: true,
     },
-
+    couponApplied:{
+       type: mongoose.Schema.Types.ObjectId,
+        ref: "Coupon",
+    },
     billingDetails: {
       name: {
         type: String,

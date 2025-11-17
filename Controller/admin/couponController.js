@@ -1,5 +1,4 @@
 import couponSchema from"../../Models/couponModel.js";
-import userSchema from "../../Models/userModel.js";
 import { STATUS } from "../../utils/statusCodes.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 
@@ -38,7 +37,6 @@ export const getCouponsPage = async (req, res, next) => {
   }
 };
 
-
 export const getaddCoupon = async (req,res,next)=>{
     try{
        res.render("addCoupons.ejs");
@@ -74,20 +72,20 @@ export const addCoupon = async (req, res, next) => {
       !userLimit ||
       !expiryDate
     ) {
-      return res.status(400).json({ success: false, message: "All required fields must be filled." });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "All required fields must be filled." });
     }
 
     if (discountAmount <= 0) {
-      return res.status(400).json({ success: false, message: "Discount amount must be  greater than ZERO." });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Discount amount must be  greater than ZERO." });
     }
 
     if (new Date(expiryDate) < new Date()) {
-      return res.status(400).json({ success: false, message: "Expiry date cannot be in the past." });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Expiry date cannot be in the past." });
     }
 
     const existingCoupon = await couponSchema.findOne({ couponCode: couponCode.trim().toUpperCase() });
     if (existingCoupon) {
-      return res.status(400).json({ success: false, message: "Coupon code already exists." });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Coupon code already exists." });
     }
 
     // --- Create new coupon ---
@@ -106,7 +104,7 @@ export const addCoupon = async (req, res, next) => {
 
     console.log("new coupon saved.");
     
-    res.status(201).json({
+    res.status(STATUS.CREATED).json({
       success: true,
       message: "Coupon added successfully..!"
     });
@@ -125,21 +123,66 @@ export const deactivateCoupon = async (req, res, next) => {
 
     const coupon = await couponSchema.findById(id);
     if (!coupon) {
-      return res.status(404).json({ success: false, message: "Coupon not found." });
+      return res.status(STATUS.NOT_FOUND).json({ success: false, message: "Coupon not found." });
     }
 
      console.log("coupon", coupon)
 
     if (new Date(coupon.expiryDate) < new Date()) {
-      return res.status(400).json({ success: false, message: "Cannot delete expired coupons." });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Cannot delete expired coupons." });
     }
 
     coupon.isActive = false;
     await coupon.save();
 
-    res.status(200).json({ success: true, message: "Coupon deactivated successfully." });
+    res.status(STATUS.OK).json({ success: true, message: "Coupon deactivated successfully." });
   } catch (error) {
     console.error("Error deleting coupon:", error);
     next(error);
   }
 };
+
+export const geteditCoupon = async (req,res,next)=>{
+    try{
+     const { id } = req.params;
+     console.log("coupon id in edit controller::",id);
+
+    const couponData = await couponSchema.findById(id);
+    if (!couponData) {
+      return res.status(STATUS.NOT_FOUND).json({ success: false, message: "Coupon not found." });
+    }
+
+     console.log("couponData", couponData)
+
+    if (new Date(couponData.expiryDate) < new Date()) {
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Cannot edit expired coupons." });
+    }
+
+      res.render("editCoupon.ejs",{
+        couponData,
+      });
+       
+    }catch(error){
+        console.error(MESSAGES.COUPON_EDIT_PAGE_ERR, error);
+        next(error);
+    }
+}
+
+export const updateCoupon = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const updated = await couponSchema.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updated) {
+      return res.status(STATUS.NOT_FOUND).json({ success: false, message: "Coupon not found." });
+    }
+
+    res.json({ success: true, message: "Coupon updated successfully." });
+  } catch (error) {
+    console.error("Error updating coupon:", error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: "Server error." });
+  }
+};
+
