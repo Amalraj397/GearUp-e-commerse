@@ -1,0 +1,169 @@
+ <%-include("../../Views/Partials/User/headerLand")%>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      background: #0f0f0f;
+      margin-top: 9%;
+      color: #fff;
+      font-family: Poppins, sans-serif;
+      
+    }
+    .container {
+      max-width: 900px;
+      margin: auto auto 9% auto;
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.4);
+    }
+    h1 {
+      text-align: center;
+      color: #ff7b00;
+      margin-bottom: 10px;
+    }
+    .desc {
+      text-align: center;
+      font-size: 15px;
+      margin-bottom: 25px;
+      color: #cfcfcf;
+    }
+    .referral-box {
+      background: #111;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      margin-bottom: 25px;
+      border: 1px solid #ff7b00;
+    }
+    .code {
+      font-size: 27px;
+      font-weight: bold;
+      color: #ff7b00;
+      letter-spacing: 2px;
+    }
+    .copy-btn {
+      margin-top: 12px;
+      background: #ff7b00;
+      color: #000;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: .3s;
+    }
+    .copy-btn:hover {
+      background: #ffa347;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: #111;
+      padding: 18px;
+      border-radius: 10px;
+      text-align: center;
+      width: 40%;
+      border: 1px solid #ff7b00;
+    }
+    .stat-card h3 {
+      margin: 0;
+      font-size: 15px;
+      color: #ccc;
+    }
+    .stat-card p {
+      margin: 5px 0 0;
+      font-size: 22px;
+      font-weight: bold;
+      color: #ff7b00;
+    }
+    table {
+      width: 100%;
+      margin-top: 15px;
+      border-collapse: collapse;
+      background: #111;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    table th, table td {
+      padding: 12px;
+      text-align: left;
+    }
+    table thead {
+      background: #ff7b00;
+      color: #000;
+    }
+    table tbody tr:nth-child(even) {
+      background: #181818;
+    }
+    table tbody tr:hover {
+      background: #222;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Refer & Earn</h1>
+  <p class="desc">
+    Refer your friends to AutoMinima 🚗.<br>
+    They will receive <b>₹101</b> bonus and <b>you will receive ₹201</b> for each successful signup.
+  </p>
+
+  <!-- ref code box -->
+  <div class="referral-box">
+    <div class="code" id="refCode"><%= referralCode %></div>
+    <button class="copy-btn" onclick="copyCode()">Copy Referral Code</button>
+  </div>
+
+  <!-- stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <h3>Total Referrals</h3>
+      <p><%= referredUsers.length %></p>
+    </div>
+    <div class="stat-card">
+      <h3>Total Earnings</h3>
+      <p>₹ <%= totalEarnings %></p>
+    </div>
+  </div>
+
+  <!-- referred users table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Sl.No</th>
+        <th>Name</th>
+        <th>Joined On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% referredUsers.forEach((u, index) => { %>
+        <tr>
+          <td><%= index + 1 %></td>
+          <td><%= u.firstName %> <%= u.lastName %></td>
+          <td><%= new Date(u.createdAt).toLocaleDateString() %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+</div>
+
+<script>
+  function copyCode() {
+    const text = document.getElementById("refCode").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Referral Code Copied!");
+  }
+</script>
+
+</body>
+</html>
+<%-include("../../Views/Partials/User/footerLand")%>
+
+

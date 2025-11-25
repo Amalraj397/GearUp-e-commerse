@@ -2,8 +2,11 @@ import userschema from "../../Models/userModel.js";
 import generateOTP from "../../utils/generate-OTP.js";
 import sendEmail from "../../utils/nodemailer.js";
 import securePassword from "../../utils/hashPass.js";
+import userReferralSchema from "../../Models/userReferralModel.js";
 import bcrypt from "bcrypt";
 
+
+import {generateReferralCode} from "../../utils/referralCodeGenarator.js"
 import {createWalletForUser} from "../../utils/welcomeUser.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
@@ -40,6 +43,63 @@ export const showLogin = (req, res, next) => {
 };
 
 //------------- user signup controller---------------------
+// export const userSignup = async (req, res, next) => {
+//   const {
+//     firstName,
+//     lastName,
+//     registerEmail,
+//     registerPhone,
+//     registerPassword,
+//   } = req.body;
+
+//   try {
+//     // check email already exists..
+//     const existEmail = await userschema.findOne({ email: registerEmail });
+
+//     if (existEmail) {
+//       return res
+//         .status(STATUS.BAD_REQUEST)
+//         .json({ message: MESSAGES.Auth.EMAIL_NOT_REGISTERED });
+//     }
+
+//     const userData = {
+//       firstName,
+//       lastName,
+//       email: registerEmail,
+//       phone: registerPhone,
+//       password: registerPassword,
+//     };
+//     req.session.userData = userData;
+
+//     // generate OTP and Time
+//     const otpExpirationT = Date.now() + 60 * 1000;
+//     const otp = generateOTP();
+//     console.log(" userLogin OTP:", otp); //   diplay OTP in console
+
+//     //send OTP email
+//     await sendEmail({ to: registerEmail, otp });
+
+//     // store OTP in session
+//     req.session.otp = otp;
+//     req.session.otpExpiration = otpExpirationT;
+
+//     req.session.successMessage = MESSAGES.Auth.EMAIL_VERIFIED;
+
+//     // Redirect user to OTP entry page
+//     return res.status(STATUS.OK).json({
+//       success: true,
+//       message: MESSAGES.Auth.EMAIL_VERIFIED,
+//       redirectTo: "/getOtp",
+//     });
+//   } catch (error) {
+//     console.error(MESSAGES.Users.SIGNUP_ERR, error);
+//     next(error);
+//   }
+// };
+
+// --------------------------------OTP Section ------------------------------------------------
+
+//------------- user signup controller---------------------
 export const userSignup = async (req, res, next) => {
   const {
     firstName,
@@ -47,10 +107,10 @@ export const userSignup = async (req, res, next) => {
     registerEmail,
     registerPhone,
     registerPassword,
+    referralCode   
   } = req.body;
 
   try {
-    // check email already exists..
     const existEmail = await userschema.findOne({ email: registerEmail });
 
     if (existEmail) {
@@ -59,30 +119,27 @@ export const userSignup = async (req, res, next) => {
         .json({ message: MESSAGES.Auth.EMAIL_NOT_REGISTERED });
     }
 
-    const userData = {
+    req.session.userData = {
       firstName,
       lastName,
       email: registerEmail,
       phone: registerPhone,
       password: registerPassword,
     };
-    req.session.userData = userData;
 
-    // generate OTP and Time
+    if (referralCode) {
+      req.session.referralCode = referralCode.trim().toUpperCase();
+    }
+
     const otpExpirationT = Date.now() + 60 * 1000;
     const otp = generateOTP();
-    console.log(" userLogin OTP:", otp); //   diplay OTP in console
+    console.log(" userLogin OTP:", otp);
 
-    //send OTP email
     await sendEmail({ to: registerEmail, otp });
 
-    // store OTP in session
     req.session.otp = otp;
     req.session.otpExpiration = otpExpirationT;
 
-    req.session.successMessage = MESSAGES.Auth.EMAIL_VERIFIED;
-
-    // Redirect user to OTP entry page
     return res.status(STATUS.OK).json({
       success: true,
       message: MESSAGES.Auth.EMAIL_VERIFIED,
@@ -94,7 +151,6 @@ export const userSignup = async (req, res, next) => {
   }
 };
 
-// --------------------------------OTP Section ------------------------------------------------
 
 export const getOtpPage = async (req, res, next) => {
   try {
@@ -110,14 +166,71 @@ export const getOtpPage = async (req, res, next) => {
 };
 
 // verify otp
+// export const verifyOtp = async (req, res, next) => {
+//   try {
+//     const { otp } = req.body;
+
+//     const storedOtp = req.session.otp?.toString();
+//     const otpExpiration = req.session.otpExpiration; //time for otp
+
+//     //-------check if the OTP  expired-----
+//     if (Date.now() > otpExpiration) {
+//       delete req.session.otp;
+//       delete req.session.otpExpiration;
+//       return res
+//         .status(STATUS.BAD_REQUEST)
+//         .json({ message: MESSAGES.Auth.OTP_EXPIRED });
+//     }
+//     // Validate OTP
+//     if (otp == storedOtp) {
+//       const getUser = req.session.userData;
+
+//       // Hashing password
+//       const sPassword = await securePassword(req.session.userData.password);
+
+//       //  Storing User data in DB
+//       const user = new userschema({
+//         firstName: getUser.firstName,
+//         lastName: getUser.lastName,
+//         email: getUser.email,
+//         phone: getUser.phone,
+//         password: sPassword,
+//       });
+//       // console.log("this is user", user);     //dubugging
+//       await user.save();
+
+//       await createWalletForUser(user._id);
+
+//       delete req.session.otp;
+//       delete req.session.otpExpiration;
+//       delete req.session.userData;
+
+//       return res.status(STATUS.OK).json({
+//         success: true,
+//         message: MESSAGES.Auth.OTP_SUCCESS,
+//         url: "/login",
+//       });
+//     } else {
+//       return res
+//         .status(STATUS.BAD_REQUEST)
+//         .json({ message: MESSAGES.Auth.OTP_INVALID });
+//     }
+//   } catch (error) {
+//     console.error(MESSAGES.Auth.OTP_VERIFY_EROR, error);
+
+//      next(error);
+//   }
+// };
+
+
+// verify otp
+
 export const verifyOtp = async (req, res, next) => {
   try {
     const { otp } = req.body;
-
     const storedOtp = req.session.otp?.toString();
-    const otpExpiration = req.session.otpExpiration; //time for otp
+    const otpExpiration = req.session.otpExpiration;
 
-    //-------check if the OTP  expired-----
     if (Date.now() > otpExpiration) {
       delete req.session.otp;
       delete req.session.otpExpiration;
@@ -125,46 +238,67 @@ export const verifyOtp = async (req, res, next) => {
         .status(STATUS.BAD_REQUEST)
         .json({ message: MESSAGES.Auth.OTP_EXPIRED });
     }
-    // Validate OTP
-    if (otp == storedOtp) {
-      const getUser = req.session.userData;
 
-      // Hashing password
-      const sPassword = await securePassword(req.session.userData.password);
-
-      //  Storing User data in DB
-      const user = new userschema({
-        firstName: getUser.firstName,
-        lastName: getUser.lastName,
-        email: getUser.email,
-        phone: getUser.phone,
-        password: sPassword,
-      });
-      // console.log("this is user", user);     //dubugging
-      await user.save();
-
-      await createWalletForUser(user._id);
-
-      delete req.session.otp;
-      delete req.session.otpExpiration;
-      delete req.session.userData;
-
-      return res.status(STATUS.OK).json({
-        success: true,
-        message: MESSAGES.Auth.OTP_SUCCESS,
-        url: "/login",
-      });
-    } else {
+    if (otp != storedOtp) {
       return res
         .status(STATUS.BAD_REQUEST)
         .json({ message: MESSAGES.Auth.OTP_INVALID });
     }
+
+    const getUser = req.session.userData;
+    const sPassword = await securePassword(getUser.password);
+
+    const user = new userschema({
+      firstName: getUser.firstName,
+      lastName: getUser.lastName,
+      email: getUser.email,
+      phone: getUser.phone,
+      password: sPassword,
+    });
+    await user.save();
+
+    const refCode = generateReferralCode(user.firstName, user._id);
+    await userReferralSchema.create({
+      userId: user._id,
+      referralCode: refCode,
+      referredUsers: [],
+    });
+
+    await createWalletForUser(user._id, 1000, "Welcome Bonus credited");
+
+    if (req.session.referralCode) {
+      const referral = await userReferralSchema.findOne({
+        referralCode: req.session.referralCode,
+      });
+
+      if (referral) {
+   
+        referral.referredUsers.push(user._id);
+        await referral.save();
+
+        await createWalletForUser(referral.userId, 201, "Referral Reward Credited");
+
+        await createWalletForUser(user._id, 101, "Referral Bonus Credited");
+      }
+    }
+
+    delete req.session.otp;
+    delete req.session.otpExpiration;
+    delete req.session.userData;
+    delete req.session.referralCode;
+
+    return res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Auth.OTP_SUCCESS,
+      url: "/login",
+    });
+
   } catch (error) {
     console.error(MESSAGES.Auth.OTP_VERIFY_EROR, error);
-
-     next(error);
+    next(error);
   }
 };
+
 
 export const resendOTP = async (req, res, next) => {
   try {

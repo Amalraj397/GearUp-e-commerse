@@ -230,10 +230,36 @@
       isValid = false;
     }
 
-    if (!minPurchase.value||conditions.value === "minimum_purchase" && (!minPurchase.value || minPurchase.value <= 0)) {
+    if (!minPurchase.value) {
       document.getElementById("minPurchaseError").textContent = "Enter minimum purchase amount.";
       minPurchase.classList.add("error-border");
       isValid = false;
+    }
+
+    let minValue = Number(minPurchase.value);
+
+    if (conditions.value === "minimum_purchase") {
+      if (!minValue || minValue < 1000) {
+        document.getElementById("minPurchaseError").textContent = "Minimum purchase must be at least ₹1000.";
+        minPurchase.classList.add("error-border");
+        isValid = false;
+      }
+    }
+
+    else if (conditions.value === "first_purchase") {
+      if (!minValue || minValue < 100) {
+        document.getElementById("minPurchaseError").textContent ="Amount must be at least ₹100 for first purchase.";
+        minPurchase.classList.add("error-border");
+        isValid = false;
+      }
+    }
+
+    else if (conditions.value === "no_condition") {
+      if (!minValue || minValue < 100) {
+        document.getElementById("minPurchaseError").textContent ="Minimum amount must be at least ₹100.";
+        minPurchase.classList.add("error-border");
+        isValid = false;
+      }
     }
 
     if (!usageLimit.value || usageLimit.value <= 0) {

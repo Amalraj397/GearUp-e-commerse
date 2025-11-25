@@ -12,7 +12,7 @@ export const getWallet = async (req, res, next) => {
     }
 
     const page = parseInt(req.query.page) || 1;
-    const limit = 5;
+    const limit = 7;
     const skip = (page - 1) * limit;
 
     let wallet = await walletSchema.findOne({ userDetails: userId });

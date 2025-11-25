@@ -48,7 +48,7 @@ export const getaddCoupon = async (req,res,next)=>{
 }
 
 export const addCoupon = async (req, res, next) => {
-       console.log("AddCoupon controller started...!")
+    // console.log("AddCoupon controller started...!")
   try {
     const {
       couponCode,
@@ -88,7 +88,6 @@ export const addCoupon = async (req, res, next) => {
       return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Coupon code already exists." });
     }
 
-    // --- Create new coupon ---
     const newCoupon = new couponSchema({
       couponCode: couponCode.trim().toUpperCase(),
       description: description.trim(),
@@ -116,7 +115,7 @@ export const addCoupon = async (req, res, next) => {
 };
 
 export const deactivateCoupon = async (req, res, next) => {
-     console.log("coupon deactivate controller called....")
+    //  console.log("coupon deactivate controller called....")
   try {
     const { id } = req.params;
      console.log("coupon id",id);
@@ -145,7 +144,6 @@ export const deactivateCoupon = async (req, res, next) => {
 export const geteditCoupon = async (req,res,next)=>{
     try{
      const { id } = req.params;
-     console.log("coupon id in edit controller::",id);
 
     const couponData = await couponSchema.findById(id);
     if (!couponData) {

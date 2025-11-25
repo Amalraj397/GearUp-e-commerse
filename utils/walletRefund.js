@@ -4,16 +4,26 @@ import { MESSAGES } from "./messagesConfig.js";
 
 export const refundToWallet = async (userId, amount, orderId, description) => {
   try {
+    const numericAmount = Number(amount);
+
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+      console.error(
+        "Invalid refund amount passed to refundToWallet:",
+        amount
+      );
+      throw new Error("Invalid refund amount");
+    }
+
     let wallet = await walletSchema.findOne({ userDetails: userId });
 
     if (!wallet) {
       wallet = new walletSchema({
         userDetails: userId,
-        walletBalance: amount,
+        walletBalance: numericAmount,
         transactions: [
           {
             transactionType: "credit",
-            transactionAmount: amount,
+            transactionAmount: numericAmount,
             transactionId: orderId,
             transactionDescription: description,
           },
@@ -23,10 +33,10 @@ export const refundToWallet = async (userId, amount, orderId, description) => {
       return wallet;
     }
 
-    wallet.walletBalance += amount;
+    wallet.walletBalance += numericAmount;
     wallet.transactions.push({
       transactionType: "credit",
-      transactionAmount: amount,
+      transactionAmount: numericAmount,
       transactionId: orderId,
       transactionDescription: description,
     });

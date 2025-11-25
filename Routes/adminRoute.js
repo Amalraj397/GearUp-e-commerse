@@ -89,6 +89,12 @@ import {
   downloadSalesReportPdf,
  } from "../Controller/admin/salesReportController.js";
 
+
+ import {
+  getRevenueStats,
+  getOrderStatusStats,
+} from "../utils/adminDashboard.js";
+
 const adminRoute = express.Router();
 
 adminRoute.get("/login", nocache, loadAdminlogin); // load adminlogin
@@ -171,8 +177,13 @@ adminRoute.put("/editCoupons/:id", adminAuth, updateCoupon);
 //-------------------------Sales Report------------------------
 
 adminRoute.get("/salesReport", adminAuth, salesReportpage);
-adminRoute.get('/salesReport/fetch', fetchSalesReport);
-adminRoute.get('/salesReport/pdf', downloadSalesReportPdf);
-adminRoute.get('/salesReport/excel', downloadSalesReportExcel);
+adminRoute.get('/salesReport/fetch',adminAuth ,fetchSalesReport);
+adminRoute.get('/salesReport/pdf', adminAuth,downloadSalesReportPdf);
+adminRoute.get('/salesReport/excel', adminAuth,downloadSalesReportExcel);
+
+//-----dashboard------
+adminRoute.get("/order-status-stats", getOrderStatusStats);
+adminRoute.get("/revenue-stats", getRevenueStats);
+
 
 export default adminRoute;

@@ -37,9 +37,12 @@ const walletSchema =  new mongoose.Schema(
             type: String,
             enum: [
                     "Amount Credited",
-                    "Cancelled Order Refund",
+                    "Cancelled Order Refund", 
                     "Returned Order Refund",
-                    "Order Payment Deducted"
+                    "Order Payment Deducted",
+                    "Referral Reward Credited",
+                    "Referral Bonus Credited",
+                    "Welcome Bonus credited"
                   ],
             required: true
         }

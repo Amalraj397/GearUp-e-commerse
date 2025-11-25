@@ -49,3 +49,4 @@ const couponSchema =  new mongoose.Schema(
 },{timestamps:true})
     
  export default mongoose.model("Coupon",couponSchema);
+    

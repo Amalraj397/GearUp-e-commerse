@@ -257,6 +257,15 @@
   <div id="confpasswordError" class="errorMessage"></div>
 </div>
 
+<input
+  type="text"
+  placeholder="Referral Code (optional)"
+  id="register-referral"
+  name="referralCode"
+/>
+<div id="referralError" class="errorMessage"></div>
+
+
         <button class="btn" type="submit">CREATE ACCOUNT</button>
       </form>
 
@@ -329,6 +338,8 @@
             .getElementById("register-confirmPassword")
             .value.trim();
 
+          // const referralCode = document.getElementById("register-referral")?.value.trim();
+
           let isValid = true;
 
           // First,Last name validation
@@ -387,6 +398,13 @@
             isValid = false;
           }
 
+          const referralCode = document.getElementById("register-referral")?.value.trim();
+          if (referralCode && referralCode.length < 6) {
+            document.getElementById("referralError").innerText =
+              "Invalid referral code format!";
+            isValid = false;
+          }
+          
           //sweetalerts
           if (isValid) {
             fetch("/signup", {
@@ -401,6 +419,7 @@
                 registerEmail: email,
                 registerPhone: phone,
                 registerPassword: password,
+                referralCode
               }),
             })
               .then((res) => res.json())

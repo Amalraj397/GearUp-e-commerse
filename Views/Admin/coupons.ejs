@@ -1,5 +1,5 @@
 <style>
-/* Offer Management  Styles */
+
 .main-content {
   padding: 20px;
   overflow-y: auto;
@@ -282,7 +282,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
-<div class="main-content">
+<div class="main-content" style="margin-left: 10px;">
   <div class="page-header">
     <h1>Coupon Management</h1>
     <a href="/admin/addCoupons" class="btn add-btn">
@@ -382,7 +382,7 @@
         row.innerHTML = `
           <td>${slNo}</td>
           <td>${coupon.couponCode}</td>
-          <td>${coupon.description?.substring(0, 100) || ''}...</td>
+          <td>${coupon.description?.substring(0, 30) || ''}...</td>
           <td>${coupon.discountAmount}</td>
           <td>${coupon.minPurchaseAmount || "-"}</td>
           <td>${coupon.conditions}</td>

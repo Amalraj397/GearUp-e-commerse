@@ -80,6 +80,7 @@ export const updateOrderStatus = async (req, res,next) => {
     }
 
     order.orderStatus = status;
+    order.paymentStatus = "Completed";
 
     order.items.forEach((item) => {
       if (

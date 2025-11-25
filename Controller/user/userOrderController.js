@@ -132,7 +132,6 @@ export const getAddressById = async (req, res, next) => {
   }
 };
 
-
 export const placeOrder = async (req, res, next) => {
   try {
     const { billingDetails, paymentMethod, couponCode } = req.body;
@@ -157,9 +156,11 @@ export const placeOrder = async (req, res, next) => {
     const itemsTotal = processedItems.reduce((sum, item) => sum + item.totalProductprice, 0);
     const festivalOFF = (itemsTotal * 5) / 100;
     const afterfestOFF = itemsTotal - festivalOFF;
+
 // coupon 
     let discountFromCoupon = 0;
     let couponDoc = null;
+    
     if (couponCode && couponCode.trim() !== "") {
       const coupon = await couponSchema.findOne({ couponCode: couponCode.trim(), isActive: true });
       if (coupon) {
@@ -175,7 +176,7 @@ export const placeOrder = async (req, res, next) => {
           couponDoc = coupon;
           await couponSchema.findByIdAndUpdate(coupon._id, { $inc: { usedCount: 1 } });
         } else {
-          return res.status(400).json({ success: false, message: "Coupon expired or limit reached." });
+          return res.status(400).json({ success: false, message: MESSAGES.Coupons.COUPON_LIMIT});
         }
       }
     }
@@ -184,7 +185,17 @@ export const placeOrder = async (req, res, next) => {
     if (afterDiscount < 0) afterDiscount = 0;
     const shippingCharge = afterDiscount < 1999 ? 120 : 0;
     const grandTotalprice = afterDiscount + shippingCharge;
+  
+    //ordr>1000
 
+    if(paymentMethod=== "Cash-On-Delivery" && grandTotalprice>1000){
+       return res
+       .status(STATUS.BAD_REQUEST)
+       .json({
+        success:false,
+        message: MESSAGES.Orders.ORDER_ERR_1000,
+       })
+    }
 
     if (paymentMethod === "wallet") {
      
@@ -193,7 +204,7 @@ export const placeOrder = async (req, res, next) => {
       if (!wallet || wallet.walletBalance < grandTotalprice) {
         return res.status(400).json({
           success: false,
-          message: "Insufficient wallet balance. Please choose another payment method.",
+          message: MESSAGES.Wallet.WALLET_LOW_BALANCE,
         });
       }
 
@@ -231,7 +242,7 @@ export const placeOrder = async (req, res, next) => {
 
       return res.json({
         success: true,
-        message: "Order placed successfully using wallet.",
+        message: MESSAGES.Wallet.ORDER_PLCED,
         orderId: savedOrder._id,
       });
     }
@@ -259,7 +270,7 @@ export const placeOrder = async (req, res, next) => {
 
       return res.json({
         success: true,
-        message: "COD order placed successfully!",
+        message: MESSAGES.Orders.COD_SUCCESS,
         orderId: savedOrder._id,
       });
     }
@@ -401,16 +412,18 @@ export const cancelOrder = async (req, res, next) => {
       (it) => !["Cancelled", "Return-accepted"].includes(it.itemStatus)
     );
 
-    const { refundAmount } = calculateRefund(orderData, activeItems);
+    const { refundAmount } = await calculateRefund(orderData, activeItems);
+    const safeRefund = Number(refundAmount.toFixed(2));
 
+    // update statuses
     orderData.orderStatus = "Cancelled";
     orderData.items.forEach((item) => {
       item.itemStatus = "Cancelled";
     });
 
-  
     await orderData.save();
 
+    // Restock 
     for (const item of activeItems) {
       await productSchema.findByIdAndUpdate(
         item.productId,
@@ -419,16 +432,16 @@ export const cancelOrder = async (req, res, next) => {
       );
     }
 
-
+    // Refund
     if (["Online-razorpay", "wallet"].includes(orderData.paymentMethod)) {
       try {
         await refundToWallet(
           userId,
-          refundAmount,
+          safeRefund,
           orderData._id.toString(),
           "Cancelled Order Refund"
         );
-        // console.log(`Refunded ₹${refundAmount}`);
+        console.log(`Refunded ₹${safeRefund} to wallet on full cancel.`);
       } catch (error) {
         console.error(MESSAGES.Wallet.WALLET_REFUND_ERR, error);
       }
@@ -492,10 +505,14 @@ export const cancelOrderItem = async (req, res, next) => {
       });
     }
 
+    const { refundAmount, newGrandTotal } = await calculateRefund(
+      orderData,
+      [item]
+    );
+    const safeRefund = Number(refundAmount.toFixed(2));
 
-    const { refundAmount, newGrandTotal } = calculateRefund(orderData, [item]);
-  
     item.itemStatus = "Cancelled";
+
     orderData.grandTotalprice = newGrandTotal;
 
     const allCancelled = orderData.items.every(
@@ -510,22 +527,23 @@ export const cancelOrderItem = async (req, res, next) => {
 
     await orderData.save();
 
-  
+    // Restock 
     await productSchema.findByIdAndUpdate(
       item.productId,
       { $inc: { stock: item.quantity } },
       { new: true }
     );
 
+    // Refund 
     if (["Online-razorpay", "wallet"].includes(orderData.paymentMethod)) {
       try {
         await refundToWallet(
           userId,
-          refundAmount,
+          safeRefund,
           orderData._id.toString(),
           "Cancelled Order Refund"
         );
-        console.log(`Refunded ₹${refundAmount} for cancelled item.`);
+        console.log(`Refunded ₹${safeRefund} for cancelled item.`);
       } catch (error) {
         console.error(MESSAGES.Wallet.WALLET_REFUND_ERR, error);
       }
@@ -540,7 +558,6 @@ export const cancelOrderItem = async (req, res, next) => {
     next(error);
   }
 };
-
 
 export const returnOrder = async (req, res, next) => {
   const userId = req.session.user?.id;

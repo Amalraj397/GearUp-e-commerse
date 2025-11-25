@@ -47,6 +47,7 @@ import {
   getUserDashboard,
   geteditUserprofile,
   updateUserprofile,
+  referAndearn,
   
 } from "../Controller/user/userProfileController.js";
 
@@ -164,6 +165,7 @@ userRoute.get("/productDetail/:id", getproductDetailpage);
 // --------------userprofile managament section---------------
 userRoute.get("/userDashboard", getUserDashboard);
 userRoute.get("/getEditProfile", geteditUserprofile);
+userRoute.get("/referandearn", referAndearn);
 userRoute.put("/EditUserprofile",uploadMiddleware("Users").single("userProfileImage"),updateUserprofile);
 
 // ---------- email verify-----------

@@ -1,30 +1,41 @@
 import Wallet from "../Models/walletModel.js";
 import { MESSAGES } from "../utils/messagesConfig.js";
 
-export const createWalletForUser = async (userId) => {
+
+export const createWalletForUser = async (userId, amount = 1000, description = "Welcome Bonus credited") => {
   try {
-    const existingWallet = await Wallet.findOne({ userDetails: userId });
+    let wallet = await Wallet.findOne({ userDetails: userId });
 
-    if (!existingWallet) {
-      const welcomeBonus = 1000;
-      const transactionId = `WELCOME-${userId.toString().slice(-5)}-${Date.now()}`;
-
+    if (!wallet) {
+      const transactionId = `TXN-${userId.toString().slice(-5)}-${Date.now()}`;
       const wallet = new Wallet({
         userDetails: userId,
-        walletBalance: welcomeBonus,
+        walletBalance: amount,
         transactions: [
           {
             transactionType: "credit",
-            transactionAmount: welcomeBonus,
+            transactionAmount: amount,
             transactionId,
-            transactionDescription: "Amount Credited",
+            transactionDescription: description,
           },
         ],
       });
 
       await wallet.save();
-      console.log(" Wallet created with 1000 welcome bonus:", userId);
+      console.log(`Wallet created & ₹${amount} Credited as: ${description}`);
+      return;
     }
+
+    wallet.walletBalance += amount;
+    wallet.transactions.push({
+      transactionType: "credit",
+      transactionAmount: amount,
+      transactionId: `TXN-${userId.toString().slice(-5)}-${Date.now()}`,
+      transactionDescription: description,
+    });
+
+    await wallet.save();
+    console.log(`Wallet updated: ₹${amount} added for ${description}`);
   } catch (error) {
     console.error(MESSAGES.Wallet.WALLET_CREATE_ERR, error);
   }

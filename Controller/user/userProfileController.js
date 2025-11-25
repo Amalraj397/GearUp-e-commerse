@@ -3,6 +3,7 @@
 import userschema from "../../Models/userModel.js";
 import addressSchema from "../../Models/userAddressModel.js";
 import securePassword from "../../utils/hashPass.js";
+import userReferralSchema from "../../Models/userReferralModel.js";
 import bcrypt from "bcrypt";
 
 import { MESSAGES } from "../../utils/messagesConfig.js";
@@ -53,7 +54,7 @@ export const geteditUserprofile = async (req, res, next) => {
       .json({ message: MESSAGES.Users.NO_USER });
     }
 
-    console.log("userdata in userdashboard  getting user edit page::", userData);  //D
+    // console.log("userdata in userdashboard  getting user edit page::", userData);  //D
 
     res.render("editUserprofile.ejs", {
       userData,
@@ -63,7 +64,6 @@ export const geteditUserprofile = async (req, res, next) => {
     next(error)
   }
 };
-
 
 export const updateUserprofile = async (req, res, next) => {
   try {
@@ -92,20 +92,17 @@ export const updateUserprofile = async (req, res, next) => {
       confirmNewPassword,
     } = req.body;
 
-    //  Update basic profile details (if provided)
     if (firstName) userData.firstName = firstName;
     if (lastName) userData.lastName = lastName;
     // if (email) userData.email = email;
     if (phone) userData.phone = phone;
 
-    //  Update profile photo (if file or direct URL provided)
     if (req.file && req.file.path) {
       userData.profilePicture = req.file.path;
     } else if (req.body.userProfileImage) {
       userData.profilePicture = req.body.userProfileImage;
     }
 
-    //  Update password only if all password fields are filled
     if (oldPassword || newPassword || confirmNewPassword) {
       // if (!oldPassword || !newPassword || !confirmNewPassword) {
       //   return res
@@ -146,3 +143,34 @@ export const updateUserprofile = async (req, res, next) => {
   }
 };
   
+export const referAndearn = async (req, res, next ) => {
+  try {
+      const userId = req.session.user?.id;
+
+      if (!userId) return res.redirect("/login");
+  
+      const userData = await userschema.findById(userId);
+      
+      if (!userData) {
+        return res  
+        .status(STATUS.NOT_FOUND)
+        .json({ message: MESSAGES.Users.NO_USER });
+      }
+
+    const referral = await userReferralSchema
+                    .findOne({ userId })
+                    .populate("referredUsers");
+
+    const totalEarnings = referral?.referredUsers.length * 201;
+    
+    res.render("referAndearn.ejs", {
+      referralCode: referral.referralCode,
+      referredUsers: referral.referredUsers,
+      totalEarnings,
+    });
+    
+  } catch (error) {
+    console.log(MESSAGES.System.PAGE_NOT_FOUND, error);
+    next(error);
+  }
+};

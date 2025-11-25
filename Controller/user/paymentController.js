@@ -33,6 +33,7 @@ export const paymentRazorpay = async (req, res) => {
       },
       orderId: order.id
     });
+    console.log("orderPaymentdata:::",orderPaymentdata)
   } catch (error) {
     console.error("Razorpay Order Error:", error);
     res.status(500).json({ success: false, message: "Order creation failed" });

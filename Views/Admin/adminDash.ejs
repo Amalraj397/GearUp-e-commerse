@@ -1,414 +1,440 @@
-
 <%-include("../../Views/Partials/Admin/header")%>
-         <!-- Dashboard Content  --> 
-            <div class="dashboard">
-                <div class="dashboard-header">
-                    <h1>AutoMinima | Dashboard</h1>
-                    <button class="create-report-btn">
-                        <i class="fas fa-plus"></i> Create Report
-                    </button>
-                </div>
-                <p class="dashboard-subtitle">Whole data about your business here</p>
 
-                <!-- Stats Cards -->
-                <div class="stats-cards">
-                    <div class="card">
-                        <div class="card-icon revenue-icon">
-                            ₹
-                        </div>
-                        <div class="card-content">
-                            <h3>Revenue</h3>
-                            <h2>₹155,4596.5</h2>
-                            <p>Shipping fees are not included</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon orders-icon">
-                            <i class="fas fa-shopping-cart"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Orders</h3>
-                            <h2>3,668</h2>
-                            <p>Excluding orders in transit</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon products-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Products</h3>
-                            <h2>2,856</h2>
-                            <p>In 9 Categories</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-icon earnings-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <div class="card-content">
-                            <h3>Monthly Earning</h3>
-                            <h2>₹123,982</h2>
-                            <p>Based in your local time</p>
-                        </div>
-                    </div>
-                </div>
+<!-- Dashboard Content  -->
+<div class="dashboard">
+  <div class="dashboard-header">
+    <h1>AutoMinima | Dashboard</h1>
 
-                <!-- Charts Section -->
-                <div class="charts-container">
-                    <div class="chart-card large">
-                        <h3>Sale Statistics</h3>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <span class="legend-color sales-color"></span>
-                                <span>Sales</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color visitors-color"></span>
-                                <span>Visitors</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color products-color"></span>
-                                <span>Products</span>
-                            </div>
-                        </div>
-                        <canvas id="salesChart"></canvas>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Revenue Base on Area</h3>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <span class="legend-color us-color"></span>
-                                <span>US</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color europe-color"></span>
-                                <span>Europe</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color asia-color"></span>
-                                <span>Asian</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color africa-color"></span>
-                                <span>Africa</span>
-                            </div>
-                        </div>
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
+    <a href="/admin/salesReport">
+      <button class="create-report-btn">
+        <i class="fas fa-plus"></i> Create Report
+      </button>
+    </a>
 
-                <!-- Bottom Section -->
-                <div class="bottom-section">
-                    <div class="chart-card">
-                        <h3>New Members</h3>
-                        <div class="members-list">
-                            <div class="member-item">
-                                <img src="https://via.placeholder.com/40" alt="Member">
-                                <div class="member-info">
-                                    <h4>John Smith</h4>
-                                    <p>Web Developer</p>
-                                </div>
-                                <span class="member-date">Today</span>
-                            </div>
-                            <div class="member-item">
-                                <img src="https://via.placeholder.com/40" alt="Member">
-                                <div class="member-info">
-                                    <h4>Sarah Johnson</h4>
-                                    <p>UI Designer</p>
-                                </div>
-                                <span class="member-date">Yesterday</span>
-                            </div>
-                            <div class="member-item">
-                                <img src="https://via.placeholder.com/40" alt="Member">
-                                <div class="member-info">
-                                    <h4>Michael Brown</h4>
-                                    <p>Marketing</p>
-                                </div>
-                                <span class="member-date">2 days ago</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Recent Activities</h3>
-                        <div class="activities-list">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <h4>New Order #12345</h4>
-                                    <p>John Smith ordered iPhone 13 Pro</p>
-                                    <span class="activity-time">2 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <h4>New User Registration</h4>
-                                    <p>Sarah Johnson joined as a member</p>
-                                    <span class="activity-time">5 hours ago</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <i class="fas fa-comment"></i>
-                                </div>
-                                <div class="activity-info">
-                                    <h4>New Review</h4>
-                                    <p>Michael Brown left a 5-star review</p>
-                                    <span class="activity-time">1 day ago</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Marketing Channel</h3>
-                        <div class="marketing-channels">
-                            <div class="channel-item">
-                                <div class="channel-info">
-                                    <span>Facebook</span>
-                                    <span>15%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 15%; background-color: #ff8c00;"></div>
-                                </div>
-                            </div>
-                            <div class="channel-item">
-                                <div class="channel-info">
-                                    <span>Instagram</span>
-                                    <span>35%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 35%; background-color: #ff8c00;"></div>
-                                </div>
-                            </div>
-                            <div class="channel-item">
-                                <div class="channel-info">
-                                    <span>Google</span>
-                                    <span>45%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 45%; background-color: #ff8c00;"></div>
-                                </div>
-                            </div>
-                            <div class="channel-item">
-                                <div class="channel-info">
-                                    <span>Twitter</span>
-                                    <span>5%</span>
-                                </div>
-                                <div class="progress-bar">
-                                    <div class="progress" style="width: 5%; background-color: #ff8c00;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+  </div>
+  <p class="dashboard-subtitle">Whole data about your business here</p>
+
+  <!-- Stats Cards -->
+  <div class="stats-cards">
+    <div class="card">
+      <div class="card-icon revenue-icon">₹</div>
+      <div class="card-content">
+        <h3>Total Revenue</h3>
+        <h2>₹<%= totalRevenue.toLocaleString("en-IN") %></h2>
+        <p>Shipping charge not included</p>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Sidebar Toggle
-    const sidebarToggle = document.getElementById('sidebar-toggle');
-    const sidebar = document.querySelector('.sidebar');
-    
-    sidebarToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('active');
-    });
+    <div class="card">
+      <div class="card-icon orders-icon"><i class="fas fa-shopping-cart"></i></div>
+      <div class="card-content">
+        <h3>Total Orders</h3>
+        <h2><%= totalOrders %></h2>
+        <p>
+          Completed: <%= completedOrders %> |
+          Pending: <%= pendingOrders %> |
+          Cancelled: <%= cancelledOrders %>
+        </p>
+      </div>
+    </div>
 
-    // Dropdown functionality
-    const dropdownBtn = document.querySelector('.dropdown-btn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-    
-    dropdownBtn.addEventListener('click', function() {
-        dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
-    });
+    <div class="card">
+      <div class="card-icon products-icon"><i class="fas fa-box"></i></div>
+      <div class="card-content">
+        <h3>Total Products</h3>
+        <h2><%= totalProducts %></h2>
+        <p>Brands: <%= totalBrands %> | Categories: <%= totalCategories %></p>
+      </div>
+    </div>
 
-    // Close dropdown when clicking outside
-    window.addEventListener('click', function(event) {
-        if (!event.target.matches('.dropdown-btn') && !event.target.matches('.admin-avatar') && !event.target.matches('.fa-chevron-down')) {
-            if (dropdownContent.style.display === 'block') {
-                dropdownContent.style.display = 'none';
-            }
-        }
-    });
+    <div class="card">
+      <div class="card-icon earnings-icon"><i class="fas fa-chart-line"></i></div>
+      <div class="card-content">
+        <h3>Monthly Earnings</h3>
+        <h2>₹<%= monthlyEarnings.toLocaleString("en-IN") %></h2>
+        <p>Total Users: <%= totalUsers %></p>
+      </div>
+    </div>
+  </div>
 
-    // Sales Chart
-    const salesCtx = document.getElementById('salesChart').getContext('2d');
-    const salesChart = new Chart(salesCtx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Sales',
-                    data: [30, 15, 5, 10, 20, 30, 22, 30, 25, 18, 15, 10],
-                    borderColor: '#4299e1',
-                    backgroundColor: 'rgba(66, 153, 225, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'Visitors',
-                    data: [20, 25, 18, 8, 15, 35, 40, 35, 30, 25, 22, 16],
-                    borderColor: '#48bb78',
-                    backgroundColor: 'rgba(72, 187, 120, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'Products',
-                    data: [15, 20, 25, 30, 25, 20, 15, 20, 25, 30, 35, 20],
-                    borderColor: '#ed8936',
-                    backgroundColor: 'rgba(237, 137, 54, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    backgroundColor: '#222831',
-                    titleColor: '#e6e6e6',
-                    bodyColor: '#e6e6e6',
-                    borderColor: '#2d3748',
-                    borderWidth: 1
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        color: 'rgba(45, 55, 72, 0.5)'
-                    },
-                    ticks: {
-                        color: '#a0a0a0'
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'rgba(45, 55, 72, 0.5)'
-                    },
-                    ticks: {
-                        color: '#a0a0a0'
-                    }
-                }
-            }
-        }
-    });
+  <!-- ROW 1: Sales Statistics | Revenue Analytics -->
+  <div class="charts-row charts-row-1">
+    <!-- Sales Statistics -->
+    <div class="chart-card large">
+      <div class="chart-header">
+        <h3>Sales Statistics (<%= currentYear %>)</h3>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="salesChart"></canvas>
+      </div>
+    </div>
 
-    // Revenue Chart
-    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-    const revenueChart = new Chart(revenueCtx, {
-        type: 'bar',
-        data: {
-            labels: ['900', '1200', '1400', '1800'],
-            datasets: [
-                {
-                    label: 'US',
-                    data: [200, 300, 450, 600],
-                    backgroundColor: '#4299e1',
-                    borderRadius: 4
-                },
-                {
-                    label: 'Europe',
-                    data: [300, 400, 350, 500],
-                    backgroundColor: '#48bb78',
-                    borderRadius: 4
-                },
-                {
-                    label: 'Asian',
-                    data: [150, 250, 300, 400],
-                    backgroundColor: '#ed8936',
-                    borderRadius: 4
-                },
-                {
-                    label: 'Africa',
-                    data: [100, 150, 100, 200],
-                    backgroundColor: '#d53f8c',
-                    borderRadius: 4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    backgroundColor: '#222831',
-                    titleColor: '#e6e6e6',
-                    bodyColor: '#e6e6e6',
-                    borderColor: '#2d3748',
-                    borderWidth: 1
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        color: 'rgba(45, 55, 72, 0.5)'
-                    },
-                    ticks: {
-                        color: '#a0a0a0'
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'rgba(45, 55, 72, 0.5)'
-                    },
-                    ticks: {
-                        color: '#a0a0a0'
-                    }
-                }
-            }
-        }
-    });
+    <!-- Revenue Analytics -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Revenue Analytics</h3>
+        <select id="revenueFilter">
+          <option value="daily" >Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="revenueChart"></canvas>
+      </div>
+    </div>
+  </div>
 
-    // Pie Chart for Marketing Channels
-    const marketingData = {
-        facebook: 15,
-        instagram: 35,
-        google: 45,
-        twitter: 5
+  <!-- ROW 2: Monthly Target | Order Status Overview -->
+  <div class="charts-row charts-row-2">
+
+    <!-- Monthly Target -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Monthly Target</h3>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="targetGauge"></canvas>
+      </div>
+      <div class="target-stats">
+        <h2><span id="targetPercent"style="color:#ef7c00;">0%</span></h2>
+        <p id="targetNote"></p>
+      </div>
+    </div>
+
+    <!-- Order Status Overview -->
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Order Status Overview</h3>
+      </div>
+      <div class="chart-wrapper">
+        <canvas id="orderStatusChart"></canvas>
+      </div>
+      <ul class="order-status-legend">
+        <li><span class="dot completed"></span> Completed: <%= completedOrders %></li>
+        <li><span class="dot pending"></span> Pending: <%= pendingOrders %></li>
+        <li><span class="dot cancelled"></span> Cancelled: <%= cancelledOrders %></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ROW 3: New Users | Recent Orders | Best Sellers -->
+  <div class="bottom-section">
+
+    <!-- New Users -->
+    <div class="chart-card">
+      <h3>New Users</h3>
+      <div class="members-list">
+        <% newMembers.forEach(member => { %>
+        <div class="member-item">
+          <div class="member-avatar letter-avatar">
+            <%= member.firstName.charAt(0) %>
+          </div>
+          <div class="member-info">
+            <h4><%= member.firstName + " " + member.lastName %></h4>
+            <p><%= member.email %></p>
+          </div>
+          <span class="member-date"><%= member.createdAt.toDateString() %></span>
+        </div>
+        <% }) %>
+        <% if (newMembers.length === 0) { %>
+        <p>No new members yet</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="chart-card">
+      <h3>Recent Activities</h3>
+      <div class="activities-list">
+        <% recentOrders.forEach(o => { %>
+        <div class="activity-item">
+          <div class="activity-icon"><i class="fas fa-shopping-bag"></i></div>
+          <div class="activity-info">
+            <h4>Order <%= o.orderNumber %></h4>
+
+            <p>
+              <strong><%= o.billingDetails?.name %></strong>
+              (<%= o.billingDetails?.email %>)
+              — ₹<%= o.grandTotalprice.toLocaleString("en-IN") %>
+            </p>
+
+            <p>
+              Status:
+              <span style="color: <%= o.orderStatus === 'Returned' ? 'red' : '#28a745' %>;">
+                <%= o.orderStatus %>
+              </span>
+              • Payment: <%= o.paymentMethod %>
+            </p>
+
+            <span class="activity-time"><%= o.createdAt.toDateString() %></span>
+          </div>
+        </div>
+        <% }) %>
+
+        <% if (recentOrders.length === 0) { %>
+        <p>No recent orders</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Best Selling Products -->
+    <div class="chart-card">
+      <h3>Best Selling Products</h3>
+      <div class="best-item-list">
+        <% bestSellingProducts.forEach((p, i) => { %>
+        <div class="best-item">
+          <img src="<%= p.image %>" alt="product" class="best-img" />
+          <div>
+            <h4><%= i+1 %>. <%= p.name %></h4>
+            <p><%= p.totalQty %> sold</p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Best Selling Brands -->
+    <div class="chart-card">
+      <h3>Best Selling Brands</h3>
+      <div class="best-item-list">
+        <% bestSellingBrands.forEach((b, i) => { %>
+        <div class="best-item">
+          <img src="<%= b.image %>" alt="brand" class="best-img" />
+          <div>
+            <h4><%= i+1 %>. <%= b.name %></h4>
+            <p><%= b.totalQty %> sold</p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Best Selling Categories -->
+    <div class="chart-card">
+      <h3>Best Selling Categories</h3>
+      <div class="best-item-list">
+        <% bestSellingCategories.forEach((c, i) => { %>
+        <div class="best-item no-img">
+          <div>
+            <h4><%= i+1 %>. <%= c.name %></h4>
+            <p><%= c.totalQty %> sold</p>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+  </div> <!-- bottom-section -->
+
+</div> <!-- .dashboard -->
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    Chart.defaults.animation = {
+      duration: 1500,
+      easing: "easeOutQuart",
     };
+    Chart.defaults.color = "#E6E6E6";
+    Chart.defaults.borderColor = "#3a3f47";
 
-    // Update progress bars for marketing channels
-    Object.entries(marketingData).forEach(([channel, value]) => {
-        const channelElements = document.querySelectorAll('.channel-item');
-        channelElements.forEach(element => {
-            const channelName = element.querySelector('.channel-info span:first-child').textContent.toLowerCase();
-            if (channelName.toLowerCase() === channel.toLowerCase()) {
-                const progressBar = element.querySelector('.progress');
-                progressBar.style.width = `${value}%`;
+    const yearlySalesData = <%- JSON.stringify(yearlySalesData) %>;
+    let currentMonthRevenue = <%= monthlyEarnings %>;
+    let target = 50000;
+    let progress = currentMonthRevenue > 0 ?
+      Math.min(100, Math.round((currentMonthRevenue / target) * 100)) :
+      0;
+
+    let revenueChart;
+
+    function initSalesChart() {
+      const salesCanvas = document.getElementById("salesChart");
+      if (!salesCanvas) return;
+      const salesCtx = salesCanvas.getContext("2d");
+
+      new Chart(salesCtx, {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+          datasets: [{
+            label: "Sales (₹)",
+            data: yearlySalesData,
+            borderColor: "#ff8c00",
+            backgroundColor: "rgba(255, 140, 0, 0.18)",
+            fill: true,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 1500,
+            easing: "easeOutQuart"
+          }
+        }
+      });
+    }
+
+    function loadTargetGauge(progress, revenue, target) {
+      const gaugeCanvas = document.getElementById("targetGauge");
+      if (!gaugeCanvas) return;
+
+      new Chart(gaugeCanvas, {
+        type: "doughnut",
+        data: {
+          datasets: [{
+            data: [progress, 100 - progress],
+            backgroundColor: ["#ff8a00", "#f3e7d6"],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          cutout: "75%",
+          animation: {
+            animateScale: true,
+            animateRotate: true,
+            duration: 1500,
+            easing: "easeOutQuart"
+          },
+          plugins: {
+            tooltip: {
+              enabled: false
+            },
+            legend: {
+              display: false
             }
-        });
-    });
+          }
+        }
+      });
 
-    // Handle window resize for responsive charts
-    window.addEventListener('resize', function() {
-        salesChart.resize();
-        revenueChart.resize();
-    });
-});
-    </script>
+      const percentEl = document.getElementById("targetPercent");
+      const noteEl = document.getElementById("targetNote");
+      if (percentEl) percentEl.innerText = progress + "%";
+      if (noteEl) {
+        noteEl.innerText =
+          `Revenue: ₹${revenue.toLocaleString("en-IN")} / Target: ₹${target.toLocaleString("en-IN")}`;
+      }
+    }
+
+    function loadRevenueChart(type = "monthly") {
+      fetch(`/admin/revenue-stats?type=${type}`)
+        .then(res => res.json())
+        .then(data => {
+          const canvas = document.getElementById("revenueChart");
+          if (!canvas) return;
+          const ctx = canvas.getContext("2d");
+
+          if (revenueChart) {
+            revenueChart.destroy();
+          }
+
+          setTimeout(() => {
+            revenueChart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: data.labels,
+                datasets: [{
+                    label: "Revenue (₹)",
+                    data: data.revenue,
+                    borderColor: "#ff8a00",
+                    backgroundColor: "rgba(255, 138, 0, 0.15)",
+                    fill: true,
+                    tension: 0.4
+                  },
+                  {
+                    label: "Orders",
+                    data: data.orders,
+                    borderColor: "#ffc691",
+                    borderDash: [5, 5],
+                    tension: 0.4
+                  }
+                ]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: {
+                  duration: 1500,
+                  easing: "easeOutQuart"
+                }
+              }
+            });
+          }, 10);
+        })
+        .catch(err => console.error("Revenue chart error:", err));
+    }
+
+    function initOrderStatusChart() {
+      const statusCanvas = document.getElementById("orderStatusChart");
+      if (!statusCanvas) return;
+
+      fetch("/admin/order-status-stats")
+        .then(res => res.json())
+        .then(data => {
+          new Chart(statusCanvas, {
+            type: "doughnut",
+            data: {
+              labels: data.labels,
+              datasets: [{
+                data: data.counts,
+                backgroundColor: [
+                  "#286a2aff", // Delivered
+                  "#FF9800", // Pending
+                  "#9C27B0", // Confirmed
+                  "#03A9F4", // Shipped
+                  "#F44336", // Cancelled
+                  "#7dde16ff" // Returned
+                ],
+                borderWidth: 0
+              }]
+            },
+            options: {
+              cutout: "60%",
+              animation: {
+                animateScale: true,
+                animateRotate: true,
+                duration: 500,
+                easing: "easeOutQuart"
+              },
+              plugins: {
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    boxWidth: 12
+                  }
+                }
+              }
+            }
+          });
+        })
+        .catch(err => console.error("Order status chart error:", err));
+    }
+
+    const revenueFilter = document.getElementById("revenueFilter");
+    if (revenueFilter) {
+      revenueFilter.addEventListener("change", (e) => {
+        loadRevenueChart(e.target.value);
+      });
+    }
+
+    setTimeout(() => {
+      initSalesChart();
+      loadTargetGauge(progress, currentMonthRevenue, target);
+      loadRevenueChart();
+      initOrderStatusChart();
+    }, 200);
+  });
+</script>
+
 </body>
-</html> 
 
-<!-- <%-include("../../Views/Partials/Admin/footer")%> -->
-
+</html>

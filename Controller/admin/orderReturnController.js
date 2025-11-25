@@ -7,7 +7,7 @@ import { calculateRefund } from "../../utils/calculateRefund.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 import { STATUS } from "../../utils/statusCodes.js";
 
-// ---------------- Get Order Return Page ----------------
+// -------------OrderReturn 
 export const getOrderReturnPage = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -70,6 +70,111 @@ export const getOrderReturnPage = async (req, res, next) => {
   }
 };
 
+// export const approveReturn = async (req, res, next) => {
+//   try {
+//     const { returnId } = req.params;
+
+//     const returnData = await orderReturnSchema.findById(returnId);
+//     if (!returnData) {
+//       return res
+//         .status(STATUS.NOT_FOUND)
+//         .json({ success: false, message: MESSAGES.OrderReturn.NOT_FOUND });
+//     }
+
+//     if (returnData.returnStatus === "Approved") {
+//       return res.status(STATUS.BAD_REQUEST).json({
+//         success: false,
+//         message: "Return already approved and processed.",
+//       });
+//     }
+
+//     const orderData = await orderSchema.findById(returnData.orderId);
+//     if (!orderData) {
+//       return res
+//         .status(STATUS.NOT_FOUND)
+//         .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
+//     }
+//     const itemsToRefund = [];
+
+//     orderData.items.forEach((item) => {
+//       const match = returnData.returnItems.find(
+//         (rItem) =>
+//           item.productId.toString() === rItem.productId.toString() &&
+//           item.variantName === rItem.variantName &&
+//           item.scale === rItem.scale &&
+//           !["Cancelled", "Return-accepted"].includes(item.itemStatus)
+//       );
+//       if (match) itemsToRefund.push(item);
+//     });
+
+//     if (itemsToRefund.length === 0) {
+//       return res.status(STATUS.BAD_REQUEST).json({
+//         success: false,
+//         message: "No valid items found to refund for this return request.",
+//       });
+//     }
+//     const { refundAmount, newGrandTotal } = await calculateRefund(
+//       orderData,
+//       itemsToRefund
+//     );
+
+//     orderData.items.forEach((item) => {
+//       const match = itemsToRefund.find(
+//         (it) => it._id.toString() === item._id.toString()
+//       );
+//       if (match) item.itemStatus = "Return-accepted";
+//     });
+
+//     orderData.grandTotalprice = Number(newGrandTotal.toFixed(2));
+
+//     const allReturnedOrCancelled = orderData.items.every((it) =>
+//       ["Return-accepted", "Cancelled"].includes(it.itemStatus)
+//     );
+
+//     orderData.orderStatus = allReturnedOrCancelled
+//       ? "Returned"
+//       : "Partial-Return";
+
+//     await orderData.save();
+
+
+//     returnData.returnStatus = "Approved";
+//     returnData.productRefundAmount = Number(refundAmount.toFixed(2));
+//     await returnData.save();
+
+
+//     for (const item of itemsToRefund) {
+//       await productSchema.findByIdAndUpdate(
+//         item.productId,
+//         { $inc: { stock: item.quantity } },
+//         { new: true }
+//       );
+//     }
+
+//     try {
+//       await refundToWallet(
+//         orderData.userDetails,
+//         refundAmount,
+//         orderData._id.toString(),
+//         "Returned Order Refund"
+//       );
+    
+//     } catch (refundErr) {
+//       console.error(MESSAGES.Wallet.WALLET_REFUND_ERR, refundErr);
+//     }
+
+//     return res.json({
+//       success: true,
+//       message: MESSAGES.OrderReturn.APPROVED,
+//       returnUpdate: returnData,
+//     });
+//   } catch (error) {
+//     console.error(MESSAGES.OrderReturn.APPROVE_FAILED, error);
+//     next(error);
+//   }
+// };
+
+
 export const approveReturn = async (req, res, next) => {
   try {
     const { returnId } = req.params;
@@ -94,8 +199,8 @@ export const approveReturn = async (req, res, next) => {
         .status(STATUS.NOT_FOUND)
         .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
     }
-    const itemsToRefund = [];
 
+    const itemsToRefund = [];
     orderData.items.forEach((item) => {
       const match = returnData.returnItems.find(
         (rItem) =>
@@ -113,11 +218,15 @@ export const approveReturn = async (req, res, next) => {
         message: "No valid items found to refund for this return request.",
       });
     }
+
+    //  refund
     const { refundAmount, newGrandTotal } = await calculateRefund(
       orderData,
       itemsToRefund
     );
+    const safeRefund = Number(refundAmount.toFixed(2));
 
+    // update statuses
     orderData.items.forEach((item) => {
       const match = itemsToRefund.find(
         (it) => it._id.toString() === item._id.toString()
@@ -125,7 +234,7 @@ export const approveReturn = async (req, res, next) => {
       if (match) item.itemStatus = "Return-accepted";
     });
 
-    orderData.grandTotalprice = Number(newGrandTotal.toFixed(2));
+    orderData.grandTotalprice = newGrandTotal;
 
     const allReturnedOrCancelled = orderData.items.every((it) =>
       ["Return-accepted", "Cancelled"].includes(it.itemStatus)
@@ -137,12 +246,11 @@ export const approveReturn = async (req, res, next) => {
 
     await orderData.save();
 
-
     returnData.returnStatus = "Approved";
-    returnData.productRefundAmount = Number(refundAmount.toFixed(2));
+    returnData.productRefundAmount = safeRefund;
     await returnData.save();
 
-
+    // Restock
     for (const item of itemsToRefund) {
       await productSchema.findByIdAndUpdate(
         item.productId,
@@ -151,16 +259,19 @@ export const approveReturn = async (req, res, next) => {
       );
     }
 
+    // refund
     try {
       await refundToWallet(
         orderData.userDetails,
-        refundAmount,
+        safeRefund,
         orderData._id.toString(),
         "Returned Order Refund"
       );
-    
+      console.log(
+        `Refunded ₹${safeRefund} to wallet for approved return ${returnId}`
+      );
     } catch (refundErr) {
-      console.error(MESSAGES.Wallet.WALLET_REFUND_ERR, refundErr);
+      console.error("Wallet refund failed:", refundErr);
     }
 
     return res.json({
@@ -173,6 +284,7 @@ export const approveReturn = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const rejectReturn = async (req, res, next) => {
   try {

@@ -2,6 +2,7 @@ export const MESSAGES = {
   System: {
 
     LANDING_ERR: "Error occured in loading LANDING-PAGE",
+    ADMIN_DASH_ERR:"Error occured in loading Admin Dashboard",
     SIGNUP_ERR: "Error occured in loading SIGNUP-PAGE",
     SUCCESS: "Operation successful",
     CREATED: "Resource created successfully",
@@ -88,6 +89,9 @@ export const MESSAGES = {
     CANCEL_SUCCESS:"Product cancelled successfully" ,
     CANCEL_FAIL: "This product is already cancelled",
     CANNOT_CANCEL:"This cannot be cancelled after shipping/delivery",
+
+    ORDER_ERR_1000:"Cash on Delivery is not available for orders above ₹1000. Please choose another payment method.",
+    COD_SUCCESS:"COD order placed successfully!",
  
   },
 
@@ -118,6 +122,7 @@ export const MESSAGES = {
     ADD_SUCCESS:"offer added successfully.",
     FETCH_ERR:"error in fetchiung coupons",
     COUPON_APPLY_ERR:"An error Occured  while Applying Coupon..! please try again.",
+    COUPON_LIMIT:"Coupon expired or limit reached." ,
     
   },
 
@@ -136,7 +141,8 @@ export const MESSAGES = {
     WALLET_PAGE_ERR:"An error Occured while Loading the User Wallet page.! please try again.",
     WALLET_HISTRY_PAGE_ERR:"An error Occured while Loading Wallet History..!please try again.",
     WALLET_REFUND_ERR:"An error Occured while refunding orderAmount to user Wallet..! please try again.",
-
+    WALLET_LOW_BALANCE:"Insufficient wallet balance. Please choose another payment method.",
+    ORDER_PLCED:"Order placed successfully using wallet."
   },
 
   Users: {

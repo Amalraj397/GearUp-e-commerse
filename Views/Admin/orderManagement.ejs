@@ -250,7 +250,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
-    <div class="main-container">
+    <div class="main-container" >
         <!-- Header Section -->
         <div class="header-section">
             <h1 class="page-title">Order Management</h1>
@@ -342,7 +342,7 @@
         const orders = <%- JSON.stringify(orders) %>;
 
         let currentPage = 1;
-        const ordersPerPage = 7;
+        const ordersPerPage = 10;
         let filteredOrders = [...orders];
 
         // Initialize the page
