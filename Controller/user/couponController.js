@@ -8,7 +8,8 @@ import { MESSAGES } from "../../utils/messagesConfig.js";
 export const getAvailableCoupons = async (req, res, next) => {
   try {
     //  console.log(" getCoupon conmtroller;;;;;;;;")
-    const userId = req.session.user?._id;
+    const userId = req.session.user?.id; 
+
     const currentDate = new Date();
 
     const [coupons, orderCount] = await Promise.all([
@@ -17,10 +18,12 @@ export const getAvailableCoupons = async (req, res, next) => {
         usageLimit: { $gt: 0 },
         isActive: true
       }).sort({ createdAt: -1 }).lean(),
-      orderSchema.countDocuments({ userId })
+        orderSchema.countDocuments({ userDetails: userId })
     ]);
 
     const isFirstPurchase = orderCount === 0;
+
+    console.log("isFirstPurchase ::", isFirstPurchase);
 
     const annotatedCoupons = coupons.map(coupon => {
       let isEligible = true;
@@ -43,6 +46,7 @@ export const getAvailableCoupons = async (req, res, next) => {
       coupons: annotatedCoupons,
       isFirstPurchase
     });
+    console.log("isFirstPurchase ::", isFirstPurchase);
   } catch (error) {
     console.error("Error fetching coupons:", error);
     next(error);
@@ -52,7 +56,8 @@ export const getAvailableCoupons = async (req, res, next) => {
 export const applyCoupon = async (req, res, next) => {
   try {
     const { couponCode, cartTotal } = req.body;
-    const userId = req.session.user?._id;
+    const userId = req.session.user?.id; 
+    console.log("userId in applyCoupon ::::::", userId);
 
     if (!couponCode || !cartTotal) {
       return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "Invalid request data" });
@@ -72,15 +77,23 @@ export const applyCoupon = async (req, res, next) => {
     }
 
     //limit
+    // const userUsageCount = await orderSchema.countDocuments({
+    //   userId,
+    //   "coupon.couponCode": couponCode,
+    // });
+
     const userUsageCount = await orderSchema.countDocuments({
-      userId,
-      "coupon.couponCode": couponCode,
+      userDetails: userId,
+      couponApplied: coupon._id,
     });
+
     if (userUsageCount >= coupon.userLimit) {
       return res.status(STATUS.BAD_REQUEST).json({ success: false, message: "You already used this coupon" });
     }
 
-    const userOrderCount = await orderSchema.countDocuments({ userId });
+    const userOrderCount = await orderSchema.countDocuments({ userDetails: userId });
+
+    console.log("userOrderCount:::::::", userOrderCount);
 
     if (coupon.conditions === "first_purchase" && userOrderCount > 0) {
       return res.status(STATUS.BAD_REQUEST).json({
@@ -96,7 +109,6 @@ export const applyCoupon = async (req, res, next) => {
       });
     }
 
-
     const discountAmount = coupon.discountAmount;
     const newTotal = Math.max(cartTotal - discountAmount, 0);
 
@@ -111,6 +123,8 @@ export const applyCoupon = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 
  

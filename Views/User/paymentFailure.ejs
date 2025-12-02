@@ -667,7 +667,6 @@
           setTimeout(() => { btn.style.transform = 'scale(1)'; }, 150);
 
           try {
-            // 🟩 1️⃣ Create a new Razorpay order for retry
             const res = await fetch("/payment/retry-payment", { method: "POST" });
             const data = await res.json();
         
@@ -682,7 +681,6 @@
               return;
             }
         
-            // 🟩 2️⃣ Set up Razorpay options
             const options = {
               key: data.key,
               amount: data.amount,
@@ -694,7 +692,6 @@
             
               handler: async function (response) {
                 try {
-                  // 🟩 3️⃣ Verify the retry payment
                   const verifyRes = await fetch("/payment/verify-payment", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -703,8 +700,8 @@
                       razorpay_payment_id: response.razorpay_payment_id,
                       razorpay_signature: response.razorpay_signature,
                       paymentMethod: "Online-razorpay",
-                      oldOrderId: data.oldOrderId, // ✅ from backend
-                      amount: data.amount / 100, // Razorpay gives paise → convert to rupees
+                      oldOrderId: data.oldOrderId,
+                      amount: data.amount / 100, 
                     }),
                   });
               
@@ -733,8 +730,7 @@
                 }
               },
             };
-        
-            // 🟩 4️⃣ Handle Payment Failures
+
             const rzp = new Razorpay(options);
             rzp.on("payment.failed", function (response) {
               console.error("Payment Failed:", response.error);
@@ -748,8 +744,7 @@
                 window.location.href = `/payment/failure?orderId=${data.orderId}`;
               });
             });
-        
-            // 🟩 5️⃣ Open Razorpay widget
+    
             rzp.open();
         
           } catch (err) {
@@ -779,8 +774,6 @@
                 window.location.href = `/orderdetails/${OrderId}`;
             }, 150);
         }
-
-        //  const viewBtn = `<a href="/orderdetails/${orderId}" class="btn-view">View</a>`;
 
         function viewOrderList() {
             const btn = event.target.closest('.secondary-btn');

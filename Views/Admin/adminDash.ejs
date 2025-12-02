@@ -248,7 +248,7 @@
 
     const yearlySalesData = <%- JSON.stringify(yearlySalesData) %>;
     let currentMonthRevenue = <%= monthlyEarnings %>;
-    let target = 50000;
+    let target = 500000;
     let progress = currentMonthRevenue > 0 ?
       Math.min(100, Math.round((currentMonthRevenue / target) * 100)) :
       0;

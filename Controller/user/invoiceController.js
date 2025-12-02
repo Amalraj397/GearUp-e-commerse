@@ -41,7 +41,7 @@ function numberToWords(num) {
   str +=
     n[5] != 0
       ? (str != "" ? "and " : "") +
-        (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]])
+      (a[Number(n[5])] || b[n[5][0]] + " " + a[n[5][1]])
       : "";
   return str.trim();
 }
@@ -97,16 +97,16 @@ export const downloadInvoice = async (req, res, next) => {
       .text("GST Registration No: 29ABCDE1234F1Z5");
 
     /* ---------- ORDER DETAILS ---------- */
-    const topY = 180;
-    doc.font("Helvetica-Bold").fontSize(11).text("Order Details:", 300, topY);
+    const topY = 120;
+    doc.font("Helvetica-Bold").fontSize(11).text("Order Details:", 310, topY);
     doc
       .font("Helvetica")
       .fontSize(10)
-      .text(`Order Number: ${order.orderNumber}`, 300, topY + 15)
-      .text(`Order Date: ${new Date(order.createdAt).toLocaleDateString()}`, 300, topY + 30)
-      .text(`Invoice Number: INV-${order._id.toString().slice(-6)}`, 300, topY + 45)
-      .text(`Invoice Date: ${new Date(order.createdAt).toLocaleDateString()}`, 300, topY + 60)
-      .text(`Payment Method: ${order.paymentMethod}`, 300, topY + 75);
+      .text(`Order Number: ${order.orderNumber}`, 310, topY + 15)
+      .text(`Order Date: ${new Date(order.createdAt).toLocaleDateString()}`, 310, topY + 30)
+      .text(`Invoice Number: INV-${order._id.toString().slice(-6)}`, 310, topY + 45)
+      .text(`Invoice Date: ${new Date(order.createdAt).toLocaleDateString()}`, 310, topY + 60)
+      .text(`Payment Method: ${order.paymentMethod}`, 310, topY + 75);
 
     /* ---------- BILLING / SHIPPING ---------- */
     const b = order.billingDetails;
@@ -127,7 +127,7 @@ export const downloadInvoice = async (req, res, next) => {
     doc
       .font("Helvetica-Bold")
       .fontSize(11)
-      .text("Shipping Address:", 300, 260)
+      .text("Shipping Address:", 330, 260)
       .font("Helvetica")
       .fontSize(10)
       .text(`${b.name}`)
@@ -146,7 +146,7 @@ export const downloadInvoice = async (req, res, next) => {
     const colWidths = [200, 80, 50, 80, 90];
 
     // Header row
-    doc.rect(itemX, tableTop, tableWidth, 20).fill("#fa8f0b");
+    doc.rect(itemX, tableTop, tableWidth, 40).fill("#fa8f0b");
     doc.fillColor("white").font("Helvetica-Bold").fontSize(10);
     doc.text("Description", itemX + 5, tableTop + 5, { width: colWidths[0] });
     doc.text("Variant", itemX + colWidths[0] + 5, tableTop + 5, { width: colWidths[1] });
@@ -162,6 +162,11 @@ export const downloadInvoice = async (req, res, next) => {
 
     let y = tableTop + 25;
     order.items.forEach((item, idx) => {
+      if (y > 500) {
+        doc.addPage();
+        y = 50;
+      }
+
       const product = item.productId || {};
       const bg = idx % 2 === 0 ? "#f9f9f9" : "#ffffff";
       doc.rect(itemX, y - 5, tableWidth, 25).fill(bg).stroke("#dddddd");
@@ -180,19 +185,18 @@ export const downloadInvoice = async (req, res, next) => {
       y += 25;
     });
 
-    doc.moveTo(50, y + 5).lineTo(550, y + 5).stroke("#fa8f0b");
 
     /* ---------- TOTALS ---------- */
     doc
       .font("Helvetica-Bold")
       .fontSize(11)
-      .text(`Subtotal: Rs. ${order.grandTotalprice.toFixed(2)}`, 350, y + 20)
+      .text(`Subtotal: Rs. ${order.grandTotalprice.toFixed(2)}`, 350, y + 50)
       .font("Helvetica")
-      .text(`Shipping: Rs. ${order.shippingCharge.toFixed(2)}`, 350, y + 35)
-      .text(`Tax: Rs. 0.00`, 350, y + 50);
+      .text(`Shipping: Rs. ${order.shippingCharge.toFixed(2)}`, 350, y + 65)
+      .text(`Tax: Rs. 0.00`, 350, y + 85);
 
     // Highlighted final total
-    const finalY = y + 70;
+    const finalY = y + 105;
     doc.rect(320, finalY, 200, 25).fill("#fa8f0b");
     doc.fillColor("white").font("Helvetica-Bold").text(
       `Grand Total: Rs. ${order.grandTotalprice.toFixed(2)}`,
@@ -201,22 +205,23 @@ export const downloadInvoice = async (req, res, next) => {
     );
 
     /* ---------- AMOUNT IN WORDS ---------- */
-    doc.moveDown(2).fillColor("black").font("Helvetica-Bold").text("Amount in Words:", 50);
-    doc
-      .font("Helvetica")
-      .fontSize(10)
-      .text(`${numberToWords(order.grandTotalprice)} only`, 160);
+    // doc.moveDown(2).fillColor("black").font("Helvetica-Bold").text("Amount in Words:", 50);
+    // doc
+    //   .font("Helvetica")
+    //   .fontSize(10)
+    //   .text(`${numberToWords(Number(order.grandTotalprice))} only`, 160);
 
     /* ---------- FOOTER ---------- */
     const pageHeight = doc.page.height;
-    doc.rect(0, pageHeight - 25, doc.page.width, 25).fill("#fa8f0b");
-    doc
-      .fillColor("white")
-      .fontSize(10)
-      .text("Thank you for shopping with AutoMinima!", 0, pageHeight - 20, {
-        align: "center",
-      });
+    //  doc
+    //   .fillColor("black")
+    //   .fontSize(10)
+    //   .text("Thank you for shopping with AutoMinima!", 0, pageHeight - 20, {
+    //     align: "center",
+    //   });
 
+    doc.rect(0, pageHeight - 20, doc.page.width, 25).fill("#fa8f0b");
+   
     doc.end();
   } catch (err) {
     console.log(MESSAGES.System.INVOICE_EROR, err);

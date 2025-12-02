@@ -103,6 +103,7 @@ import {
   verifyPayment,
   paymentFailurePage,
   retryPaymentPage,
+  saveFailedOrder,
 //   retryPayment,
 
 } from "../Controller/user/paymentController.js";
@@ -198,9 +199,9 @@ userRoute.get("/checkout", getCheckoutpage);
 //  ---------razorpay-------
 userRoute.post("/payment/create-order", paymentRazorpay);
 userRoute.post("/payment/verify-payment", verifyPayment);
-userRoute.get("/payment/failure", paymentFailurePage);
+userRoute.get("/payment/failure/:id", paymentFailurePage);
 userRoute.post("/payment/retry-payment", retryPaymentPage);
-
+userRoute.post("/payment/save-failed-order", saveFailedOrder);
 
 
 userRoute.get("/getAddressById/:id", getAddressById);

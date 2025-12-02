@@ -71,9 +71,9 @@
 <body>
   <div class="page-wrapper">
     <main class="main">
-      <div class="page-header text-center" style="background-image: url('User/assets/images/banners/2024-Chevrolet-Corvette-Z06-GT3.R-001-1440w.jpg')">
+      <div class="page-header text-center" style="margin-top: 50px;padding-top: 100px; background-image: url('User/assets/images/banners/2024-Chevrolet-Corvette-Z06-GT3.R-001-1440w.jpg')">
         <div class="container">
-          <h1 class="page-title">Shopping Cart<span></span></h1>
+          <h1 class="page-title"style="color: #ff6c00;">Shopping Cart<span></span></h1>
         </div><!-- End .container -->
       </div><!-- End .page-header -->
       <nav aria-label="breadcrumb" class="breadcrumb-nav">
@@ -270,7 +270,6 @@
       button.addEventListener("click", async () => {
         const productId = button.getAttribute("data-product-id");
 
-        // SweetAlert confirmation
         Swal.fire({
           title: "Are you sure?",
           text: "This item will be removed from your cart.",
@@ -293,10 +292,8 @@
 
               if (response.ok) {
                 button.closest("tr").remove();
-                // Update the cart badge
                 document.querySelector(".cart-badge").textContent = data.cartCount;
 
-                // Success alert
                 Swal.fire("Removed!", data.message, "success");
                 window.location.reload();
               } else {
@@ -324,8 +321,6 @@
 
       if (newValue >= min && newValue <= max) {
         input.value = newValue;
-
-        //  Trigger same event as manual input
         input.dispatchEvent(new Event('input', {
           bubbles: true
         }));
@@ -349,7 +344,7 @@
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            // Optionally show success toast
+           
             Toastify({
               text: "Quantity updated",
               duration: 500
@@ -395,7 +390,7 @@
         grandTotal += total;
       });
 
-      // Update subtotal and total in summary
+ 
       document.querySelector(".summary-subtotal td:last-child").textContent = "₹" + grandTotal.toFixed(2);
       document.querySelector(".summary-total td:last-child").textContent = "₹" + grandTotal.toFixed(2);
     }
@@ -405,19 +400,17 @@
       const max = parseInt(inputElement.max);
       let value = parseInt(inputElement.value);
 
-      // If input is not a number, reset to min
+   
       if (isNaN(value)) {
         inputElement.value = min;
         return;
       }
 
-      // Clamp value between min and max
       if (value < min) {
         inputElement.value = min;
       } else if (value > max - 1) {
         inputElement.value = max;
 
-        // Show Toast only when value exceeds max
         Toastify({
           text: `Maximum quantity is ${max}`,
           duration: 1500,
