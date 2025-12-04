@@ -974,6 +974,7 @@
 
   // ================IMAGE EVENTS SETUP================
 
+
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     imageUploadArea.addEventListener(eventName, e => {
       e.preventDefault();
@@ -986,6 +987,7 @@
       imageUploadArea.classList.add('highlight');
     }, false);
   });
+
 
   ['dragleave', 'drop'].forEach(eventName => {
     imageUploadArea.addEventListener(eventName, () => {
@@ -1008,8 +1010,8 @@
 
   function addFiles(files) {
     for (const file of files) {
-      if (!file.type.match('image/(jpeg|png|gif|jpg|jfif)')) {
-        Swal.fire({ icon: 'error', title: 'Invalid File Type', text: 'Only JPG, PNG, GIF, or JFIF formats allowed.' });
+      if (!file.type.match('image/(jpeg|png|gif|jpg|jfif|PDF)')) {
+        Swal.fire({ icon: 'error', title: 'Invalid File Type', text: 'Only JPG, PNG,PDF, GIF, or JFIF formats allowed.' });
         continue;
       }
 
