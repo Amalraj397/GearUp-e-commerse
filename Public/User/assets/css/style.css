@@ -4941,6 +4941,10 @@ p {
   margin-right: auto;
   margin-bottom: 0;
 }
+
+html {
+  scroll-behavior:smooth;
+}
 #scroll-top {
   width: 5rem;
   height: 5rem;

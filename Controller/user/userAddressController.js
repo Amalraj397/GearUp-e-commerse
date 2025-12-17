@@ -42,7 +42,7 @@ export const add_UserAddress = async (req, res, next) => {
       userId,
       firstName,
       lastName,
-      email,
+      email,   
       phone,
       altPhone,
       houseName,

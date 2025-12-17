@@ -1,17 +1,21 @@
+<%-include("../../Views/Partials/User/headerLand")%>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --primary-color: #ffffff;
+    /* Text */
+    --secondary-color: #ff7b00;
+    /* AutoMinima Orange */
+    --accent-color: #ff9a34;
+    /* Light Orange */
+    --success-color: #10b981;
+    /* Green Checkmark */
+    --light-bg: #141414;
+    /* Dark Card */
+  }
 
-  <%-include("../../Views/Partials/User/headerLand")%>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-    --primary-color: #ffffff;       /* Text */
-    --secondary-color: #ff7b00;     /* AutoMinima Orange */
-    --accent-color: #ff9a34;        /* Light Orange */
-    --success-color: #10b981;       /* Green Checkmark */
-    --light-bg: #141414;            /* Dark Card */
-}
-
-body {
+  body {
     background: #0d0d0d;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
@@ -21,21 +25,22 @@ body {
     background-position: center;
     background-attachment: fixed;
     position: relative;
-}
+  }
 
-body::before {
+  body::before {
     content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.78);  /* Dark overlay */
+    background: rgba(0, 0, 0, 0.78);
+    /* Dark overlay */
     z-index: -1;
-}
+  }
 
-/* Loader */
-.loader-overlay {
+  /* Loader */
+  .loader-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -48,79 +53,89 @@ body::before {
     justify-content: center;
     z-index: 9999;
     transition: opacity 0.5s ease-out;
-}
+  }
 
-.loader-overlay.fade-out {
+  .loader-overlay.fade-out {
     opacity: 0;
     pointer-events: none;
-}
+  }
 
-.loader-car {
+  .loader-car {
     font-size: 4rem;
     color: #000;
     animation: loaderBounce 1s ease-in-out infinite alternate;
     margin-bottom: 1rem;
-}
+  }
 
-.loader-text {
+  .loader-text {
     color: #000;
     font-size: 1.2rem;
     font-weight: 600;
     margin-bottom: 2rem;
-}
+  }
 
-.loader-progress {
+  .loader-progress {
     width: 200px;
     height: 4px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 2px;
     overflow: hidden;
-}
+  }
 
-.loader-progress-bar {
+  .loader-progress-bar {
     height: 100%;
     background: #000;
     border-radius: 2px;
     animation: loaderProgress 1.8s ease-in-out;
-}
+  }
 
-@keyframes loaderBounce {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-20px); }
-}
+  @keyframes loaderBounce {
+    0% {
+      transform: translateY(0);
+    }
 
-@keyframes loaderProgress {
-    0% { width: 0%; }
-    100% { width: 100%; }
-}
+    100% {
+      transform: translateY(-20px);
+    }
+  }
 
-/* Main Success Container */
-.success-container {
+  @keyframes loaderProgress {
+    0% {
+      width: 0%;
+    }
+
+    100% {
+      width: 100%;
+    }
+  }
+
+  /* Main Success Container */
+  .success-container {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom: 55vh;
-}
+    margin-bottom: 35vh;
+  }
 
-/* Card */
-.success-card {
+  /* Card */
+  .success-card {
     background: rgba(20, 20, 20, 0.92);
     backdrop-filter: blur(10px);
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-    padding: 3rem;
-    top: 35vh;
+    padding: 1.8rem;
+    top: 20vh;
     text-align: center;
     max-width: 600px;
     position: relative;
     overflow: hidden;
     animation: slideUp 0.8s ease-out;
     border: 1px solid rgba(255, 255, 255, 0.08);
-}
+  }
 
-.success-card::before {
+  .success-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -128,28 +143,29 @@ body::before {
     right: 0;
     height: 5px;
     background: linear-gradient(90deg, #ff7b00, #ff9a34);
-}
+  }
 
-@keyframes slideUp {
+  @keyframes slideUp {
     from {
-        opacity: 0;
-        transform: translateY(50px);
+      opacity: 0;
+      transform: translateY(50px);
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-/* Checkmark */
-.checkmark-container {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Checkmark */
+  .checkmark-container {
     position: relative;
     margin: 0 auto 2rem;
     width: 120px;
     height: 120px;
-}
+  }
 
-.checkmark {
+  .checkmark {
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -161,306 +177,334 @@ body::before {
     font-size: 55px;
     font-weight: bold;
     animation: checkmarkBounce 0.6s ease-in-out 0.3s both;
-    box-shadow: 0 8px 25px rgba(16,185,129,0.3);
-}
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+  }
 
-@keyframes checkmarkBounce {
-    0% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1.2); }
-    100% { opacity: 1; transform: scale(1); }
-}
+  @keyframes checkmarkBounce {
+    0% {
+      opacity: 0;
+      transform: scale(0);
+    }
 
-/* Headings */
-.success-title {
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Headings */
+  .success-title {
     color: #ffffff;
     font-weight: 700;
     font-size: 2.5rem;
     margin-bottom: 1rem;
-}
+  }
 
-.success-subtitle {
+  .success-subtitle {
     color: #ff7b00;
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
-}
+  }
 
-.success-message {
+  .success-message {
     color: #bbbbbb;
     font-size: 1.15rem;
     line-height: 1.7;
     margin-bottom: 2rem;
-}
+  }
 
-/* Order Details */
-.order-details {
-    background: rgba(255,255,255,0.06);
+  /* Order Details */
+  .order-details {
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 15px;
     padding: 1.5rem;
     margin: 2rem 0;
     animation: fadeInUp 0.8s ease-out 1s both;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
-}
+  }
 
-.order-number {
+  .order-number {
     font-weight: 700;
     color: var(--secondary-color);
     font-size: 1.3rem;
-}
+  }
 
-.delivery-status {
+  .delivery-status {
     display: inline-flex;
     align-items: center;
-    background: rgba(16,185,129,0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: var(--success-color);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-top: 0.5rem;
-}
+  }
 
-/* Buttons */
-.continue-btn,
-.home-btn,
-.orders-btn {
-    background: linear-gradient(45deg, #ff7b00, #ff9a34);
+  /* Buttons */
+  .continue-btn,
+  .home-btn,
+  .orders-btn {
+    background: linear-gradient(45deg, #ff7b00, #ff5d34ff);
     border: none;
     color: #000;
-    padding: 15px 40px;
-    font-size: 1.1rem;
+    padding: 15px 30px;
+    font-size: 1.0rem;
     font-weight: 600;
     border-radius: 50px;
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px rgba(255, 123, 0, 0.25);
-}
+  }
 
-.continue-btn:hover,
-.home-btn:hover,
-.orders-btn:hover {
+  .continue-btn:hover,
+  .home-btn:hover,
+  .orders-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(255, 123, 0, 0.45);
     color: #000;
-}
+  }
 
-.home-btn,
-.orders-btn {
+  .home-btn,
+  .orders-btn {
     position: fixed;
-    top: 25px;
+    top: 100px;
     padding: 7px 15px;
     z-index: 999;
-}
+  }
 
-.home-btn { left: 30px; }
-.orders-btn { right: 30px; }
+  .home-btn {
+    left: 30px;
+  }
 
-/* Social Icons */
-.social-links {
+  .orders-btn {
+    right: 30px;
+  }
+
+  /* Social Icons */
+  .social-links {
     margin-top: 2rem;
-}
+  }
 
-.social-links a {
+  .social-links a {
     color: #ff7b00;
     font-size: 1.5rem;
     margin: 0 15px;
     transition: all 0.3s ease;
-}
+  }
 
-.social-links a:hover {
+  .social-links a:hover {
     color: #ff9a34;
     transform: translateY(-3px);
-}
+  }
 
-/* Confetti */
-.confetti {
+  /* Confetti */
+  .confetti {
     position: absolute;
     width: 10px;
     height: 10px;
     background: var(--accent-color);
     animation: confetti-fall 3s linear infinite;
-}
+  }
 
-.confetti:nth-child(odd) {
+  .confetti:nth-child(odd) {
     background: var(--secondary-color);
-}
+  }
 
-.confetti:nth-child(3n) {
+  .confetti:nth-child(3n) {
     background: var(--success-color);
-}
+  }
 
-@keyframes confetti-fall {
-    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
-    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .success-card {
-        margin: 1rem;
-        padding: 2rem;
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
     }
 
-    .success-title { font-size: 2rem; }
-    .success-subtitle { font-size: 1.1rem; }
-    .loader-car { font-size: 3rem; }
-}
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
 
-    </style>
+  /* Responsive */
+  @media (max-width: 768px) {
+    .success-card {
+      margin: 1rem;
+      padding: 2rem;
+    }
+
+    .success-title {
+      font-size: 2rem;
+    }
+
+    .success-subtitle {
+      font-size: 1.1rem;
+    }
+
+    .loader-car {
+      font-size: 3rem;
+    }
+  }
+</style>
 </head>
+
 <body>
-    <!-- Added custom loader overlay -->
-    <div class="loader-overlay" id="loader">
-        <div class="loader-car">
-            <i class="fas fa-car-side"></i>
-        </div>
-        <div class="loader-text">Preparing your order confirmation...</div>
-        <div class="loader-progress">
-            <div class="loader-progress-bar"></div>
-        </div>
+  <!-- Added custom loader overlay -->
+  <div class="loader-overlay" id="loader">
+    <div class="loader-car">
+      <i class="fas fa-car-side"></i>
     </div>
-
-    <div class="success-container">
-        <!-- Removed floating cars section -->
-         <button class="btn home-btn" onclick="window.location.href = '/'">
-            <i class="fas fa-home me-2"></i>Home
-         </button>
-
-        <div class="success-card">
-            <!-- Removed animated car driving across -->
-
-            <!-- Success checkmark -->
-            <div class="checkmark-container">
-                <div class="checkmark"></div>
-            </div>
-
-            <!-- Success content -->
-            <h1 class="success-title">Order Confirmed!</h1>
-            <h2 class="success-subtitle">Keep Shopping with Autominima</h2>
-            
-            <p class="success-message">
-                🎉 Congratulations! Your order has been successfully placed. 
-                Your premium diecast scale model cars are being prepared with care 
-                and will be shipped to you soon. Thank you for choosing Autominima 
-                for your collection!
-            </p>
-
-            <!-- Order details -->
-            <div class="order-details">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p class="mb-1"><strong>Order Number:</strong></p>
-                        <p class="order-number">{{order.orderNumber}}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p class="mb-1"><strong>Estimated Delivery:</strong></p>
-                        <p class="text-muted">3-5 Business Days</p>
-                        <!-- Added delivery status indicator -->
-                        <div class="delivery-status">
-                            <i class="fas fa-truck me-2"></i>
-                            Processing
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action buttons -->
-            <div class="d-flex flex-column flex-md-row gap-3 justify-content-center align-items-center">
-                <button class="btn continue-btn" onclick="continueShopping()">
-                    <i class="fas fa-shopping-cart me-2"></i>
-                    Continue Shopping
-                </button>
-                <a href="#" class="text-decoration-none" style="color: var(--primary-color);">
-                    <i class="fas fa-truck me-1"></i>
-                    Track Your Order
-                </a>
-            </div>
-
-            <!-- Social links -->
-            <div class="social-links">
-                <p class="text-muted mb-3">Follow us for the latest collections:</p>
-                <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
-            </div>
-        </div>
-         <button class="btn orders-btn" onclick="window.location.href = '/myOrders'">   
-            <i class="fas fa-box me-2"></i>View Orders   
-         </button>
+    <div class="loader-text">Preparing your order confirmation...</div>
+    <div class="loader-progress">
+      <div class="loader-progress-bar"></div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        window.addEventListener('load', function() {
-            const loader = document.getElementById('loader');
-            
-            // Hide loader after 1.8 seconds
-            setTimeout(() => {
-                loader.classList.add('fade-out');
-                // Remove loader from DOM after fade animation
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                    // Trigger confetti after loader disappears
-                    createConfetti();
-                }, 500);
-            }, 1800);
-        });
+  <div class="success-container">
+    <!-- Removed floating cars section -->
+    <button class="btn home-btn" onclick="window.location.href = '/'">
+      <i class="fas fa-home me-2"></i>Home
+    </button>
 
-        // Continue shopping function
-        function continueShopping() {
-            // Add a nice click animation
-            const btn = event.target;
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                btn.style.transform = 'scale(1)';
-                // Redirect to shop page (replace with your actual shop URL)
-                window.location.href = '/shopPage';
-            }, 150);
-        }
+    <div class="success-card">
+      <!-- Removed animated car driving across -->
 
-        // Create confetti effect
-        function createConfetti() {
-            const colors = ['#e74c3c', '#f39c12', '#27ae60', '#3498db'];
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    document.body.appendChild(confetti);
-            
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 3000);
-                }, i * 100);
-            }
-        }
+      <!-- Success checkmark -->
+      <div class="checkmark-container">
+        <div class="checkmark">✔</div>
+      </div>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const card = document.querySelector('.success-card');
-            
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-5px)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
+      <!-- Success content -->
+      <h1 class="success-title">Order Confirmed!</h1>
+      <h2 class="success-subtitle">Keep Shopping with Autominima</h2>
 
-        function generateOrderNumber() {
-            const orderNum = 'AM-2024-' + Math.floor(Math.random() * 900000 + 100000);
-            document.querySelector('.order-number').textContent = '#' + orderNum;
-        }
+      <p class="success-message">
+        🎉 Congratulations! Your order has been successfully placed.
+        Your premium diecast scale model cars are being prepared with care
+        and will be shipped to you soon. Thank you for choosing Autominima
+        for your collection!
+      </p>
 
-        // Call on page load
-        generateOrderNumber();
-    </script>
-      <%-include("../../Views/Partials/User/footerLand")%>
+      <!-- Order details -->
+      <div class="order-details">
+        <div class="row">
+          <div class="col-md-6">
+            <p class="mb-1" style="color: #d3c5c5;"><strong>Order Number:</strong></p>
+            <p class="order-number">{{order.orderNumber}}</p>
+          </div>
+          <div class="col-md-6">
+            <p class="mb-1" style="color: #d3c5c5;"><strong>Estimated Delivery:</strong></p>
+            <p class="text" style="color: #e85252ff;">3-5 Business Days</p>
+            <!-- Added delivery status indicator -->
+            <div class="delivery-status">
+              <i class="fas fa-truck me-2"></i>
+              Processing
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="d-flex flex-column flex-md-row gap-3 justify-content-center align-items-center">
+        <button class="btn continue-btn" onclick="continueShopping()">
+          <i class="fas fa-shopping-cart me-2"></i>
+          Continue Shopping
+        </button>
+      </div>
+
+      <!-- Social links -->
+      <div class="social-links">
+        <p class="text mb-3" style="color: #baababff;">Follow us for the latest collections:</p>
+        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <button class="btn orders-btn" onclick="window.location.href = '/myOrders'">
+      <i class="fas fa-box me-2"></i>View Orders
+    </button>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    window.addEventListener('load', function() {
+      const loader = document.getElementById('loader');
+
+      // Hide loader after 1.8 seconds
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+        // Remove loader from DOM after fade animation
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Trigger confetti after loader disappears
+          createConfetti();
+        }, 500);
+      }, 1800);
+    });
+
+    // Continue shopping function
+    function continueShopping() {
+      // Add a nice click animation
+      const btn = event.target;
+      btn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        btn.style.transform = 'scale(1)';
+        // Redirect to shop page (replace with your actual shop URL)
+        window.location.href = '/shopPage';
+      }, 150);
+    }
+
+    // Create confetti effect
+    function createConfetti() {
+      const colors = ['#e74c3c', '#f39c12', '#27ae60', '#3498db'];
+
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 2 + 's';
+          document.body.appendChild(confetti);
+
+          setTimeout(() => {
+            confetti.remove();
+          }, 3000);
+        }, i * 100);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const card = document.querySelector('.success-card');
+
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+      });
+
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+
+    function generateOrderNumber() {
+      const orderNum = 'AM-2024-' + Math.floor(Math.random() * 900000 + 100000);
+      document.querySelector('.order-number').textContent = '#' + orderNum;
+    }
+
+    // Call on page load
+    generateOrderNumber();
+  </script>
+  <%-include("../../Views/Partials/User/footerLand")%>
 </body>
+
 </html>

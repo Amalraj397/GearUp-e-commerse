@@ -1,17 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Navigation menu hover effect
-  // const navLinks = document.querySelectorAll(".nav-link");
-
-  // navLinks.forEach((link) => {
-  //   link.addEventListener("mouseenter", function () {
-  //     this.style.color = "#ff6600";
-  //   });
-
-  //   link.addEventListener("mouseleave", function () {
-  //     this.style.color = "#ffffff";
-  //   });
-
-  //   ---------------------------
 
   document.addEventListener("DOMContentLoaded", () => {
     const userDisplayName = document.getElementById("user-name");
@@ -23,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (loggedInUser) {
       const name =
-        loggedInUser.displayName || loggedInUser.firstName || "Guest";
+      loggedInUser.displayName || loggedInUser.firstName || "Guest";
       userDisplayName.innerText = `Hi, welcomeee ${name}`;
       userDisplayName.style.display = "block"; // Show the username
       logoutLink.style.display = "block"; // Show logout
@@ -40,6 +27,19 @@ document.addEventListener("DOMContentLoaded", function () {
       localStorage.removeItem("loggedInUser");
     });
   });
+
+
+  // Scroll to contact section if ?contact=1 is present
+window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("contact") === "1") {
+        const section = document.getElementById("contactSection");
+        if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+});
+
 
   // Hero slider functionality
   const dots = document.querySelectorAll(".dot");
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const message = document.getElementById("message").value;
 
       // Simple validation
-      if (!name || !email || !message) {
+      if (!name || !email || !message||!phone){
         alert("Please fill in all required fields.");
         return;
       }

@@ -84,15 +84,25 @@ export const getCartPage = async (req, res, next) => {
 export const addToCartpage = async (req, res, next) => {
   try {
     const { productId, variantName, scale, quantity } = req.body;
+    console.log("addToCart req body::", req.body);
+
     const user = req.session.user;
     const usermaxQuantity = 5;
 
-    if (!user) return res.redirect("/login");
-
+    if (!user) {
+      return res.status(STATUS.UNAUTHORIZED).json({
+        success: false,
+        message: "Please login to continue"
+      });
+    }
+         
     const userId = user.id;
     const userData = await userschema.findById(userId);
-    if (!userData)
-      return res.status(STATUS.NOT_FOUND).json({ message: MESSAGES.Users.NO_USER });
+    if (!userData) {
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Users.NO_USER });
+    }
 
     if (!productId || !variantName || !scale || !quantity) {
       return res
@@ -100,15 +110,23 @@ export const addToCartpage = async (req, res, next) => {
         .json({ success: false, message: MESSAGES.System.ALL_REQUIRED });
     }
 
+    const qtyToAdd = Number(quantity);
+    if (!qtyToAdd || qtyToAdd <= 0) {
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: "Invalid quantity" });
+    }
+
     const product = await productSchema
       .findById(productId)
       .populate("brand")
       .populate("category");
 
-    if (!product)
+    if (!product) {
       return res
         .status(STATUS.NOT_FOUND)
         .json({ success: false, message: MESSAGES.Products.PRODUCT_NOT_FOUND });
+    }
 
     if (
       product.isBlocked ||
@@ -133,12 +151,6 @@ export const addToCartpage = async (req, res, next) => {
         .json({ success: false, message: MESSAGES.Cart.ITEM_NOT_FOUND });
     }
 
-    if (quantity > usermaxQuantity) {
-      return res
-        .status(STATUS.BAD_REQUEST)
-        .json({ success: false, message: MESSAGES.Cart.MAX_QUANTITY });
-    }
-
     let cart = await cartSchema.findOne({ userDetails: userId });
     if (!cart) {
       cart = new cartSchema({
@@ -156,9 +168,18 @@ export const addToCartpage = async (req, res, next) => {
     );
 
     const newTotalQuantity = existingItem
-      ? existingItem.quantity + quantity
-      : quantity;
+      ? existingItem.quantity + qtyToAdd
+      : qtyToAdd;
 
+    // user max limit
+    if (newTotalQuantity > usermaxQuantity) {
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.Cart.MAX_QUANTITY,
+      });
+    }
+
+    // stock limit
     if (newTotalQuantity > selectedVariant.stock) {
       const remaining = selectedVariant.stock - (existingItem?.quantity || 0);
       return res.status(STATUS.BAD_REQUEST).json({
@@ -166,32 +187,38 @@ export const addToCartpage = async (req, res, next) => {
         message:
           remaining > 0
             ? `Only ${remaining} more item(s) can be added. Total available: ${selectedVariant.stock}.`
-            : `Out of stock! You already have ${existingItem.quantity} in your cart.`,
+            : `Out of stock! You already have ${existingItem?.quantity || 0} in your cart.`,
       });
     }
-    if (existingItem) {
-      existingItem.quantity = newTotalQuantity;
-      existingItem.totalProductprice =
-        existingItem.salePrice * existingItem.quantity;
-    } else {
-      // remov
-      await wishlistSchema.updateOne(
-        { userId },
-        { $pull: { products: { productId } } }
-      );
-    
-      const priceToUse = selectedVariant.offerPrice > 0 ? selectedVariant.offerPrice : selectedVariant.salePrice;
-      const totalPrice = priceToUse * quantity;
 
-      cart.items.push({
-        productId,
-        variantName,
-        scale,
-        quantity,
-        salePrice: priceToUse,
-        totalProductprice: totalPrice,
+   
+    if (existingItem) {
+      return res.status(STATUS.OK).json({
+        success: false,
+        alreadyInCart: true,
+        message: `This item is already in your cart with quantity ${existingItem.quantity}. Do you want to increase it?`,
       });
     }
+
+    await wishlistSchema.updateOne(
+      { userId },
+      { $pull: { products: { productId } } }
+    );
+
+    const priceToUse =
+      selectedVariant.offerPrice > 0
+        ? selectedVariant.offerPrice
+        : selectedVariant.salePrice;
+    const totalPrice = priceToUse * qtyToAdd;
+
+    cart.items.push({
+      productId,
+      variantName,
+      scale,
+      quantity: qtyToAdd,
+      salePrice: priceToUse,
+      totalProductprice: totalPrice,
+    });
 
     cart.grandTotalprice = cart.items.reduce(
       (sum, item) => sum + item.totalProductprice,
@@ -200,7 +227,7 @@ export const addToCartpage = async (req, res, next) => {
 
     await cart.save();
 
-    res.status(STATUS.OK).json({
+    return res.status(STATUS.OK).json({
       success: true,
       message: MESSAGES.Cart.ITEM_ADDED,
       cartCount: cart.items.length,
@@ -254,10 +281,18 @@ export const removeFromCartpage = async (req, res, next) => {
   }
 };
 
+
 export const increaseCartQuantity = async (req, res, next) => {
   try {
     const { productId, variantName, scale, quantity } = req.body;
     const userId = req.session.user?.id;
+    const usermaxQuantity = 5;
+
+    if (!userId) {
+      return res
+        .status(STATUS.UNAUTHORIZED)
+        .json({ success: false, message: "Please login to continue" });
+    }
 
     if (!productId || !variantName || !scale || !quantity) {
       return res
@@ -265,19 +300,26 @@ export const increaseCartQuantity = async (req, res, next) => {
         .json({ success: false, message: MESSAGES.System.ALL_REQUIRED });
     }
 
+    const qtyToAdd = Number(quantity);
+    if (!qtyToAdd || qtyToAdd <= 0) {
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: "Invalid quantity" });
+    }
+
     const cart = await cartSchema.findOne({ userDetails: userId });
 
     if (!cart) {
       return res
         .status(STATUS.NOT_FOUND)
-        .json({ message: MESSAGES.Cart.NO_CART });
+        .json({ success: false, message: MESSAGES.Cart.NO_CART });
     }
 
     const item = cart.items.find(
       (item) =>
         item.productId.toString() === productId &&
         item.variantName === variantName &&
-        item.scale === scale,
+        item.scale === scale
     );
 
     if (!item) {
@@ -286,16 +328,49 @@ export const increaseCartQuantity = async (req, res, next) => {
         .json({ success: false, message: MESSAGES.Cart.ITEM_NOT_FOUND });
     }
 
-    item.quantity += quantity;
+    const product = await productSchema.findById(productId);
+    const variant = product?.variants.find(
+      (v) => v.variantName === variantName && v.scale === scale
+    );
+
+    if (!variant) {
+      return res
+        .status(STATUS.NOT_FOUND)
+        .json({ success: false, message: MESSAGES.Cart.ITEM_NOT_FOUND });
+    }
+
+    const newTotalQuantity = item.quantity + qtyToAdd;
+
+    if (newTotalQuantity > usermaxQuantity) {
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ success: false, message: MESSAGES.Cart.MAX_QUANTITY });
+    }
+
+    if (newTotalQuantity > variant.stock) {
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: `Only ${variant.stock} item(s) available in stock.`,
+      });
+    }
+
+    item.quantity = newTotalQuantity;
     item.totalProductprice = item.quantity * item.salePrice;
 
     cart.grandTotalprice = cart.items.reduce(
       (sum, item) => sum + item.totalProductprice,
-      0,
+      0
     );
+
     await cart.save();
 
-    res.status(STATUS.OK).json({
+    // remove from wishlist after successful increment
+    await wishlistSchema.updateOne(
+      { userId },
+      { $pull: { products: { productId } } }
+    );
+
+    return res.status(STATUS.OK).json({
       success: true,
       message: MESSAGES.Cart.UPDATED,
     });
@@ -304,6 +379,7 @@ export const increaseCartQuantity = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const updateQuantity = async (req, res, next) => {
   try {
