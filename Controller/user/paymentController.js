@@ -2,9 +2,10 @@ import crypto from "crypto";
 import orderSchema from "../../Models/orderModel.js";
 import couponSchema from "../../Models/couponModel.js";
 import generateReceiptId from "../../utils/generateReceiptId.js";
-import razorpayInstance from "../../utils/razorpay.js";
+import getRazorpayInstance  from "../../utils/razorpay.js";
 import cartSchema from "../../Models/cartModel.js";
-import walletSchema from "../../Models/walletModel.js";
+
+const razorpayInstance = getRazorpayInstance();
 
 // ORDER 
 export const paymentRazorpay = async (req, res) => {
