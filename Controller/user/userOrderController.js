@@ -456,6 +456,8 @@ export const cancelOrder = async (req, res, next) => {
 };
 
 
+//cancell order stock lessthan  5 and has offer   refund 25%
+
 export const cancelOrderItem = async (req, res, next) => {
   try {
     const userId = req.session.user?.id;

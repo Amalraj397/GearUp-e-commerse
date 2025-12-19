@@ -5,11 +5,12 @@ import generateReceiptId from "../../utils/generateReceiptId.js";
 import getRazorpayInstance  from "../../utils/razorpay.js";
 import cartSchema from "../../Models/cartModel.js";
 
-const razorpayInstance = getRazorpayInstance();
+// const razorpayInstance = getRazorpayInstance();
 
 // ORDER 
 export const paymentRazorpay = async (req, res) => {
   try {
+    const razorpayInstance = getRazorpayInstance();
     const { amount } = req.body;
     if (!amount) return res.status(400).json({ success: false, message: "Amount missing" });
 
@@ -155,6 +156,7 @@ export const verifyPayment = async (req, res, next) => {
 // PAYMENT FAILURE PAGE
 export const paymentFailurePage = async (req, res, next) => {
   try {
+    const razorpayInstance = getRazorpayInstance();
     const userId = req.session.user?.id;
     if (!userId) return res.redirect("/login");
 
@@ -187,6 +189,9 @@ export const paymentFailurePage = async (req, res, next) => {
 // RETRY PAYMENT 
 export const retryPaymentPage = async (req, res, next) => {
   try {
+
+    const razorpayInstance = getRazorpayInstance();
+
     const userId = req.session.user?.id;
     if (!userId) return res.redirect("/login");
 
