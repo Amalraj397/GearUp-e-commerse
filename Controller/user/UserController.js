@@ -35,7 +35,7 @@ export const showLogin = (req, res, next) => {
   if (req.session.user) return res.redirect("/");
   if (req.session.admin) return res.redirect("/admin/dashboard");
   try {
-    res.render("loginLanding.ejs");
+    res.render("LoginLanding.ejs");
   } catch (error) {
     console.error(MESSAGES.Auth.LOGIN_PAGE_ERROR, error);
     next(error)
