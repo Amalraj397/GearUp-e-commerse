@@ -8,16 +8,19 @@
     color: #ffffff;
     background-color: #1a202c;
   }
+
   .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
+
   .page-title {
     font-size: 24px;
     margin: 0;
   }
+
   .back-button {
     display: flex;
     align-items: center;
@@ -29,22 +32,27 @@
     cursor: pointer;
     font-size: 14px;
   }
+
   .back-button .material-icons {
     margin-right: 8px;
   }
+
   .form-container {
     background-color: #2d3748;
     padding: 20px;
     border-radius: 8px;
   }
+
   .form-group {
     margin-bottom: 20px;
   }
- .form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight:bold;
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
   }
+
   .form-group input,
   .form-group select {
     width: 100%;
@@ -54,13 +62,16 @@
     border-radius: 4px;
     color: #ffffff;
   }
+
   .date-row {
     display: flex;
     gap: 20px;
   }
+
   .date-row .form-group {
     flex: 1;
   }
+
   .submit-button {
     background-color: #000000;
     color: #ffffff;
@@ -70,9 +81,11 @@
     cursor: pointer;
     font-size: 16px;
   }
+
   .submit-button:hover {
     background-color: #0343b1;
   }
+
   .error {
     color: red;
     font-size: 13px;
@@ -84,116 +97,116 @@
     margin-bottom: 18px;
   }
 
-  input.error-border, select.error-border {
+  input.error-border,
+  select.error-border {
     border: 1px solid red;
   }
-  
+
   .btn {
-  background: linear-gradient(135deg, #ff2600, #ff8c1a);
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-  border: none;
-  border-radius: 9px;
-  padding: 12px 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
-}
+    background: linear-gradient(135deg, #ff2600, #ff8c1a);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+  }
 
-.btn:hover {
-  background: linear-gradient(135deg, #ff8c1a, #ff714d);
-  box-shadow: 0 6px 18px rgba(255, 107, 0, 0.4);
-  transform: translateY(-2px);
-}
+  .btn:hover {
+    background: linear-gradient(135deg, #ff8c1a, #ff714d);
+    box-shadow: 0 6px 18px rgba(255, 107, 0, 0.4);
+    transform: translateY(-2px);
+  }
 
-.btn:active {
-  transform: scale(0.97);
-}
-.back-button {
-  background: #1c1c1c;
-  color: #ff6b00;
-  border: 2px solid #ff6b00;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
-}
+  .btn:active {
+    transform: scale(0.97);
+  }
 
-.back-button:hover {
-  background: #ff6b00;
-  color: #fff;
-  box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
-  transform: scale(1.05);
-}
+  .back-button {
+    background: #1c1c1c;
+    color: #ff6b00;
+    border: 2px solid #ff6b00;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
+  }
 
-.back-button:active {
-  transform: scale(0.95);
-}
+  .back-button:hover {
+    background: #ff6b00;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+    transform: scale(1.05);
+  }
 
-.date-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* spacing between both fields */
-  flex-wrap: wrap; 
-}
+  .back-button:active {
+    transform: scale(0.95);
+  }
 
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+  .date-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    /* spacing between both fields */
+    flex-wrap: wrap;
+  }
 
-.form-group input[type="date"] {
-  padding: 10px;
-  border: 1px solid #525a68;
-  border-radius: 4px;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 
-.form-group input[type="date"]:focus {
-  border-color: #ff6b00;
-}
+  .form-group input[type="date"] {
+    padding: 10px;
+    border: 1px solid #525a68;
+    border-radius: 4px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
 
-.error {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
-}
+  .form-group input[type="date"]:focus {
+    border-color: #ff6b00;
+  }
 
-#offer-type {
-  width: 100%;
-  padding: 10px;
- 
-  border-radius: 6px;
-  font-size: 15px;
-  outline: none;
-  
-  background-color: #1a202c;
-  border: 1px solid #4a5568;
-  color: #ffffff;
-  transition: border-color 0.3s ease;
-}
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+  }
 
-#offer-type:focus {
-  border-color: #ff6b00;
-}
+  #offer-type {
+    width: 100%;
+    padding: 10px;
 
-#offer-type option {
-  background-color: #1c1c1c; 
-  color: #ff6b00; 
-  font-weight: 500;
-}
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
 
+    background-color: #1a202c;
+    border: 1px solid #4a5568;
+    color: #ffffff;
+    transition: border-color 0.3s ease;
+  }
 
+  #offer-type:focus {
+    border-color: #ff6b00;
+  }
 
+  #offer-type option {
+    background-color: #1c1c1c;
+    color: #ff6b00;
+    font-weight: 500;
+  }
 </style>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -208,53 +221,53 @@
 
   <div class="form-container">
     <form id="add-offer" class="offer-form">
-  <div class="form-group">
-    <label for="offer-name"><b>Offer Name</b></label>
-    <input type="text" id="offer-name" placeholder="Enter Offer Name" />
-    <span class="error" id="offerNameError"></span>
-  </div>
+      <div class="form-group">
+        <label for="offer-name"><b>Offer Name</b></label>
+        <input type="text" id="offer-name" placeholder="Enter Offer Name" />
+        <span class="error" id="offerNameError"></span>
+      </div>
 
-  <div class="form-group">
-    <label for="offer-type"><b>Offer Type</b></label>
-    <select id="offer-type">
-      <option value="">- Select -</option>
-      <option value="Product">Product</option>
-      <option value="Category">Category</option>
-      <option value="Brand">Brand</option>
-    </select>
-    <span class="error" id="offerTypeError"></span>
-  </div>
+      <div class="form-group">
+        <label for="offer-type"><b>Offer Type</b></label>
+        <select id="offer-type">
+          <option value="">- Select -</option>
+          <option value="Product">Product</option>
+          <option value="Category">Category</option>
+          <option value="Brand">Brand</option>
+        </select>
+        <span class="error" id="offerTypeError"></span>
+      </div>
 
-  <div class="form-group">
-    <label for="applicable-to"><b>Applicable To</b></label>
-    <select id="applicable-to" multiple>
-  <option value=""></option>
-</select>
-    <span class="error" id="applicableError"></span>
-  </div>
+      <div class="form-group">
+        <label for="applicable-to"><b>Applicable To</b></label>
+        <select id="applicable-to" multiple>
+          <option value=""></option>
+        </select>
+        <span class="error" id="applicableError"></span>
+      </div>
 
-  <div class="form-group">
-    <label for="discount"><b>Discount Percentage</b></label>
-    <input type="number" id="discount" placeholder="Enter discount %" />
-    <span class="error" id="discountError"></span>
-  </div>
+      <div class="form-group">
+        <label for="discount"><b>Discount Percentage</b></label>
+        <input type="number" id="discount" placeholder="Enter discount %" />
+        <span class="error" id="discountError"></span>
+      </div>
 
-  <div class="date-container">
-  <div class="form-group">
-    <label for="start-date"><b>Start Date</b></label>
-    <input type="date" id="start-date" />
-    <span class="error" id="startDateError"></span>
-  </div>
+      <div class="date-container">
+        <div class="form-group">
+          <label for="start-date"><b>Start Date</b></label>
+          <input type="date" id="start-date" />
+          <span class="error" id="startDateError"></span>
+        </div>
 
-  <div class="form-group">
-    <label for="end-date"><b>End Date</b></label>
-    <input type="date" id="end-date" />
-    <span class="error" id="endDateError"></span>
-  </div>
-</div>
+        <div class="form-group">
+          <label for="end-date"><b>End Date</b></label>
+          <input type="date" id="end-date" />
+          <span class="error" id="endDateError"></span>
+        </div>
+      </div>
 
-  <button type="submit" class="btn">Add Offer</button>
-</form>
+      <button type="submit" class="btn">Add Offer</button>
+    </form>
 
 
     <div id="errorMessages" style="color: red;"></div>
@@ -325,8 +338,8 @@
       isValid = false;
     }
 
-    if (!discount.value.trim() || discount.value < 0 || discount.value > 100) {
-      document.getElementById("discountError").textContent = "Discount must be between 0 and 100%.";
+    if (!discount.value.trim() || discount.value < 0 || discount.value >= 100) {
+      document.getElementById("discountError").textContent = "Discount must be between 0 and less than 99";
       discount.classList.add("error-border");
       isValid = false;
     }
@@ -362,7 +375,9 @@
 
     const res = await fetch("/admin/addOffer", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(formData)
     });
 
@@ -379,5 +394,5 @@
   });
 </script>
 
-  
+
 <%-include("../../Views/Partials/Admin/footer")%>

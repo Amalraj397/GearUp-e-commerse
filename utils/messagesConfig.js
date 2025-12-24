@@ -1,3 +1,5 @@
+import { NOTFOUND } from "dns";
+
 export const MESSAGES = {
   System: {
 
@@ -92,6 +94,7 @@ export const MESSAGES = {
 
     ORDER_ERR_1000:"Cash on Delivery is not available for orders above ₹1000. Please choose another payment method.",
     COD_SUCCESS:"COD order placed successfully!",
+    OLD_ORDER_NOT_FOUND:"Old order not found" ,
  
   },
 
@@ -257,6 +260,15 @@ export const MESSAGES = {
       CART_REM_EROR: "error in removing from cart",
       CART_QTY_EROR: "Error increasing cart quantity",
     },
+  },
+  Payment:{
+    AMOUNT_MISSING: "Amount or payment details Missing ",
+    RAZORPAY_ERR:"An error Occured on Razorpay Order:",
+    PAYMENT_FAILED:"Payment verification failed",
+    PAYMENT_ERR: "An error Occured while Payment Verification:",
+    PAYMENT_FAILURE_PAGE_ERR:"An error Occured while getting Payment Failue page:",
+    RETRY_PAYMENT_ERR:"Retry Payment Error:",
+    FAILED_ORDER_ERR:"Error occured in saving Failed Order:"
   },
 
   Wishlist: {

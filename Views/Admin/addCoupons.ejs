@@ -226,8 +226,8 @@
       isValid = false;
     }
 
-    if (!discountAmount.value.trim() || discountAmount.value <= 0) {
-      document.getElementById("discountAmountError").textContent = "Discount must be greater than 0.";
+    if (!discountAmount.value.trim() || discountAmount.value <= 0 || discountAmount.value.trim() >=  minPurchase.value) {
+      document.getElementById("discountAmountError").textContent = "Discount must be greater than 0, must be less than Min_purchase.";
       discountAmount.classList.add("error-border");
       isValid = false;
     }

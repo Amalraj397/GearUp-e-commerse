@@ -1,5 +1,5 @@
 import Wallet from "../Models/walletModel.js";
-import { MESSAGES } from "../utils/messagesConfig.js";
+import { MESSAGES } from "./messagesConfig.js";
 
 
 export const createWalletForUser = async (userId, amount = 1000, description = "Welcome Bonus credited") => {

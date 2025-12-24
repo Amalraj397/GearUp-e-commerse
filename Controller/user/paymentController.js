@@ -5,6 +5,9 @@ import generateReceiptId from "../../utils/generateReceiptId.js";
 import getRazorpayInstance  from "../../utils/razorpay.js";
 import cartSchema from "../../Models/cartModel.js";
 
+import { STATUS } from "../../utils/statusCodes.js";
+import { MESSAGES } from "../../utils/messagesConfig.js";
+
 // const razorpayInstance = getRazorpayInstance();
 
 // ORDER 
@@ -12,7 +15,7 @@ export const paymentRazorpay = async (req, res) => {
   try {
     const razorpayInstance = getRazorpayInstance();
     const { amount } = req.body;
-    if (!amount) return res.status(400).json({ success: false, message: "Amount missing" });
+    if (!amount) return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.Payment.AMOUNT_MISSING });
 
     const order = await razorpayInstance.orders.create({
       amount: Number(amount) * 100,
@@ -31,8 +34,8 @@ export const paymentRazorpay = async (req, res) => {
       orderId: order.id,
     });
   } catch (error) {
-    console.error("Razorpay Order Error:", error);
-    res.status(500).json({ success: false, message: "Order creation failed" });
+    console.error(MESSAGES.Payment.RAZORPAY_ERR, error);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false, message: MESSAGES.Orders.ORDER_FAILURE});
   }
 };
 
@@ -50,7 +53,7 @@ export const verifyPayment = async (req, res, next) => {
     } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature)
-      return res.status(400).json({ success: false, message: "Missing payment details" });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.Payment.AMOUNT_MISSING });
 
     const generatedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -58,14 +61,14 @@ export const verifyPayment = async (req, res, next) => {
       .digest("hex");
 
     if (generatedSignature !== razorpay_signature)
-      return res.status(400).json({ success: false, message: "Payment verification failed" });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.Payment.PAYMENT_FAILED });
 
     const userId = req.session.user?.id;
 
     if (oldOrderId) {
       const existingOrder = await orderSchema.findById(oldOrderId);
       if (!existingOrder)
-        return res.status(404).json({ success: false, message: "Old order not found" });
+        return res.status(STATUS.NOT_FOUND).json({ success: false, message: MESSAGES.Orders.OLD_ORDER_NOT_FOUND});
 
       existingOrder.paymentStatus = "Completed";
       existingOrder.paymentMethod = paymentMethod || "Online-razorpay";
@@ -81,7 +84,7 @@ export const verifyPayment = async (req, res, next) => {
 
     const cart = await cartSchema.findOne({ userDetails: userId }).populate("items.productId");
     if (!cart || cart.items.length === 0)
-      return res.status(400).json({ success: false, message: "Cart is empty" });
+      return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.Cart.CART_EMPTY });
 
     const items = cart.items.map((item) => ({
       productId: item.productId._id,
@@ -149,7 +152,7 @@ export const verifyPayment = async (req, res, next) => {
 
     res.json({ success: true, orderId: savedOrder._id });
   } catch (error) {
-    console.error("Payment Verification Error:", error);
+    console.error(MESSAGES.Payment.PAYMENT_ERR, error);
     next(error);
   }
 };
@@ -181,7 +184,7 @@ export const paymentFailurePage = async (req, res, next) => {
       user: req.session.user,
     });
   } catch (error) {
-    console.error("Payment Failure Page Error:", error);
+    console.error(MESSAGES.Payment.PAYMENT_FAILURE_PAGE_ERR, error);
     next(error);
   }
 };
@@ -214,7 +217,7 @@ export const retryPaymentPage = async (req, res, next) => {
       oldOrderId: lastOrder._id,
     });
   } catch (error) {
-    console.error("Retry Payment Error:", error);
+    console.error(MESSAGES.Payment.RETRY_PAYMENT_ERR, error);
     next(error);
   }
 };
@@ -226,7 +229,7 @@ export const saveFailedOrder = async (req, res) => {
     const { billingDetails, paymentMethod, couponCode } = req.body;
 
     const cart = await cartSchema.findOne({ userDetails: userId }).populate("items.productId");
-    if (!cart) return res.status(400).json({ success: false, message: "Cart empty" });
+    if (!cart) return res.status(STATUS.BAD_REQUEST).json({ success: false, message: MESSAGES.Cart.CART_EMPTY });
 
     const items = cart.items.map((item) => ({
       productId: item.productId._id,
@@ -279,7 +282,7 @@ export const saveFailedOrder = async (req, res) => {
     await failedOrder.save();
     res.json({ success: true, orderId: failedOrder._id });
   } catch (err) {
-    console.error("Save Failed Order Error:", err);
-    res.status(500).json({ success: false });
+    console.error(MESSAGES.Payment.FAILED_ORDER_ERR, err);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).json({ success: false });
   }
 };
