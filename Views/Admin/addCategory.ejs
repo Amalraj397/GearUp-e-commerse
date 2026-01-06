@@ -146,12 +146,12 @@
           const errorMessage = [];
   
           const nameRegex = /^[A-Z][a-zA-Z+\-\s]*$/;
-          if (!categoryName || !nameRegex.test(categoryName) || categoryName.length < 5) {
-            errorMessage.push("The category name must start with a capital letter and be at least 5 characters long.");
+          if (!categoryName || !nameRegex.test(categoryName) || categoryName.length < 5 || categoryName.length > 50) {
+            errorMessage.push("The category name must start with a capital letter and be at least 5 characters long & max upto 50 .");
           }
   
-          if (!categoryDescription || categoryDescription.trim().length < 5) {
-            errorMessage.push("The description must be at least 5 characters long and cannot start with a space.");
+          if (!categoryDescription || categoryDescription.trim().length < 5 || categoryDescription.trim().length > 300) {
+            errorMessage.push("The description must be at least 5 characters long and less than 300 characters and cannot start with a space.");
           }
   
           const errorMessageContainer = document.getElementById('errorMessages');

@@ -302,7 +302,11 @@
       <% category.forEach((cat) => { %>
       <tr>
         <td><%= cat.name || 'N/A' %></td>
-        <td><%= cat.description || 'N/A' %></td>
+        <td><%= cat.description 
+              ? cat.description.slice(0, 150) + (cat.description.length > 100 ? '...' : '') 
+              : 'N/A' 
+          %>
+        </td>
         <td></td>
         <td></td>
         <td></td>

@@ -158,18 +158,18 @@
       }
 
       const nameRegex = /^[A-Z][a-zA-Z0-9+\-]*(?: [a-zA-Z0-9+\-]+)*$/;
-      if (!nameRegex.test(brandName) || brandName.length < 2 ) {
+      if (!nameRegex.test(brandName) || brandName.length < 2 || brandName.length > 50) {
         errorMessage.push(
-          "The brand name must start with a Capital letter and be at least 3 characters long. "
+          "The brand name must start with a Capital letter and be at least 3 characters long & max upto 50."
         );
       }
 
       if (brandDescription == "") {
         errorMessage.push("Enter brand description..!");
       }
-      if (brandDescription.trim().length < 5) {
+      if (brandDescription.trim().length < 5 || brandDescription.trim().length > 300) {
         errorMessage.push(
-          "The description must be at least 5 characters long and cannot start with a space."
+          "The description must be at least 5 characters long and less than 300 characters and cannot start with a space."
         );
       }
 

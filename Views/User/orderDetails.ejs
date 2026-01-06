@@ -212,7 +212,7 @@
      <div class="container my-4">
        <!-- Back Button -->
        <div class="mb-4">
-         <button class="btn btn-orange" onclick="goBackToOrders()">
+         <button class="btn btn-orange" id="invoiceBtn" onclick="downloadInvoice()">
            <i class="fas fa-arrow-left me-2"></i>Back to Orders
          </button>
        </div>
@@ -372,10 +372,10 @@
                </div>
 
                <hr>
-              <div class="d-flex justify-content-between fw-bold">
-                <span style="color: green;">Payment amount:</span>
-                <span style="color: green;" id="grandTotal">₹0</span>
-              </div>
+               <div class="d-flex justify-content-between fw-bold">
+                 <span style="color: green;">Payment amount:</span>
+                 <span style="color: green;" id="grandTotal">₹0</span>
+               </div>
 
                <div class="mt-3">
                  <div class="info-label">Payment Method:</div>
@@ -427,153 +427,324 @@
        const orderData = <%- JSON.stringify(order) %>;
        const cancelledTotal = <%- cancelledTotal %>;
        const returnTotal = <%- returnTotal %>;
+       console.log("orderdata:::", orderData);
 
-
-function populateOrderDetails() {
-  // Basic info
-  document.getElementById('orderId').textContent = orderData.orderNumber;
-  document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
-  document.getElementById('itemCount').textContent = orderData.items.length;
-  document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
-  document.getElementById('paymentStatus').textContent = orderData.paymentStatus;
-  document.getElementById('customerName').textContent = orderData.billingDetails.name;
-  document.getElementById('customerEmail').textContent = orderData.billingDetails.email;
-  document.getElementById('customerPhone').textContent = orderData.billingDetails.phone;
-  document.getElementById('deliveryAddress').innerHTML = `
+       function populateOrderDetails() {
+         // Basic info
+         document.getElementById('orderId').textContent = orderData.orderNumber;
+         document.getElementById('orderDate').textContent = new Date(orderData.createdAt).toLocaleDateString();
+         document.getElementById('itemCount').textContent = orderData.items.length;
+         document.getElementById('paymentMethod').textContent = orderData.paymentMethod;
+         document.getElementById('paymentStatus').textContent = orderData.paymentStatus;
+         document.getElementById('customerName').textContent = orderData.billingDetails.name;
+         document.getElementById('customerEmail').textContent = orderData.billingDetails.email;
+         document.getElementById('customerPhone').textContent = orderData.billingDetails.phone;
+         document.getElementById('deliveryAddress').innerHTML = `
       ${orderData.billingDetails.address}, ${orderData.billingDetails.city},
       ${orderData.billingDetails.state}, ${orderData.billingDetails.country},
       ${orderData.billingDetails.pincode}<br>
       Landmark: ${orderData.billingDetails.landMark}
   `;
 
-  showPriceSummary();
+         showPriceSummary();
 
-  populateOrderItems();
-}
+         populateOrderItems();
 
-function showPriceSummary() {
-  const subTotal = orderData.items.reduce((acc, it) => acc + it.totalProductprice, 0);
-  const shippingCharge = orderData.shippingCharge || 0;
-  const couponDiscountTotal = orderData.couponApplied?.discountAmount || 0;
+         // Disable invoice download if payment failed
+         const invoiceBtn = document.getElementById("invoiceBtn");
 
-  const cancelledAmt = cancelledTotal || 0;
-  const returnedAmt = returnTotal || 0;
-  const adjustmentAmt = cancelledAmt + returnedAmt;
+         if (orderData.paymentStatus === "Failed") {
+           invoiceBtn.disabled = true;
+           invoiceBtn.classList.add("btn-secondary");
+           invoiceBtn.classList.remove("btn-orange");
+           invoiceBtn.innerHTML = `<i class="fas fa-ban me-2"></i>Invoice Unavailable`;
+         }
 
-  const activeTotal = subTotal - adjustmentAmt;
+       }
 
-  const festivalOffer = Math.round(activeTotal * 0.05);
+       function showPriceSummary() {
+         const subTotal = orderData.items.reduce((acc, it) => acc + it.totalProductprice, 0);
+         const shippingCharge = orderData.shippingCharge || 0;
+         const couponDiscountTotal = orderData.couponApplied?.discountAmount || 0;
 
-  let proportionalCoupon = 0;
-  if (couponDiscountTotal > 0 && activeTotal > 0) {
-    proportionalCoupon = Math.round((activeTotal / subTotal) * couponDiscountTotal);
-  }
+         const cancelledAmt = cancelledTotal || 0;
+         const returnedAmt = returnTotal || 0;
+         const adjustmentAmt = cancelledAmt + returnedAmt;
 
-  const originalFinalTotal = Math.round(subTotal - Math.round(subTotal * 0.05) - couponDiscountTotal + shippingCharge);
-  const grandTotal = Math.round(activeTotal - festivalOffer - proportionalCoupon + shippingCharge);
-  const allGone = (adjustmentAmt === subTotal);
+         const activeTotal = subTotal - adjustmentAmt;
+
+         const festivalOffer = Math.round(activeTotal * 0.05);
+
+         let proportionalCoupon = 0;
+         if (couponDiscountTotal > 0 && activeTotal > 0) {
+           proportionalCoupon = Math.round((activeTotal / subTotal) * couponDiscountTotal);
+         }
+
+         const originalFinalTotal = Math.round(subTotal - Math.round(subTotal * 0.05) - couponDiscountTotal + shippingCharge);
+         const grandTotal = Math.round(activeTotal - festivalOffer - proportionalCoupon + shippingCharge);
+         const allGone = (adjustmentAmt === subTotal);
 
 
-  document.getElementById("totalPrice").textContent = `₹${Math.round(subTotal)}`;
+         document.getElementById("totalPrice").textContent = `₹${Math.round(subTotal)}`;
 
-  document.getElementById("festivalOffer").textContent = `-₹${Math.round(subTotal * 0.05)}`;
-  document.getElementById("shipping").textContent = shippingCharge === 0 ? "Free" : `₹${shippingCharge}`;
+         document.getElementById("festivalOffer").textContent = `-₹${Math.round(subTotal * 0.05)}`;
+         document.getElementById("shipping").textContent = shippingCharge === 0 ? "Free" : `₹${shippingCharge}`;
 
-  document.getElementById("cancelledRow").style.display = cancelledAmt > 0 ? "flex" : "none";
-  document.getElementById("cancelledAmount").textContent = `-₹${Math.round(cancelledAmt)}`;
+         document.getElementById("cancelledRow").style.display = cancelledAmt > 0 ? "flex" : "none";
+         document.getElementById("cancelledAmount").textContent = `-₹${Math.round(cancelledAmt)}`;
 
 
-  document.getElementById("returnRow").style.display = returnedAmt > 0 ? "flex" : "none";
-  document.getElementById("returnAmount").textContent = `-₹${Math.round(returnedAmt)}`;
+         document.getElementById("returnRow").style.display = returnedAmt > 0 ? "flex" : "none";
+         document.getElementById("returnAmount").textContent = `-₹${Math.round(returnedAmt)}`;
 
-  
-  if (couponDiscountTotal > 0) {
-    document.getElementById("couponRow").style.display = "flex";
-    document.getElementById("couponCode").textContent = orderData.couponApplied.couponCode;
-    document.getElementById("couponDiscount").textContent = `-₹${proportionalCoupon}`;
-  } else {
-    document.getElementById("couponRow").style.display = "none";
-  }
 
-  if (allGone) {
-    document.getElementById("grandTotal").innerHTML = `<span style="color:red;font-weight:700;">ORDER CANCELLED</span>`;
-    document.getElementById("final").textContent = `₹${originalFinalTotal}`; // shows original value only for history
-    return;
-  }
+         if (couponDiscountTotal > 0) {
+           document.getElementById("couponRow").style.display = "flex";
+           document.getElementById("couponCode").textContent = orderData.couponApplied.couponCode;
+           document.getElementById("couponDiscount").textContent = `-₹${proportionalCoupon}`;
+         } else {
+           document.getElementById("couponRow").style.display = "none";
+         }
 
-  document.getElementById("final").textContent = `₹${originalFinalTotal}`;
-  document.getElementById("grandTotal").textContent = `₹${grandTotal}`;
-}
+         if (allGone) {
+           document.getElementById("grandTotal").innerHTML = `<span style="color:red;font-weight:700;">ORDER CANCELLED</span>`;
+           document.getElementById("final").textContent = `₹${originalFinalTotal}`; // shows original value only for history
+           return;
+         }
+
+         document.getElementById("final").textContent = `₹${originalFinalTotal}`;
+         document.getElementById("grandTotal").textContent = `₹${grandTotal}`;
+       }
 
        populateOrderDetails();
 
-       function populateOrderItems() {
+       //  function populateOrderItems() {
 
-         const container = document.getElementById('orderItems');
-         container.innerHTML = '';
+       //    const container = document.getElementById('orderItems');
+       //    container.innerHTML = '';
+       //    orderData.items.forEach(item => {
+       //      const product = item.productId;
+       //      const itemHtml = `
+       //           <div class="d-flex align-items-center p-3 border rounded mb-3">
+       //               <img src="${product.productImage[0] || '/placeholder.svg'}" 
+       //               alt="${product.productName.slice(0, 25)}" class="product-image me-3">
+       //               <div class="flex-grow-1">
+       //                   <h6 class="mb-1">${product.productName.slice(0, 25) + "..." }</h6>
+       //                   <div class="row">
+       //                       <div class="col-md-6">
+       //                           <small class="text-muted">Variant: ${item.variantName}</small><br>
+       //                           <small class="text-muted">Scale: ${item.scale}</small><br>
+       //                           <small class="text-muted">Brand: ${product.brand?.brandName || ''}</small><br>
+       //                           <small class="text-muted">Category: ${product.category?.name || ''}</small>
+       //                       </div>
+       //                       <div class="col-md-6">
+       //                           <div class="text-end">
+       //                               <div class="fw-bold">₹${item.salePrice.toLocaleString()}</div>
+       //                               <small class="text-muted">Qty: ${item.quantity}</small>
+       //                           </div>
+       //                       </div>
+       //                   </div>
+       //               </div>
+       //               <div class="ms-3">
+       //               ${(() => {
+       //                   if (item.itemStatus === "Shipped" || item.itemStatus === "Pending" ) {
+       //                     return `
+       //                       <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('${item._id}')">
+       //                         <i class="fas fa-times me-1"></i> Cancel Order
+       //                       </button>
+       //                     `;
+       //                   } 
+
+       //                   else if (item.itemStatus === "Cancelled") {
+       //                     return `<span class="badge bg-danger">Cancelled</span>`;
+       //                   } 
+
+       //                   else if (item.itemStatus === "Return-requested") {
+       //                     return `<span class="badge bg-warning text-dark">Return Requested</span>`;
+       //                   } 
+
+       //                   else if (item.itemStatus === "Return-accepted") {
+       //                     return `<span class="badge bg-warning">Returned</span>`;
+       //                   }
+
+       //                   else {
+       //                     return "";
+       //                   }
+       //               })()}                   
+       //               </div>
+       //           </div>
+       //       `;
+       //      container.innerHTML += itemHtml;
+       //    });
+       //  }
+
+       function populateOrderItems() {
+         const container = document.getElementById("orderItems");
+         container.innerHTML = "";
+
          orderData.items.forEach(item => {
            const product = item.productId;
+
            const itemHtml = `
-                <div class="d-flex align-items-center p-3 border rounded mb-3">
-                    <img src="${product.productImage[0] || '/placeholder.svg'}" 
-                    alt="${product.productName.slice(0, 25)}" class="product-image me-3">
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1">${product.productName.slice(0, 25) + "..." }</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <small class="text-muted">Variant: ${item.variantName}</small><br>
-                                <small class="text-muted">Scale: ${item.scale}</small><br>
-                                <small class="text-muted">Brand: ${product.brand?.brandName || ''}</small><br>
-                                <small class="text-muted">Category: ${product.category?.name || ''}</small>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-end">
-                                    <div class="fw-bold">₹${item.salePrice.toLocaleString()}</div>
-                                    <small class="text-muted">Qty: ${item.quantity}</small>
-                                </div>
-                            </div>
-                        </div>
+              <div class="d-flex align-items-center p-3 border rounded mb-3">
+
+                <img
+                  src="${product.productImage?.[0] || "/placeholder.svg"}"
+                  alt="${product.productName.slice(0, 25)}"
+                  class="product-image me-3"
+                />
+
+                <div class="flex-grow-1">
+                  <h6 class="mb-1">${product.productName.slice(0, 25)}...</h6>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <small class="text-muted">Variant: ${item.variantName}</small><br>
+                      <small class="text-muted">Scale: ${item.scale}</small><br>
+                      <small class="text-muted">Brand: ${product.brand?.brandName || ""}</small><br>
+                      <small class="text-muted">Category: ${product.category?.name || ""}</small>
                     </div>
-                    <div class="ms-3">
-                    ${(() => {
-                        if (item.itemStatus === "Shipped" || item.itemStatus === "Pending") {
-                          return `
-                            <button class="btn btn-outline-danger btn-sm" onclick="cancelOrder('${item._id}')">
-                              <i class="fas fa-times me-1"></i> Cancel Order
-                            </button>
-                          `;
-                        } 
-                        
-                        else if (item.itemStatus === "Cancelled") {
-                          return `<span class="badge bg-danger">Cancelled</span>`;
-                        } 
-                        
-                        else if (item.itemStatus === "Return-requested") {
-                          return `<span class="badge bg-warning text-dark">Return Requested</span>`;
-                        } 
-                        
-                        else if (item.itemStatus === "Return-accepted") {
-                          return `<span class="badge bg-warning">Returned</span>`;
-                        }
-                        
-                        else {
-                          return "";
-                        }
-                    })()}                   
+
+                    <div class="col-md-6 text-end">
+                      <div class="fw-bold">₹${item.salePrice.toLocaleString()}</div>
+                      <small class="text-muted">Qty: ${item.quantity}</small>
                     </div>
+                  </div>
                 </div>
+
+                <div class="ms-3">
+                  ${getOrderActionButtons(item)}
+                </div>
+
+              </div>
             `;
-           container.innerHTML += itemHtml;
+
+           container.insertAdjacentHTML("beforeend", itemHtml);
          });
        }
+
+
+       function getOrderActionButtons(item) {
+
+         /* =========================
+            CASH ON DELIVERY
+            ========================= */
+         if (orderData.paymentMethod === "Cash-On-Delivery") {
+
+           if (item.itemStatus === "Pending") {
+             return `
+        <button class="btn btn-outline-danger btn-sm"
+                onclick="cancelOrder('${item._id}')">
+          <i class="fas fa-times me-1"></i> Cancel Order
+        </button>
+      `;
+           }
+
+           if (item.itemStatus === "Shipped") {
+             return `<span class="badge bg-info">Shipped</span>`;
+           }
+
+           if (item.itemStatus === "Delivered") {
+             return `<span class="badge bg-success">Delivered</span>`;
+           }
+
+           if (item.itemStatus === "Cancelled") {
+             return `<span class="badge bg-danger">Cancelled</span>`;
+           }
+         }
+
+         /* =========================
+            ONLINE PAYMENT - RAZORPAY
+            ========================= */
+         if (orderData.paymentMethod === "Online-razorpay") {
+
+           if (orderData.paymentStatus === "Processing") {
+             return `<span class="badge bg-warning text-dark">Payment Processing</span>`;
+           }
+
+           if (orderData.paymentStatus === "Failed") {
+             return `
+        <span class="badge bg-danger d-block mb-1">Payment Failed</span>
+      `;
+           }
+
+           if (
+             orderData.paymentStatus === "Completed" &&
+             (item.itemStatus === "Pending" || item.itemStatus === "Shipped")
+           ) {
+             return `
+        <button class="btn btn-outline-danger btn-sm"
+                onclick="cancelOrder('${item._id}')">
+          <i class="fas fa-times me-1"></i> Cancel Order
+        </button>
+      `;
+           }
+         }
+
+         /* =========================
+            WALLET PAYMENT
+            ========================= */
+         if (orderData.paymentMethod === "wallet") {
+
+           // Wallet payments are always completed instantly
+           if (
+             item.itemStatus === "Pending" ||
+             item.itemStatus === "Shipped"
+           ) {
+             return `
+        <button class="btn btn-outline-danger btn-sm"
+                onclick="cancelOrder('${item._id}')">
+          <i class="fas fa-times me-1"></i> Cancel Order
+        </button>
+      `;
+           }
+
+           if (item.itemStatus === "Delivered") {
+             return `<span class="badge bg-success">Delivered</span>`;
+           }
+
+           if (item.itemStatus === "Cancelled") {
+             return `<span class="badge bg-danger">Cancelled</span>`;
+           }
+         }
+
+         /* =========================
+            COMMON ITEM STATES
+            ========================= */
+         if (item.itemStatus === "Return-requested") {
+           return `<span class="badge bg-warning text-dark">Return Requested</span>`;
+         }
+
+         if (item.itemStatus === "Return-accepted") {
+           return `<span class="badge bg-warning">Returned</span>`;
+         }
+
+         return "";
+       }
+
+
 
        function goBackToOrders() {
          window.location.href = "/myOrders"; // redirect 
        }
 
-       function downloadInvoice() {
-         window.location.href = `/orders/${orderData._id}/invoice`;
-       }
+      //  function downloadInvoice() {
+      //    window.location.href = `/orders/${orderData._id}/invoice`;
+      //  }
+
+      function downloadInvoice() {
+        if (orderData.paymentStatus === "Failed") {
+          Swal.fire({
+            icon: "error",
+            title: "Payment Failed",
+            text: "Invoice is available only for successful payments.",
+          });
+          return;
+        }
+      
+        window.location.href = `/orders/${orderData._id}/invoice`;
+      }
+
 
        function cancelOrder(itemId) {
 

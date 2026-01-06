@@ -20,7 +20,8 @@
   } from "./middlewares/cartCount.js";
 
   import { errorHandler }from "./middlewares/errorHandler.js";
-  import  "./utils/offerScheduler.js";
+  import "./utils/offerScheduler.js";
+  import "./utils/autocancelOrders.js";
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);

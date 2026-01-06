@@ -59,7 +59,55 @@ export const getuserOrders = async (req, res, next) => {
   }
 };
 
-export const updateOrderStatus = async (req, res,next) => {
+// export const updateOrderStatus = async (req, res,next) => {
+//   try {
+//     const { orderId } = req.params;
+//     const { status } = req.body;
+
+//     const validStatuses = ["Pending", "Shipped", "Delivered", "Returned"];
+
+//     if (!validStatuses.includes(status)) {
+//       return res
+//         .status(STATUS.BAD_REQUEST)
+//         .json({ success: false, message: MESSAGES.System.STATUS_INV });
+//     }
+
+//     const order = await orderSchema.findById(orderId);
+//     if (!order) {
+//       return res
+//         .status(STATUS.BAD_REQUEST)
+//         .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
+//     }
+
+//     order.orderStatus = status;
+//     order.paymentStatus = "Completed";
+
+//     order.items.forEach((item) => {
+//       if (
+//         item.itemStatus !== "Cancelled" &&
+//         item.itemStatus !== "Returned" &&
+//         item.itemStatus !== "Return-accepted" &&
+//         item.itemStatus !== "Return-rejected"
+//       ) {
+//         item.itemStatus = status;
+//       }
+//     });
+
+//     await order.save();
+
+//     return res.json({
+//       success: true,
+//       message: MESSAGES.System.UPDATED,
+//       order,
+//     });
+//   } catch (error) {
+//     console.error(MESSAGES.System.ORDER_UPDATE_ERROR, error);
+//     next(error);
+
+//   }
+// };
+
+export const updateOrderStatus = async (req, res, next) => {
   try {
     const { orderId } = req.params;
     const { status } = req.body;
@@ -75,22 +123,50 @@ export const updateOrderStatus = async (req, res,next) => {
     const order = await orderSchema.findById(orderId);
     if (!order) {
       return res
-        .status(STATUS.BAD_REQUEST)
+        .status(STATUS.NOT_FOUND)
         .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
     }
 
+    if (status === "Returned") {
+      const hasAcceptedReturn = order.items.some(
+        (item) => item.itemStatus === "Return-accepted"
+      );
+
+      if (!hasAcceptedReturn) {
+        return res.status(STATUS.BAD_REQUEST).json({
+          success: false,
+          message:
+            "Order cannot be marked as Returned without an accepted return request.",
+        });
+      }
+    }
+
     order.orderStatus = status;
-    order.paymentStatus = "Completed";
+
+    // Payment status 
+    if (status === "Delivered") {
+      order.paymentStatus = "Completed";
+    }
+
+    if (status === "Returned") {
+      order.paymentStatus = "Refunded";
+    }
 
     order.items.forEach((item) => {
       if (
-        item.itemStatus !== "Cancelled" &&
-        item.itemStatus !== "Returned" &&
-        item.itemStatus !== "Return-accepted" &&
-        item.itemStatus !== "Return-rejected"
+        ["Cancelled", "Returned", "Return-rejected"].includes(item.itemStatus)
       ) {
-        item.itemStatus = status;
+        return;
       }
+
+      if (status === "Returned") {
+        if (item.itemStatus === "Return-accepted") {
+          item.itemStatus = "Returned";
+        }
+        return;
+      }
+
+      item.itemStatus = status;
     });
 
     await order.save();
@@ -102,11 +178,10 @@ export const updateOrderStatus = async (req, res,next) => {
     });
   } catch (error) {
     console.error(MESSAGES.System.ORDER_UPDATE_ERROR, error);
-
     next(error);
-
   }
 };
+
 
 export const adminviewDetails = async (req, res, next) => {
   try {
