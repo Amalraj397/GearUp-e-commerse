@@ -100,13 +100,6 @@ export const unlistCategory = async (req, res, next) => {
       isBlocked: true,
     });
 
-
-    //test 
-  //   const removProduct =  await productSchema.findByIdAndUpdate(
-  //     {category:id,"variant.stock":{$lte:5}},
-  //     {$set:{isBlocked:true}}
-  // );
-    
     if (!updatedCategory) {
       return res
         .status(STATUS.NOT_FOUND)

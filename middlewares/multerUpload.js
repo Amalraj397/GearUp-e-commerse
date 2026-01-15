@@ -1,6 +1,6 @@
 // uploadMiddleware.js
 import multer from "multer";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
+import CloudinaryStorage from "multer-storage-cloudinary";
 import cloudinary from "../Config/cloudinary_Config.js"; // import only config
 import path from "path";
 
@@ -19,3 +19,4 @@ export function uploadMiddleware(folderName) {
     limits: { fileSize: 10 * 1024 * 1024 },
   });
 }
+export default uploadMiddleware;

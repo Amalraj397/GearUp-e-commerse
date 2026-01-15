@@ -2,8 +2,9 @@
   import session from "express-session";
   import cookieParser from "cookie-parser";
   import cors from "cors";
+  import { STATUS } from "./utils/statusCodes.js";
+  import { MESSAGES } from "./utils/messagesConfig.js";
   
-
   const app = express();
   import dotenv from "dotenv";
   dotenv.config(); // to read sll frm .env
@@ -12,14 +13,24 @@
 
   import userRoute from "./Routes/userRoute.js";
   import adminRoute from "./Routes/adminRoute.js";
+  import { requestLogger } from "./middlewares/requestLogger.js";
+  import logger from "./utils/logger.js";
+
+  app.use(requestLogger);    //log all httpq requests
+
+  logger.info("Autominima Enigne Starting...");
+
+  app.use((err,req,res,next)=>{
+    logger.error(err.message);
+    res.status(STATUS.INTERNAL_SERVER_ERROR).send(MESSAGES.System.INTERNAL_SERVER_ERROR);
+  });
 
   import { setUserLocals } from "./middlewares/setUserLocals.js";
   import {
     cartCountMiddleware,
-    wishlistCountmiddleware,
-  } from "./middlewares/cartCount.js";
+    wishlistCountmiddleware, } from "./middlewares/cartCount.js";
 
-  import { errorHandler }from "./middlewares/errorHandler.js";
+  import { errorHandler } from "./middlewares/errorHandler.js";
   import "./utils/offerScheduler.js";
   import "./utils/autocancelOrders.js";
 

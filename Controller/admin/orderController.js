@@ -59,54 +59,6 @@ export const getuserOrders = async (req, res, next) => {
   }
 };
 
-// export const updateOrderStatus = async (req, res,next) => {
-//   try {
-//     const { orderId } = req.params;
-//     const { status } = req.body;
-
-//     const validStatuses = ["Pending", "Shipped", "Delivered", "Returned"];
-
-//     if (!validStatuses.includes(status)) {
-//       return res
-//         .status(STATUS.BAD_REQUEST)
-//         .json({ success: false, message: MESSAGES.System.STATUS_INV });
-//     }
-
-//     const order = await orderSchema.findById(orderId);
-//     if (!order) {
-//       return res
-//         .status(STATUS.BAD_REQUEST)
-//         .json({ success: false, message: MESSAGES.Orders.NO_ORDER });
-//     }
-
-//     order.orderStatus = status;
-//     order.paymentStatus = "Completed";
-
-//     order.items.forEach((item) => {
-//       if (
-//         item.itemStatus !== "Cancelled" &&
-//         item.itemStatus !== "Returned" &&
-//         item.itemStatus !== "Return-accepted" &&
-//         item.itemStatus !== "Return-rejected"
-//       ) {
-//         item.itemStatus = status;
-//       }
-//     });
-
-//     await order.save();
-
-//     return res.json({
-//       success: true,
-//       message: MESSAGES.System.UPDATED,
-//       order,
-//     });
-//   } catch (error) {
-//     console.error(MESSAGES.System.ORDER_UPDATE_ERROR, error);
-//     next(error);
-
-//   }
-// };
-
 export const updateOrderStatus = async (req, res, next) => {
   try {
     const { orderId } = req.params;
