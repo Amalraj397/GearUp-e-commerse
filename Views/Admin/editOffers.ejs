@@ -13,10 +13,12 @@
     align-items: center;
     margin-bottom: 20px;
   }
+
   .page-title {
     font-size: 24px;
     margin: 0;
   }
+
   .back-button {
     display: flex;
     align-items: center;
@@ -28,22 +30,27 @@
     cursor: pointer;
     font-size: 14px;
   }
+
   .back-button .material-icons {
     margin-right: 8px;
   }
+
   .form-container {
     background-color: #2d3748;
     padding: 20px;
     border-radius: 8px;
   }
+
   .form-group {
     margin-bottom: 20px;
   }
- .form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight:bold;
+
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
   }
+
   .form-group input,
   .form-group select {
     width: 100%;
@@ -53,13 +60,16 @@
     border-radius: 4px;
     color: #ffffff;
   }
+
   .date-row {
     display: flex;
     gap: 20px;
   }
+
   .date-row .form-group {
     flex: 1;
   }
+
   .submit-button {
     background-color: #000000;
     color: #ffffff;
@@ -69,9 +79,11 @@
     cursor: pointer;
     font-size: 16px;
   }
+
   .submit-button:hover {
     background-color: #0343b1;
   }
+
   .error {
     color: red;
     font-size: 13px;
@@ -83,128 +95,130 @@
     margin-bottom: 18px;
   }
 
-  input.error-border, select.error-border {
+  input.error-border,
+  select.error-border {
     border: 1px solid red;
   }
-  
+
   .btn {
-  background: linear-gradient(135deg, #ff2600, #ff8c1a);
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-  border: none;
-  border-radius: 9px;
-  padding: 12px 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
-}
+    background: linear-gradient(135deg, #ff2600, #ff8c1a);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+  }
 
-.btn:hover {
-  background: linear-gradient(135deg, #ff8c1a, #ff714d);
-  box-shadow: 0 6px 18px rgba(255, 107, 0, 0.4);
-  transform: translateY(-2px);
-}
+  .btn:hover {
+    background: linear-gradient(135deg, #ff8c1a, #ff714d);
+    box-shadow: 0 6px 18px rgba(255, 107, 0, 0.4);
+    transform: translateY(-2px);
+  }
 
-.btn:active {
-  transform: scale(0.97);
-}
-.back-button {
-  background: #1c1c1c;
-  color: #ff6b00;
-  border: 2px solid #ff6b00;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
-}
+  .btn:active {
+    transform: scale(0.97);
+  }
 
-.back-button:hover {
-  background: #ff6b00;
-  color: #fff;
-  box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
-  transform: scale(1.05);
-}
+  .back-button {
+    background: #1c1c1c;
+    color: #ff6b00;
+    border: 2px solid #ff6b00;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(255, 107, 0, 0.3);
+  }
 
-.back-button:active {
-  transform: scale(0.95);
-}
+  .back-button:hover {
+    background: #ff6b00;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+    transform: scale(1.05);
+  }
 
-.date-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px; /* spacing between both fields */
-  flex-wrap: wrap; 
-}
+  .back-button:active {
+    transform: scale(0.95);
+  }
 
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
+  .date-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    /* spacing between both fields */
+    flex-wrap: wrap;
+  }
 
-.form-group input[type="date"] {
-  padding: 10px;
-  border: 1px solid #525a68;
-  border-radius: 4px;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
 
-.form-group input[type="date"]:focus {
-  border-color: #ff6b00;
-}
+  .form-group input[type="date"] {
+    padding: 10px;
+    border: 1px solid #525a68;
+    border-radius: 4px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
 
-.error {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
-}
+  .form-group input[type="date"]:focus {
+    border-color: #ff6b00;
+  }
 
-#offer-type {
-  width: 100%;
-  padding: 10px;
- 
-  border-radius: 6px;
-  font-size: 15px;
-  outline: none;
-  
-  background-color: #1a202c;
-  border: 1px solid #4a5568;
-  color: #ffffff;
-  transition: border-color 0.3s ease;
-}
+  .error {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+  }
 
-#offer-type:focus {
-  border-color: #ff6b00;
-}
+  #offer-type {
+    width: 100%;
+    padding: 10px;
 
-#offer-type option {
-  background-color: #1c1c1c; 
-  color: #ff6b00; 
-  font-weight: 500;
-}
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
 
-.update-btn {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    background-color: #1a202c;
+    border: 1px solid #4a5568;
+    color: #ffffff;
+    transition: border-color 0.3s ease;
+  }
 
-.update-btn:hover {
-  background-color: #0056b3;
-}
+  #offer-type:focus {
+    border-color: #ff6b00;
+  }
 
+  #offer-type option {
+    background-color: #1c1c1c;
+    color: #ff6b00;
+    font-weight: 500;
+  }
+
+  .update-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .update-btn:hover {
+    background-color: #0056b3;
+  }
 </style>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -216,108 +230,80 @@
       <span class="material-icons">arrow_back</span>
     </button>
   </div>
-<div class="form-container">
-  <form id="edit-offer-form" data-id="<%= offer._id %>">
-    <input type="hidden" id="offer-id" value="<%= offer._id %>" />
+  <div class="form-container">
+    <form id="edit-offer-form" data-id="<%= offer._id %>">
+      <input type="hidden" id="offer-id" value="<%= offer._id %>" />
 
-    <div class="form-group">
-      <label for="offer-name"><b>Offer Name</b></label>
-      <input
-        type="text"
-        id="offer-name"
-        name="offerName"
-        value="<%= offer.offerName %>"
-        placeholder="Enter Offer Name"
-      />
-      <span class="error" id="offerNameError"></span>
-    </div>
-
-    <div class="form-group">
-      <label for="offer-type"><b>Offer Type</b></label>
-      <select id="offer-type" name="offerType">
-        <option value="">- Select -</option>
-        <option value="Product" <%= offer.offerType === 'Product' ? 'selected' : '' %>>Product</option>
-        <option value="Category" <%= offer.offerType === 'Category' ? 'selected' : '' %>>Category</option>
-        <option value="Brand" <%= offer.offerType === 'Brand' ? 'selected' : '' %>>Brand</option>
-      </select>
-      <span class="error" id="offerTypeError"></span>
-    </div>
-
-    <div class="form-group">
-  <label for="applicable-to"><b>Applicable To</b></label>
-  <select id="applicable-to" name="ApplicableTo" multiple>
-    <% if (offer.offerType === 'Product') { %>
-      <% productData.forEach(product => { %>
-        <option 
-          value="<%= product._id %>"
-          <%= offer.ApplicableTo.includes(product._id.toString()) ? 'selected' : '' %>>
-          <%= product.productName %>
-        </option>
-      <% }) %>
-    <% } else if (offer.offerType === 'Category') { %>
-      <% categoryData.forEach(category => { %>
-        <option 
-          value="<%= category._id %>"
-          <%= offer.ApplicableTo.includes(category._id.toString()) ? 'selected' : '' %>>
-          <%= category.name %>
-        </option>
-      <% }) %>
-    <% } else if (offer.offerType === 'Brand') { %>
-      <% brandData.forEach(brand => { %>
-        <option 
-          value="<%= brand._id %>"
-          <%= offer.ApplicableTo.includes(brand._id.toString()) ? 'selected' : '' %>>
-          <%= brand.brandName %>
-        </option>
-      <% }) %>
-    <% } %>
-  </select>
-  <span class="error" id="applicableError"></span>
-</div>
-
-
-    <div class="form-group">
-      <label for="discount"><b>Discount Percentage</b></label>
-      <input
-        type="number"
-        id="discount"
-        name="discount"
-        value="<%= offer.discountPercentage %>"
-        placeholder="Enter discount %"
-      />
-      <span class="error" id="discountError"></span>
-    </div>
-
-    <div class="date-container">
       <div class="form-group">
-        <label for="start-date"><b>Start Date</b></label>
-        <input
-          type="date"
-          id="start-date"
-          name="startDate"
-          value="<%= offer.startDate.toISOString().split('T')[0] %>"
-        />
-        <span class="error" id="startDateError"></span>
+        <label for="offer-name"><b>Offer Name</b></label>
+        <input type="text" id="offer-name" name="offerName" value="<%= offer.offerName %>" placeholder="Enter Offer Name" />
+        <span class="error" id="offerNameError"></span>
       </div>
 
       <div class="form-group">
-        <label for="end-date"><b>End Date</b></label>
-        <input
-          type="date"
-          id="end-date"
-          name="endDate"
-          value="<%= offer.endDate.toISOString().split('T')[0] %>"
-        />
-        <span class="error" id="endDateError"></span>
+        <label for="offer-type"><b>Offer Type</b></label>
+        <select id="offer-type" name="offerType">
+          <option value="">- Select -</option>
+          <option value="Product" <%= offer.offerType === 'Product' ? 'selected' : '' %>>Product</option>
+          <option value="Category" <%= offer.offerType === 'Category' ? 'selected' : '' %>>Category</option>
+          <option value="Brand" <%= offer.offerType === 'Brand' ? 'selected' : '' %>>Brand</option>
+        </select>
+        <span class="error" id="offerTypeError"></span>
       </div>
-    </div>
 
-    <button type="submit" class="btn update-btn">Update Offer</button>
-  </form>
-</div>
+      <div class="form-group">
+        <label for="applicable-to"><b>Applicable To</b></label>
+        <select id="applicable-to" name="ApplicableTo" multiple>
+          <% if (offer.offerType === 'Product') { %>
+          <% productData.forEach(product => { %>
+          <option value="<%= product._id %>" <%= offer.ApplicableTo.includes(product._id.toString()) ? 'selected' : '' %>>
+            <%= product.productName %>
+          </option>
+          <% }) %>
+          <% } else if (offer.offerType === 'Category') { %>
+          <% categoryData.forEach(category => { %>
+          <option value="<%= category._id %>" <%= offer.ApplicableTo.includes(category._id.toString()) ? 'selected' : '' %>>
+            <%= category.name %>
+          </option>
+          <% }) %>
+          <% } else if (offer.offerType === 'Brand') { %>
+          <% brandData.forEach(brand => { %>
+          <option value="<%= brand._id %>" <%= offer.ApplicableTo.includes(brand._id.toString()) ? 'selected' : '' %>>
+            <%= brand.brandName %>
+          </option>
+          <% }) %>
+          <% } %>
+        </select>
+        <span class="error" id="applicableError"></span>
+      </div>
 
-    <div id="errorMessages" style="color: red;"></div>
+
+      <div class="form-group">
+        <label for="discount"><b>Discount Percentage</b></label>
+        <input type="number" id="discount" name="discount" value="<%= offer.discountPercentage %>" placeholder="Enter discount %" />
+        <span class="error" id="discountError"></span>
+      </div>
+
+      <div class="date-container">
+        <div class="form-group">
+          <label for="start-date"><b>Start Date</b></label>
+          <input type="date" id="start-date" name="startDate" value="<%= offer.startDate.toISOString().split('T')[0] %>" />
+          <span class="error" id="startDateError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="end-date"><b>End Date</b></label>
+          <input type="date" id="end-date" name="endDate" value="<%= offer.endDate.toISOString().split('T')[0] %>" />
+          <span class="error" id="endDateError"></span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn update-btn">Update Offer</button>
+    </form>
   </div>
+
+  <div id="errorMessages" style="color: red;"></div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -371,46 +357,55 @@
       const startDate = document.getElementById("start-date").value;
       const endDate = document.getElementById("end-date").value;
 
-      // Local validation
       let isValid = true;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
       if (!offerName) {
         document.getElementById("offerNameError").textContent = "Offer name is required.";
-        document.getElementById("offer-name").classList.add("error-border");
+        offerName.classList.add("error-border");
         isValid = false;
       }
       if (!offerType) {
         document.getElementById("offerTypeError").textContent = "Please select an offer type.";
-        document.getElementById("offer-type").classList.add("error-border");
+        offerType.classList.add("error-border");
         isValid = false;
       }
       if (ApplicableTo.length === 0) {
         document.getElementById("applicableError").textContent = "Select at least one applicable item.";
-        document.getElementById("applicable-to").classList.add("error-border");
+        ApplicableTo.classList.add("error-border");
         isValid = false;
       }
       if (!discountPercentage || discountPercentage < 0 || discountPercentage > 100) {
         document.getElementById("discountError").textContent = "Discount must be between 0 and 100%.";
-        document.getElementById("discount").classList.add("error-border");
+        discountPercentage.classList.add("error-border");
         isValid = false;
       }
+
       if (!startDate) {
         document.getElementById("startDateError").textContent = "Start date is required.";
-        document.getElementById("start-date").classList.add("error-border");
+        startDate.classList.add("error-border");
+        isValid = false;
+
+      } else if (new Date(startDate) < today) {
+        document.getElementById("startDateError").textContent ="Start date cannot be less than today.";
+        startDate.classList.add("error-border");
         isValid = false;
       }
+
       if (!endDate) {
         document.getElementById("endDateError").textContent = "End date is required.";
-        document.getElementById("end-date").classList.add("error-border");
+        endDate.classList.add("error-border");
         isValid = false;
+
       } else if (new Date(endDate) < new Date(startDate)) {
         document.getElementById("endDateError").textContent = "End date cannot be before start date.";
-        document.getElementById("end-date").classList.add("error-border");
+        endDate.classList.add("error-border");
         isValid = false;
       }
 
       if (!isValid) return;
 
-      // Build payload only with updated fields
       const formData = {};
       if (offerName) formData.offerName = offerName;
       if (offerType) formData.offerType = offerType;
@@ -419,11 +414,13 @@
       if (startDate) formData.startDate = startDate;
       if (endDate) formData.endDate = endDate;
 
-console.log("formdata",formData)
+      console.log("formdata", formData)
       try {
         const response = await fetch(`/admin/editOffer/${offerId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify(formData),
         });
 

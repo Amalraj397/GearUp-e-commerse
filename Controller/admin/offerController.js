@@ -2,7 +2,8 @@ import offerSchema from "../../Models/offerModel.js";
 import productSchema from "../../Models/productModel.js";
 import categorySchema from "../../Models/categoryModel.js";
 import brandSchema from "../../Models/brandModel.js";
-import {applyOfferTocartwishlist} from "../../utils/applyOffCartWishlist.js"
+import { applyOfferTocartwishlist } from "../../utils/applyOffCartWishlist.js"
+import { calculateOfferStatus } from "../../utils/calculateOfferStatus.js";
 import { STATUS } from "../../utils/statusCodes.js";
 import { MESSAGES } from "../../utils/messagesConfig.js";
 
@@ -27,7 +28,7 @@ export const getOfferPage = async (req, res, next) => {
       .limit(limit)
       .populate({
         path: "ApplicableTo",
-        select: "productName name brandName", 
+        select: "productName name brandName",
       }).exec();
 
     res.status(STATUS.OK).render("offers.ejs", {
@@ -38,7 +39,7 @@ export const getOfferPage = async (req, res, next) => {
       searchQuery,
     });
   } catch (error) {
-    console.error(MESSAGES.Offers.OFFR_PAGE_ERR , error);
+    console.error(MESSAGES.Offers.OFFR_PAGE_ERR, error);
     next(error);
   }
 };
@@ -47,11 +48,11 @@ export const getOfferPage = async (req, res, next) => {
 export const getaddOffer = async (req, res, next) => {
   try {
     const [productData, categoryData, brandData] = await Promise.all(
-        [
+      [
         productSchema.find({}).sort({ productName: 1 }).lean(),
         categorySchema.find({}).sort({ name: 1 }).lean(),
         brandSchema.find({}).sort({ brandName: 1 }).lean(),
-        ]   
+      ]
     );
     return res.status(STATUS.OK).render("addOffers.ejs", {
       productData,
@@ -136,7 +137,8 @@ export const addOffer = async (req, res, next) => {
       ApplicableTo,
       startDate,
       endDate,
-      status: true,
+      // status: true,
+      status: calculateOfferStatus(startDate, endDate),
     });
 
     await newOffer.save();
@@ -155,7 +157,7 @@ export const addOffer = async (req, res, next) => {
         { $set: { brandOffer: discountPercentage } }
       );
     }
-    
+
     let productsToUpdate = [];
 
     if (offerType === "Product") {
@@ -246,9 +248,36 @@ export const updateOffer = async (req, res, next) => {
         });
       }
     }
-    const updatedOffer = await offerSchema.findByIdAndUpdate(id, updates, {
-      new: true,
-    });
+    // const updatedOffer = await offerSchema.findByIdAndUpdate(id, updates, {
+    //   new: true,
+    // });
+
+    const existingOffer = await offerSchema.findById(id);
+
+    if (!existingOffer) {
+      return res.status(STATUS.NOT_FOUND).json({
+        success: false,
+        message: "Offer not found",
+      });
+    }
+
+    // merge updates
+    Object.assign(existingOffer, updates);
+
+    // 🔥 recalculate status AFTER date changes
+    existingOffer.status = calculateOfferStatus(
+      existingOffer.startDate,
+      existingOffer.endDate
+    );
+
+    // 🔥 restore discountPercentage if admin edited it
+    if (existingOffer.status && updates.discountPercentage !== undefined) {
+      existingOffer.discountPercentage = updates.discountPercentage;
+    }
+
+    await existingOffer.save();
+
+    const updatedOffer = existingOffer;
 
     if (!updatedOffer) {
       return res.status(STATUS.NOT_FOUND).json({

@@ -348,6 +348,10 @@
       document.getElementById("startDateError").textContent = "Start date is required.";
       startDate.classList.add("error-border");
       isValid = false;
+    }else if (new Date(startDate.value) < new Date().setHours(0,0,0,0)) {
+      document.getElementById("startDateError").textContent = "Start date cannot be in the past.";
+      startDate.classList.add("error-border");
+      isValid = false;
     }
 
     if (!endDate.value) {
