@@ -24,7 +24,6 @@
       color: #9d0707;
     }
 
-
     body {
       margin: 0;
       padding: 0;
@@ -36,7 +35,6 @@
       position: relative;
     }
 
-    /* Style for the video */
     #bg-video {
       position: fixed;
       top: 0;
@@ -104,7 +102,7 @@
       cursor: pointer;
       font-weight: bold;
       transition: 0.3s ease;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .btn:hover {
@@ -121,15 +119,22 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      padding: 2px 20px !important;
+      margin: 15px auto 0 auto !important;
+      width: fit-content;
+      font-size: 12px;
+      font-weight: 400;
     }
 
     .google-btn:hover {
-      background-color: #f5f5f5;
+      background-color: #f8f3e5;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      border: 3px solid #f36e10;
     }
 
     .google-btn img {
-      width: 20px;
-      height: 20px;
+      width: 14px;
+      height: 14px;
     }
 
     .signup {
@@ -181,12 +186,11 @@
       object-fit: cover;
       z-index: -1;
       background-color: black;
-      /* fallback color if aspect ratio creates bars */
+  
     }
 
     .modal {
       display: none;
-      /* Hidden by default */
       position: fixed;
       z-index: 999;
       left: 0;
@@ -297,6 +301,12 @@
         <a href="#" id="forgotPasswordBtn">Forgot Password?</a>
       </div>
       <button class="btn" type="submit">LOGIN</button>
+      
+      <button class="btn google-btn" id="google-login" type="button">
+        <i class="fab fa-google" style="font-size: 14px;"></i>
+        Login with Google
+      </button>
+
       <a href="/" class="go-back-button">Go Back</a>
     </form>
 
@@ -320,7 +330,25 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/gh/noumanqamar450/alertbox@main/version/1.0.2/alertbox.min.js"></script>
   <script src="User/assets/js/forgotPass.js "></script>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+  <!-- Firebase Auth (compat version) -->
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
   <!-- Copy\Public\User\assets\js\forgotPass.js  -->
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6oCwWMMPVUy278R7RqtfyIDjdf9Lr2bQ",
+      authDomain: "auth-gearup.firebaseapp.com",
+      projectId: "auth-gearup",
+      storageBucket: "auth-gearup.firebasestorage.app",
+      messagingSenderId: "1035509266541",
+      appId: "1:1035509266541:web:1de31eb39abebb79be2764",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <script>
 
     //.......... toggle eye..........
@@ -462,6 +490,70 @@
         }
       });
     });
+  });
+
+  // -------- Google Login -------
+  document.addEventListener("DOMContentLoaded", () => {
+    const googleLoginBtn = document.getElementById("google-login");
+
+    if (googleLoginBtn) {
+      googleLoginBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase
+          .auth()
+          .signInWithPopup(provider)
+          .then((result) => {
+            const user = result.user;
+
+            const userData = {
+              email: user.email,
+              displayName: user.displayName,
+              googleId: user.uid,
+              photo: user.photoURL,
+            };
+
+            return fetch("/auth/google/signup", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            });
+          })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              localStorage.setItem(
+                "loggedInUser",
+                JSON.stringify(data.user)
+              );
+              Swal.fire({
+                icon: "success",
+                title: "Login Successful!",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+
+              setTimeout(() => {
+                window.location.href = "/"; // Redirect after login
+              }, 1000);
+            } else {
+              throw new Error("Something went wrong during login");
+            }
+          })
+          .catch((error) => {
+            console.error("Google Login Error:", error);
+
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Authentication Failed!",
+            });
+          });
+      });
+    }
   });
 </script>
 </body>

@@ -467,7 +467,14 @@ export const handleGoogleSignup = async (req, res, next) => {
         .json({ success: false, message: MESSAGES.Users.USER_BLKED_BY_ADMIN });
     }
 
-    if (user) return res.status(STATUS.OK).json({ success: true, user });
+    if (user) {
+      // Set session for existing user
+      req.session.user = {
+        id: user._id,
+        name: user.firstName,
+      };
+      return res.status(STATUS.OK).json({ success: true, user });
+    }
 
     const nameParts = displayName.split(" ");
     const firstName = nameParts[0];
@@ -484,6 +491,15 @@ export const handleGoogleSignup = async (req, res, next) => {
       password: hashedPassword,
       googleId,
     });
+
+    // Create wallet for new user
+    await createWalletForUser(user._id, 1000, "Welcome Bonus credited");
+
+    // Set session to log in the user
+    req.session.user = {
+      id: user._id,
+      name: user.firstName,
+    };
 
     res.status(STATUS.CREATED).json({ success: true, user });
   } catch (error) {
