@@ -783,6 +783,9 @@ Type: ${data.addressType}`;
     function toggleCouponList() {
       const list = document.getElementById("couponList");
       const icon = document.getElementById("toggleIcon");
+      
+      if (!list || !icon) return; // Safety check
+      
       const isVisible = list.style.display === "block";
       list.style.display = isVisible ? "none" : "block";
       icon.textContent = isVisible ? "view" : "close";
@@ -794,6 +797,9 @@ Type: ${data.addressType}`;
         const res = await fetch("/available-coupons");
         const data = await res.json();
         const list = document.getElementById("couponList");
+        
+        if (!list) return; // Safety check
+        
         list.innerHTML = "";
 
         if (!data.success || data.coupons.length === 0) {
@@ -802,7 +808,7 @@ Type: ${data.addressType}`;
         }
 
         const totalElem = document.querySelector(".total-final span:last-child");
-        const grandTotalText = (originalTotal ?? totalElem.textContent.replace("₹", "").trim());
+        const grandTotalText = (originalTotal ?? totalElem?.textContent.replace("₹", "").trim());
         const cartTotal = parseFloat(grandTotalText);
 
         data.coupons.forEach(coupon => {
