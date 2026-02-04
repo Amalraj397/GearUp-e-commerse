@@ -119,7 +119,7 @@ export const unlistCategory = async (req, res, next) => {
 export const listCategory = async (req, res, next) => {
   try {
     const { id } = req.params;
-
+  // commanbd 23213
     const updatedCategory = await categorySchema.findByIdAndUpdate(id, {
       isBlocked: false,
     });
