@@ -79,6 +79,7 @@ html {
   const hamburger = document.getElementById('hamburger');
   const navMenu = document.getElementById('nav-menu');
   const userDropdown = document.getElementById('user-dropdown');
+  const userName = document.getElementById('user-name');
 
   hamburger.addEventListener('click', (e) => {
     e.stopPropagation();
@@ -89,35 +90,40 @@ html {
     hamburger.classList.toggle('active');
   });
 
-  // Close menu when a link is clicked
-  const navLinks = document.querySelectorAll('.nav-link');
+  // Close menu when a link is clicked (but exclude dropdown menu items and user-name)
+  const navLinks = document.querySelectorAll('.nav-links .nav-link');
   navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
-      // Don't close if it's the user-name link
-      if (!link.id.includes('user-name')) {
-        navMenu.classList.remove('active');
-        if (userDropdown) {
-          userDropdown.style.display = 'none';
-        }
-        hamburger.classList.remove('active');
-      }
-    });
-  });
-
-  // Close menu when clicking outside - but not on dropdown items
-  document.addEventListener('click', (e) => {
-    const isClickInsideNav = navMenu.contains(e.target);
-    const isClickOnHamburger = hamburger.contains(e.target);
-    const isClickInsideDropdown = userDropdown && userDropdown.contains(e.target);
-    
-    // Allow clicks on user dropdown menu items to work
-    const isUserMenuLink = e.target.closest('.user-menu a') || e.target.closest('.user-menu li');
-
-    if (!isClickInsideNav && !isClickOnHamburger && !isClickInsideDropdown && !isUserMenuLink) {
       navMenu.classList.remove('active');
       if (userDropdown) {
         userDropdown.style.display = 'none';
       }
+      hamburger.classList.remove('active');
+    });
+  });
+
+  // User dropdown menu item clicks should navigate without closing
+  const userMenuLinks = document.querySelectorAll('.user-menu a');
+  userMenuLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // For logout button, let the Swal handle it
+      if (link.classList.contains('logoutBtn')) {
+        e.preventDefault();
+        return;
+      }
+      // For other links, allow normal navigation
+      // Navigation will happen and page will change
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const isClickInsideNav = navMenu.contains(e.target);
+    const isClickOnHamburger = hamburger.contains(e.target);
+    const isClickInsideDropdown = userDropdown && userDropdown.contains(e.target);
+
+    if (!isClickInsideNav && !isClickOnHamburger && !isClickInsideDropdown) {
+      navMenu.classList.remove('active');
       hamburger.classList.remove('active');
     }
   });
