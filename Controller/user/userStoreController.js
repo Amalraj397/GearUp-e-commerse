@@ -20,6 +20,12 @@ export const getshopPage = async (req, res, next) => {
       filter.productName = { $regex: regex };
     }
 
+    // Handle brand filter from query parameters
+    const brandsQuery = req.query.brands;
+    if (brandsQuery) {
+      filter.brand = { $in: brandsQuery.split(",") };
+    }
+
     const products = await productSchema
       .find(filter)
       .populate("brand", "brandName")
@@ -66,8 +72,9 @@ export const getshopPage = async (req, res, next) => {
       minPrice: null,
       maxPrice: null,
       selectedCategories: [],
-      selectedBrands: [],
+      selectedBrands: brandsQuery ? brandsQuery.split(",") : [],
       selectedEditions: [],
+
       selectedScales: [],
     });
   } catch (error) {
@@ -125,9 +132,10 @@ export const getcategoryPage = (req, res, next) => {
 };
 
 //  Brand page
-export const getBrandPage = (req, res, next) => {
+export const getBrandPage = async (req, res, next) => {
   try {
-    res.render("brandPage.ejs");
+    const brands = await brandSchema.find({ isBlocked: false });
+    res.render("brandPage.ejs", { brands });
   } catch (error) {
     console.log(MESSAGES.Store.ERROR_LOADING_BRAND, error);
     next(error)
