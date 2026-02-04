@@ -320,11 +320,18 @@ ul {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   list-style: none;
   z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 /* Show menu on hover of user-dropdown */
 .user-dropdown:hover .user-menu {
   display: block;
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
 }
 
 .user-menu li {
@@ -342,6 +349,7 @@ ul {
   transition: all 0.3s ease;
   white-space: nowrap;
   text-transform: capitalize;
+  pointer-events: auto;
 }
 
 .user-menu li a i {

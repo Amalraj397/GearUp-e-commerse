@@ -104,13 +104,16 @@ html {
     });
   });
 
-  // Close menu when clicking outside
+  // Close menu when clicking outside - but not on dropdown items
   document.addEventListener('click', (e) => {
     const isClickInsideNav = navMenu.contains(e.target);
     const isClickOnHamburger = hamburger.contains(e.target);
     const isClickInsideDropdown = userDropdown && userDropdown.contains(e.target);
+    
+    // Allow clicks on user dropdown menu items to work
+    const isUserMenuLink = e.target.closest('.user-menu a') || e.target.closest('.user-menu li');
 
-    if (!isClickInsideNav && !isClickOnHamburger && !isClickInsideDropdown) {
+    if (!isClickInsideNav && !isClickOnHamburger && !isClickInsideDropdown && !isUserMenuLink) {
       navMenu.classList.remove('active');
       if (userDropdown) {
         userDropdown.style.display = 'none';
