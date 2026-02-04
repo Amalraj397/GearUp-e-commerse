@@ -16,6 +16,8 @@
   import { requestLogger } from "./middlewares/requestLogger.js";
   import logger from "./utils/logger.js";
 
+  import contactRoute from "./Routes/contactRoute.js";
+
   app.use(requestLogger);    //log all httpq requests
 
   logger.info("Autominima Enigne Starting...");
@@ -73,6 +75,8 @@
   app.use(wishlistCountmiddleware);
   app.use("/", userRoute);
   app.use("/admin", adminRoute);
+
+  app.use("/api", contactRoute);
 
   app.use((req, res) => {
     res.status(404).render("page-404");

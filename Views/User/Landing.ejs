@@ -1,215 +1,244 @@
 <%-include("../../Views/Partials/User/headerLand")%>
 <style>
-html {
-  scroll-behavior: smooth;
-}
+  html {
+    scroll-behavior: smooth;
+  }
+
+  .facility-title {
+    color: #ff6600;
+    /* AutoMinima orange */
+    font-size: 1.4rem;
+    /* adjust if needed */
+    font-weight: 700;
+    margin: 12px 0 6px;
+  }
+
+  .facility-description {
+    font-size: 1rem;
+    color: #555;
+    /* dark gray for readability */
+    line-height: 1.5;
+  }
 </style>
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                 <div class="arrows">
-                    <button class="arrow-btn prev">&#10094;&#10094;</button>
-                    <button class="arrow-btn next">&#10095;&#10095;</button>
-                </div>
-                <div class="hero-text">
-                    <span class="year-tag">CARS RANGE-2025</span>
-                    <h2>Vanquish Comp Carbon</h2>
-                    <div class="price">₹2955.00</div>
-                    <p>High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.</p>
-                    <div class="hero-buttons">
-                        <button class="btn btn-primary">BUY NOW</button>
-                        <button class="btn btn-secondary">EXPLORE PRODUCTS</button>
-                    </div>
-                </div>
-                <div class="hero-image" >
-                    <div class="orange-bg"></div>
-                    <img id="hero-bike" src="./User/assets/images/backgrounds/2018-Ferrari-FXX-K-Evo-001-1080-removebg-preview.png " alt="Vanquish Comp Carbon Bicycle" id="hero-bike">
-                </div>
-            </div>
-            <div class="hero-controls">
-                <div class="dots">
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-            </div>
-        </section>
-        <section class="facilities">
-            <h2 class="section-title">Our Facilities & Features</h2>
-            <div class="facilities-container">
-                <div class="facility-card">
-                    <div class="facility-icon">
-                        <div class="icon-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3>Complete Overhaul</h3>
-                    <p>Professional bike maintenance from our certified expert technicians</p>
-                </div>
-                <div class="facility-card">
-                    <div class="facility-icon">
-                        <div class="icon-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 12.5V10a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v1.4"></path>
-                                <path d="M14 11V9a2 2 0 1 0-4 0v2"></path>
-                                <path d="M10 10.5V5a2 2 0 1 0-4 0v9"></path>
-                                <path d="m7 15-1.76-1.76a2 2 0 0 0-2.83 2.82l3.6 3.6C7.5 21.14 9.2 22 12 22h2a8 8 0 0 0 8-8V7a2 2 0 1 0-4 0v5"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3>Custom Parts & Accessories</h3>
-                    <p>Personalize your ride with our wide range of custom options</p>
-                </div>
-                <div class="facility-card">
-                    <div class="facility-icon">
-                        <div class="icon-circle">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="5.5" cy="17.5" r="3.5"></circle>
-                                <circle cx="18.5" cy="17.5" r="3.5"></circle>
-                                <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h3>Bike Fitting & Delivery</h3>
-                    <p>Professional bike fitting service and convenient delivery options</p>
-                </div>
-            </div>
-        </section>
+<main>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="arrows">
+        <button class="arrow-btn prev">&#10094;&#10094;</button>
+        <button class="arrow-btn next">&#10095;&#10095;</button>
+      </div>
+      <div class="hero-text">
+        <span class="year-tag">CARS RANGE-2025</span>
+        <h2>Vanquish Comp Carbon</h2>
+        <div class="price">₹2955.00</div>
+        <p>High-end carbon frame provides efficiency and stiffness through the use of optimized layered tubes.</p>
+        <div class="hero-buttons">
+          <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="orange-bg"></div>
+        <img id="hero-bike" src="./User/assets/images/backgrounds/2018-Ferrari-FXX-K-Evo-001-1080-removebg-preview.png " alt="Vanquish Comp Carbon Bicycle" id="hero-bike">
+      </div>
+    </div>
+    <div class="hero-controls">
+      <div class="dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </section>
+  <section class="facilities">
+    <h2 class="section-title">Our Collector Facilities & Features</h2>
 
-        <section class="product-categories">
+    <div class="facilities-container">
 
-            <div class="product-category kids">
-                <div class="product-info">
-                    <h3>Premium series CARS</h3>
-                    <p>Top-tier models with unmatched detail.</p>
-                    <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
-                </div>
-                <div class="product-image">
-                    <video src="/User/assets/videos/Nissan Skyline GTR-34 blue.mp4"  autoplay muted loop playsinline  style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
-                </div>
-            </div>
-            
-            <div class="product-category accessories">
-                <div class="product-info">
-                    <h3>Super-Fancy CARS</h3>
-                   <p>Bold designs built to impress.</p>
-                    <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
-                </div>
-               <div class="product-image">
-                    <video src="/User/assets/videos/drift video hotwheels.mp4"  autoplay muted loop playsinline  style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
-                </div>
-            </div>
+      <!-- Facility 1 -->
+      <div class="facility-card">
+        <div class="facility-icon">
+          <div class="icon-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l7 4v6c0 5-3.8 9.7-7 10-3.2-.3-7-5-7-10V6l7-4z"></path>
+              <path d="M9 12l2 2 4-4"></path>
+            </svg>
+          </div>
+        </div>
+        <h2 class="facility-title">Authenticity & Quality Checks</h2>
+        <p>Every diecast model is inspected for detailing, paint finish, and collector-grade quality.</p>
+      </div>
 
-            <div class="product-category accessories">
-                <div class="product-image">
-                    <video src="/User/assets/videos/mclaren 7205.mp4"  autoplay muted loop playsinline  style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
-                </div>
-                <div class="product-info">
-                    <h3>Exclusive CARS</h3>
-                    <p>Rare finds for true collectors.</p>
-                    <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
-                </div> 
-            </div>
+      <!-- Facility 2 -->
+      <div class="facility-card">
+        <div class="facility-icon">
+          <div class="icon-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 22 7 12 12 2 7 12 2"></polygon>
+              <polyline points="2 12 12 17 22 12"></polyline>
+              <polyline points="2 17 12 22 22 17"></polyline>
+            </svg>
+          </div>
+        </div>
+        <h2 class="facility-title">Multiple Scale Edition & Collections</h2>
+        <p>From 1:64 to premium 1:18 scales, including limited and exclusive edition models.</p>
+      </div>
 
-            <div class="product-category accessories">
-                 <div class="product-image">
-                    <video src="/User/assets/videos/fort escort RS1600.mp4"  autoplay muted loop playsinline style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
-                </div>
-                <div class="product-info">
-                    <h3>Mainline CARS</h3>
-                    <p>Everyday favorites, always ready to race.</p>
-                    <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
-                </div>
-            </div>
-        </section>
+      <!-- Facility 3 -->
+      <div class="facility-card">
+        <div class="facility-icon">
+          <div class="icon-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 21s6-5.33 6-10a6 6 0 1 0-12 0c0 4.67 6 10 6 10z"></path>
+              <path d="M9 11l2 2 4-4"></path>
+            </svg>
+          </div>
+        </div>
+        <h2 class="facility-title">Trusted Worldwide Delivery</h2>
+        <p>Your collectibles are delivered safely with tracking and care, ensuring peace of mind for every order.</p>
+      </div>
 
-        <section class="services">
-            <div class="services-content">
-                <div class="services-text">
-                    <h2>Bike Services & Repair</h2>
-                    <div class="service-items">
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                                </svg>
-                            </div>
-                            <div class="service-details">
-                                <h4>Tune-Up / Full Rebuild</h4>
-                                <p>Get your bike in top shape with our expert service</p>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 7 7 21"></path>
-                                    <path d="m7 7 3 3"></path>
-                                    <path d="m14 14 3 3"></path>
-                                    <path d="M3 21h18"></path>
-                                    <path d="M3 7h18"></path>
-                                </svg>
-                            </div>
-                            <div class="service-details">
-                                <h4>Pre-arrival Bike Fit</h4>
-                                <p>Custom fitting to ensure maximum comfort and efficiency</p>
-                            </div>
-                        </div>
-                        <div class="service-item">
-                            <div class="service-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M10 17h4V5H2v12h3"></path>
-                                    <path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5v8h1"></path>
-                                    <circle cx="7.5" cy="17.5" r="2.5"></circle>
-                                    <circle cx="17.5" cy="17.5" r="2.5"></circle>
-                                </svg>
-                            </div>
-                            <div class="service-details">
-                                <h4>Free Delivery</h4>
-                                <p>We deliver your diecast car fully detailed and ready to display.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary">BOOK SERVICE</button>
-                </div>
-                <div class="services-image">
-                    <img src="/User/assets/images/banners/2022-Formula1-Mercedes-AMG-W13-F1-E-Performance-008-2160.jpg" alt="Red Mountain Bike">
-                </div>
-            </div>
-        </section>
+    </div>
+  </section>
 
-        <section id="contactSection" class="contact-form-section">
-            <div class="form-container">
-                <div class="form-content">
-                    <h2>Get In Touch</h2>
-                    <p>Have questions about our bikes or services? Send us a message and we'll get back to you.</p>
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
+  <section class="product-categories">
+
+    <div class="product-category kids">
+      <div class="product-info">
+        <h3>Premium series CARS</h3>
+        <p>Top-tier models with unmatched detail.</p>
+        <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
+      </div>
+      <div class="product-image">
+        <video src="/User/assets/videos/Nissan Skyline GTR-34 blue.mp4" autoplay muted loop playsinline style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
+      </div>
+    </div>
+
+    <div class="product-category accessories">
+      <div class="product-info">
+        <h3>Super-Fancy CARS</h3>
+        <p>Bold designs built to impress.</p>
+        <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
+      </div>
+      <div class="product-image">
+        <video src="/User/assets/videos/drift video hotwheels.mp4" autoplay muted loop playsinline style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
+      </div>
+    </div>
+
+    <div class="product-category accessories">
+      <div class="product-image">
+        <video src="/User/assets/videos/mclaren 7205.mp4" autoplay muted loop playsinline style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
+      </div>
+      <div class="product-info">
+        <h3>Exclusive CARS</h3>
+        <p>Rare finds for true collectors.</p>
+        <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
+      </div>
+    </div>
+
+    <div class="product-category accessories">
+      <div class="product-image">
+        <video src="/User/assets/videos/fort escort RS1600.mp4" autoplay muted loop playsinline style="width: 100%;height: 100%;object-fit: initial;display: block;"></video>
+      </div>
+      <div class="product-info">
+        <h3>Mainline CARS</h3>
+        <p>Everyday favorites, always ready to race.</p>
+        <a href="/shopPage" class="btn btn-outline">SHOP NOW</a>
+      </div>
+    </div>
+  </section>
+  <section class="services">
+    <div class="services-content">
+      <div class="services-text">
+        <h2>Custom Collections & Rare Models</h2>
+
+        <div class="service-items">
+
+          <!-- Service 1 -->
+          <div class="service-item">
+            <div class="service-icon">
+              <!-- Star / Premium Collectible Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9"></polygon>
+              </svg>
             </div>
-        </section>
-    </main>
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+            <div class="service-details">
+              <h4>Exclusive Rare Models</h4>
+              <p>Limited-edition and hard-to-find diecast cars curated for serious collectors.</p>
+            </div>
+          </div>
+
+          <!-- Service 2 -->
+          <div class="service-item">
+            <div class="service-icon">
+              <!-- Palette / Custom Build Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a10 10 0 0 0 0 20c1.7 0 2-1 2-1.5s-.3-1.5-2-1.5h-1a3 3 0 0 1 0-6h3a4 4 0 0 0 0-8Z" />
+                <circle cx="8.5" cy="10.5" r="1" />
+                <circle cx="14.5" cy="10.5" r="1" />
+                <circle cx="10.5" cy="14.5" r="1" />
+              </svg>
+            </div>
+            <div class="service-details">
+              <h4>Custom Collector Sets</h4>
+              <p>Create your own themed collections by brand, scale, era, or motorsport legacy.</p>
+            </div>
+          </div>
+
+          <!-- Service 3 -->
+          <div class="service-item">
+            <div class="service-icon">
+              <!-- Delivery / Box Icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff6600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73L13 2.27a2 2 0 0 0-2 0L4 6.27A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22" x2="12" y2="12" />
+              </svg>
+            </div>
+            <div class="service-details">
+              <h4>Secure Delivery</h4>
+              <p>Free delivery on all orders above <strong>₹1000</strong>. Safe packaging guaranteed.</p>
+            </div>
+          </div>
+
+        </div>
+         <a href="/shopPage" class="btn btn-outline">EXPLORE COLLECTIONS</a>
+      </div>
+
+      <div class="services-image">
+        <img src="/User/assets/images/banners/2022-Formula1-Mercedes-AMG-W13-F1-E-Performance-008-2160.jpg" alt="Red Mountain Bike">
+      </div>
+    </div>
+  </section>
+
+  <section id="contactSection" class="contact-form-section">
+    <div class="form-container">
+      <div class="form-content">
+        <h2>Get In Touch</h2>
+        <p>Have questions about our bikes or services? Send us a message and we'll get back to you.</p>
+        <form id="contact-form">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" >
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" >
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Your Message" rows="5" ></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
 <%-include("../../Views/Partials/User/footerLand")%>
-

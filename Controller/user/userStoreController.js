@@ -62,6 +62,13 @@ export const getshopPage = async (req, res, next) => {
       totalPages,
       searchQuery,
       userWishlist,
+      sort: "default",
+      minPrice: null,
+      maxPrice: null,
+      selectedCategories: [],
+      selectedBrands: [],
+      selectedEditions: [],
+      selectedScales: [],
     });
   } catch (error) {
     console.error("Error loading shop page:", error);
@@ -150,8 +157,8 @@ export const filterProducts = async (req, res, next) => {
     }
 
     let sortOption = {};
-    if (sort === "asc") sortOption = { "variants.salePrice": 1 };
-    else if (sort === "desc") sortOption = { "variants.salePrice": -1 };
+    if (sort === "asc") sortOption = { "variants.0.salePrice": 1 };
+    else if (sort === "desc") sortOption = { "variants.0.salePrice": -1 };
     else sortOption = { _id: -1 };
 
     const limit = 8;
@@ -196,6 +203,8 @@ export const filterProducts = async (req, res, next) => {
       filter,
       searchQuery,
       sort,
+      minPrice: isNaN(minPrice) ? null : minPrice,
+      maxPrice: isNaN(maxPrice) ? null : maxPrice,
       selectedCategories: categories ? categories.split(",") : [],
       selectedBrands: brands ? brands.split(",") : [],
       selectedEditions: editions ? editions.split(",") : [],

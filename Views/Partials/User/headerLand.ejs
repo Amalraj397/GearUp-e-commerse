@@ -24,37 +24,36 @@ html {
              <img src="/User/assets/images/GEAR-UP/autominima logo.png" alt="gearup logo" class="logo-img">
             <!-- <div class="logo-underli"></div> -->
           </div>
+
+          <!-- Hamburger Menu Button -->
+          <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
       
-          <ul class="nav-links">
+          <ul class="nav-links" id="nav-menu">
             <li><a href="/" class="nav-link" >HOME </a></li>
-            <li><a href="#" class="nav-link">Offer-Zone</a></li>
             <li><a href="/shopPage" class="nav-link">Garage</a></li>
             <li><a href="/brandPage" class="nav-link">Manufacturers</a></li>
-            <li><a href="/#contactSection" class="nav-link contact-link">Pit Stop</a></li> 
+            <li><a href="/#contactSection" class="nav-link contact-link">Pit-Stop</a></li> 
             <li><a href="/aboutUs" class="nav-link">Engine Room</a></li>
           </ul>
-      
-          <ul class="auth-buttons">
-            <% if (user) { %>
-                <% console.log("user data:::", user); %>
-              <li class="nav-link"  id="user-name">Hi, <%= user.name %></li>
-             <div class="dropdown">
-              
-              <!-- User Icon -->
-               <div class="dropdown-user">
-                 <button class="dropdown-btn">
-                   <i class="fas fa-user" style="font-size: larger;"></i>
-                  </button>
-                  <div class="dropdown-content">
-                    <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
-                    <a href="/myOrders"><i class="fas fa-shopping-bag"></i>My Orders</a>
-                    <a href="/wallet"><i class="fas fa-wallet"></i> Wallet</a>
-                    <a href="/referandearn"><i class="fas fa-gift"></i> Earn Rewards</a>
-                    <a href="/logout" class="logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
-                    
-                  </div>
-                </div>
 
+          <!-- User Dropdown on the Right -->
+          <% if (user) { %>
+              <div class="user-dropdown" id="user-dropdown">
+                <div class="nav-link nav-divider" id="user-name">Hi, <%= user.name %></div>
+                <ul class="user-menu">
+                  <li><a href="/userDashboard" class="nav-link"><i class="fas fa-user"></i> Account</a></li>
+                  <li><a href="/myOrders" class="nav-link"><i class="fas fa-shopping-bag"></i> My Orders</a></li>
+                  <li><a href="/wallet" class="nav-link"><i class="fas fa-wallet"></i> Wallet</a></li>
+                  <li><a href="/referandearn" class="nav-link"><i class="fas fa-gift"></i> Earn Rewards</a></li>
+                  <li><a href="/logout" class="nav-link logoutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</a></li>
+                </ul>
+              </div>
+
+              
               <!-- Wishlist Icon -->
               <button class="dropdown-btn-heart" onclick="window.location.href='/Wishlist'">
                  <i class="fas fa-heart"></i><span class="wishlist-badge"><%= wishlistCount ||0 %></span>
@@ -65,26 +64,61 @@ html {
                  <i class="fas fa-shopping-cart"></i><span class="cart-badge"><%= cartCount ||0 %></span>
               </button>
 
-              <div class="dropdown-content">
-                <a href="/userDashboard"><i class="fas fa-user"></i>Account</a>
-                <a href="/myOrders"><i class="fas fa-shopping-bag"></i>My Orders</a>
-                <a href="#"><i class="fas fa-map-marker-alt"></i> Your Address</a>
-                <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                <a href="#"><i class="fas fa-headset"></i> Contact Us</a>
-                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
-              </div>
-            </div>
-
-            <% } else { %>
-              <li><a href="/login" class="nav-link">Login</a></li>
-              <li><a href="/signup" class="nav-link">Sign-up</a></li>
-            <% } %>
-            </ul>
-          </div>
+              
+          <% } else { %>
+              <ul class="auth-buttons">
+                <li><a href="/login" class="nav-link">Login</a></li>
+                <li><a href="/signup" class="nav-link">Sign-up</a></li>
+              </ul>
+          <% } %>
         </nav>
       </header>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+  // Hamburger Menu Toggle
+  const hamburger = document.getElementById('hamburger');
+  const navMenu = document.getElementById('nav-menu');
+  const userDropdown = document.getElementById('user-dropdown');
+
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navMenu.classList.toggle('active');
+    if (userDropdown) {
+      userDropdown.style.display = navMenu.classList.contains('active') ? 'flex' : 'none';
+    }
+    hamburger.classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Don't close if it's the user-name link
+      if (!link.id.includes('user-name')) {
+        navMenu.classList.remove('active');
+        if (userDropdown) {
+          userDropdown.style.display = 'none';
+        }
+        hamburger.classList.remove('active');
+      }
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    const isClickInsideNav = navMenu.contains(e.target);
+    const isClickOnHamburger = hamburger.contains(e.target);
+    const isClickInsideDropdown = userDropdown && userDropdown.contains(e.target);
+
+    if (!isClickInsideNav && !isClickOnHamburger && !isClickInsideDropdown) {
+      navMenu.classList.remove('active');
+      if (userDropdown) {
+        userDropdown.style.display = 'none';
+      }
+      hamburger.classList.remove('active');
+    }
+  });
+
   document.querySelectorAll(".logoutBtn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.preventDefault(); // stop immediate logout
@@ -128,7 +162,7 @@ setInterval(async () => {
   } catch (err) {
     console.error('Error checking user status:', err);
   }
-}, 10000); // 5 seconds
+}, 10000); // 10 seconds
 
 </script>
 

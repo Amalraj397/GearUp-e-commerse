@@ -43,12 +43,12 @@ export const getCheckoutpage = async (req, res, next) => {
     const defaultAddress =
       addressData.find((addr) => addr.isDefault) || addressData[0] || null;
 
-    if (!defaultAddress) {
-      return res.status(STATUS.BAD_REQUEST).json({
-        message: MESSAGES.Users.NO_ADDRESS,
-        redirectTo: "/addUserAddress"
-      });
-    }
+    // if (!defaultAddress) {
+    //   return res.status(STATUS.BAD_REQUEST).json({
+    //     message: MESSAGES.Users.NO_ADDRESS,
+    //     redirectTo: "/addUserAddress"
+    //   });
+    // }
 
     // console.log("addressData:: from checkOut Page,",addressData);
     // console.log("deafaultaddress:: from checkOut Page",defaultAddress);

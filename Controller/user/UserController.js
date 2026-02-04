@@ -135,7 +135,7 @@ export const userSignup = async (req, res, next) => {
     const otp = generateOTP();
     console.log(" userLogin OTP:", otp);
 
-    await sendEmail({ to: registerEmail, otp });
+    await sendEmail({ to: registerEmail, otp, otpType: "resendOtp" });
 
     req.session.otp = otp;
     req.session.otpExpiration = otpExpirationT;
@@ -328,7 +328,7 @@ export const resendOTP = async (req, res, next) => {
     req.session.otp = otp;
     // const otpExpiration = newExpirationTime;
 
-    await sendEmail({ to: email, otp });
+    await sendEmail({ to: email, otp, otpType: "resendOtp" });
 
     res
     .status(STATUS.OK)

@@ -10,7 +10,7 @@ export const forgotverifyEmail = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    //  if the email sddress already exisits
+    //  if  email sddress already exisits
     const userExist = await userschema.findOne({ email: email });
 
     if (!userExist) {
@@ -25,7 +25,7 @@ export const forgotverifyEmail = async (req, res, next) => {
     console.log(" Forgot Password - OTP :", otp);
 
     // Send OTP to email
-    await sendEmail({ to: email, otp });
+    await sendEmail({ to: email, otp, otpType: "forgotPassword" });
 
     req.session.otp = otp;
     req.session.otpExpiration = expiryTime;
@@ -117,7 +117,7 @@ export const forgotresendOTP = async (req, res, next) => {
     req.session.otp = otp;
     req.session.otpExpiration = newExpirationTime;
 
-    await sendEmail({ to: email, otp });
+    await sendEmail({ to: email, otp, otpType: "forgotPasswordResendOtp" });
 
     res.status(STATUS.OK).json({
       success: true,

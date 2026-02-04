@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (loggedInUser) {
       const name =
-      loggedInUser.displayName || loggedInUser.firstName || "Guest";
+        loggedInUser.displayName || loggedInUser.firstName || "Guest";
       userDisplayName.innerText = `Hi, welcomeee ${name}`;
       userDisplayName.style.display = "block"; // Show the username
       logoutLink.style.display = "block"; // Show logout
@@ -30,15 +30,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // Scroll to contact section if ?contact=1 is present
-window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("contact") === "1") {
-        const section = document.getElementById("contactSection");
-        if (section) {
-            section.scrollIntoView({ behavior: "smooth" });
-        }
+      const section = document.getElementById("contactSection");
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      }
     }
-});
+  });
 
 
   // Hero slider functionality
@@ -152,9 +152,8 @@ window.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", () => {
       const scrollPosition = window.scrollY;
       if (scrollPosition < 500) {
-        heroImage.style.transform = `translate(-50%, -${
-          50 - scrollPosition * 0.05
-        }%)`;
+        heroImage.style.transform = `translate(-50%, -${50 - scrollPosition * 0.05
+          }%)`;
         orangeBg.style.transform = `translateX(${scrollPosition * 0.05}%)`;
       }
     });
@@ -227,7 +226,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const message = document.getElementById("message").value;
 
       // Simple validation
-      if (!name || !email || !message||!phone){
+      if (!name || !email || !message || !phone) {
         alert("Please fill in all required fields.");
         return;
       }
@@ -239,18 +238,45 @@ window.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Simulate form submission
+      // Submit to Google Sheets
       const submitBtn = contactForm.querySelector('button[type="submit"]');
       submitBtn.textContent = "Sending...";
       submitBtn.disabled = true;
 
-      // Simulate API call
-      setTimeout(() => {
-        alert("Thank you for your message! We will get back to you soon.");
-        contactForm.reset();
-        submitBtn.textContent = "Submit";
-        submitBtn.disabled = false;
-      }, 1500);
+      // Use backend endpoint instead of direct Google Apps Script
+      const GOOGLE_SCRIPT_URL = "/api/contact-submit";
+
+      const formData = {
+        name: name,
+        email: email,
+        phone: phone,
+        message: message
+      };
+
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Thank you for your message! We will get back to you soon.");
+            contactForm.reset();
+          } else {
+            alert("There was an error: " + (data.error || "Failed to save message"));
+          }
+          submitBtn.textContent = "Submit";
+          submitBtn.disabled = false;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Something went wrong. Please try again.");
+          submitBtn.textContent = "Submit";
+          submitBtn.disabled = false;
+        });
     });
   }
 });

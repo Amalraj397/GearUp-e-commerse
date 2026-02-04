@@ -159,10 +159,22 @@
 
                 <nav aria-label="Page navigation">
                   <ul class="pagination justify-content-center">
+                    <% 
+                      // Build query string with all filters
+                      let filterQuery = '';
+                      if (selectedCategories && selectedCategories.length > 0) filterQuery += '&categories=' + selectedCategories.join(',');
+                      if (selectedBrands && selectedBrands.length > 0) filterQuery += '&brands=' + selectedBrands.join(',');
+                      if (selectedEditions && selectedEditions.length > 0) filterQuery += '&editions=' + selectedEditions.join(',');
+                      if (selectedScales && selectedScales.length > 0) filterQuery += '&scales=' + selectedScales.join(',');
+                      if (minPrice) filterQuery += '&minPrice=' + minPrice;
+                      if (maxPrice) filterQuery += '&maxPrice=' + maxPrice;
+                      if (sort && sort !== 'default') filterQuery += '&sort=' + sort;
+                      if (searchQuery) filterQuery += '&search=' + encodeURIComponent(searchQuery);
+                    %>
 
                     <% if (currentPage > 1) { %>
                     <li class="page-item">
-                      <a class="page-link page-link-prev" href="?page=<%= currentPage - 1 %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" aria-label="Previous">
+                      <a class="page-link page-link-prev" href="?page=<%= currentPage - 1 %><%= filterQuery %>" aria-label="Previous">
                         <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
                       </a>
                     </li>
@@ -176,7 +188,7 @@
 
                     <% for (let i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i === currentPage ? 'active' : '' %>">
-                      <a class="page-link" href="?page=<%= i %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>">
+                      <a class="page-link" href="?page=<%= i %><%= filterQuery %>">
                         <%= i %>
                       </a>
                     </li>
@@ -186,7 +198,7 @@
 
                     <% if (currentPage < totalPages) { %>
                     <li class="page-item">
-                      <a class="page-link page-link-next" href="?page=<%= currentPage + 1 %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>" aria-label="Next">
+                      <a class="page-link page-link-next" href="?page=<%= currentPage + 1 %><%= filterQuery %>" aria-label="Next">
                         Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
                       </a>
                     </li>

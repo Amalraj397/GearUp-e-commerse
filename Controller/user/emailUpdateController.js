@@ -27,7 +27,7 @@ export const requestEmailUpdate = async (req, res, next) => {
     req.session.newEmailOtp = otp;
     req.session.newEmailOtpExpiration = Date.now() + 5 * 60 * 1000; // 5 minn
 
-    await sendEmail({ to: newEmail, otp });
+    await sendEmail({ to: newEmail, otp, otpType: "emailUpdate" });
 
     return res.status(STATUS.OK).json({ success: true, message:MESSAGES.Auth.OTP_SENT});
   } catch (error) {
