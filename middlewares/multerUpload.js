@@ -1,10 +1,12 @@
 // uploadMiddleware.js
 import multer from "multer";
-import CloudinaryStorage from "multer-storage-cloudinary";
-import cloudinary from "../Config/cloudinary_Config.js"; // import only config
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import cloudinary from "../Config/cloudinary_Config.js"; 
 import path from "path";
 
 export function uploadMiddleware(folderName) {
+  console.log("Initializing upload middleware for folder:", folderName);
+  
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: (req, file) => ({
@@ -20,3 +22,4 @@ export function uploadMiddleware(folderName) {
   });
 }
 export default uploadMiddleware;
+

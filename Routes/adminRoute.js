@@ -10,13 +10,13 @@ import {
   loadAdminlogin,
   loadAdminDash,
   adminLogout,
-  } from "../Controller/admin/adminController.js";
+} from "../Controller/admin/adminController.js";
 
 import {
   getuserData,
   blockUser,
   unblockUser,
-  } from "../Controller/admin/AdminuserController.js";
+} from "../Controller/admin/AdminuserController.js";
 
 import {
   loadproductList,
@@ -28,7 +28,7 @@ import {
   listProduct,
   updateProduct,
   deleteProductImage,
-  } from "../Controller/admin/productController.js";
+} from "../Controller/admin/productController.js";
 
 import {
   getBrands,
@@ -38,7 +38,7 @@ import {
   listBrand,
   getBrandEditPage,
   updateBrand,
-  } from "../Controller/admin/brandController.js";
+} from "../Controller/admin/brandController.js";
 
 import {
   getCategory,
@@ -49,13 +49,13 @@ import {
   getLiveCategorySearch,
   getCategoryEditPage,
   updateCategory,
-  } from "../Controller/admin/categoryController.js";
+} from "../Controller/admin/categoryController.js";
 
 import {
   getuserOrders,
   updateOrderStatus,
   adminviewDetails,
-  } from "../Controller/admin/orderController.js";
+} from "../Controller/admin/orderController.js";
 
 import { uploadMiddleware } from "../middlewares/multerUpload.js";
 
@@ -63,7 +63,7 @@ import {
   getOrderReturnPage,
   rejectReturn,
   approveReturn,
-  } from "../Controller/admin/orderReturnController.js";
+} from "../Controller/admin/orderReturnController.js";
 
 import {
   getOfferPage,
@@ -71,7 +71,7 @@ import {
   addOffer,
   getEditOffer,
   updateOffer,
-  } from "../Controller/admin/offerController.js";
+} from "../Controller/admin/offerController.js";
 
 import {
   getCouponsPage,
@@ -79,18 +79,18 @@ import {
   addCoupon,
   deactivateCoupon,
   geteditCoupon,
-  updateCoupon, 
-  } from "../Controller/admin/couponController.js";
+  updateCoupon,
+} from "../Controller/admin/couponController.js";
 
 import {
   salesReportpage,
   fetchSalesReport,
   downloadSalesReportExcel,
   downloadSalesReportPdf,
- } from "../Controller/admin/salesReportController.js";
+} from "../Controller/admin/salesReportController.js";
 
 
- import {
+import {
   getRevenueStats,
   getOrderStatusStats,
 } from "../utils/adminDashboard.js";
@@ -110,7 +110,9 @@ adminRoute.put("/unblock-user/:id", adminAuth, unblockUser); //unblocking user
 adminRoute.get("/addProduct", adminAuth, loadAddproduct); //product management [add product]
 adminRoute.get("/productList", adminAuth, loadproductList); //  [list product]
 adminRoute.get("/api/products", adminAuth, getProductsJson); // JSON data for frontend
-adminRoute.post("/addProduct", uploadMiddleware("Products").array("productImages", 8), adminAuth,addnewProduct,); // adding new product
+// adminRoute.post("/addProduct", uploadMiddleware("Products").array("productImages", 8), adminAuth,addnewProduct,); // adding new product
+adminRoute.post("/addProduct",adminAuth,uploadMiddleware("Products").array("productImages", 8), addnewProduct,);
+
 
 //listing and unlisting  products
 adminRoute.patch("/unlist-product/:id", adminAuth, unlistProduct);
@@ -118,13 +120,13 @@ adminRoute.patch("/list-product/:id", adminAuth, listProduct);
 
 // edit product
 adminRoute.get("/editProduct/:id", adminAuth, getProductEditpage); // getting edit product_page
-adminRoute.delete("/editProduct/delete-image/:id",adminAuth,deleteProductImage,); // deleting image
-adminRoute.put("/editProduct/:id",uploadMiddleware("Products").array("productImages", 8),adminAuth,updateProduct,); //update product page
+adminRoute.delete("/editProduct/delete-image/:id", adminAuth, deleteProductImage,); // deleting image
+adminRoute.put("/editProduct/:id", uploadMiddleware("Products").array("productImages", 8), adminAuth, updateProduct,); //update product page
 
 //--------------------------Brand management-------------------------
 adminRoute.get("/brands", adminAuth, getBrands); // getting brandpage
 adminRoute.get("/addBrands", adminAuth, getAddBrandPage); //getting brand page //adding new brand
-adminRoute.post( "/addBrands",adminAuth,uploadMiddleware("Brands").single("brand-Image"),addNewBrand,);
+adminRoute.post("/addBrands", adminAuth, uploadMiddleware("Brands").single("brand-Image"), addNewBrand,);
 
 //listing and unlisting brand
 adminRoute.patch("/unlist-brand/:id", adminAuth, unlistBrand); //Un-listing a Brand
@@ -132,7 +134,7 @@ adminRoute.patch("/list-brand/:id", adminAuth, listBrand); // Listing a Brand
 
 //edit & update Brand
 adminRoute.get("/editBrand/:id", adminAuth, getBrandEditPage); //get brand edit page
-adminRoute.patch( "/editBrand/:id", uploadMiddleware("Brands").single("brandImage"),adminAuth,updateBrand,);
+adminRoute.patch("/editBrand/:id", uploadMiddleware("Brands").single("brandImage"), adminAuth, updateBrand,);
 
 //--------------------------category management-----------------------
 adminRoute.get("/category", adminAuth, getCategory); //getting  category page
@@ -149,21 +151,21 @@ adminRoute.patch("/list-category/:id", adminAuth, listCategory); //listing categ
 adminRoute.get("/category/search", adminAuth, getLiveCategorySearch); //live search
 
 // ------------------------------order management------------------------------
-adminRoute.get("/orders",adminAuth ,getuserOrders); //getting Admin side userOrders
-adminRoute.put("/update-order-status/:orderId",adminAuth, updateOrderStatus);
+adminRoute.get("/orders", adminAuth, getuserOrders); //getting Admin side userOrders
+adminRoute.put("/update-order-status/:orderId", adminAuth, updateOrderStatus);
 adminRoute.get("/orderdetails/:id", adminviewDetails);
 
 //---------------- order return management-----------------
-adminRoute.get("/orderReturn", adminAuth,getOrderReturnPage);
-adminRoute.put("/orderReturn/:returnId/approve",adminAuth, approveReturn);
+adminRoute.get("/orderReturn", adminAuth, getOrderReturnPage);
+adminRoute.put("/orderReturn/:returnId/approve", adminAuth, approveReturn);
 adminRoute.put("/orderReturn/:returnId/reject", adminAuth, rejectReturn);
 
 //  ---------------------offer management--------------------
-adminRoute.get("/offers", adminAuth,getOfferPage);
+adminRoute.get("/offers", adminAuth, getOfferPage);
 adminRoute.post("/addOffer", adminAuth, addOffer);
-adminRoute.get("/addOffer",adminAuth,getaddOffer);
-adminRoute.get("/editOffer/:id",adminAuth,getEditOffer);
-adminRoute.put("/editOffer/:id", adminAuth,updateOffer )
+adminRoute.get("/addOffer", adminAuth, getaddOffer);
+adminRoute.get("/editOffer/:id", adminAuth, getEditOffer);
+adminRoute.put("/editOffer/:id", adminAuth, updateOffer)
 
 // ---------------------- coupon management---------------------
 
@@ -171,15 +173,15 @@ adminRoute.get("/coupons", adminAuth, getCouponsPage);
 adminRoute.get("/addCoupons", adminAuth, getaddCoupon);
 adminRoute.post("/addCoupons", adminAuth, addCoupon);
 adminRoute.patch("/deactivateCoupon/:id", adminAuth, deactivateCoupon);
-adminRoute.get("/editCoupons/:id",adminAuth, geteditCoupon);
+adminRoute.get("/editCoupons/:id", adminAuth, geteditCoupon);
 adminRoute.put("/editCoupons/:id", adminAuth, updateCoupon);
 
 //-------------------------Sales Report------------------------
 
 adminRoute.get("/salesReport", adminAuth, salesReportpage);
-adminRoute.get('/salesReport/fetch',adminAuth ,fetchSalesReport);
-adminRoute.get('/salesReport/pdf', adminAuth,downloadSalesReportPdf);
-adminRoute.get('/salesReport/excel', adminAuth,downloadSalesReportExcel);
+adminRoute.get('/salesReport/fetch', adminAuth, fetchSalesReport);
+adminRoute.get('/salesReport/pdf', adminAuth, downloadSalesReportPdf);
+adminRoute.get('/salesReport/excel', adminAuth, downloadSalesReportExcel);
 
 //-----dashboard------
 adminRoute.get("/order-status-stats", getOrderStatusStats);
