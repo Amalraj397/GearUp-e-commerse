@@ -70,7 +70,7 @@ export const loadAddproduct = async (req, res, next) => {
 
 // addProduct controller
 export const addnewProduct = async (req, res, next) => {
-  console.log("add new product controller starting");
+  // console.log("add new product controller starting");
 
   const {   
     productName,
@@ -83,11 +83,11 @@ export const addnewProduct = async (req, res, next) => {
     status,
   } = req.body;
 
-   console.log( "req.body:", req.body);  //debugging
+  //  console.log( "req.body:", req.body);  //debugging
 
   const variants = JSON.parse(parsedVariants);
 
-   console.log("Files received:", req.files); //debugging
+  //  console.log("Files received:", req.files); //debugging
   try {
 
     if (!req.files || req.files.length < 3) {
@@ -98,7 +98,7 @@ export const addnewProduct = async (req, res, next) => {
  
     const imageUrls = req.files.map((file) => file.path);
 
-     console.log("Image URLs:", imageUrls); //debugging
+    //  console.log("Image URLs:", imageUrls); //debugging
 
     const categoryData = await categorySchema.findOne({ name: category });
     if (!categoryData) {

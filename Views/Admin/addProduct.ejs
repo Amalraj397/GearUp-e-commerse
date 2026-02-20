@@ -1286,7 +1286,7 @@
       console.log("FORMDATA:", formData.get("parsedVariants"));
 
 
-      fetch("http://localhost:3000/admin/addProduct", {
+      fetch("/admin/addProduct", {
           method: 'POST',
           body: formData
         })

@@ -7,13 +7,6 @@ import { STATUS } from "../../utils/statusCodes.js";
 
 import { fetchSalesReportData } from "../../utils/salesReport-generate.js";
 
-// PDF Fonts
-// const fonts = {
-//   Roboto: {
-//     normal: path.join(process.cwd(), 'fonts/Roboto-Regular.ttf'),
-//     bold: path.join(process.cwd(), 'fonts/Roboto-Bold.ttf'),
-//   },
-// };
 
 function getBase64Image(filePath) {
   const file = fs.readFileSync(filePath);

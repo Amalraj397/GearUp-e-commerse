@@ -37,13 +37,7 @@ export const loadAdminDash = async (req, res, next) => {
       getBestSellers(),
     ]);
 
-    // console.log("counts:::",counts);
-    // console.log("revenue:::",revenue);
-    // console.log("yearlySales:::",yearlySales);
-    // console.log("newMembers:::",newMembers);
-    // console.log("recentOrders:::",recentOrders);
-    // console.log("bestSellers:::",bestSellers);
-
+  
     res.render("adminDash.ejs", {
       ...counts,
       ...revenue,
