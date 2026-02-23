@@ -804,7 +804,6 @@ $(document).ready(function () {
                     .eq(currentIndex)
                     .addClass("active")
                     .siblings()
-                    .removeClass("active");
                   $(".curidx").html(currentIndex + 1);
                 },
               });
