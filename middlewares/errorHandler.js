@@ -53,5 +53,16 @@ export const errorHandler = (err, req, res, next) => {
       break;
   }
 
-  res.status(statusCode).render("errors", errorInfo);
+  // If the client expects JSON (AJAX/fetch) return JSON, otherwise render HTML error page
+  const acceptsJson = req.xhr || (req.headers.accept && req.headers.accept.includes("application/json")) || (req.get && req.get("X-Requested-With") === "XMLHttpRequest");
+
+  if (acceptsJson) {
+    return res.status(statusCode).json({
+      success: false,
+      message: err.message || errorInfo.message,
+      statusCode,
+    });
+  }
+
+  return res.status(statusCode).render("errors", errorInfo);
 };

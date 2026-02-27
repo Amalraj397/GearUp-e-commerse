@@ -360,12 +360,23 @@ Type: ${defaultAddress.addressType} ` : '' %></textarea>
           <% if (addressData && addressData.length > 0) { %>
           <form id="addressSelectForm">
             <% addressData.forEach((address, index) => { %>
+            // <div class="border p-2 mb-2">
+              // <input type="radio" name="selectedAddress" value="<%= address._id %>" id="addr<%= index %>" <%= defaultAddress && defaultAddress._id.toString() === address._id.toString() ? 'checked' : '' %>>
+              // <label for="addr <%= index %>">
+                // <strong><%= address.firstName %> <%= address.lastName %></strong><br>
+                // <%= address.houseName %>, <%= address.city %>, <%= address.state %>, <%= address.country %> - <%= address.pincode %><br>
+                // Landmark: <%= address.landmark %> <br>
+                // Type: <%= address.addressType %>
+                // </label>
+              // </div>
+
             <div class="border p-2 mb-2">
-              <input type="radio" name="selectedAddress" value="<%= address._id %>" id="addr<%= index %>" <%= defaultAddress && defaultAddress._id.toString() === address._id.toString() ? 'checked' : '' %>>
-              <label for="addr<%= index %>">
+              <input type="radio" id="add<%= index %>" name="selectedAddress" value="<%= address._id %>">
+
+              <label for="add<%= index %>">
                 <strong><%= address.firstName %> <%= address.lastName %></strong><br>
-                <%= address.houseName %>, <%= address.city %>, <%= address.state %>, <%= address.country %> - <%= address.pincode %><br>
-                Landmark: <%= address.landmark %> <br>
+                <%= address.houseName %>, <%= address.city %>, ...
+                Landmark: <%= address.landmark %><br>
                 Type: <%= address.addressType %>
               </label>
             </div>
@@ -575,6 +586,29 @@ Type: ${data.addressType}`;
 
       const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || "Cash-On-Delivery";
 
+      // Validate address before placing order
+      const name = document.getElementById("name").value.trim();
+      const addressField = document.getElementById("addressField").value.trim();
+      const pincode = document.getElementById("pincode").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!name || !addressField || !pincode || !phone) {
+        Swal.fire({
+          icon: "warning",
+          title: "No Address Found!",
+          text: "Please add a delivery address before placing your order.",
+          confirmButtonText: "Add Address",
+          confirmButtonColor: "#ff6600",
+          showCancelButton: true,
+          cancelButtonText: "Cancel"
+        }).then(result => {
+          if (result.isConfirmed) {
+            const modal = new bootstrap.Modal(document.getElementById('addAddressModal'));
+            modal.show();
+          }
+        });
+        return;
+      }
       const billingDetails = {
         name: document.getElementById("name").value,
         address: document.getElementById("addressField").value,
@@ -670,7 +704,7 @@ Type: ${data.addressType}`;
           Number(sessionStorage.getItem("finalPayableAmount")) ||
           Number("<%= grandTotal %>");
 
-          
+
         const orderResponse = await fetch("/payment/create-order", {
           method: "POST",
           headers: {
@@ -783,9 +817,9 @@ Type: ${data.addressType}`;
     function toggleCouponList() {
       const list = document.getElementById("couponList");
       const icon = document.getElementById("toggleIcon");
-      
+
       if (!list || !icon) return; // Safety check
-      
+
       const isVisible = list.style.display === "block";
       list.style.display = isVisible ? "none" : "block";
       icon.textContent = isVisible ? "view" : "close";
@@ -797,9 +831,9 @@ Type: ${data.addressType}`;
         const res = await fetch("/available-coupons");
         const data = await res.json();
         const list = document.getElementById("couponList");
-        
+
         if (!list) return; // Safety check
-        
+
         list.innerHTML = "";
 
         if (!data.success || data.coupons.length === 0) {
@@ -870,7 +904,7 @@ Type: ${data.addressType}`;
         document.getElementById("couponList").innerHTML = `<p class="text-danger">Failed to load coupons.</p>`;
       }
     }
-  //apply coupon
+    //apply coupon
 
     async function applyCoupon(code) {
       const totalElem = document.querySelector(".total-final span:last-child");
@@ -937,8 +971,8 @@ Type: ${data.addressType}`;
       document.getElementById("appliedCouponCode").value = "";
 
       Swal.fire("Removed", "Coupon has been removed.", "info");
-        sessionStorage.removeItem("finalPayableAmount");
-        sessionStorage.removeItem("appliedCouponCode");
+      sessionStorage.removeItem("finalPayableAmount");
+      sessionStorage.removeItem("appliedCouponCode");
 
 
       const container = document.getElementById("appliedCouponBox");
@@ -946,13 +980,12 @@ Type: ${data.addressType}`;
 
       setTimeout(() => loadAvailableCoupons(), 250);
     }
-      const totalElem = document.querySelector(".total-final span:last-child");
-      const initialAmount = parseFloat(totalElem.textContent.replace("₹","").trim());
-      sessionStorage.setItem("finalPayableAmount", initialAmount);
-      sessionStorage.removeItem("appliedCouponCode");
+    const totalElem = document.querySelector(".total-final span:last-child");
+    const initialAmount = parseFloat(totalElem.textContent.replace("₹", "").trim());
+    sessionStorage.setItem("finalPayableAmount", initialAmount);
+    sessionStorage.removeItem("appliedCouponCode");
 
     window.addEventListener("DOMContentLoaded", loadAvailableCoupons);
-    
   </script>
 </body>
 

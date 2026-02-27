@@ -438,7 +438,7 @@ $(document).ready(function () {
             gallery: {
               enabled: true,
             },
-            fixedContentPos: false,
+            fixedContentPos: false, 
             removalDelay: 600,
             closeBtnInside: false,
           },

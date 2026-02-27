@@ -287,10 +287,16 @@ export const verifyOtp = async (req, res, next) => {
     delete req.session.userData;
     delete req.session.referralCode;
 
+    // Auto-login user after signup
+    req.session.user = {
+      id: user._id,
+      name: user.firstName,
+    };
+
     return res.status(STATUS.OK).json({
       success: true,
       message: MESSAGES.Auth.OTP_SUCCESS,
-      url: "/login",
+      url: "/",
     });
 
   } catch (error) {
@@ -298,7 +304,6 @@ export const verifyOtp = async (req, res, next) => {
     next(error);
   }
 };
-
 
 export const resendOTP = async (req, res, next) => {
   try {

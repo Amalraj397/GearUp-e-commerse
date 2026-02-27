@@ -5,7 +5,7 @@ import cloudinary from "../Config/cloudinary_Config.js";
 import path from "path";
 
 export function uploadMiddleware(folderName) {
-  console.log("Initializing upload middleware for folder:", folderName);
+  // console.log("Initializing upload middleware for folder:", folderName);
   
   const storage = new CloudinaryStorage({
     cloudinary: cloudinary,

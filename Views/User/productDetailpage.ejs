@@ -1,224 +1,221 @@
-
 <head>
-  
-    <title>AutoMinima - precesion in every scale</title>
-  
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
-    <link rel="manifest" href="/User/assets/images/icons/site.html">
-    <link rel="shortcut icon" href="/User/assets/images/icons/autominima-logo.png">
-    <meta name="apple-mobile-web-app-title" content="Molla">
-    <meta name="application-name" content="Molla">
-    <meta name="msapplication-TileColor" content="#cc9966">
-    <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
-    <!-- Plugins CSS File -->
-    <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/User/assets/css/plugins/owl-carousel/owl.carousel.css">
-    <link rel="stylesheet" href="/User/assets/css/plugins/magnific-popup/magnific-popup.css">
-    <!-- Main CSS File -->
-    <link rel="stylesheet" href="/User/assets/css/style.css">
-    <link rel="stylesheet" href="/User/assets/css/styles.css">
 
-    <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <style>
+  <title>AutoMinima - precesion in every scale</title>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
+  <link rel="manifest" href="/User/assets/images/icons/site.html">
+  <link rel="shortcut icon" href="/User/assets/images/icons/autominima-logo.png">
+  <meta name="apple-mobile-web-app-title" content="Molla">
+  <meta name="application-name" content="Molla">
+  <meta name="msapplication-TileColor" content="#cc9966">
+  <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+  <!-- Plugins CSS File -->
+  <link rel="stylesheet" href="/User/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/User/assets/css/plugins/owl-carousel/owl.carousel.css">
+  <link rel="stylesheet" href="/User/assets/css/plugins/magnific-popup/magnific-popup.css">
+  <!-- Main CSS File -->
+  <link rel="stylesheet" href="/User/assets/css/style.css">
+  <link rel="stylesheet" href="/User/assets/css/styles.css">
+
+  <link rel="stylesheet" href="/User/assets/css/plugins/nouislider/nouislider.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
     .scale-btn.active {
-  background-color: #ff6600; /* Highlight color */
-  color: white;
-  border-color: #ff6600;
-}
-
-    </style>
+      background-color: #ff6600;
+      /* Highlight color */
+      color: white;
+      border-color: #ff6600;
+    }
+  </style>
 
 </head>
 
 <body>
-    <%-include("../../Views/Partials/User/headerLand")%>
+  <%-include("../../Views/Partials/User/headerLand")%>
 
-<main class="main">
-  <div class="page-content">
-    <div class="container">
-      <div class="product-details-top">
-  <div class="row">
-    <!-- Product Gallery -->
-    <div class="col-md-6 position-relative" id="product-gallery-container">
-      <div class="product-gallery product-gallery-vertical">
-        <div class="row">
+  <main class="main">
+    <div class="page-content">
+      <div class="container">
+        <div class="product-details-top">
+          <div class="row">
+            <!-- Product Gallery -->
+            <div class="col-md-6 position-relative" id="product-gallery-container">
+              <div class="product-gallery product-gallery-vertical">
+                <div class="row">
 
-      <figure class="product-main-image">
-        <img id="product-zoom" src="<%= product.productImage[0] %>" data-zoom-image="<%= product.productImage[0] %>" alt="product image">
-        <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-          <i class="icon-arrows"></i>
-        </a>
-      </figure>
+                  <figure class="product-main-image">
+                    <img id="product-zoom" src="<%= product.productImage[0] %>" data-zoom-image="<%= product.productImage[0] %>" alt="product image">
+                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
+                      <i class="icon-arrows"></i>
+                    </a>
+                  </figure>
 
-      <div id="product-zoom-gallery" class="product-image-gallery">
-        <% product.productImage.forEach((image, index) => { %>
-          <a class="product-gallery-item <%= index === 0 ? 'active' : '' %>" href="#" data-image="<%= image %>" data-zoom-image="<%= image %>">
-            <img src="<%= image %>" alt="product side">
-          </a>
-        <% }) %>
-      </div>
-    </div>
-  </div>
-</div>
+                  <div id="product-zoom-gallery" class="product-image-gallery">
+                    <% product.productImage.forEach((image, index) => { %>
+                    <a class="product-gallery-item <%= index === 0 ? 'active' : '' %>" href="#" data-image="<%= image %>" data-zoom-image="<%= image %>">
+                      <img src="<%= image %>" alt="product side">
+                    </a>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-<!-- Product Details -->
-<div class="col-md-6" id="product-galler-details">
-  <div class="product-details">
-    <label for="scale">Edition:</label><h3><%= product.edition %></h3>
-    <h2 class="product-title" style="font-size: 3.7rem; font-weight: 700; font-family: 'Montserrat';">
-      <%= product.productName %>
-    </h2>
+            <!-- Product Details -->
+            <div class="col-md-6" id="product-galler-details">
+              <div class="product-details">
+                <label for="scale">Edition:</label>
+                <h3><%= product.edition %></h3>
+                <h2 class="product-title" style="font-size: 3.7rem; font-weight: 700; font-family: 'Montserrat';">
+                  <%= product.productName %>
+                </h2>
 
-    <div class="details-filter-row details-row-size">
-      <label>Brand:</label><h4><%= product.brand.brandName %></h4>
-    </div>
+                <div class="details-filter-row details-row-size">
+                  <label>Brand:</label>
+                  <h4><%= product.brand.brandName %></h4>
+                </div>
 
-    <div class="ratings-container">
-      <div class="ratings">
-        <div class="ratings-val" style="width: 80%;"></div>
-      </div>
-      <a class="ratings-text" href="#product-review-link">( 2 Reviews )</a>
-    </div>
+                <div class="ratings-container">
+                  <div class="ratings">
+                    <div class="ratings-val" style="width: 80%;"></div>
+                  </div>
+                  <a class="ratings-text" href="#product-review-link">( 2 Reviews )</a>
+                </div>
 
-   
-    
-    <div class="product-price mt-2">
-      <% const selectedVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null; %>
-      <% if (product.productOffer > 0 && selectedVariant?.offerPrice > 0) { %>
-        <span class="text-muted" style="text-decoration: line-through; font-size: 18px; margin-right: 12px;">
-          ₹<%= selectedVariant.salePrice %>
-        </span>
-        <span class="fw-bold fs-4 ms-2" style="color:#0af011;">
-          ₹<%= selectedVariant.offerPrice %>
-        </span>
-        
-      <% } else { %>
-        <span class="fs-4 fw-bold text-dark">
-          ₹<%= selectedVariant ? selectedVariant.salePrice : 'N/A' %>
-        </span>
-      <% } %>
-    </div>
 
-    <% if (product.productOffer > 0) { %>
-      <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1" 
-           style="top: 222px; left: 36%; font-size: 19px; font-weight: 600; background-color:#bd080e;">
-        <%= product.productOffer %>% OFF
-      </div>
-    <% } %>
 
-    <div class="product-content">
-      <p class="short-desc"><%= product.description.split(" ").slice(0, 22).join(" ") %>...</p>
-      <p class="full-desc" style="display:none;"><%= product.description %></p>
-      <button class="toggle-desc-btn">See More..</button>
-    </div>
+                <div class="product-price mt-2">
+                  <% const selectedVariant = product.variants && product.variants.length > 0 ? product.variants[0] : null; %>
+                  <% if (product.productOffer > 0 && selectedVariant?.offerPrice > 0) { %>
+                  <span class="text-muted" style="text-decoration: line-through; font-size: 18px; margin-right: 12px;">
+                    ₹<%= selectedVariant.salePrice %>
+                  </span>
+                  <span class="fw-bold fs-4 ms-2" style="color:#0af011;">
+                    ₹<%= selectedVariant.offerPrice %>
+                  </span>
 
-    <!-- Scale Buttons -->
-    <div class="details-filter-row details-row-size">
-      <label>Scale:</label>
-      <div id="scale-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
-        <% product.variants.forEach((variant, index) => { %>
-          <button type="button"
-            class="btn btn-outline scale-btn <%= index === 0 ? 'active' : '' %>"
-            data-variant='<%- JSON.stringify(variant) %>'>
-            <%= variant.scale %>
-          </button>
-        <% }); %>
-      </div>
-    </div>
+                  <% } else { %>
+                  <span class="fs-4 fw-bold text-dark">
+                    ₹<%= selectedVariant ? selectedVariant.salePrice : 'N/A' %>
+                  </span>
+                  <% } %>
+                </div>
 
-    <!-- Stock Badge -->
-    <div class="details-filter-row">
-      <span id="stock-badge" style="font-weight: bold;font-size: larger;"></span>
-    </div>
+                <% if (product.productOffer > 0) { %>
+                <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1" style="top: 222px; left: 36%; font-size: 19px; font-weight: 600; background-color:#bd080e;">
+                  <%= product.productOffer %>% OFF
+                </div>
+                <% } %>
 
-    <!-- Quantity -->
-    <div class="details-filter-row details-row-size">
-      <label for="qty">Quantity </label>
-      <div class="product-details-quantity">
-        <input type="number" id="qty" class="form-control" value="1" min="1" max="5" step="1" required>
-      </div>
-    </div>
+                <div class="product-content">
+                  <p class="short-desc"><%= product.description.split(" ").slice(0, 22).join(" ") %>...</p>
+                  <p class="full-desc" style="display:none;"><%= product.description %></p>
+                  <button class="toggle-desc-btn">See More..</button>
+                </div>
 
-    <!-- Category -->
-    <div class="product-cat">
-      <span>Category:</span>
-      <a href="#"><%= product.category ? product.category.name : '' %></a>,
-      <a href="#"><%= product.productName %></a>
-    </div>
+                <!-- Scale Buttons -->
+                <div class="details-filter-row details-row-size">
+                  <label>Scale:</label>
+                  <div id="scale-buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <% product.variants.forEach((variant, index) => { %>
+                    <button type="button" class="btn btn-outline scale-btn <%= index === 0 ? 'active' : '' %>" data-variant='<%- JSON.stringify(variant) %>'>
+                      <%= variant.scale %>
+                    </button>
+                    <% }); %>
+                  </div>
+                </div>
 
-    <!-- Actions -->
-    <div class="product-details-action">
-      <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')">
-        <span>Add to Cart</span>
-      </a>
-      <a href="#" class="btn-product btn-wishlist" onclick="addToWishlist('<%= product._id %>')">
-        <span>Add to Wishlist</span>
-      </a>
-    </div>
+                <!-- Stock Badge -->
+                <div class="details-filter-row">
+                  <span id="stock-badge" style="font-weight: bold;font-size: larger;"></span>
+                </div>
 
-    <!-- Social Links -->
-    <div class="social-icons social-icons-sm">
-      <span class="social-label">Share:</span>
-      <a href="#" class="social-icon" title="Facebook"><i class="icon-facebook-f"></i></a>
-      <a href="#" class="social-icon" title="Twitter"><i class="icon-twitter"></i></a>
-      <a href="#" class="social-icon" title="Instagram"><i class="icon-instagram"></i></a>
-      <a href="#" class="social-icon" title="Pinterest"><i class="icon-pinterest"></i></a>
-    </div>
+                <!-- Quantity -->
+                <div class="details-filter-row details-row-size">
+                  <label for="qty">Quantity </label>
+                  <div class="product-details-quantity">
+                    <input type="number" id="qty" class="form-control" value="1" min="1" max="5" step="1" required>
+                  </div>
+                </div>
 
-    <p>Experience premium craftsmanship with AutoMinima’s diecast models. Built for collectors and enthusiasts. Perfect for display or gifting — Precision in Every Scale.</p>
-  </div>
-</div>
+                <!-- Category -->
+                <div class="product-cat">
+                  <span>Category:</span>
+                  <a href="#"><%= product.category ? product.category.name : '' %></a>,
+                  <a href="#"><%= product.productName %></a>
+                </div>
 
-  </div>
-</div>
+                <!-- Actions -->
+                <div class="product-details-action">
+                  <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')">
+                    <span>Add to Cart</span>
+                  </a>
+                  <a href="#" class="btn-product btn-wishlist" onclick="addToWishlist('<%= product._id %>')">
+                    <span>Add to Wishlist</span>
+                  </a>
+                </div>
 
-      <div class="product-details-tab">
-        <ul class="nav nav-pills justify-content-center" role="tablist" style=" border: 2px solid; width: 100%;">
-          <li class="nav-item"><a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab">Description</a></li>
-          <li class="nav-item"><a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab">Additional information</a></li>
-          <li class="nav-item"><a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab">Reviews (2)</a></li>
-        </ul>
-      </div>
+                <!-- Social Links -->
+                <div class="social-icons social-icons-sm">
+                  <span class="social-label">Share:</span>
+                  <a href="#" class="social-icon" title="Facebook"><i class="icon-facebook-f"></i></a>
+                  <a href="#" class="social-icon" title="Twitter"><i class="icon-twitter"></i></a>
+                  <a href="#" class="social-icon" title="Instagram"><i class="icon-instagram"></i></a>
+                  <a href="#" class="social-icon" title="Pinterest"><i class="icon-pinterest"></i></a>
+                </div>
 
-       <!-- ------------------------ related products ------------------------ -->
+                <p>Experience premium craftsmanship with AutoMinima’s diecast models. Built for collectors and enthusiasts. Perfect for display or gifting — Precision in Every Scale.</p>
+              </div>
+            </div>
 
-    <h2 class="title text-center mb-4">You May Also Like</h2>
-      <div class="related-product-list row g-4 justify-content-center">
-        <% if (relatedProducts.length === 0) { %>
+          </div>
+        </div>
+
+        <div class="product-details-tab">
+          <ul class="nav nav-pills justify-content-center" role="tablist" style=" border: 2px solid; width: 100%;">
+            <li class="nav-item"><a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab">Description</a></li>
+            <li class="nav-item"><a class="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab">Additional information</a></li>
+            <li class="nav-item"><a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab">Reviews (2)</a></li>
+          </ul>
+        </div>
+
+        <!-- ------------------------ related products ------------------------ -->
+
+        <h2 class="title text-center mb-4">You May Also Like</h2>
+        <div class="related-product-list row g-4 justify-content-center">
+          <% if (relatedProducts.length === 0) { %>
           <p>No any related products found</p>
-        <% } else { %>
+          <% } else { %>
           <% relatedProducts.forEach(product => { 
                const variant = product.variants && product.variants.length > 0 ? product.variants[0] : null;
                const hasOffer = product.productOffer > 0 && variant?.offerPrice > 0;
           %>
-            <div class="col-md-6 col-lg-4 col-xl-3 products-container position-relative">
+          <div class="col-md-6 col-lg-4 col-xl-3 products-container position-relative">
 
-          <!-- Offer Badge -->
-          <% if (hasOffer) { %>
-            <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1"
-              style="bottom: 154px; left: 80%; font-size: 12px; font-family: 'Orbitron'; background-color: #ff0000;">
+            <!-- Offer Badge -->
+            <% if (hasOffer) { %>
+            <div class="offer-badge position-absolute text-white fw-bold rounded px-2 py-1" style="bottom: 154px; left: 80%; font-size: 12px; font-family: 'Orbitron'; background-color: #ff0000;">
               <%= product.productOffer %>% OFF
             </div>
-          <% } %>
+            <% } %>
 
-          <a href="/productDetail/<%= product._id %>">
-            <div class="product-card">
-              <img src="<%= product.productImage[0] %>" class="img-fluid w-100 rounded-top" alt="<%= product.productName %>">
-            </div>
+            <a href="/productDetail/<%= product._id %>">
+              <div class="product-card">
+                <img src="<%= product.productImage[0] %>" class="img-fluid w-100 rounded-top" alt="<%= product.productName %>">
+              </div>
 
-            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 12px;">
-              <%= product.category ? product.category.name : 'Cat_Autominima' %>
-            </div>
+              <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 12px;">
+                <%= product.category ? product.category.name : 'Cat_Autominima' %>
+              </div>
 
-            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-              <h4><%= product.productName.slice(0, 22) %>...</h4>
-              <p><%= variant ? variant.scale : 'No scale' %> | <%= product.edition %></p>
+              <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                <h4><%= product.productName.slice(0, 22) %>...</h4>
+                <p><%= variant ? variant.scale : 'No scale' %> | <%= product.edition %></p>
 
-              <div class="d-flex justify-content-between align-items-center flex-lg-wrap">
-                <% if (hasOffer) { %>
+                <div class="d-flex justify-content-between align-items-center flex-lg-wrap">
+                  <% if (hasOffer) { %>
                   <div>
                     <p class="text-muted mb-0" style="text-decoration: line-through; font-size: 14px;">
                       ₹<%= variant.salePrice %>
@@ -227,73 +224,72 @@
                       ₹<%= variant.offerPrice %>
                     </p>
                   </div>
-                <% } else { %>
+                  <% } else { %>
                   <p class="text-dark fs-5 fw-bold mb-0">
                     ₹<%= variant ? variant.salePrice : 'N/A' %>
                   </p>
-                <% } %>
+                  <% } %>
 
-                <a href="#" class="btn border border-secondary text-primary" onclick="addToWishlist('<%= product._id %>')">❤️ wishlist</a>
+                  <a href="#" class="btn border border-secondary text-primary" onclick="addToWishlist('<%= product._id %>')">❤️ wishlist</a>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
+          <% }) %>
+          <% } %>
         </div>
-      <% }) %>
-    <% } %>
-  </div>
 
-         <!-- ------------------------related product ends--------------------- -->
+        <!-- ------------------------related product ends--------------------- -->
 
-                 </div><!-- End .container -->
-            </div><!-- End .page-content -->
-        </main><!-- End .main -->
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+      </div><!-- End .container -->
+    </div><!-- End .page-content -->
+  </main><!-- End .main -->
+  <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-    <!-- Plugins JS File -->
-    <script src="/User/assets/js/jquery.min.js"></script>
-    <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/User/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="/User/assets/js/jquery.waypoints.min.js"></script>
-    <script src="/User/assets/js/superfish.min.js"></script>
-    <script src="/User/assets/js/owl.carousel.min.js"></script>
-    <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="/User/assets/js/jquery.elevateZoom.min.js"></script>
-    <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="/User/assets/js/jquery.magnific-popup.min.js"></script>
-    <!-- Main JS File -->
-    <script src="/User/assets/js/main.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>               
+  <!-- Plugins JS File -->
+  <script src="/User/assets/js/jquery.min.js"></script>
+  <script src="/User/assets/js/bootstrap.bundle.min.js"></script>
+  <script src="/User/assets/js/jquery.hoverIntent.min.js"></script>
+  <script src="/User/assets/js/jquery.waypoints.min.js"></script>
+  <script src="/User/assets/js/superfish.min.js"></script>
+  <script src="/User/assets/js/owl.carousel.min.js"></script>
+  <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
+  <script src="/User/assets/js/jquery.elevateZoom.min.js"></script>
+  <script src="/User/assets/js/bootstrap-input-spinner.js"></script>
+  <script src="/User/assets/js/jquery.magnific-popup.min.js"></script>
+  <!-- Main JS File -->
+  <script src="/User/assets/js/main.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.querySelectorAll('.toggle-desc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productContent = btn.closest('.product-content');
+        const shortDesc = productContent.querySelector('.short-desc');
+        const fullDesc = productContent.querySelector('.full-desc');
 
-        document.querySelectorAll('.toggle-desc-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const productContent = btn.closest('.product-content');
-            const shortDesc = productContent.querySelector('.short-desc');
-            const fullDesc = productContent.querySelector('.full-desc');
-        
-            const isExpanded = fullDesc.style.display === 'block';
-        
-            shortDesc.style.display = isExpanded ? 'block' : 'none';
-            fullDesc.style.display = isExpanded ? 'none' : 'block';
-            btn.textContent = isExpanded ? 'See More' : 'See Less';
-          });
-        });
-    </script>
-   
-<script>
-  let selectedVariant = <%- JSON.stringify(product.variants[0]) %>;
+        const isExpanded = fullDesc.style.display === 'block';
 
-  const priceContainer = document.querySelector(".product-price");
-  const stockBadge = document.getElementById("stock-badge");
-  const userMaxQuantity = 5;
+        shortDesc.style.display = isExpanded ? 'block' : 'none';
+        fullDesc.style.display = isExpanded ? 'none' : 'block';
+        btn.textContent = isExpanded ? 'See More' : 'See Less';
+      });
+    });
+  </script>
 
-  // Function to update price and stock dynamically
-  const updatePriceAndStock = () => {
-    priceContainer.innerHTML = "";
+  <script>
+    let selectedVariant = <%- JSON.stringify(product.variants[0]) %>;
 
-    if (selectedVariant.offerPrice && selectedVariant.offerPrice > 0) {
-      priceContainer.innerHTML = `
+    const priceContainer = document.querySelector(".product-price");
+    const stockBadge = document.getElementById("stock-badge");
+    const userMaxQuantity = 5;
+
+    // Function to update price and stock dynamically
+    const updatePriceAndStock = () => {
+      priceContainer.innerHTML = "";
+
+      if (selectedVariant.offerPrice && selectedVariant.offerPrice > 0) {
+        priceContainer.innerHTML = `
         <span class="text-muted" style="text-decoration: line-through; font-size: 18px; margin-right: 12px;">
           ₹${selectedVariant.salePrice}
         </span>
@@ -301,154 +297,169 @@
           ₹${selectedVariant.offerPrice}
         </span>
       `;
-    } else {
-      priceContainer.innerHTML = `
+      } else {
+        priceContainer.innerHTML = `
         <span class="fs-4 fw-bold text-dark">₹${selectedVariant.salePrice}</span>
       `;
-    }
-    if (selectedVariant.stock === 0) {
-      stockBadge.textContent = "Out of Stock";
-      stockBadge.style.color = "red";
-    } else if (selectedVariant.stock < userMaxQuantity) {
-      stockBadge.textContent = `Only (${selectedVariant.stock} left)`;
-      stockBadge.style.color = "orange";
-    } else {
-      stockBadge.textContent = "In Stock";
-      stockBadge.style.color = "green";
-    }
-  };
+      }
+      if (selectedVariant.stock === 0) {
+        stockBadge.textContent = "Out of Stock";
+        stockBadge.style.color = "red";
+      } else if (selectedVariant.stock < userMaxQuantity) {
+        stockBadge.textContent = `Only (${selectedVariant.stock} left)`;
+        stockBadge.style.color = "orange";
+      } else {
+        stockBadge.textContent = "In Stock";
+        stockBadge.style.color = "green";
+      }
+    };
 
-  document.querySelectorAll(".scale-btn").forEach(button => {
-    button.addEventListener("click", () => {
-      document.querySelectorAll(".scale-btn").forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
+    document.querySelectorAll(".scale-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".scale-btn").forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-      // Get the new variant data
-      selectedVariant = JSON.parse(button.getAttribute("data-variant"));
+        // Get the new variant data
+        selectedVariant = JSON.parse(button.getAttribute("data-variant"));
 
-      // Update UI
-      updatePriceAndStock();
-    });
-  });
-
-  updatePriceAndStock();
-  
-// -------------- addtoCart with increment----------
-function addToCart(productId) {
-  const quantity = document.getElementById("qty").value;
-
-  const productCartdata = {
-    productId,
-    variantName: selectedVariant.variantName,
-    scale: selectedVariant.scale,
-    quantity: parseInt(quantity)
-  };
-
-  fetch("/addToCart", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(productCartdata)
-  })
-  .then(async res => {
-    let data;
-    try {
-      data = await res.json();
-    } catch (err) {
-      throw new Error("Invalid JSON response from server.");
-    }
-
-    // Already in cart
-    if (data.alreadyInCart) {
-      Swal.fire({
-        title: "Already in Cart",
-        text: "This product is already in your cart. Do you want to increase the quantity?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes, increase it!",
-        cancelButtonText: "No, cancel"
-      }).then(result => {
-        if (result.isConfirmed) {
-
-          //increase quantity api
-          fetch("/increaseCartQuantity", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(productCartdata)
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              Toastify({
-                text: "Quantity increased in cart 🛒",
-                duration: 1000,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "green",
-              }).showToast();
-            } else {
-              Swal.fire("Oops", data.message || "Failed to increase quantity", "error");
-            }
-          });
-        }
+        // Update UI
+        updatePriceAndStock();
       });
-    }
-
-    //  success 
-    else if (res.ok && data.success) {
-      Toastify({
-        text: data.message || "Product added to cart successfully! 🛒",
-        gravity: "top",
-        position: "right",
-        duration: 1200,
-        backgroundColor: "green"
-      }).showToast();
-      window.location.reload()
-      document.getElementById("cart-icon-badge").style.display = "block";
-    }
-
-    // Error
-    else {
-      Swal.fire("Oops!", data.message || "Unable to add to cart", "error");
-    }
-  })
-  .catch(err => {
-    console.error("Caught error in addToCart:", err);
-  });
-}
-
- 
-function addToWishlist(productId) {
-    fetch("/addToWishlist", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            Toastify({
-                text: "Product Added to wishlist ❤",
-                gravity: "top",
-                position: "right",
-                duration: 1000,
-                backgroundColor: "green"
-            }).showToast();
-        } else {
-            Swal.fire("Oops!", data.message || "Unable to add to wishlist", "error");
-        }
-    })
-    .catch(() => {
-        Swal.fire("Error", "Something went wrong!", "error");
     });
-}
-</script>
-       <%-include("../../Views/Partials/User/footerLand")%>
+
+    updatePriceAndStock();
+
+    // -------------- addtoCart with increment----------
+    function addToCart(productId) {
+      const quantity = document.getElementById("qty").value;
+
+      const productCartdata = {
+        productId,
+        variantName: selectedVariant.variantName,
+        scale: selectedVariant.scale,
+        quantity: parseInt(quantity)
+      };
+
+      fetch("/addToCart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(productCartdata)
+        })
+        .then(async res => {
+          let data;
+          try {
+            data = await res.json();
+          } catch (err) {
+            throw new Error("Invalid JSON response from server.");
+          }
+
+          // Already in cart
+          if (data.alreadyInCart) {
+            Swal.fire({
+              title: "Already in Cart",
+              text: "This product is already in your cart. Do you want to increase the quantity?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonText: "Yes, increase it!",
+              cancelButtonText: "No, cancel"
+            }).then(result => {
+              if (result.isConfirmed) {
+
+                //increase quantity api
+                fetch("/increaseCartQuantity", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(productCartdata)
+                  })
+                  .then(res => res.json())
+                  .then(data => {
+                    if (data.success) {
+                      Toastify({
+                        text: "Quantity increased in cart 🛒",
+                        duration: 1000,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "green",
+                      }).showToast();
+                    } else {
+                      Swal.fire("Oops", data.message || "Failed to increase quantity", "error");
+                    }
+                  });
+              }
+            });
+          }
+
+          //  success 
+          else if (res.ok && data.success) {
+            Toastify({
+              text: data.message || "Product added to cart successfully! 🛒",
+              gravity: "top",
+              position: "right",
+              duration: 1200,
+              backgroundColor: "green"
+            }).showToast();
+            window.location.reload()
+            document.getElementById("cart-icon-badge").style.display = "block";
+          }
+
+          // Error
+          else {
+            Swal.fire("Oops!", data.message || "Unable to add to cart", "error");
+          }
+        })
+        .catch(err => {
+          console.error("Caught error in addToCart:", err);
+        });
+    }
+
+
+    function addToWishlist(productId) {
+      fetch("/addToWishlist", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            Toastify({
+              text: "Product Added to wishlist ❤",
+              gravity: "top",
+              position: "right",
+              duration: 1000,
+              backgroundColor: "green"
+            }).showToast();
+            window.location.reload();
+          } else {
+            Swal.fire({
+              title: "Login Required",
+              text: "You are not logged in. Please login to add items to wishlist.",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Login Now",
+              cancelButtonText: "Cancel"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/login";
+              }
+            });
+          }
+        })
+        .catch(() => {
+          Swal.fire("Error", "Something went wrong!", "error");
+        });
+    }
+  </script>
+  <%-include("../../Views/Partials/User/footerLand")%>
 
 </body>
+
 </html>
