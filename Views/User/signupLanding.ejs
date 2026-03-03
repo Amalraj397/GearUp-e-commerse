@@ -1,380 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup Page</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", sans-serif;
-      }
 
-      body {
-        /* background: url("/User/assets/images/2019-Bugatti-Divo-004-1440w.jpg") */
-          /* no-repeat center center fixed; */
-        background-size: cover;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 125vh;
-        padding: 20px;
-      }
-
-      .signup-container {
-        background: rgba(43, 43, 43, 0.95);
-        padding: 15px 25px 15px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-        width: 100%;
-        max-width: 500px;
-        color: #f5f5f5;
-        /* position: relative; */
-      }
-
-      .signup-container h1 {
-        margin-bottom: 30px;
-        text-align: center;
-        color: #f36d07;
-        font-style: italic;
-        letter-spacing: 4px;
-      }
-
-      .input-group {
-        position: relative;
-      }
-
-      .signup-container input {
-        width: 100%;
-        padding: 20px 35px 13px 25px;
-        margin-bottom: 20px;
-        border: 1px solid #555;
-        border-radius: 25px;
-        background-color: #3c3c3c;
-        color: #f5f5f5;
-        transition: 0.3s ease;
-      }
-
-      .signup-container input:hover,
-      .signup-container input:focus {
-        border-color: #f0a500;
-        box-shadow: 0 0 5px rgba(240, 165, 0, 0.5);
-        outline: none;
-      }
-
-      .toggle-password {
-        position: absolute;
-        top: 33%;
-        right: 27px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #ccc;
-        font-size: 13px;
-      }
-
-      .btn {
-        background-color: #f36d07;
-        color: #1a1a1a;
-        padding: 12px 25px;
-        width: 100%;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        font-weight: bold;
-        transition: 0.3s ease;
-        margin-bottom: 15px;
-      }
-
-      .btn:hover {
-        background-color: #ffbb33;
-        box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
-        transform: translateY(-2px);
-      }
-
-      .login-link {
-        margin-top: 20px;
-        text-align: center;
-        font-size: 14px;
-        color: #ccc;
-      }
-
-      .login-link a {
-        color: #f08000;
-        font-size: 18px;
-        font-weight: 700;
-        text-decoration: none;}
-
-
-      .login-link a:hover {
-        text-decoration: underline;
-      }
-      .go-back-button {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        background-color: #f36d07;
-        color: #1a1a1a;
-        padding: 10px 18px;
-        border-radius: 20px;
-        font-weight: bold;
-        text-decoration: none;
-        transition: 0.3s ease;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-      }
-
-      .go-back-button:hover {
-        background-color: #ffbb33;
-        box-shadow: 0 6px 15px rgba(255, 187, 51, 0.4);
-        transform: translateY(-2px);
-      }
-      
-      #bg-video {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: fill ;
-        z-index: -1;
-        background-color: rgb(0, 0, 0); /* fallback color if aspect ratio creates bars */
-      }
-      .btn-google{
-        width: 18px;
-        height: 18px;
-      }
-
-      @media (max-width: 480px) {
-        .signup-container {
-          padding: 25px;
-        }
-
-        .signup-container h2 {
-          font-size: 22px;
-        }
-        .google-btn {
-          font-size: 14px;
-          padding: 10px 20px;
-        }
-      }
-      .errorMessage {
-        color: rgb(236, 49, 49);
-      }
-    </style>
-  </head>
-  <body>
-    <video autoplay muted loop playsinline id="bg-video">
-    <source src="User/assets/videos/mustang high quality.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
-    <div class="signup-container">
-      <h1 id="signID">SIGN UP</h1>
-      <form id="signupForm" action="/signup" method="post">
-        <input
-          type="text"
-          placeholder=" Enter Your First Name"
-          id="register-firstName"
-          name="firstName"  
-        />
-        <div id="fnameError" class="errorMessage"></div>
-
-        <input
-          type="text"
-          placeholder=" Enter Your Last Name"
-          id="register-lastName"
-          name="lastName"
-        />
-        <div id="lnameError" class="errorMessage"></div>
-
-        <input
-          type="text"
-          placeholder="Enter Your Email"
-          id="register-email"
-          name="registerEmail"
-        />
-        <div id="emailError" class="errorMessage"></div>
-
-        <input
-          type="tel"
-          placeholder="Phone Your Contact Number"
-          id="register-phone"
-          name="registerPhone"
-        />
-        <div id="phoneError" class="errorMessage"></div>
-
-        <div class="input-group">
-  <input
-    type="password"
-    id="register-password"
-    placeholder="Enter Your Password"
-  />
-  <span class="toggle-password" data-target="register-password">🔒</span>
-  <div id="passwordError" class="errorMessage"></div>
-</div>
-
-<div class="input-group">
-  <input
-    type="password"
-    id="register-confirmPassword"
-    placeholder="Confirm Password"
-  />
-  <span class="toggle-password" data-target="register-confirmPassword">🔒</span>
-  <div id="confpasswordError" class="errorMessage"></div>
-</div>
-
-<input
-  type="text"
-  placeholder="Referral Code (optional)"
-  id="register-referral"
-  name="referralCode"
-/>
-<div id="referralError" class="errorMessage"></div>
-
-
-        <button class="btn" type="submit">CREATE ACCOUNT</button>
-      </form>
-
-      <button class="btn" id="google-login" type="">
-
-        <p>Continue with Google</p>
-      </button>
-
-      <a href="/" class="go-back-button">Go Back</a>
-      <div class="login-link">
-        Already have an account? <a href="/login">Login</a>
-      </div>
-    </div>
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
-    <!-- Firebase Auth (compat version) -->
-    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
-
-    <script>
-      // Your Firebase config
-      const firebaseConfig = {
-        apiKey: "AIzaSyD6oCwWMMPVUy278R7RqtfyIDjdf9Lr2bQ",
-        authDomain: "auth-gearup.firebaseapp.com",
-        projectId: "auth-gearup",
-        storageBucket: "auth-gearup.firebasestorage.app",
-        messagingSenderId: "1035509266541",
-        appId: "1:1035509266541:web:1de31eb39abebb79be2764",
-      };
-
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-      // const user = ${userData};
-
-      document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("toggle-password")) {
-    const targetId = e.target.getAttribute("data-target");
-    const input = document.getElementById(targetId);
-    if (!input) return;
-
-    if (input.type === "password") {
-      input.type = "text";
-      e.target.textContent = "🔓"; // change icon
-    } else {
-      input.type = "password";
-      e.target.textContent = "🔒";
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup Page</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
     }
-  }
-});
-      document
-        .getElementById("signupForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          clearErrors();
-          // Get input values
-          const firstName = document
-            .getElementById("register-firstName")
-            .value.trim();
-          const lastName = document
-            .getElementById("register-lastName")
-            .value.trim();
-          const email = document.getElementById("register-email").value.trim();
-          const phone = document.getElementById("register-phone").value.trim();
-          const password = document
-            .getElementById("register-password")
-            .value.trim();
-          const confirmPassword = document
-            .getElementById("register-confirmPassword")
-            .value.trim();
 
-          // const referralCode = document.getElementById("register-referral")?.value.trim();
+    body {
+      /* background: url("/User/assets/images/2019-Bugatti-Divo-004-1440w.jpg") */
+      /* no-repeat center center fixed; */
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 125vh;
+      padding: 20px;
+    }
 
-          let isValid = true;
+    .signup-container {
+      background: rgba(43, 43, 43, 0.95);
+      padding: 15px 25px 15px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 500px;
+      color: #f5f5f5;
+      /* position: relative; */
+    }
 
-          // First,Last name validation
-          const namePattern = /^[A-Z][a-zA-Z]{2,}$/; // star with capital and len should 3
-          const specialCharPattern = /[!@#$%^&*()~/+\-]/; // identify if special symbols
+    .signup-container h1 {
+      margin-bottom: 30px;
+      text-align: center;
+      color: #f36d07;
+      font-style: italic;
+      letter-spacing: 4px;
+    }
 
-          if (!firstName || !lastName) {
-            document.getElementById("fnameError").innerText =
-              "Please enter your first name!";
-            document.getElementById("lnameError").innerText =
-              "Please enter your last name!";
-            isValid = false;
-          }else if(
-            !namePattern.test(firstName) ||
-            specialCharPattern.test(firstName)
-          ) {
-            document.getElementById("fnameError").innerText =
-              "Invalid first name! Use only letters, start with uppercase, min 3 chars.";
-            isValid = false;
-          }else if (
-            !namePattern.test(lastName) ||
-            specialCharPattern.test(lastName)
-          ) {
-            document.getElementById("lnameError").innerText =
-              "Invalid last name! Use only letters, start with uppercase, min 3 chars.";
-            isValid = false;
-          }
+    .input-group {
+      position: relative;
+    }
 
-          // Email Validation
-          const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-          if (!emailPattern.test(email)) {
-            document.getElementById("emailError").innerText =
-              "Please enter a valid email address!";
-            isValid = false;
-          }
+    .signup-container input {
+      width: 100%;
+      padding: 20px 35px 13px 25px;
+      margin-bottom: 20px;
+      border: 1px solid #555;
+      border-radius: 25px;
+      background-color: #3c3c3c;
+      color: #f5f5f5;
+      transition: 0.3s ease;
+    }
 
-          // Phone Number Validation (10 digits)
-          const phonePattern = /^[0-9]{10}$/;
-          if (!phonePattern.test(phone)) {
-            document.getElementById("phoneError").innerText =
-              "Phone number must be exactly 10 digits!";
-            isValid = false;
-          }
+    .signup-container input:hover,
+    .signup-container input:focus {
+      border-color: #f0a500;
+      box-shadow: 0 0 5px rgba(240, 165, 0, 0.5);
+      outline: none;
+    }
 
-          // Password Validation (Min 6 characters)
-          if (password.length < 6) {
-            document.getElementById("passwordError").innerText =
-              "Password must be at least 6 characters long!";
-            isValid = false;
-          }
+    .toggle-password {
+      position: absolute;
+      top: 33%;
+      right: 27px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #ccc;
+      font-size: 13px;
+    }
 
-          // Confirm Password Validation
-          if (password !== confirmPassword) {
-            document.getElementById("confpasswordError").innerText =
-              "Passwords do not match!";
-            isValid = false;
-          }
+    .btn {
+      background-color: #f36d07;
+      color: #1a1a1a;
+      padding: 12px 25px;
+      width: 100%;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s ease;
+      margin-bottom: 15px;
+    }
 
-          const referralCode = document.getElementById("register-referral")?.value.trim();
-          if (referralCode && referralCode.length < 6) {
-            document.getElementById("referralError").innerText =
-              "Invalid referral code format!";
-            isValid = false;
-          }
-          
-          //sweetalerts
-          if (isValid) {
-            fetch("/signup", {
+    .btn:hover {
+      background-color: #ffbb33;
+      box-shadow: 0 4px 12px rgba(255, 187, 51, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .login-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .login-link a {
+      color: #f08000;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .go-back-button {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #f36d07;
+      color: #1a1a1a;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+    }
+
+    .go-back-button:hover {
+      background-color: #ffbb33;
+      box-shadow: 0 6px 15px rgba(255, 187, 51, 0.4);
+      transform: translateY(-2px);
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      z-index: -1;
+      background-color: rgb(0, 0, 0);
+      /* fallback color if aspect ratio creates bars */
+    }
+
+    .btn-google {
+      width: 18px;
+      height: 18px;
+    }
+
+    @media (max-width: 480px) {
+      .signup-container {
+        padding: 25px;
+      }
+
+      .signup-container h2 {
+        font-size: 22px;
+      }
+
+      .google-btn {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+    }
+
+    .errorMessage {
+      color: rgb(236, 49, 49);
+    }
+  </style>
+</head>
+
+<body>
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="User/assets/videos/mustang high quality.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div class="signup-container">
+    <h1 id="signID">SIGN UP</h1>
+    <form id="signupForm" action="/signup" method="post">
+      <input type="text" placeholder=" Enter Your First Name" id="register-firstName" name="firstName" />
+      <div id="fnameError" class="errorMessage"></div>
+
+      <input type="text" placeholder=" Enter Your Last Name" id="register-lastName" name="lastName" />
+      <div id="lnameError" class="errorMessage"></div>
+
+      <input type="text" placeholder="Enter Your Email" id="register-email" name="registerEmail" />
+      <div id="emailError" class="errorMessage"></div>
+
+      <input type="tel" placeholder="Phone Your Contact Number" id="register-phone" name="registerPhone" />
+      <div id="phoneError" class="errorMessage"></div>
+
+      <div class="input-group">
+        <input type="password" id="register-password" placeholder="Enter Your Password" />
+        <span class="toggle-password" data-target="register-password">🔒</span>
+        <div id="passwordError" class="errorMessage"></div>
+      </div>
+
+      <div class="input-group">
+        <input type="password" id="register-confirmPassword" placeholder="Confirm Password" />
+        <span class="toggle-password" data-target="register-confirmPassword">🔒</span>
+        <div id="confpasswordError" class="errorMessage"></div>
+      </div>
+
+      <input type="text" placeholder="Referral Code (optional)" id="register-referral" name="referralCode" />
+      <div id="referralError" class="errorMessage"></div>
+
+
+      <button class="btn" type="submit">CREATE ACCOUNT</button>
+    </form>
+
+    <button class="btn" id="google-login" type="">
+
+      <p>Continue with Google</p>
+    </button>
+
+    <a href="/" class="go-back-button">Go Back</a>
+    <div class="login-link">
+      Already have an account? <a href="/login">Login</a>
+    </div>
+  </div>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+  <!-- Firebase Auth (compat version) -->
+  <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD6oCwWMMPVUy278R7RqtfyIDjdf9Lr2bQ",
+      authDomain: "auth-gearup.firebaseapp.com",
+      projectId: "auth-gearup",
+      storageBucket: "auth-gearup.firebasestorage.app",
+      messagingSenderId: "1035509266541",
+      appId: "1:1035509266541:web:1de31eb39abebb79be2764",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // const user = ${userData};
+
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("toggle-password")) {
+        const targetId = e.target.getAttribute("data-target");
+        const input = document.getElementById(targetId);
+        if (!input) return;
+
+        if (input.type === "password") {
+          input.type = "text";
+          e.target.textContent = "🔓"; // change icon
+        } else {
+          input.type = "password";
+          e.target.textContent = "🔒";
+        }
+      }
+    });
+    document
+      .getElementById("signupForm")
+      .addEventListener("submit", function(e) {
+        e.preventDefault();
+        clearErrors();
+        // Get input values
+        const firstName = document
+          .getElementById("register-firstName")
+          .value.trim();
+        const lastName = document
+          .getElementById("register-lastName")
+          .value.trim();
+        const email = document.getElementById("register-email").value.trim();
+        const phone = document.getElementById("register-phone").value.trim();
+        const password = document
+          .getElementById("register-password")
+          .value.trim();
+        const confirmPassword = document
+          .getElementById("register-confirmPassword")
+          .value.trim();
+
+        // const referralCode = document.getElementById("register-referral")?.value.trim();
+
+        let isValid = true;
+
+        // First,Last name validation
+        const namePattern = /^[A-Z][a-zA-Z]{2,}$/; // star with capital and len should 3
+        const specialCharPattern = /[!@#$%^&*()~/+\-]/; // identify if special symbols
+
+        if (!firstName || !lastName) {
+          document.getElementById("fnameError").innerText =
+            "Please enter your first name!";
+          document.getElementById("lnameError").innerText =
+            "Please enter your last name!";
+          isValid = false;
+        } else if (
+          !namePattern.test(firstName) ||
+          specialCharPattern.test(firstName)
+        ) {
+          document.getElementById("fnameError").innerText =
+            "Invalid first name! Use only letters, start with uppercase, min 3 chars.";
+          isValid = false;
+        } else if (
+          !namePattern.test(lastName) ||
+          specialCharPattern.test(lastName)
+        ) {
+          document.getElementById("lnameError").innerText =
+            "Invalid last name! Use only letters, start with uppercase, min 3 chars.";
+          isValid = false;
+        }
+
+        // Email Validation
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById("emailError").innerText =
+            "Please enter a valid email address!";
+          isValid = false;
+        }
+
+        // Phone Number Validation (10 digits)
+        const phonePattern = /^[0-9]{10}$/;
+        if (!phonePattern.test(phone)) {
+          document.getElementById("phoneError").innerText =
+            "Phone number must be exactly 10 digits!";
+          isValid = false;
+        }
+
+        // Password Validation (Min 6 characters)
+        if (password.length < 6) {
+          document.getElementById("passwordError").innerText =
+            "Password must be at least 6 characters long!";
+          isValid = false;
+        }
+
+        // Confirm Password Validation
+        if (password !== confirmPassword) {
+          document.getElementById("confpasswordError").innerText =
+            "Passwords do not match!";
+          isValid = false;
+        }
+
+        const referralCode = document.getElementById("register-referral")?.value.trim();
+        if (referralCode && referralCode.length < 6) {
+          document.getElementById("referralError").innerText =
+            "Invalid referral code format!";
+          isValid = false;
+        }
+
+        //sweetalerts
+        if (isValid) {
+          fetch("/signup", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -389,111 +364,106 @@
                 referralCode
               }),
             })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.success) {
-                  Swal.fire({
-                    icon: "success",
-                    title: data.message || "Signup successful!",
-                    showConfirmButton: false,
-                    timer: 1000,
-                  }).then(() => {
-                    window.location.href = data.redirectTo || "/";
-                  });
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Signup Failed",
-                    text: data.message || "Something went wrong.",
-                  });
-                }
-              })
-              .catch(() => {
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                Swal.fire({
+                  icon: "success",
+                  title: data.message || "Signup successful!",
+                  showConfirmButton: false,
+                  timer: 1000,
+                }).then(() => {
+                  window.location.href = data.redirectTo || "/";
+                });
+              } else {
                 Swal.fire({
                   icon: "error",
-                  title: "Error",
-                  text: "Server error. Please try again.",
+                  title: "Signup Failed",
+                  text: data.message || "Something went wrong.",
                 });
+              }
+            })
+            .catch(() => {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Server error. Please try again.",
               });
-          }
-        });
-
-      // Function to Clear Previous Errors
-      function clearErrors() {
-        document
-          .querySelectorAll(".errorMessage")
-          .forEach((error) => (error.innerText = ""));
-      }
-
-      //-------- Google Login-------
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const googleLoginBtn = document.getElementById("google-login");
-
-        if (googleLoginBtn) {
-          googleLoginBtn.addEventListener("click", () => {
-            const provider = new firebase.auth.GoogleAuthProvider();
-
-            firebase
-              .auth()
-              .signInWithPopup(provider)
-              .then((result) => {
-                const user = result.user;
-
-                const userData = {
-                  email: user.email,
-                  displayName: user.displayName,
-                  googleId: user.uid,
-                  photo: user.photoURL,
-                };
-
-                return fetch("/auth/google/signup", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(userData),
-                });
-              })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data.success) {
-                  localStorage.setItem(
-                    "loggedInUser",
-                    JSON.stringify(data.user)
-                  );
-                  Swal.fire({
-                    icon: "success",
-                    title: "Login Successful!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
-
-                  // // Save user to localStorage
-                  // localStorage.setItem(
-                  //   "loggedInUser",
-                  //   JSON.stringify(data.user)
-                  // );
-
-                  setTimeout(() => {
-                    window.location.href = "/"; // Redirect after login
-                  }, 1000);
-                } else {
-                  throw new Error("Something went wrong during signup");
-                }
-              })
-              .catch((error) => {
-                console.error("Google Sign-In Error:", error);
-
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: "Authentication Failed!",
-                });
-              });
-          });
+            });
         }
       });
-    </script>
-  </body>
+
+    // Function to Clear Previous Errors
+    function clearErrors() {
+      document
+        .querySelectorAll(".errorMessage")
+        .forEach((error) => (error.innerText = ""));
+    }
+
+    //-------- Google Login-------
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const googleLoginBtn = document.getElementById("google-login");
+
+      if (googleLoginBtn) {
+        googleLoginBtn.addEventListener("click", () => {
+          const provider = new firebase.auth.GoogleAuthProvider();
+
+          firebase
+            .auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+              const user = result.user;
+
+              const userData = {
+                email: user.email,
+                displayName: user.displayName,
+                googleId: user.uid,
+                photo: user.photoURL,
+              };
+
+              return fetch("/auth/google/signup", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+              });
+            })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                localStorage.setItem(
+                  "loggedInUser",
+                  JSON.stringify(data.user)
+                );
+                Swal.fire({
+                  icon: "success",
+                  title: "Login Successful!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                
+                setTimeout(() => {
+                  window.location.href = "/"; // Redirect after login
+                }, 1000);
+              } else {
+                throw new Error("Something went wrong during signup");
+              }
+            })
+            .catch((error) => {
+              console.error("Google Sign-In Error:", error);
+
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Authentication Failed!",
+              });
+            });
+        });
+      }
+    });
+  </script>
+</body>
+
 </html>

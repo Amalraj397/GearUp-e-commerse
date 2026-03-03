@@ -305,7 +305,8 @@ export const MESSAGES = {
     EMAIL_UPD_ERR: "An error occured in updating email:",
     EMAIL_VERIFY_ERR: "An error occured in verifying email:",
     EMAIL_UPD_SUCCESS: "Email address updated successfully",
-
+    TEMP_EMAIL_ERR:"Please use a valid email address. Temporary or disposable emails are not allowed.",
+    
     OTP_SENT: "An OTP has been sent to your email.",
     OTP_RESENT: "A New OTP has been sent to your email.",
     OTP_EXPIRED: "OTP expired. Please request a new OTP.",
