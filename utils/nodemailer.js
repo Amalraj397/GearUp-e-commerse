@@ -6,8 +6,8 @@ const sendEmail = async ({ to, otp, otpType = "login" }) => {
   try {
     // create a transporter - responsible to send emeil
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 465,
+      // host: "smtp.ethereal.email",
+      // port: 465,
       service: "gmail",
       auth: {
         user: process.env.NODEMAILER_EMAIL,
