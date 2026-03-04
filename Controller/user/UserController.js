@@ -45,58 +45,6 @@ export const showLogin = (req, res, next) => {
 // --------------------------------OTP Section ------------------------------------------------
 
 // ------------- user signup controller---------------------
-export const userSignup = async (req, res, next) => {
-  const {
-    firstName,
-    lastName,
-    registerEmail,
-    registerPhone,
-    registerPassword,
-    referralCode   
-  } = req.body;
-
-  try {
-    const existEmail = await userschema.findOne({ email: registerEmail });
-
-    if (existEmail) {
-      return res
-        .status(STATUS.BAD_REQUEST)
-        .json({ message: MESSAGES.Auth.EMAIL_NOT_REGISTERED });
-    }
-
-    req.session.userData = {
-      firstName,
-      lastName,
-      email: registerEmail,
-      phone: registerPhone,
-      password: registerPassword,
-    };
-
-    if (referralCode) {
-      req.session.referralCode = referralCode.trim().toUpperCase();
-    }
-
-    const otpExpirationT = Date.now() + 60 * 1000;
-    const otp = generateOTP();
-    console.log(" userLogin OTP:", otp);
-
-    await sendEmail({ to: registerEmail, otp, otpType: "resendOtp" });
-
-    req.session.otp = otp;
-    req.session.otpExpiration = otpExpirationT;
-
-    return res.status(STATUS.OK).json({
-      success: true,
-      message: MESSAGES.Auth.EMAIL_VERIFIED,
-      redirectTo: "/getOtp",
-    });
-  } catch (error) {
-    console.error(MESSAGES.Users.SIGNUP_ERR, error);
-    next(error);
-  }
-};
-
-
 // export const userSignup = async (req, res, next) => {
 //   const {
 //     firstName,
@@ -113,7 +61,7 @@ export const userSignup = async (req, res, next) => {
 //     if (existEmail) {
 //       return res
 //         .status(STATUS.BAD_REQUEST)
-//         .json({ message: MESSAGES.Auth.EMAIL_ALREADY_EXISTS });
+//         .json({ message: MESSAGES.Auth.EMAIL_NOT_REGISTERED });
 //     }
 
 //     req.session.userData = {
@@ -132,16 +80,7 @@ export const userSignup = async (req, res, next) => {
 //     const otp = generateOTP();
 //     console.log(" userLogin OTP:", otp);
 
-    
-//     try {
-//       await sendEmail({ to: registerEmail, otp, otpType: "resendOtp" });
-//     } catch (emailError) {
-//       console.error("Email sending failed:", emailError.message);
-//       return res.status(STATUS.BAD_REQUEST).json({
-//         success: false,
-//         message: MESSAGES.Auth.TEMP_EMAIL_ERR
-//       });
-//     }
+//     await sendEmail({ to: registerEmail, otp, otpType: "resendOtp" });
 
 //     req.session.otp = otp;
 //     req.session.otpExpiration = otpExpirationT;
@@ -156,6 +95,67 @@ export const userSignup = async (req, res, next) => {
 //     next(error);
 //   }
 // };
+
+
+export const userSignup = async (req, res, next) => {
+  const {
+    firstName,
+    lastName,
+    registerEmail,
+    registerPhone,
+    registerPassword,
+    referralCode   
+  } = req.body;
+
+  try {
+    const existEmail = await userschema.findOne({ email: registerEmail });
+
+    if (existEmail) {
+      return res
+        .status(STATUS.BAD_REQUEST)
+        .json({ message: MESSAGES.Auth.EMAIL_ALREADY_EXISTS });
+    }
+
+    req.session.userData = {
+      firstName,
+      lastName,
+      email: registerEmail,
+      phone: registerPhone,
+      password: registerPassword,
+    };
+
+    if (referralCode) {
+      req.session.referralCode = referralCode.trim().toUpperCase();
+    }
+
+    const otpExpirationT = Date.now() + 60 * 1000;
+    const otp = generateOTP();
+    console.log(" userLogin OTP:", otp);
+
+    
+    try {
+      await sendEmail({ to: registerEmail, otp, otpType: "resendOtp" });
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError.message);
+      return res.status(STATUS.BAD_REQUEST).json({
+        success: false,
+        message: MESSAGES.Auth.TEMP_EMAIL_ERR
+      });
+    }
+
+    req.session.otp = otp;
+    req.session.otpExpiration = otpExpirationT;
+
+    return res.status(STATUS.OK).json({
+      success: true,
+      message: MESSAGES.Auth.EMAIL_VERIFIED,
+      redirectTo: "/getOtp",
+    });
+  } catch (error) {
+    console.error(MESSAGES.Users.SIGNUP_ERR, error);
+    next(error);
+  }
+};
 
 
 export const getOtpPage = async (req, res, next) => {
